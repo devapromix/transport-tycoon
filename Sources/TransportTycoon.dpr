@@ -1,17 +1,18 @@
-program TransportTycoon;
+﻿program TransportTycoon;
 
 uses
   SysUtils,
-  BearLibTerminal in 'Sources\Third-Party\BearLibTerminal\BearLibTerminal.pas',
+  BearLibTerminal in 'Third-Party\BearLibTerminal\BearLibTerminal.pas',
   TransportTycoon.Map in 'Game\TransportTycoon.Map.pas',
   TransportTycoon.Game in 'Game\TransportTycoon.Game.pas',
   TransportTycoon.Scenes in 'Scenes\TransportTycoon.Scenes.pas';
 
 var
-  Key: word = 0;
-  Tmp: word = 0;
+  Key: Word = 0;
+  Tmp: Word = 0;
 
 begin
+  Randomize;
   terminal_open();
   terminal_set('window: size=80x25, title="Transport Tycoon";');
   terminal_set('input: filter={keyboard, mouse+}');

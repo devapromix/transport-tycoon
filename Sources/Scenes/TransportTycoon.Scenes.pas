@@ -1,4 +1,4 @@
-unit TransportTycoon.Scenes;
+﻿unit TransportTycoon.Scenes;
 
 interface
 
@@ -15,11 +15,11 @@ type
   public
     procedure Render; virtual; abstract;
     procedure Update(var Key: word); virtual; abstract;
-    procedure DrawText(const X, Y: integer; Text: string); overload;
+    procedure DrawText(const X, Y: Integer; Text: string); overload;
     procedure DrawTitle(const Title: string);
-    procedure DrawFrame(const X, Y, W, H: integer);
-    function Width: integer;
-    function Height: integer;
+    procedure DrawFrame(const X, Y, W, H: Integer);
+    function Width: Integer;
+    function Height: Integer;
   end;
 
 type
@@ -93,13 +93,13 @@ begin
   DrawTitle('WORLD GENERATION');
 
 
-  //DrawText(12, 9, "[[A]] Map size: " + gen_map_size_str());
-  //DrawText(42, 9, "[[B]] No. of towns: " + gen_towns_str());
+  // DrawText(12, 9, "[[A]] Map size: " + gen_map_size_str());
+  // DrawText(42, 9, "[[B]] No. of towns: " + gen_towns_str());
 
-  //DrawText(12, 10, "[[C]] Rivers: " + gen_rivers_str());
-  //DrawText(42, 10, "[[D]] No. of ind.: " + gen_indust_str());
+  // DrawText(12, 10, "[[C]] Rivers: " + gen_rivers_str());
+  // DrawText(42, 10, "[[D]] No. of ind.: " + gen_indust_str());
 
-  //DrawText(12, 11, "[[E]] Sea level: " + gen_sea_level_str());
+  // DrawText(12, 11, "[[E]] Sea level: " + gen_sea_level_str());
   DrawText(42, 11, 'Date: Jan 1st, 1950');
 
   DrawText(36, 17, 'GENERATE');
@@ -107,17 +107,17 @@ end;
 
 procedure TSceneGen.Update(var Key: word);
 var
-  X, Y: integer;
+  X, Y: Integer;
 begin
   X := terminal_state(TK_MOUSE_X);
   Y := terminal_state(TK_MOUSE_Y);
   if (Key = TK_MOUSE_LEFT) and (X > 35) and (X < 45) then
     case Y of
       17:
-      begin
-        Game.Map.Gen;
-        Scenes.SetScene(scGame);
-      end;
+        begin
+          Game.Map.Gen;
+          Scenes.SetScene(scGame);
+        end;
     end;
 end;
 
@@ -137,7 +137,7 @@ end;
 
 procedure TSceneMenu.Update(var Key: word);
 var
-  X, Y: integer;
+  X, Y: Integer;
 begin
   X := terminal_state(TK_MOUSE_X);
   Y := terminal_state(TK_MOUSE_Y);
@@ -152,7 +152,7 @@ end;
 
 { TScene }
 
-procedure TScene.DrawText(const X, Y: integer; Text: string);
+procedure TScene.DrawText(const X, Y: Integer; Text: string);
 begin
   terminal_print(X, Y, Text);
 end;
@@ -162,9 +162,9 @@ begin
   terminal_print(40, 7, TK_ALIGN_CENTER, '[c=yellow]' + Title + '[/c]');
 end;
 
-procedure TScene.DrawFrame(const X, Y, W, H: integer);
+procedure TScene.DrawFrame(const X, Y, W, H: Integer);
 var
-  I: integer;
+  I: Integer;
 begin
   terminal_clear_area(X, Y, W, H);
   for I := X + 1 to X + W - 2 do
@@ -178,17 +178,17 @@ begin
     terminal_put(X + W - 1, I, $2551);
   end;
   terminal_put(X, Y, $2554);
-  terminal_put(x + w - 1, y, $2557);
-  terminal_put(x, y + h - 1, $255A);
-  terminal_put(x + w - 1, y + h - 1, $255D);
+  terminal_put(X + W - 1, Y, $2557);
+  terminal_put(X, Y + H - 1, $255A);
+  terminal_put(X + W - 1, Y + H - 1, $255D);
 end;
 
-function TScene.Width: integer;
+function TScene.Width: Integer;
 begin
   Result := terminal_state(TK_WIDTH);
 end;
 
-function TScene.Height: integer;
+function TScene.Height: Integer;
 begin
   Result := terminal_state(TK_HEIGHT);
 end;
@@ -252,34 +252,40 @@ end;
 
 procedure TSceneGame.Render;
 var
-  X, Y: integer;
+  X, Y: Integer;
 begin
   Game.Map.Draw(Self.Width, Self.Height - 1);
 
   X := terminal_state(TK_MOUSE_X);
   Y := terminal_state(TK_MOUSE_Y);
 
-  terminal_bkcolor('white');
+  terminal_bkcolor('gray');
   terminal_put(X, Y, $2588);
   terminal_color('black');
-  terminal_put(X, Y, Tile[Game.Map.Cell[X][Y]].Tile);
+  terminal_put(X, Y, Tile[Game.Map.Cell[X][Game.Map.Top + Y]].Tile);
 
   DrawBar;
+
+  DrawText(30, 24, Tile[Game.Map.Cell[X][Game.Map.Top + Y]].Name);
 end;
 
 procedure TSceneGame.Update(var Key: word);
 var
-  X, Y: integer;
+  X, Y: Integer;
 begin
   X := terminal_state(TK_MOUSE_X);
   Y := terminal_state(TK_MOUSE_Y);
   if (Key = TK_MOUSE_LEFT) and (Y = 24) and (X > 75) then
     Scenes.SetScene(scMenu);
   case Key of
-    TK_LEFT: ;
-    TK_RIGHT: ;
-    TK_UP: ;
-    TK_DOWN: ;
+    TK_LEFT:
+      ;
+    TK_RIGHT:
+      ;
+    TK_UP:
+      Game.Map.Top := Game.Map.Top - 1;
+    TK_DOWN:
+      Game.Map.Top := Game.Map.Top + 1;
   end;
 end;
 

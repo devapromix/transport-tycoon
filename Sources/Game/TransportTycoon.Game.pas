@@ -1,4 +1,4 @@
-unit TransportTycoon.Game;
+﻿unit TransportTycoon.Game;
 
 interface
 
@@ -28,7 +28,6 @@ var
 
 implementation
 
-
 { TGame }
 
 constructor TGame.Create;
@@ -51,9 +50,11 @@ begin
 end;
 
 initialization
-  Game := TGame.Create;
+
+Game := TGame.Create;
 
 finalization
-  Game.Free;
+
+Game.Free;
 
 end.
