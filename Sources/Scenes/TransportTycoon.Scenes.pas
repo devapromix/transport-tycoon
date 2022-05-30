@@ -82,6 +82,7 @@ uses
   BearLibTerminal,
   SysUtils,
   Graphics,
+  TransportTycoon.Map,
   TransportTycoon.Game;
 
 { TSceneGen }
@@ -261,7 +262,7 @@ begin
   terminal_bkcolor('white');
   terminal_put(X, Y, $2588);
   terminal_color('black');
-  terminal_put(X, Y, '#');
+  terminal_put(X, Y, Tile[Game.Map.Cell[X][Y]].Tile);
 
   DrawBar;
 end;

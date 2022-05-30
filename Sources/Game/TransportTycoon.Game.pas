@@ -47,6 +47,7 @@ procedure TGame.Clear;
 begin
   Turn := 0;
   Money := 100000;
+  Map.Gen;
 end;
 
 initialization

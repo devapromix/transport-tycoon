@@ -7,7 +7,7 @@ type
 
 type
   TTile = record
-    Tile: Char;
+    Tile: char;
     Color: string;
   end;
 
@@ -26,7 +26,7 @@ type
 
 const
   MapSizeStr: array [TMapSize] of string = ('Tiny', 'Small', 'Medium', 'Large');
-  MapSizeInt: array [TMapSize] of Integer = (64, 128, 256, 512);
+  MapSizeInt: array [TMapSize] of integer = (64, 128, 256, 512);
 
 type
 
@@ -34,14 +34,14 @@ type
 
   TMap = class(TObject)
   private
-    FWidth: Word;
-    FHeight: Word;
+    FWidth: word;
+    FHeight: word;
   public
-    Cell: array of array of TCell;
+    Cell: array [0..79, 0..19] of Tiles;
     constructor Create;
     destructor Destroy; override;
     procedure Clear;
-    procedure Draw(const AWidth, AHeight: Integer);
+    procedure Draw(const AWidth, AHeight: integer);
     procedure Gen;
   end;
 
@@ -55,7 +55,8 @@ uses
 
 constructor TMap.Create;
 begin
-
+  FWidth := 80;
+  FHeight := 20;
 end;
 
 destructor TMap.Destroy;
@@ -65,17 +66,21 @@ begin
 end;
 
 procedure TMap.Clear;
+var
+  X, Y: integer;
 begin
-
+  for Y := 0 to FHeight - 1 do
+    for X := 0 to FWidth - 1 do
+      Cell[X][Y] := tlGrass;
 end;
 
-procedure TMap.Draw(const AWidth, AHeight: Integer);
+procedure TMap.Draw(const AWidth, AHeight: integer);
 var
-  X, Y: Integer;
+  X, Y: integer;
 begin
   for Y := 0 to AHeight - 1 do
     for X := 0 to AWidth - 1 do
-      terminal_print(X, Y, Cell[X][Y].Tile.Tile);
+      terminal_print(X, Y, Tile[Cell[X][Y]].Tile);
 end;
 
 procedure TMap.Gen;
