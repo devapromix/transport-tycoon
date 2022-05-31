@@ -31,6 +31,7 @@ var
   C: TCity;
   N: Byte;
   S: string;
+  F: Boolean;
 begin
   Game.Map.Draw(Self.Width, Self.Height - 1);
 
@@ -39,18 +40,15 @@ begin
   C := Game.Map.City[Game.Map.CurrentCity];
   DrawTitle('BUILD IN ' + C.Name);
 
-  if (Game.Money >= C.AirportCost) and (C.Airport < 5) then
-    terminal_color('white')
-  else
-    terminal_color('gray');
+  F := (Game.Money >= C.AirportCost) and (C.Airport < 5);
   N := Math.EnsureRange(C.Airport + 1, 0, 5);
   S := '';
   if C.Airport < 5 then
     S := ' ($' + IntToStr(C.AirportCost) + ')';
-  DrawText(12, 9, '[[A]] Build ' + AirportSizeStr[N] + S);
+  DrawButton(12, 9, F, 'A', 'Build ' + AirportSizeStr[N] + S);
 
   terminal_color('white');
-  DrawText(36, 17, '[[ESC]] CLOSE');
+  DrawButton(17, 'ESC', 'CLOSE');
 
   TSceneWorld(Scenes.GetScene(scWorld)).DrawBar;
 end;

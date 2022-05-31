@@ -36,14 +36,14 @@ begin
   DrawTitle(C.Name);
   terminal_color('white');
   DrawText(12, 9, 'Population: ' + IntToStr(C.Population));
-  if C.Airport = 0 then
-    terminal_color('dark gray');
-  DrawText(34, 9, '[[A]] Airport: ' + AirportSizeStr[C.Airport]);
+  DrawButton(34, 9, C.Airport > 0, 'A', 'Airport: ' + AirportSizeStr[C.Airport]);
   terminal_color('white');
-  DrawText(30, 17, '[[B]] BUILD | [[ESC]] CLOSE');
+
+  DrawButton(30, 17, 'B', 'BUILD');
+  DrawText(40, 17, '|');
+  DrawButton(42, 17, 'ESC', 'CLOSE');
 
   TSceneWorld(Scenes.GetScene(scWorld)).DrawBar;
-
 end;
 
 procedure TSceneCity.Update(var Key: word);

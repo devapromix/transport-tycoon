@@ -17,6 +17,8 @@ type
     procedure Render; virtual; abstract;
     procedure Update(var Key: word); virtual; abstract;
     procedure DrawText(const X, Y: Integer; Text: string);
+    procedure DrawButton(const X, Y: Integer; IsActive: Boolean;
+      Button, Text: string); overload;
     procedure DrawButton(const X, Y: Integer; Button, Text: string); overload;
     procedure DrawButton(const Y: Integer; Button, Text: string); overload;
     procedure DrawTitle(const Title: string);
@@ -73,14 +75,34 @@ end;
 
 procedure TScene.DrawButton(const X, Y: Integer; Button, Text: string);
 begin
-  terminal_print(X, Y, Format('[c=green][[%s]][/c] [c=dark white]%s[/c]',
+  terminal_print(X, Y, Format('[c=light yellow][[%s]][/c] [c=white]%s[/c]',
     [Button, Text]));
 end;
 
 procedure TScene.DrawButton(const Y: Integer; Button, Text: string);
 begin
   terminal_print(Width div 2, Y, TK_ALIGN_CENTER,
-    Format('[c=green][[%s]][/c] [c=dark white]%s[/c]', [Button, Text]));
+    Format('[c=light yellow][[%s]][/c] [c=white]%s[/c]', [Button, Text]));
+end;
+
+procedure TScene.DrawButton(const X, Y: Integer; IsActive: Boolean;
+  Button, Text: string);
+var
+  CB, CT: string;
+begin
+  if IsActive then
+  begin
+    CB := 'light yellow';
+    CT := 'white';
+  end
+  else
+  begin
+    CB := 'gray';
+    CT := 'gray';
+  end;
+
+  terminal_print(X, Y, Format('[c=' + CB + '][[%s]][/c] [c=' + CT + ']%s[/c]',
+    [Button, Text]));
 end;
 
 procedure TScene.DrawFrame(const X, Y, W, H: Integer);

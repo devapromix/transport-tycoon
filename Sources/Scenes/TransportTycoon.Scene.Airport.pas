@@ -36,7 +36,7 @@ begin
   DrawTitle(UpperCase(AirportSizeStr[C.Airport]));
 
   terminal_color('white');
-  DrawText(36, 17, '[[ESC]] CLOSE');
+  DrawButton(17, 'ESC', 'CLOSE');
 
   TSceneWorld(Scenes.GetScene(scWorld)).DrawBar;
 end;
