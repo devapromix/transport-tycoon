@@ -5,7 +5,10 @@ uses
   BearLibTerminal in 'Third-Party\BearLibTerminal\BearLibTerminal.pas',
   TransportTycoon.Map in 'Game\TransportTycoon.Map.pas',
   TransportTycoon.Game in 'Game\TransportTycoon.Game.pas',
-  TransportTycoon.Scenes in 'Scenes\TransportTycoon.Scenes.pas';
+  TransportTycoon.Scenes in 'Scenes\TransportTycoon.Scenes.pas',
+  TransportTycoon.Scene.City in 'Scenes\TransportTycoon.Scene.City.pas',
+  TransportTycoon.Scene.BuildInCity
+    in 'Scenes\TransportTycoon.Scene.BuildInCity.pas';
 
 var
   Key: Word = 0;
@@ -36,7 +39,7 @@ begin
       if (Tmp > 25) then
       begin
         Tmp := 0;
-        Inc(Game.Turn);
+        Game.Step;
       end;
     until (Key = TK_CLOSE);
     terminal_close();

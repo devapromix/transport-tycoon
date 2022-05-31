@@ -3,7 +3,7 @@
 interface
 
 type
-  TSceneEnum = (scMenu, scGen, scGame);
+  TSceneEnum = (scMenu, scGen, scGame, scCity, scBuildInCity);
 
 type
 
@@ -13,6 +13,7 @@ type
   private
 
   public
+    MX, MY: Integer;
     procedure Render; virtual; abstract;
     procedure Update(var Key: word); virtual; abstract;
     procedure DrawText(const X, Y: Integer; Text: string); overload;
@@ -67,8 +68,8 @@ type
 
   TSceneGame = class(TScene)
   private
-    procedure DrawBar;
   public
+    procedure DrawBar;
     procedure Render; override;
     procedure Update(var Key: word); override;
   end;
@@ -83,7 +84,9 @@ uses
   SysUtils,
   Graphics,
   TransportTycoon.Map,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Scene.City,
+  TransportTycoon.Scene.BuildInCity;
 
 { TSceneGen }
 
@@ -92,30 +95,28 @@ begin
   DrawFrame(10, 5, 60, 15);
   DrawTitle('WORLD GENERATION');
 
-
-  // DrawText(12, 9, "[[A]] Map size: " + gen_map_size_str());
+  DrawText(12, 9, 'Map size: ' + MapSizeStr[Game.Map.Size]);
   // DrawText(42, 9, "[[B]] No. of towns: " + gen_towns_str());
 
   // DrawText(12, 10, "[[C]] Rivers: " + gen_rivers_str());
   // DrawText(42, 10, "[[D]] No. of ind.: " + gen_indust_str());
 
   // DrawText(12, 11, "[[E]] Sea level: " + gen_sea_level_str());
-  DrawText(42, 11, 'Date: Jan 1st, 1950');
+  DrawText(42, 11, Format('Date: %s %d, %d', [MonStr[Game.Month], Game.Day,
+    Game.Year]));
 
   DrawText(36, 17, 'GENERATE');
 end;
 
 procedure TSceneGen.Update(var Key: word);
-var
-  X, Y: Integer;
 begin
-  X := terminal_state(TK_MOUSE_X);
-  Y := terminal_state(TK_MOUSE_Y);
-  if (Key = TK_MOUSE_LEFT) and (X > 35) and (X < 45) then
-    case Y of
+  if (Key = TK_MOUSE_LEFT) and (MX > 35) and (MX < 45) then
+    case MY of
       17:
         begin
+          Game.Clear;
           Game.Map.Gen;
+          Game.IsPause := False;
           Scenes.SetScene(scGame);
         end;
     end;
@@ -129,22 +130,31 @@ begin
   DrawTitle('TRANSPORT TYCOON');
 
   DrawText(36, 11, 'NEW GAME');
-  DrawText(38, 12, 'LOAD');
+  if not Game.IsGame then
+    terminal_color('dark gray');
+  DrawText(36, 12, 'CONTINUE');
+  terminal_color('white');
   DrawText(38, 13, 'QUIT');
 
   DrawText(32, 17, 'APROMIX (C) 2022');
 end;
 
 procedure TSceneMenu.Update(var Key: word);
-var
-  X, Y: Integer;
 begin
-  X := terminal_state(TK_MOUSE_X);
-  Y := terminal_state(TK_MOUSE_Y);
   if (Key = TK_MOUSE_LEFT) then
-    case Y of
+    case MY of
       11:
-        Scenes.SetScene(scGen);
+        begin
+          Game.New;
+          Game.IsGame := False;
+          Scenes.SetScene(scGen);
+        end;
+      12:
+        if Game.IsGame then
+        begin
+          Game.IsPause := False;
+          Scenes.SetScene(scGame);
+        end;
       13:
         terminal_close();
     end;
@@ -201,12 +211,19 @@ begin
   FScene[scMenu] := TSceneMenu.Create;
   FScene[scGen] := TSceneGen.Create;
   FScene[scGame] := TSceneGame.Create;
+  FScene[scCity] := TSceneCity.Create;
+  FScene[scBuildInCity] := TSceneBuildInCity.Create;
 end;
 
 procedure TScenes.Update(var Key: word);
 begin
   if (FScene[Scene] <> nil) then
-    FScene[Scene].Update(Key);
+    with FScene[Scene] do
+    begin
+      MX := terminal_state(TK_MOUSE_X);
+      MY := terminal_state(TK_MOUSE_Y);
+      Update(Key);
+    end;
 end;
 
 procedure TScenes.Render;
@@ -247,45 +264,48 @@ begin
   terminal_clear_area(0, 24, 80, 1);
   DrawText(0, 24, Format('$%d', [Game.Money]));
   DrawText(12, 24, Format('Turn:%d', [Game.Turn]));
+  DrawText(60, 24, Format('%s %d, %d', [MonStr[Game.Month], Game.Day,
+    Game.Year]));
   DrawText(76, 24, 'MENU');
 end;
 
 procedure TSceneGame.Render;
-var
-  X, Y: Integer;
 begin
   Game.Map.Draw(Self.Width, Self.Height - 1);
 
-  X := terminal_state(TK_MOUSE_X);
-  Y := terminal_state(TK_MOUSE_Y);
-
   terminal_bkcolor('gray');
-  terminal_put(X, Y, $2588);
+  terminal_put(MX, MY, $2588);
   terminal_color('black');
-  terminal_put(X, Y, Tile[Game.Map.Cell[X][Game.Map.Top + Y]].Tile);
+  terminal_put(MX, MY, Tile[Game.Map.Cell[MX][Game.Map.Top + MY]].Tile);
 
   DrawBar;
 
-  DrawText(30, 24, Tile[Game.Map.Cell[X][Game.Map.Top + Y]].Name);
+  DrawText(30, 24, Tile[Game.Map.Cell[MX][Game.Map.Top + MY]].Name);
 end;
 
 procedure TSceneGame.Update(var Key: word);
-var
-  X, Y: Integer;
 begin
-  X := terminal_state(TK_MOUSE_X);
-  Y := terminal_state(TK_MOUSE_Y);
-  if (Key = TK_MOUSE_LEFT) and (Y = 24) and (X > 75) then
-    Scenes.SetScene(scMenu);
+  if (Key = TK_MOUSE_LEFT) then
+  begin
+    if (MY = 24) and (MX > 75) then
+    begin
+      Game.IsPause := True;
+      Scenes.SetScene(scMenu);
+    end;
+    if Game.Map.Cell[MX][Game.Map.Top + MY] = tlCity then
+      Scenes.SetScene(scCity);
+  end;
   case Key of
     TK_LEFT:
       ;
     TK_RIGHT:
       ;
     TK_UP:
-      Game.Map.Top := Game.Map.Top - 1;
+      if (Game.Map.Top > 0) then
+        Game.Map.Top := Game.Map.Top - 1;
     TK_DOWN:
-      Game.Map.Top := Game.Map.Top + 1;
+      if (Game.Map.Top <= Game.Map.Height - Self.Height) then
+        Game.Map.Top := Game.Map.Top + 1;
   end;
 end;
 

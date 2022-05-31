@@ -3,7 +3,7 @@
 interface
 
 type
-  Tiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush);
+  Tiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlCity);
 
 type
   TTile = record
@@ -17,13 +17,15 @@ const
     //
     (Name: 'Grass'; Tile: '"'; Color: 'green'),
     //
-    (Name: 'Dirt'; Tile: '.'; Color: 'red'),
+    (Name: 'Dirt'; Tile: ':'; Color: 'darker yellow'),
     //
     (Name: 'Tree'; Tile: 'T'; Color: 'green'),
     //
-    (Name: 'Small Tree'; Tile: 't'; Color: 'green'),
+    (Name: 'Small Tree'; Tile: 't'; Color: 'dark green'),
     //
-    (Name: 'Bush'; Tile: 'b'; Color: 'green')
+    (Name: 'Bush'; Tile: 'b'; Color: 'dark green'),
+    //
+    (Name: 'City'; Tile: '#'; Color: 'lighter yellow')
     //
     );
 
@@ -49,6 +51,7 @@ type
     FWidth: Word;
     FHeight: Word;
   public
+    Size: TMapSize;
     Cell: array [0 .. 79, 0 .. 79] of Tiles;
     constructor Create;
     destructor Destroy; override;
@@ -56,6 +59,7 @@ type
     procedure Draw(const AWidth, AHeight: Integer);
     procedure Gen;
     property Top: Word read FTop write FTop;
+    property Height: Word read FHeight;
   end;
 
 implementation
@@ -68,6 +72,7 @@ uses
 
 constructor TMap.Create;
 begin
+  Self.Size := msTiny;
   FWidth := 80;
   FHeight := 80;
 end;
@@ -85,6 +90,32 @@ begin
   FTop := 0;
   for Y := 0 to FHeight - 1 do
     for X := 0 to FWidth - 1 do
+      Cell[X][Y] := tlGrass;
+end;
+
+procedure TMap.Draw(const AWidth, AHeight: Integer);
+var
+  X, Y: Integer;
+begin
+  terminal_layer(0);
+  terminal_bkcolor('darkest gray');
+  for Y := 0 to AHeight - 1 do
+    for X := 0 to AWidth - 1 do
+    begin
+      terminal_color(Tile[Cell[X][Top + Y]].Color);
+      terminal_put(X, Y, Tile[Cell[X][Top + Y]].Tile);
+    end;
+  terminal_color('white');
+  terminal_layer(0);
+end;
+
+procedure TMap.Gen;
+var
+  X, Y, I: Integer;
+begin
+  Self.Clear;
+  for Y := 0 to FHeight - 1 do
+    for X := 0 to FWidth - 1 do
     begin
       case Math.RandomRange(0, 15) of
         0:
@@ -99,24 +130,12 @@ begin
         Cell[X][Y] := tlGrass;
       end;
     end;
-end;
-
-procedure TMap.Draw(const AWidth, AHeight: Integer);
-var
-  X, Y: Integer;
-begin
-  for Y := 0 to AHeight - 1 do
-    for X := 0 to AWidth - 1 do
-    begin
-      terminal_color(Tile[Cell[X][Top + Y]].Color);
-      terminal_bkcolor('darkest ' + Tile[Cell[X][Top + Y]].Color);
-      terminal_print(X, Y, Tile[Cell[X][Top + Y]].Tile);
-    end;
-end;
-
-procedure TMap.Gen;
-begin
-  Self.Clear;
+  for I := 0 to 3 do
+  begin
+    X := Math.RandomRange(1, 78);
+    Y := Math.RandomRange(1, 78);
+    Cell[X][Y] := tlCity;
+  end;
 end;
 
 end.
