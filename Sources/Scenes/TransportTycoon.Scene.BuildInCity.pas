@@ -18,7 +18,8 @@ implementation
 
 uses
   BearLibTerminal,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Scene.World;
 
 { TSceneBuildInCity }
 
@@ -31,7 +32,7 @@ begin
 
   DrawText(38, 17, 'CLOSE');
 
-  TSceneGame(Scenes.GetScene(scGame)).DrawBar;
+  TSceneWorld(Scenes.GetScene(scWorld)).DrawBar;
 end;
 
 procedure TSceneBuildInCity.Update(var Key: word);

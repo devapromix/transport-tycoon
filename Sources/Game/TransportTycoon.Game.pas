@@ -17,13 +17,12 @@ type
 
   TGame = class(TObject)
   private
-
+    FMoney: Integer;
   public
     IsPause: Boolean;
     IsGame: Boolean;
     Map: TMap;
     Turn: Integer;
-    Money: Integer;
     Day: Byte;
     Month: Byte;
     Year: Word;
@@ -32,12 +31,18 @@ type
     procedure Clear;
     procedure Step;
     procedure New;
+    property Money: Integer read FMoney;
+    procedure ModifyMoney(const AMoney: Integer);
+    procedure CityGrow;
   end;
 
 var
   Game: TGame;
 
 implementation
+
+uses
+  Math;
 
 { TGame }
 
@@ -55,10 +60,23 @@ begin
   inherited Destroy;
 end;
 
+procedure TGame.ModifyMoney(const AMoney: Integer);
+begin
+  FMoney := FMoney + AMoney;
+end;
+
 procedure TGame.New;
 begin
   Day := 1;
   Month := 1;
+end;
+
+procedure TGame.CityGrow;
+var
+  I: Integer;
+begin
+  for I := 0 to Length(Map.City) - 1 do
+    Map.City[I].Grow;
 end;
 
 procedure TGame.Step;
@@ -72,6 +90,7 @@ begin
   begin
     Day := 1;
     Inc(Month);
+    Self.CityGrow;
   end;
   if Month > 12 then
   begin
@@ -86,7 +105,7 @@ begin
   Self.New;
   IsGame := True;
   Turn := 0;
-  Money := 100000;
+  FMoney := 100000;
   Map.Gen;
 end;
 

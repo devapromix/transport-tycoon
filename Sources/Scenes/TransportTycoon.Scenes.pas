@@ -3,7 +3,7 @@
 interface
 
 type
-  TSceneEnum = (scMenu, scGen, scGame, scCity, scBuildInCity);
+  TSceneEnum = (scMenu, scGen, scWorld, scCity, scBuildInCity);
 
 type
 
@@ -62,18 +62,6 @@ type
     procedure Update(var Key: word); override;
   end;
 
-type
-
-  { TSceneGame }
-
-  TSceneGame = class(TScene)
-  private
-  public
-    procedure DrawBar;
-    procedure Render; override;
-    procedure Update(var Key: word); override;
-  end;
-
 var
   Scenes: TScenes;
 
@@ -86,6 +74,7 @@ uses
   TransportTycoon.Map,
   TransportTycoon.Game,
   TransportTycoon.Scene.City,
+  TransportTycoon.Scene.World,
   TransportTycoon.Scene.BuildInCity;
 
 { TSceneGen }
@@ -96,7 +85,7 @@ begin
   DrawTitle('WORLD GENERATION');
 
   DrawText(12, 9, 'Map size: ' + MapSizeStr[Game.Map.Size]);
-  // DrawText(42, 9, "[[B]] No. of towns: " + gen_towns_str());
+  DrawText(42, 9, 'No. of towns: ' + MapNoOfTownsStr[Game.Map.NoOfTowns]);
 
   // DrawText(12, 10, "[[C]] Rivers: " + gen_rivers_str());
   // DrawText(42, 10, "[[D]] No. of ind.: " + gen_indust_str());
@@ -117,7 +106,7 @@ begin
           Game.Clear;
           Game.Map.Gen;
           Game.IsPause := False;
-          Scenes.SetScene(scGame);
+          Scenes.SetScene(scWorld);
         end;
     end;
 end;
@@ -153,7 +142,7 @@ begin
         if Game.IsGame then
         begin
           Game.IsPause := False;
-          Scenes.SetScene(scGame);
+          Scenes.SetScene(scWorld);
         end;
       13:
         terminal_close();
@@ -210,7 +199,7 @@ begin
   inherited;
   FScene[scMenu] := TSceneMenu.Create;
   FScene[scGen] := TSceneGen.Create;
-  FScene[scGame] := TSceneGame.Create;
+  FScene[scWorld] := TSceneWorld.Create;
   FScene[scCity] := TSceneCity.Create;
   FScene[scBuildInCity] := TSceneBuildInCity.Create;
 end;
@@ -253,60 +242,6 @@ end;
 function TScenes.GetScene(I: TSceneEnum): TScene;
 begin
   Result := FScene[I];
-end;
-
-{ TSceneGame }
-
-procedure TSceneGame.DrawBar;
-begin
-  terminal_color('white');
-  terminal_bkcolor('black');
-  terminal_clear_area(0, 24, 80, 1);
-  DrawText(0, 24, Format('$%d', [Game.Money]));
-  DrawText(12, 24, Format('Turn:%d', [Game.Turn]));
-  DrawText(60, 24, Format('%s %d, %d', [MonStr[Game.Month], Game.Day,
-    Game.Year]));
-  DrawText(76, 24, 'MENU');
-end;
-
-procedure TSceneGame.Render;
-begin
-  Game.Map.Draw(Self.Width, Self.Height - 1);
-
-  terminal_bkcolor('gray');
-  terminal_put(MX, MY, $2588);
-  terminal_color('black');
-  terminal_put(MX, MY, Tile[Game.Map.Cell[MX][Game.Map.Top + MY]].Tile);
-
-  DrawBar;
-
-  DrawText(30, 24, Tile[Game.Map.Cell[MX][Game.Map.Top + MY]].Name);
-end;
-
-procedure TSceneGame.Update(var Key: word);
-begin
-  if (Key = TK_MOUSE_LEFT) then
-  begin
-    if (MY = 24) and (MX > 75) then
-    begin
-      Game.IsPause := True;
-      Scenes.SetScene(scMenu);
-    end;
-    if Game.Map.Cell[MX][Game.Map.Top + MY] = tlCity then
-      Scenes.SetScene(scCity);
-  end;
-  case Key of
-    TK_LEFT:
-      ;
-    TK_RIGHT:
-      ;
-    TK_UP:
-      if (Game.Map.Top > 0) then
-        Game.Map.Top := Game.Map.Top - 1;
-    TK_DOWN:
-      if (Game.Map.Top <= Game.Map.Height - Self.Height) then
-        Game.Map.Top := Game.Map.Top + 1;
-  end;
 end;
 
 end.

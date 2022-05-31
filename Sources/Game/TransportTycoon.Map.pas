@@ -2,6 +2,9 @@
 
 interface
 
+uses
+  TransportTycoon.City;
+
 type
   Tiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlCity);
 
@@ -40,6 +43,9 @@ type
 const
   MapSizeStr: array [TMapSize] of string = ('Tiny', 'Small', 'Medium', 'Large');
   MapSizeInt: array [TMapSize] of Integer = (80, 160, 320, 640);
+  MapNoOfTownsStr: array [1 .. 4] of string = ('Very Low', 'Low',
+    'Normal', 'High');
+  MapNoOfTownsInt: array [1 .. 4] of Byte = (3, 5, 7, 9);
 
 type
 
@@ -52,7 +58,10 @@ type
     FHeight: Word;
   public
     Size: TMapSize;
+    NoOfTowns: Byte;
     Cell: array [0 .. 79, 0 .. 79] of Tiles;
+    City: array of TCity;
+    CurrentCity: Byte;
     constructor Create;
     destructor Destroy; override;
     procedure Clear;
@@ -60,12 +69,15 @@ type
     procedure Gen;
     property Top: Word read FTop write FTop;
     property Height: Word read FHeight;
+    function GetCurrentCity(const AX, AY: Integer): ShortInt;
+    function EnterInCity(const AX, AY: Integer): Boolean;
   end;
 
 implementation
 
 uses
   Math,
+  SysUtils,
   BearLibTerminal;
 
 { TMap }
@@ -75,10 +87,15 @@ begin
   Self.Size := msTiny;
   FWidth := 80;
   FHeight := 80;
+  NoOfTowns := 1;
 end;
 
 destructor TMap.Destroy;
+var
+  I: Integer;
 begin
+  for I := 0 to Length(City) - 1 do
+    City[I].Free;
 
   inherited Destroy;
 end;
@@ -109,6 +126,12 @@ begin
   terminal_layer(0);
 end;
 
+function TMap.EnterInCity(const AX, AY: Integer): Boolean;
+begin
+  CurrentCity := GetCurrentCity(AX, AY);
+  Result := CurrentCity >= 0;
+end;
+
 procedure TMap.Gen;
 var
   X, Y, I: Integer;
@@ -130,12 +153,28 @@ begin
         Cell[X][Y] := tlGrass;
       end;
     end;
-  for I := 0 to 3 do
+  //
+  for I := 0 to MapNoOfTownsInt[NoOfTowns] - 1 do
   begin
     X := Math.RandomRange(1, 78);
     Y := Math.RandomRange(1, 78);
     Cell[X][Y] := tlCity;
+    SetLength(City, I + 1);
+    City[I] := TCity.Create(TownNameStr[I], X, Y);
   end;
+end;
+
+function TMap.GetCurrentCity(const AX, AY: Integer): ShortInt;
+var
+  I: Integer;
+begin
+  Result := -1;
+  for I := 0 to Length(City) - 1 do
+    if (City[I].X = AX) and (City[I].X = AX) then
+    begin
+      Result := I;
+      Exit;
+    end;
 end;
 
 end.

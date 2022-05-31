@@ -7,8 +7,9 @@ uses
   TransportTycoon.Game in 'Game\TransportTycoon.Game.pas',
   TransportTycoon.Scenes in 'Scenes\TransportTycoon.Scenes.pas',
   TransportTycoon.Scene.City in 'Scenes\TransportTycoon.Scene.City.pas',
-  TransportTycoon.Scene.BuildInCity
-    in 'Scenes\TransportTycoon.Scene.BuildInCity.pas';
+  TransportTycoon.Scene.BuildInCity in 'Scenes\TransportTycoon.Scene.BuildInCity.pas',
+  TransportTycoon.Scene.World in 'Scenes\TransportTycoon.Scene.World.pas',
+  TransportTycoon.City in 'Game\TransportTycoon.City.pas';
 
 var
   Key: Word = 0;
