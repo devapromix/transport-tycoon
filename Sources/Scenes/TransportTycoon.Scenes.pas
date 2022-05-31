@@ -3,7 +3,7 @@
 interface
 
 type
-  TSceneEnum = (scMenu, scGen, scWorld, scCity, scBuildInCity);
+  TSceneEnum = (scMenu, scGen, scWorld, scCity, scBuildInCity, scAirport);
 
 type
 
@@ -16,7 +16,9 @@ type
     MX, MY: Integer;
     procedure Render; virtual; abstract;
     procedure Update(var Key: word); virtual; abstract;
-    procedure DrawText(const X, Y: Integer; Text: string); overload;
+    procedure DrawText(const X, Y: Integer; Text: string);
+    procedure DrawButton(const X, Y: Integer; Button, Text: string); overload;
+    procedure DrawButton(const Y: Integer; Button, Text: string); overload;
     procedure DrawTitle(const Title: string);
     procedure DrawFrame(const X, Y, W, H: Integer);
     function Width: Integer;
@@ -38,30 +40,6 @@ type
     procedure SetScene(SceneEnum: TSceneEnum);
   end;
 
-type
-
-  { TSceneMenu }
-
-  TSceneMenu = class(TScene)
-  private
-
-  public
-    procedure Render; override;
-    procedure Update(var Key: word); override;
-  end;
-
-type
-
-  { TSceneGen }
-
-  TSceneGen = class(TScene)
-  private
-
-  public
-    procedure Render; override;
-    procedure Update(var Key: word); override;
-  end;
-
 var
   Scenes: TScenes;
 
@@ -73,81 +51,12 @@ uses
   Graphics,
   TransportTycoon.Map,
   TransportTycoon.Game,
+  TransportTycoon.Scene.Gen,
+  TransportTycoon.Scene.Menu,
   TransportTycoon.Scene.City,
   TransportTycoon.Scene.World,
-  TransportTycoon.Scene.BuildInCity;
-
-{ TSceneGen }
-
-procedure TSceneGen.Render;
-begin
-  DrawFrame(10, 5, 60, 15);
-  DrawTitle('WORLD GENERATION');
-
-  DrawText(12, 9, 'Map size: ' + MapSizeStr[Game.Map.Size]);
-  DrawText(42, 9, 'No. of towns: ' + MapNoOfTownsStr[Game.Map.NoOfTowns]);
-
-  // DrawText(12, 10, "[[C]] Rivers: " + gen_rivers_str());
-  // DrawText(42, 10, "[[D]] No. of ind.: " + gen_indust_str());
-
-  // DrawText(12, 11, "[[E]] Sea level: " + gen_sea_level_str());
-  DrawText(42, 11, Format('Date: %s %d, %d', [MonStr[Game.Month], Game.Day,
-    Game.Year]));
-
-  DrawText(36, 17, 'GENERATE');
-end;
-
-procedure TSceneGen.Update(var Key: word);
-begin
-  if (Key = TK_MOUSE_LEFT) and (MX > 35) and (MX < 45) then
-    case MY of
-      17:
-        begin
-          Game.Clear;
-          Game.Map.Gen;
-          Game.IsPause := False;
-          Scenes.SetScene(scWorld);
-        end;
-    end;
-end;
-
-{ TSceneMenu }
-
-procedure TSceneMenu.Render;
-begin
-  DrawFrame(10, 5, 60, 15);
-  DrawTitle('TRANSPORT TYCOON');
-
-  DrawText(36, 11, 'NEW GAME');
-  if not Game.IsGame then
-    terminal_color('dark gray');
-  DrawText(36, 12, 'CONTINUE');
-  terminal_color('white');
-  DrawText(38, 13, 'QUIT');
-
-  DrawText(32, 17, 'APROMIX (C) 2022');
-end;
-
-procedure TSceneMenu.Update(var Key: word);
-begin
-  if (Key = TK_MOUSE_LEFT) then
-    case MY of
-      11:
-        begin
-          Game.New;
-          Game.IsGame := False;
-          Scenes.SetScene(scGen);
-        end;
-      12:
-        if Game.IsGame then
-        begin
-          Game.IsPause := False;
-          Scenes.SetScene(scWorld);
-        end;
-      13:
-        terminal_close();
-    end;
-end;
+  TransportTycoon.Scene.BuildInCity,
+  TransportTycoon.Scene.Airport;
 
 { TScene }
 
@@ -158,7 +67,20 @@ end;
 
 procedure TScene.DrawTitle(const Title: string);
 begin
-  terminal_print(40, 7, TK_ALIGN_CENTER, '[c=yellow]' + Title + '[/c]');
+  terminal_print(Width div 2, 7, TK_ALIGN_CENTER, '[c=yellow]' + Title
+    + '[/c]');
+end;
+
+procedure TScene.DrawButton(const X, Y: Integer; Button, Text: string);
+begin
+  terminal_print(X, Y, Format('[c=green][[%s]][/c] [c=dark white]%s[/c]',
+    [Button, Text]));
+end;
+
+procedure TScene.DrawButton(const Y: Integer; Button, Text: string);
+begin
+  terminal_print(Width div 2, Y, TK_ALIGN_CENTER,
+    Format('[c=green][[%s]][/c] [c=dark white]%s[/c]', [Button, Text]));
 end;
 
 procedure TScene.DrawFrame(const X, Y, W, H: Integer);
@@ -202,6 +124,7 @@ begin
   FScene[scWorld] := TSceneWorld.Create;
   FScene[scCity] := TSceneCity.Create;
   FScene[scBuildInCity] := TSceneBuildInCity.Create;
+  FScene[scAirport] := TSceneAirport.Create;
 end;
 
 procedure TScenes.Update(var Key: word);

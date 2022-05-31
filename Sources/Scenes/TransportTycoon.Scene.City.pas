@@ -21,7 +21,8 @@ uses
   BearLibTerminal,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Scene.World, TransportTycoon.City;
+  TransportTycoon.Scene.World,
+  TransportTycoon.City;
 
 procedure TSceneCity.Render;
 var
@@ -46,24 +47,42 @@ begin
 end;
 
 procedure TSceneCity.Update(var Key: word);
+var
+  C: TCity;
 begin
-  if (Key = TK_MOUSE_LEFT) and (MX >= 30) and (MX <= 38) then
-    case MY of
-      17:
-        begin
-          Scenes.SetScene(scBuildInCity);
-        end;
-    end;
-  if (Key = TK_MOUSE_LEFT) and (MX >= 42) and (MX <= 52) then
-    case MY of
-      17:
-        begin
-          Scenes.SetScene(scWorld);
-        end;
-    end;
+  C := Game.Map.City[Game.Map.CurrentCity];
+  if (Key = TK_MOUSE_LEFT) then
+  begin
+    if (MX >= 30) and (MX <= 38) then
+      case MY of
+        17:
+          begin
+            Scenes.SetScene(scBuildInCity);
+          end;
+      end;
+    if (MX >= 42) and (MX <= 52) then
+      case MY of
+        17:
+          begin
+            Scenes.SetScene(scWorld);
+          end;
+      end;
+    if (MX >= 34) and (MX <= 69) then
+      case MY of
+        9:
+          begin
+            Key := TK_A;
+          end;
+      end;
+  end;
   case Key of
     TK_ESCAPE:
       Scenes.SetScene(scWorld);
+    TK_A:
+      if (C.Airport > 0) then
+        Scenes.SetScene(scAirport);
+    TK_B:
+      Scenes.SetScene(scBuildInCity);
   end;
 end;
 
