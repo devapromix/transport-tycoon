@@ -14,7 +14,8 @@ uses
   TransportTycoon.Scene.MainMenu in 'Scenes\TransportTycoon.Scene.MainMenu.pas',
   TransportTycoon.Scene.Gen in 'Scenes\TransportTycoon.Scene.Gen.pas',
   TransportTycoon.Aircraft in 'Game\TransportTycoon.Aircraft.pas',
-  TransportTycoon.Scene.GameMenu in 'Scenes\TransportTycoon.Scene.GameMenu.pas';
+  TransportTycoon.Scene.GameMenu in 'Scenes\TransportTycoon.Scene.GameMenu.pas',
+  TransportTycoon.Scene.Hangar in 'Scenes\TransportTycoon.Scene.Hangar.pas';
 
 var
   Key: Word = 0;

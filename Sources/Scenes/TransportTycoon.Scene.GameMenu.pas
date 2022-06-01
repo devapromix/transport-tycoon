@@ -30,11 +30,19 @@ begin
   Game.Map.Draw(Self.Width, Self.Height - 1);
 
   DrawFrame(10, 5, 60, 15);
-  DrawTitle('TRANSPORT TYCOON');
+  DrawTitle(Game.CompanyName);
 
-  DrawButton(12, 9, '?', 'COMPANY FINANCES INFO');
-  DrawButton(42, 9, '?', 'GENERAL COMPANY INFO');
+  DrawButton(12, 9, False, 'F', 'COMPANY FINANCES INFO');
+  DrawButton(42, 9, False, 'G', 'GENERAL COMPANY INFO');
 
+  DrawButton(12, 10, False, 'N', 'TOWN DIRECTORY');
+
+  DrawButton(12, 12, False, 'C', 'LIST OF ROAD VEHICLES');
+  DrawButton(12, 13, False, 'T', 'LIST OF TRAINS');
+  DrawButton(12, 14, False, 'S', 'LIST OF SHIPS');
+  DrawButton(12, 15, False, 'A', 'LIST OF AIRCRAFTS');
+
+  DrawButton(42, 14, False, 'B', 'BUILD');
   DrawButton(42, 15, 'X', 'CLEAR LAND');
 
   DrawButton(29, 17, 'Q', 'QUIT');
@@ -48,6 +56,11 @@ procedure TSceneGameMenu.Update(var Key: word);
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
+    if (MX >= 42) and (MX <= 68) then
+      case MY of
+        15:
+          Key := TK_X;
+      end;
     if (MX >= 29) and (MX <= 36) then
       case MY of
         17:

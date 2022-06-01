@@ -4,7 +4,7 @@ interface
 
 type
   TSceneEnum = (scMainMenu, scGameMenu, scGen, scWorld, scCity, scBuildInCity,
-    scAirport);
+    scAirport, scHangar);
 
 type
 
@@ -62,7 +62,8 @@ uses
   TransportTycoon.Scene.City,
   TransportTycoon.Scene.World,
   TransportTycoon.Scene.BuildInCity,
-  TransportTycoon.Scene.Airport;
+  TransportTycoon.Scene.Airport,
+  TransportTycoon.Scene.Hangar;
 
 { TScene }
 
@@ -73,20 +74,21 @@ end;
 
 procedure TScene.DrawTitle(const Title: string);
 begin
-  terminal_print(Width div 2, 7, TK_ALIGN_CENTER, '[c=yellow]' + Title
-    + '[/c]');
+  terminal_print(Width div 2, 7, TK_ALIGN_CENTER,
+    '[c=yellow]' + UpperCase(Title) + '[/c]');
 end;
 
 procedure TScene.DrawButton(const X, Y: Integer; Button, Text: string);
 begin
   terminal_print(X, Y, Format('[c=light yellow][[%s]][/c] [c=white]%s[/c]',
-    [Button, Text]));
+    [UpperCase(Button), UpperCase(Text)]));
 end;
 
 procedure TScene.DrawButton(const Y: Integer; Button, Text: string);
 begin
   terminal_print(Width div 2, Y, TK_ALIGN_CENTER,
-    Format('[c=light yellow][[%s]][/c] [c=white]%s[/c]', [Button, Text]));
+    Format('[c=light yellow][[%s]][/c] [c=white]%s[/c]', [UpperCase(Button),
+    UpperCase(Text)]));
 end;
 
 procedure TScene.DrawButton(const X, Y: Integer; IsActive: Boolean;
@@ -106,7 +108,7 @@ begin
   end;
 
   terminal_print(X, Y, Format('[c=' + CB + '][[%s]][/c] [c=' + CT + ']%s[/c]',
-    [Button, Text]));
+    [UpperCase(Button), UpperCase(Text)]));
 end;
 
 procedure TScene.DrawButton(const Y: Integer; IsActive: Boolean;
@@ -125,7 +127,8 @@ begin
     CT := 'gray';
   end;
   terminal_print(Width div 2, Y, TK_ALIGN_CENTER,
-    Format('[c=' + CB + '][[%s]][/c] [c=' + CT + ']%s[/c]', [Button, Text]));
+    Format('[c=' + CB + '][[%s]][/c] [c=' + CT + ']%s[/c]', [UpperCase(Button),
+    UpperCase(Text)]));
 end;
 
 procedure TScene.DrawFrame(const X, Y, W, H: Integer);
@@ -171,6 +174,7 @@ begin
   FScene[scCity] := TSceneCity.Create;
   FScene[scBuildInCity] := TSceneBuildInCity.Create;
   FScene[scAirport] := TSceneAirport.Create;
+  FScene[scHangar] := TSceneHangar.Create;
 end;
 
 procedure TScenes.Update(var Key: word);

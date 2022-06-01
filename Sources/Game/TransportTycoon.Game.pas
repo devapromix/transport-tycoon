@@ -13,12 +13,10 @@ const
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
 
 type
-
-  { TGame }
-
   TGame = class(TObject)
   private
     FMoney: Integer;
+    FCompanyName: string;
   public
     IsClearLand: Boolean;
     IsPause: Boolean;
@@ -38,6 +36,7 @@ type
     property Money: Integer read FMoney;
     procedure ModifyMoney(const AMoney: Integer);
     procedure CityGrow;
+    property CompanyName: string read FCompanyName;
   end;
 
 var
@@ -46,7 +45,7 @@ var
 implementation
 
 uses
-  Math;
+  Math, TransportTycoon.City;
 
 { TGame }
 
@@ -56,15 +55,19 @@ begin
   IsPause := True;
   Self.New;
   Year := 1950;
-  Aircrafts := TAircrafts.Create;
   Map := TMap.Create;
   Map.Gen;
+  Aircrafts := TAircrafts.Create;
 end;
 
 destructor TGame.Destroy;
+var
+  I: Integer;
 begin
   Map.Free;
   Aircrafts.Free;
+  for I := 0 to Length(Aircraft) - 1 do
+    Aircraft[I].Free;
   inherited Destroy;
 end;
 
@@ -106,6 +109,8 @@ begin
     Inc(Year);
   end;
 
+  Aircrafts.Step;
+
 end;
 
 procedure TGame.Clear;
@@ -116,6 +121,8 @@ begin
   Turn := 0;
   FMoney := 100000;
   Map.Gen;
+  FCompanyName := TownNameStr[Math.RandomRange(0, Length(Map.City))] +
+    ' TRANSPORT';
 end;
 
 initialization

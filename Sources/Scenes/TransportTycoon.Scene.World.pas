@@ -8,6 +8,7 @@ uses
 type
   TSceneWorld = class(TScene)
   private
+    procedure ClearLand;
   public
     procedure DrawBar;
     procedure Render; override;
@@ -24,6 +25,15 @@ uses
 
 { TSceneWorld }
 
+procedure TSceneWorld.ClearLand;
+begin
+  if (Game.Money >= 10) then
+  begin
+    Game.Map.Cell[MX][Game.Map.Top + MY] := tlDirt;
+    Game.ModifyMoney(-10);
+  end;
+end;
+
 procedure TSceneWorld.DrawBar;
 begin
   terminal_color('white');
@@ -37,6 +47,8 @@ begin
 end;
 
 procedure TSceneWorld.Render;
+var
+  I: Integer;
 begin
   Game.Map.Draw(Self.Width, Self.Height - 1);
   if Game.IsClearLand then
@@ -58,6 +70,8 @@ begin
       Game.Map.Top + MY)].Name)
   else
     DrawText(30, 24, Tile[Game.Map.Cell[MX][Game.Map.Top + MY]].Name);
+
+  Game.Aircrafts.Draw(0, Game.Map.Top);
 end;
 
 procedure TSceneWorld.Update(var Key: Word);
@@ -72,10 +86,10 @@ begin
       if Game.Map.EnterInCity(MX, Game.Map.Top + MY) then
         Scenes.SetScene(scCity);
     end;
-    // Clear land
-    if (Game.Map.Cell[MX][Game.Map.Top + MY] in [tlTree, tlSmallTree, tlBush]) then
+    if (Game.Map.Cell[MX][Game.Map.Top + MY] in [tlTree, tlSmallTree, tlBush])
+    then
     begin
-      Game.Map.Cell[MX][Game.Map.Top + MY] := tlDirt;
+      ClearLand;
       Scenes.Render;
       Exit;
     end;
@@ -111,7 +125,6 @@ begin
       if (Game.Map.Top <= Game.Map.Height - Self.Height) then
         Game.Map.Top := Game.Map.Top + 1;
   end;
-
 end;
 
 end.

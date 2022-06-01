@@ -35,9 +35,9 @@ begin
   C := Game.Map.City[Game.Map.CurrentCity];
   DrawTitle(C.Name);
   terminal_color('white');
-  DrawText(12, 9, 'Population: ' + IntToStr(C.Population));
-  DrawText(12, 10, 'Houses: ' + IntToStr(C.Houses));
-  DrawButton(34, 9, C.Airport > 0, 'A', 'Airport: ' + AirportSizeStr
+  DrawText(12, 9, 'POPULATION: ' + IntToStr(C.Population));
+  DrawText(12, 10, 'HOUSES: ' + IntToStr(C.Houses));
+  DrawButton(34, 9, C.Airport > 0, 'A', 'AIRPORT: ' + AirportSizeStr
     [C.Airport]);
   terminal_color('white');
 
