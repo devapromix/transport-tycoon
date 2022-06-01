@@ -36,6 +36,7 @@ begin
   DrawTitle(C.Name);
   terminal_color('white');
   DrawText(12, 9, 'Population: ' + IntToStr(C.Population));
+  DrawText(12, 10, 'Houses: ' + IntToStr(C.Houses));
   DrawButton(34, 9, C.Airport > 0, 'A', 'Airport: ' + AirportSizeStr[C.Airport]);
   terminal_color('white');
 

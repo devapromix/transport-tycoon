@@ -33,9 +33,12 @@ begin
   DrawFrame(10, 5, 60, 15);
 
   C := Game.Map.City[Game.Map.CurrentCity];
-  DrawTitle(UpperCase(AirportSizeStr[C.Airport]));
+  DrawTitle(UpperCase(C.Name + ' ' + AirportSizeStr[C.Airport]));
 
   terminal_color('white');
+  DrawText(12, 9, 'Passengers: ' + IntToStr(C.Passengers.Airport));
+  DrawText(12, 10, 'Mail: ' + IntToStr(C.Mail.Airport));
+
   DrawButton(17, 'ESC', 'CLOSE');
 
   TSceneWorld(Scenes.GetScene(scWorld)).DrawBar;

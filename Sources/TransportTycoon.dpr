@@ -12,7 +12,8 @@ uses
   TransportTycoon.City in 'Game\TransportTycoon.City.pas',
   TransportTycoon.Scene.Airport in 'Scenes\TransportTycoon.Scene.Airport.pas',
   TransportTycoon.Scene.Menu in 'Scenes\TransportTycoon.Scene.Menu.pas',
-  TransportTycoon.Scene.Gen in 'Scenes\TransportTycoon.Scene.Gen.pas';
+  TransportTycoon.Scene.Gen in 'Scenes\TransportTycoon.Scene.Gen.pas',
+  TransportTycoon.Aircraft in 'Game\TransportTycoon.Aircraft.pas';
 
 var
   Key: Word = 0;

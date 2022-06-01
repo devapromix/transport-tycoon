@@ -81,7 +81,10 @@ begin
       begin
         C := Game.Map.City[Game.Map.CurrentCity];
         if Game.Money >= C.AirportCost then
+        begin
           C.BuildAirport;
+          Scenes.SetScene(scAirport);
+        end;
       end;
 
   end;
