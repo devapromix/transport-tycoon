@@ -20,6 +20,7 @@ type
   private
     FMoney: Integer;
   public
+    IsClearLand: Boolean;
     IsPause: Boolean;
     IsGame: Boolean;
     Map: TMap;
@@ -29,7 +30,6 @@ type
     Year: Word;
     Aircraft: array of TAircraft;
     Aircrafts: TAircrafts;
-
     constructor Create;
     destructor Destroy; override;
     procedure Clear;
@@ -52,6 +52,7 @@ uses
 
 constructor TGame.Create;
 begin
+  IsClearLand := False;
   IsPause := True;
   Self.New;
   Year := 1950;
@@ -111,6 +112,7 @@ procedure TGame.Clear;
 begin
   Self.New;
   IsGame := True;
+  IsClearLand := False;
   Turn := 0;
   FMoney := 100000;
   Map.Gen;

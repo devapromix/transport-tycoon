@@ -39,9 +39,16 @@ end;
 procedure TSceneWorld.Render;
 begin
   Game.Map.Draw(Self.Width, Self.Height - 1);
-
-  terminal_bkcolor('gray');
-  terminal_put(MX, MY, $2588);
+  if Game.IsClearLand then
+  begin
+    terminal_bkcolor('red');
+    terminal_put(MX, MY, $2588);
+  end
+  else
+  begin
+    terminal_bkcolor('gray');
+    terminal_put(MX, MY, $2588);
+  end;
   terminal_color('black');
   terminal_put(MX, MY, Tile[Game.Map.Cell[MX][Game.Map.Top + MY]].Tile);
 
@@ -59,15 +66,38 @@ begin
   begin
     if (MY = 24) and (MX >= 70) then
       Key := TK_ESCAPE;
-    if Game.Map.Cell[MX][Game.Map.Top + MY] = tlCity then
+    if (Game.Map.Cell[MX][Game.Map.Top + MY] = tlCity) and not Game.IsClearLand
+    then
     begin
       if Game.Map.EnterInCity(MX, Game.Map.Top + MY) then
         Scenes.SetScene(scCity);
+    end;
+    // Clear land
+    if (Game.Map.Cell[MX][Game.Map.Top + MY] in [tlTree, tlSmallTree, tlBush]) then
+    begin
+      Game.Map.Cell[MX][Game.Map.Top + MY] := tlDirt;
+      Scenes.Render;
+      Exit;
+    end;
+  end;
+  if (Key = TK_MOUSE_RIGHT) then
+  begin
+    if Game.IsClearLand then
+    begin
+      Game.IsClearLand := False;
+      Scenes.Render;
+      Exit;
     end;
   end;
   case Key of
     TK_ESCAPE:
       begin
+        if Game.IsClearLand then
+        begin
+          Game.IsClearLand := False;
+          Scenes.Render;
+          Exit;
+        end;
         Scenes.SetScene(scGameMenu);
       end;
     TK_LEFT:

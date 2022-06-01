@@ -32,6 +32,11 @@ begin
   DrawFrame(10, 5, 60, 15);
   DrawTitle('TRANSPORT TYCOON');
 
+  DrawButton(12, 9, '?', 'COMPANY FINANCES INFO');
+  DrawButton(42, 9, '?', 'GENERAL COMPANY INFO');
+
+  DrawButton(42, 15, 'X', 'CLEAR LAND');
+
   DrawButton(29, 17, 'Q', 'QUIT');
   DrawText(38, 17, '|');
   DrawButton(40, 17, 'ESC', 'CLOSE');
@@ -63,6 +68,11 @@ begin
       begin
         Game.IsPause := True;
         Scenes.SetScene(scMainMenu);
+      end;
+    TK_X:
+      begin
+        Game.IsClearLand := True;
+        Scenes.SetScene(scWorld);
       end;
   end;
 end;
