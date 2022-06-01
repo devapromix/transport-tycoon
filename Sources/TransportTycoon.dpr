@@ -11,7 +11,7 @@ uses
   TransportTycoon.Scene.World in 'Scenes\TransportTycoon.Scene.World.pas',
   TransportTycoon.City in 'Game\TransportTycoon.City.pas',
   TransportTycoon.Scene.Airport in 'Scenes\TransportTycoon.Scene.Airport.pas',
-  TransportTycoon.Scene.Menu in 'Scenes\TransportTycoon.Scene.Menu.pas',
+  TransportTycoon.Scene.MainMenu in 'Scenes\TransportTycoon.Scene.MainMenu.pas',
   TransportTycoon.Scene.Gen in 'Scenes\TransportTycoon.Scene.Gen.pas',
   TransportTycoon.Aircraft in 'Game\TransportTycoon.Aircraft.pas';
 
@@ -25,7 +25,7 @@ begin
   terminal_set('window: size=80x25, title="Transport Tycoon";');
   terminal_set('input: filter={keyboard, mouse+}');
   Scenes := TScenes.Create;
-  Scenes.SetScene(scMenu);
+  Scenes.SetScene(scMainMenu);
   try
     Scenes.Render;
     terminal_refresh();

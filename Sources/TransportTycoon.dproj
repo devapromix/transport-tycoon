@@ -111,7 +111,7 @@
         <DCCReference Include="Scenes\TransportTycoon.Scene.World.pas"/>
         <DCCReference Include="Game\TransportTycoon.City.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Airport.pas"/>
-        <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.MainMenu.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Gen.pas"/>
         <DCCReference Include="Game\TransportTycoon.Aircraft.pas"/>
         <BuildConfiguration Include="Release">

@@ -60,7 +60,7 @@ begin
   end;
   case Key of
     TK_ESCAPE:
-      Scenes.SetScene(scMenu);
+      Scenes.SetScene(scMainMenu);
     TK_ENTER:
       begin
         Game.Clear;

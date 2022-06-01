@@ -1,4 +1,4 @@
-﻿unit TransportTycoon.Scene.Menu;
+﻿unit TransportTycoon.Scene.MainMenu;
 
 interface
 
@@ -6,7 +6,7 @@ uses
   TransportTycoon.Scenes;
 
 type
-  TSceneMenu = class(TScene)
+  TSceneMainMenu = class(TScene)
   private
 
   public
@@ -21,22 +21,20 @@ uses
   SysUtils,
   TransportTycoon.Game;
 
-procedure TSceneMenu.Render;
+procedure TSceneMainMenu.Render;
 begin
   DrawFrame(10, 5, 60, 15);
   DrawTitle('TRANSPORT TYCOON');
 
   DrawButton(11, 'ENTER', 'NEW GAME');
-  if not Game.IsGame then
-    terminal_color('dark gray');
-  DrawButton(12, 'ESC', 'CONTINUE');
+  DrawButton(12, Game.IsGame, 'ESC', 'CONTINUE');
   terminal_color('white');
   DrawButton(13, 'Q', 'QUIT');
 
   DrawText(32, 17, 'APROMIX (C) 2022');
 end;
 
-procedure TSceneMenu.Update(var Key: word);
+procedure TSceneMainMenu.Update(var Key: word);
 begin
   if (Key = TK_MOUSE_LEFT) then
     case MY of

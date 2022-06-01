@@ -3,7 +3,7 @@
 interface
 
 type
-  TSceneEnum = (scMenu, scGen, scWorld, scCity, scBuildInCity, scAirport);
+  TSceneEnum = (scMainMenu, scGen, scWorld, scCity, scBuildInCity, scAirport);
 
 type
 
@@ -18,6 +18,8 @@ type
     procedure Update(var Key: word); virtual; abstract;
     procedure DrawText(const X, Y: Integer; Text: string);
     procedure DrawButton(const X, Y: Integer; IsActive: Boolean;
+      Button, Text: string); overload;
+    procedure DrawButton(const Y: Integer; IsActive: Boolean;
       Button, Text: string); overload;
     procedure DrawButton(const X, Y: Integer; Button, Text: string); overload;
     procedure DrawButton(const Y: Integer; Button, Text: string); overload;
@@ -54,7 +56,7 @@ uses
   TransportTycoon.Map,
   TransportTycoon.Game,
   TransportTycoon.Scene.Gen,
-  TransportTycoon.Scene.Menu,
+  TransportTycoon.Scene.MainMenu,
   TransportTycoon.Scene.City,
   TransportTycoon.Scene.World,
   TransportTycoon.Scene.BuildInCity,
@@ -105,6 +107,25 @@ begin
     [Button, Text]));
 end;
 
+procedure TScene.DrawButton(const Y: Integer; IsActive: Boolean;
+  Button, Text: string);
+var
+  CB, CT: string;
+begin
+  if IsActive then
+  begin
+    CB := 'light yellow';
+    CT := 'white';
+  end
+  else
+  begin
+    CB := 'gray';
+    CT := 'gray';
+  end;
+  terminal_print(Width div 2, Y, TK_ALIGN_CENTER,
+    Format('[c=' + CB + '][[%s]][/c] [c=' + CT + ']%s[/c]', [Button, Text]));
+end;
+
 procedure TScene.DrawFrame(const X, Y, W, H: Integer);
 var
   I: Integer;
@@ -141,7 +162,7 @@ end;
 constructor TScenes.Create;
 begin
   inherited;
-  FScene[scMenu] := TSceneMenu.Create;
+  FScene[scMainMenu] := TSceneMainMenu.Create;
   FScene[scGen] := TSceneGen.Create;
   FScene[scWorld] := TSceneWorld.Create;
   FScene[scCity] := TSceneCity.Create;

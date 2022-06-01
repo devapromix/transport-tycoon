@@ -14,4 +14,3 @@ del /s *.dbg
 del /s *.ddp
 del /s *.o
 del /s *.a
-del *.exe

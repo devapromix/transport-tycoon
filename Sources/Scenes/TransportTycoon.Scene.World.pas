@@ -69,7 +69,7 @@ begin
     TK_ESCAPE:
       begin
         Game.IsPause := True;
-        Scenes.SetScene(scMenu);
+        Scenes.SetScene(scMainMenu);
       end;
     TK_LEFT:
       ;

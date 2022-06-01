@@ -80,7 +80,7 @@ begin
     TK_A:
       begin
         C := Game.Map.City[Game.Map.CurrentCity];
-        if Game.Money >= C.AirportCost then
+        if (Game.Money >= C.AirportCost) and (C.Airport < 5) then
         begin
           C.BuildAirport;
           Scenes.SetScene(scAirport);
