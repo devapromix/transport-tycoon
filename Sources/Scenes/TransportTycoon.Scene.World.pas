@@ -68,8 +68,7 @@ begin
   case Key of
     TK_ESCAPE:
       begin
-        Game.IsPause := True;
-        Scenes.SetScene(scMainMenu);
+        Scenes.SetScene(scGameMenu);
       end;
     TK_LEFT:
       ;

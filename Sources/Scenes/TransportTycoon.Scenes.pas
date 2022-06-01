@@ -3,7 +3,8 @@
 interface
 
 type
-  TSceneEnum = (scMainMenu, scGen, scWorld, scCity, scBuildInCity, scAirport);
+  TSceneEnum = (scMainMenu, scGameMenu, scGen, scWorld, scCity, scBuildInCity,
+    scAirport);
 
 type
 
@@ -57,6 +58,7 @@ uses
   TransportTycoon.Game,
   TransportTycoon.Scene.Gen,
   TransportTycoon.Scene.MainMenu,
+  TransportTycoon.Scene.GameMenu,
   TransportTycoon.Scene.City,
   TransportTycoon.Scene.World,
   TransportTycoon.Scene.BuildInCity,
@@ -163,6 +165,7 @@ constructor TScenes.Create;
 begin
   inherited;
   FScene[scMainMenu] := TSceneMainMenu.Create;
+  FScene[scGameMenu] := TSceneGameMenu.Create;
   FScene[scGen] := TSceneGen.Create;
   FScene[scWorld] := TSceneWorld.Create;
   FScene[scCity] := TSceneCity.Create;

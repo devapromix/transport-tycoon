@@ -5,7 +5,8 @@ interface
 uses
   Classes,
   SysUtils,
-  TransportTycoon.Map;
+  TransportTycoon.Map,
+  TransportTycoon.Aircraft;
 
 const
   MonStr: array [1 .. 12] of string = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -26,6 +27,9 @@ type
     Day: Byte;
     Month: Byte;
     Year: Word;
+    Aircraft: array of TAircraft;
+    Aircrafts: TAircrafts;
+
     constructor Create;
     destructor Destroy; override;
     procedure Clear;
@@ -51,12 +55,15 @@ begin
   IsPause := True;
   Self.New;
   Year := 1950;
+  Aircrafts := TAircrafts.Create;
   Map := TMap.Create;
+  Map.Gen;
 end;
 
 destructor TGame.Destroy;
 begin
   Map.Free;
+  Aircrafts.Free;
   inherited Destroy;
 end;
 

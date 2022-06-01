@@ -59,19 +59,15 @@ var
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
-    if (MX >= 36) and (MX <= 46) then
+    if (MX >= 35) and (MX <= 45) then
       case MY of
         17:
-          begin
-            Scenes.SetScene(scCity);
-          end;
+          Key := TK_ESCAPE;
       end;
     if (MX >= 12) and (MX <= 46) then
       case MY of
         9:
-          begin
-            Key := TK_A;
-          end;
+          Key := TK_A;
       end;
   end;
   case Key of

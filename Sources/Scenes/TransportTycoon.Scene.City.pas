@@ -37,12 +37,13 @@ begin
   terminal_color('white');
   DrawText(12, 9, 'Population: ' + IntToStr(C.Population));
   DrawText(12, 10, 'Houses: ' + IntToStr(C.Houses));
-  DrawButton(34, 9, C.Airport > 0, 'A', 'Airport: ' + AirportSizeStr[C.Airport]);
+  DrawButton(34, 9, C.Airport > 0, 'A', 'Airport: ' + AirportSizeStr
+    [C.Airport]);
   terminal_color('white');
 
-  DrawButton(30, 17, 'B', 'BUILD');
-  DrawText(40, 17, '|');
-  DrawButton(42, 17, 'ESC', 'CLOSE');
+  DrawButton(29, 17, 'B', 'BUILD');
+  DrawText(39, 17, '|');
+  DrawButton(41, 17, 'ESC', 'CLOSE');
 
   TSceneWorld(Scenes.GetScene(scWorld)).DrawBar;
 end;
@@ -54,26 +55,20 @@ begin
   C := Game.Map.City[Game.Map.CurrentCity];
   if (Key = TK_MOUSE_LEFT) then
   begin
-    if (MX >= 30) and (MX <= 38) then
+    if (MX >= 29) and (MX <= 37) then
       case MY of
         17:
-          begin
-            Scenes.SetScene(scBuildInCity);
-          end;
+          Key := TK_B;
       end;
-    if (MX >= 42) and (MX <= 52) then
+    if (MX >= 41) and (MX <= 51) then
       case MY of
         17:
-          begin
-            Scenes.SetScene(scWorld);
-          end;
+          Key := TK_ESCAPE;
       end;
     if (MX >= 34) and (MX <= 69) then
       case MY of
         9:
-          begin
-            Key := TK_A;
-          end;
+          Key := TK_A;
       end;
   end;
   case Key of

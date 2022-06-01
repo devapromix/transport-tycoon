@@ -114,6 +114,7 @@
         <DCCReference Include="Scenes\TransportTycoon.Scene.MainMenu.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Gen.pas"/>
         <DCCReference Include="Game\TransportTycoon.Aircraft.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.GameMenu.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

@@ -13,7 +13,8 @@ uses
   TransportTycoon.Scene.Airport in 'Scenes\TransportTycoon.Scene.Airport.pas',
   TransportTycoon.Scene.MainMenu in 'Scenes\TransportTycoon.Scene.MainMenu.pas',
   TransportTycoon.Scene.Gen in 'Scenes\TransportTycoon.Scene.Gen.pas',
-  TransportTycoon.Aircraft in 'Game\TransportTycoon.Aircraft.pas';
+  TransportTycoon.Aircraft in 'Game\TransportTycoon.Aircraft.pas',
+  TransportTycoon.Scene.GameMenu in 'Scenes\TransportTycoon.Scene.GameMenu.pas';
 
 var
   Key: Word = 0;
