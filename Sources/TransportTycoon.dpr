@@ -20,7 +20,8 @@ uses
   TransportTycoon.Vehicles in 'Game\TransportTycoon.Vehicles.pas',
   TransportTycoon.Scene.Aircraft in 'Scenes\TransportTycoon.Scene.Aircraft.pas',
   TransportTycoon.Scene.Orders in 'Scenes\TransportTycoon.Scene.Orders.pas',
-  TransportTycoon.Scene.Aircrafts in 'Scenes\TransportTycoon.Scene.Aircrafts.pas';
+  TransportTycoon.Scene.Aircrafts in 'Scenes\TransportTycoon.Scene.Aircrafts.pas',
+  TransportTycoon.Order in 'Game\TransportTycoon.Order.pas';
 
 var
   Key: Word = 0;

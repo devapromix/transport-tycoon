@@ -46,7 +46,9 @@ begin
       (Game.Vehicles.Aircraft[I].Y = C.Y), Chr(Ord('A') + I),
       Game.Vehicles.Aircraft[I].Name);
 
-  DrawButton(17, 'ESC', 'CLOSE');
+  DrawButton(28, 17, 'H', 'HANGAR');
+  DrawText(39, 17, '|');
+  DrawButton(41, 17, 'ESC', 'CLOSE');
 
   DrawBar;
 end;
@@ -55,7 +57,12 @@ procedure TSceneAirport.Update(var Key: Word);
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
-    if (MX >= 36) and (MX <= 46) then
+    if (MX >= 28) and (MX <= 37) then
+      case MY of
+        17:
+          Key := TK_H;
+      end;
+    if (MX >= 41) and (MX <= 51) then
       case MY of
         17:
           Key := TK_ESCAPE;
@@ -71,12 +78,6 @@ begin
       end;
     TK_H:
       Scenes.SetScene(scHangar);
-    TK_V: // Test
-      if Length(Game.Vehicles.Aircraft) < 7 then
-        Game.Vehicles.AddAircraft('Aircraft #' +
-          IntToStr(Length(Game.Vehicles.Aircraft) + 1),
-          Game.Map.CurrentCity, 25);
-
   end;
 end;
 

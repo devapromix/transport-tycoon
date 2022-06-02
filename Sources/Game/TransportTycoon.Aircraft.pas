@@ -6,15 +6,24 @@ uses
   TransportTycoon.Vehicle;
 
 type
+  TAircraftBase = record
+    Name: string;
+  end;
+
+const
+  AircraftBase: array [0 .. 1] of TAircraftBase = (
+    // #1
+    (Name: 'Toreador MT-4'),
+    // #2
+    (Name: 'Rotor JG')
+    //
+    );
+
+type
   TOrder = record
     Id: Integer;
     Name: string;
     X, Y: Integer;
-  end;
-
-type
-  TTransport = class
-
   end;
 
 type

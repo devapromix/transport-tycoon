@@ -17,6 +17,7 @@ type
   private
     FMoney: Integer;
     FCompanyName: string;
+    FCompanyInavgurated: Integer;
   public
     IsClearLand: Boolean;
     IsPause: Boolean;
@@ -36,6 +37,7 @@ type
     procedure ModifyMoney(const AMoney: Integer);
     procedure CityGrow;
     property CompanyName: string read FCompanyName;
+    property CompanyInavgurated: Integer read FCompanyInavgurated;
   end;
 
 var
@@ -118,6 +120,7 @@ begin
   Map.Gen;
   FCompanyName := TownNameStr[Math.RandomRange(0, Length(Map.City))] +
     ' TRANSPORT';
+  FCompanyInavgurated := Self.Year;
 end;
 
 initialization
