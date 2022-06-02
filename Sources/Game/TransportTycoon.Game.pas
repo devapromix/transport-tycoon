@@ -6,7 +6,7 @@ uses
   Classes,
   SysUtils,
   TransportTycoon.Map,
-  TransportTycoon.Aircraft;
+  TransportTycoon.Vehicles;
 
 const
   MonStr: array [1 .. 12] of string = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -26,8 +26,7 @@ type
     Day: Byte;
     Month: Byte;
     Year: Word;
-    Aircraft: array of TAircraft;
-    Aircrafts: TAircrafts;
+    Vehicles: TVehicles;
     constructor Create;
     destructor Destroy; override;
     procedure Clear;
@@ -45,7 +44,8 @@ var
 implementation
 
 uses
-  Math, TransportTycoon.City;
+  Math,
+  TransportTycoon.City;
 
 { TGame }
 
@@ -57,17 +57,13 @@ begin
   Year := 1950;
   Map := TMap.Create;
   Map.Gen;
-  Aircrafts := TAircrafts.Create;
+  Vehicles := TVehicles.Create;
 end;
 
 destructor TGame.Destroy;
-var
-  I: Integer;
 begin
   Map.Free;
-  Aircrafts.Free;
-  for I := 0 to Length(Aircraft) - 1 do
-    Aircraft[I].Free;
+  Vehicles.Free;
   inherited Destroy;
 end;
 
@@ -109,8 +105,7 @@ begin
     Inc(Year);
   end;
 
-  Aircrafts.Step;
-
+  Vehicles.Step;
 end;
 
 procedure TGame.Clear;

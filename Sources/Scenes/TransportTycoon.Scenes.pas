@@ -26,6 +26,8 @@ type
     procedure DrawButton(const Y: Integer; Button, Text: string); overload;
     procedure DrawTitle(const Title: string);
     procedure DrawFrame(const X, Y, W, H: Integer);
+    procedure DrawMap(const AWidth, AHeight: Integer);
+    procedure DrawBar;
     function Width: Integer;
     function Height: Integer;
   end;
@@ -84,6 +86,18 @@ begin
     [UpperCase(Button), UpperCase(Text)]));
 end;
 
+procedure TScene.DrawBar;
+begin
+  terminal_color('white');
+  terminal_bkcolor('black');
+  terminal_clear_area(0, 24, 80, 1);
+  DrawText(0, 24, Format('$%d', [Game.Money]));
+  DrawText(12, 24, Format('Turn:%d', [Game.Turn]));
+  DrawText(56, 24, Format('%s %d, %d', [MonStr[Game.Month], Game.Day,
+    Game.Year]));
+  DrawButton(70, 24, 'ESC', 'MENU');
+end;
+
 procedure TScene.DrawButton(const Y: Integer; Button, Text: string);
 begin
   terminal_print(Width div 2, Y, TK_ALIGN_CENTER,
@@ -135,6 +149,7 @@ procedure TScene.DrawFrame(const X, Y, W, H: Integer);
 var
   I: Integer;
 begin
+  // terminal_bkcolor('black');
   terminal_clear_area(X, Y, W, H);
   for I := X + 1 to X + W - 2 do
   begin
@@ -150,6 +165,12 @@ begin
   terminal_put(X + W - 1, Y, $2557);
   terminal_put(X, Y + H - 1, $255A);
   terminal_put(X + W - 1, Y + H - 1, $255D);
+end;
+
+procedure TScene.DrawMap(const AWidth, AHeight: Integer);
+begin
+  Game.Map.Draw(AWidth, AHeight);
+  Game.Vehicles.Draw;
 end;
 
 function TScene.Width: Integer;
@@ -193,7 +214,10 @@ begin
   terminal_clear();
   terminal_bkcolor(0);
   if (FScene[Scene] <> nil) then
-    FScene[Scene].Render;
+    with FScene[Scene] do
+    begin
+      Render;
+    end;
   terminal_bkcolor(0);
 end;
 

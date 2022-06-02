@@ -15,7 +15,9 @@ uses
   TransportTycoon.Scene.Gen in 'Scenes\TransportTycoon.Scene.Gen.pas',
   TransportTycoon.Aircraft in 'Game\TransportTycoon.Aircraft.pas',
   TransportTycoon.Scene.GameMenu in 'Scenes\TransportTycoon.Scene.GameMenu.pas',
-  TransportTycoon.Scene.Hangar in 'Scenes\TransportTycoon.Scene.Hangar.pas';
+  TransportTycoon.Scene.Hangar in 'Scenes\TransportTycoon.Scene.Hangar.pas',
+  TransportTycoon.Vehicle in 'Game\TransportTycoon.Vehicle.pas',
+  TransportTycoon.Vehicles in 'Game\TransportTycoon.Vehicles.pas';
 
 var
   Key: Word = 0;

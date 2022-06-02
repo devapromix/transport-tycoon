@@ -21,14 +21,13 @@ uses
   Math,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.City,
-  TransportTycoon.Scene.World;
+  TransportTycoon.City;
 
 procedure TSceneHangar.Render;
 var
   C: TCity;
 begin
-  Game.Map.Draw(Self.Width, Self.Height - 1);
+  DrawMap(Self.Width, Self.Height - 1);
 
   DrawFrame(10, 5, 60, 15);
 
@@ -40,7 +39,7 @@ begin
 
   DrawButton(17, 'ESC', 'CLOSE');
 
-  TSceneWorld(Scenes.GetScene(scWorld)).DrawBar;
+  DrawBar;
 end;
 
 procedure TSceneHangar.Update(var Key: Word);

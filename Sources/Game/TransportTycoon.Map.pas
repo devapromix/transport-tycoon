@@ -56,6 +56,7 @@ type
     FTop: Word;
     FWidth: Word;
     FHeight: Word;
+    FLeft: Word;
   public
     Size: TMapSize;
     NoOfTowns: Byte;
@@ -68,6 +69,7 @@ type
     procedure Draw(const AWidth, AHeight: Integer);
     procedure Gen;
     property Top: Word read FTop write FTop;
+    property Left: Word read FLeft write FLeft;
     property Height: Word read FHeight;
     function GetCurrentCity(const AX, AY: Integer): ShortInt;
     function EnterInCity(const AX, AY: Integer): Boolean;
@@ -79,8 +81,6 @@ uses
   Math,
   SysUtils,
   BearLibTerminal;
-
-{ TMap }
 
 constructor TMap.Create;
 begin
@@ -105,6 +105,7 @@ var
   X, Y: Integer;
 begin
   FTop := 0;
+  FLeft := 0;
   for Y := 0 to FHeight - 1 do
     for X := 0 to FWidth - 1 do
       Cell[X][Y] := tlGrass;
@@ -114,7 +115,6 @@ procedure TMap.Draw(const AWidth, AHeight: Integer);
 var
   X, Y: Integer;
 begin
-  terminal_layer(0);
   terminal_bkcolor('darkest gray');
   for Y := 0 to AHeight - 1 do
     for X := 0 to AWidth - 1 do
@@ -123,7 +123,6 @@ begin
       terminal_put(X, Y, Tile[Cell[X][Top + Y]].Tile);
     end;
   terminal_color('white');
-  terminal_layer(0);
 end;
 
 function TMap.EnterInCity(const AX, AY: Integer): Boolean;

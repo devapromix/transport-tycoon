@@ -10,7 +10,6 @@ type
   private
     procedure ClearLand;
   public
-    procedure DrawBar;
     procedure Render; override;
     procedure Update(var Key: Word); override;
   end;
@@ -23,8 +22,6 @@ uses
   TransportTycoon.Map,
   TransportTycoon.Game;
 
-{ TSceneWorld }
-
 procedure TSceneWorld.ClearLand;
 begin
   if (Game.Money >= 10) then
@@ -34,23 +31,12 @@ begin
   end;
 end;
 
-procedure TSceneWorld.DrawBar;
-begin
-  terminal_color('white');
-  terminal_bkcolor('black');
-  terminal_clear_area(0, 24, 80, 1);
-  DrawText(0, 24, Format('$%d', [Game.Money]));
-  DrawText(12, 24, Format('Turn:%d', [Game.Turn]));
-  DrawText(56, 24, Format('%s %d, %d', [MonStr[Game.Month], Game.Day,
-    Game.Year]));
-  DrawButton(70, 24, 'ESC', 'MENU');
-end;
-
 procedure TSceneWorld.Render;
 var
   I: Integer;
 begin
-  Game.Map.Draw(Self.Width, Self.Height - 1);
+  DrawMap(Self.Width, Self.Height - 1);
+
   if Game.IsClearLand then
   begin
     terminal_bkcolor('red');
@@ -65,13 +51,12 @@ begin
   terminal_put(MX, MY, Tile[Game.Map.Cell[MX][Game.Map.Top + MY]].Tile);
 
   DrawBar;
+
   if Tile[Game.Map.Cell[MX][Game.Map.Top + MY]].Tile = Tile[tlCity].Tile then
     DrawText(30, 24, Game.Map.City[Game.Map.GetCurrentCity(MX,
       Game.Map.Top + MY)].Name)
   else
     DrawText(30, 24, Tile[Game.Map.Cell[MX][Game.Map.Top + MY]].Name);
-
-  Game.Aircrafts.Draw(0, Game.Map.Top);
 end;
 
 procedure TSceneWorld.Update(var Key: Word);

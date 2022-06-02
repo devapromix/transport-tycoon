@@ -28,7 +28,7 @@ procedure TSceneCity.Render;
 var
   C: TCity;
 begin
-  Game.Map.Draw(Self.Width, Self.Height - 1);
+  DrawMap(Self.Width, Self.Height - 1);
 
   DrawFrame(10, 5, 60, 15);
 
@@ -45,7 +45,7 @@ begin
   DrawText(39, 17, '|');
   DrawButton(41, 17, 'ESC', 'CLOSE');
 
-  TSceneWorld(Scenes.GetScene(scWorld)).DrawBar;
+  DrawBar;
 end;
 
 procedure TSceneCity.Update(var Key: word);

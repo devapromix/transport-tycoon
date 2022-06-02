@@ -2,6 +2,9 @@
 
 interface
 
+uses
+  TransportTycoon.Vehicle;
+
 type
   TOrder = record
     Id: Integer;
@@ -15,7 +18,7 @@ type
   end;
 
 type
-  TAircraft = class(TTransport)
+  TAircraft = class(TVehicle)
   private
     FName: string;
     FH: Integer;
@@ -39,22 +42,12 @@ type
     property X: Integer read FX;
     property Y: Integer read FY;
     property State: string read FState;
-    procedure Step;
+    procedure Step; override;
     procedure Load;
     procedure UnLoad;
     procedure AddOrder(const AId: Integer; const AName: string;
       const AX, AY: Integer);
-    procedure Draw(const DX, DY: Integer);
-  end;
-
-type
-  TAircrafts = class(TObject)
-  private
-  public
-    procedure Step;
-    procedure AddAircraft(const AName: string;
-      const ACityIndex, AMaxPassengers: Integer);
-    procedure Draw(const DX, DY: Integer);
+    procedure Draw; override;
   end;
 
 implementation
@@ -96,9 +89,9 @@ begin
   FDistance := 0;
 end;
 
-procedure TAircraft.Draw(const DX, DY: Integer);
+procedure TAircraft.Draw;
 begin
-  terminal_print(FX - DX, FY - DY, '@');
+  terminal_print(FX, FY - Game.Map.Top, '@');
 end;
 
 procedure TAircraft.Load;
@@ -176,52 +169,6 @@ begin
     FDistance := 0;
     FPassengers := 0;
   end;
-end;
-
-{ TAircrafts }
-
-procedure TAircrafts.AddAircraft(const AName: string;
-  const ACityIndex, AMaxPassengers: Integer);
-begin
-  with Game do
-    if ((Map.City[ACityIndex].Airport > 0) and (Money >= 1000)) then
-    begin
-      SetLength(Aircraft, Length(Aircraft) + 1);
-
-      Aircraft[High(Aircraft)] := TAircraft.Create(AName,
-        Game.Map.City[ACityIndex].X, Game.Map.City[ACityIndex].Y,
-        AMaxPassengers);
-
-      { Aircraft[High(Aircraft)].AddOrder(ACityIndex,
-        Game.Map.City[ACityIndex].Name, Game.Map.City[ACityIndex].X,
-        Game.Map.City[ACityIndex].Y); }
-      // Test
-      Aircraft[High(Aircraft)].AddOrder(1, Game.Map.City[1].Name,
-        Game.Map.City[1].X, Game.Map.City[1].Y);
-      Aircraft[High(Aircraft)].AddOrder(0, Game.Map.City[0].Name,
-        Game.Map.City[0].X, Game.Map.City[0].Y);
-
-      Game.ModifyMoney(-1000);
-    end;
-end;
-
-procedure TAircrafts.Draw(const DX, DY: Integer);
-var
-  I: Integer;
-begin
-  terminal_layer(9);
-  terminal_color('lighter blue');
-  for I := 0 to Length(Game.Aircraft) - 1 do
-    Game.Aircraft[I].Draw(DX, DY);
-  terminal_layer(0);
-end;
-
-procedure TAircrafts.Step;
-var
-  I: Integer;
-begin
-  for I := 0 to Length(Game.Aircraft) - 1 do
-    Game.Aircraft[I].Step;
 end;
 
 end.

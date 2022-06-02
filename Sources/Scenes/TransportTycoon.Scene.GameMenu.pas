@@ -27,7 +27,7 @@ uses
 
 procedure TSceneGameMenu.Render;
 begin
-  Game.Map.Draw(Self.Width, Self.Height - 1);
+  DrawMap(Self.Width, Self.Height - 1);
 
   DrawFrame(10, 5, 60, 15);
   DrawTitle(Game.CompanyName);
@@ -49,7 +49,7 @@ begin
   DrawText(38, 17, '|');
   DrawButton(40, 17, 'ESC', 'CLOSE');
 
-  TSceneWorld(Scenes.GetScene(scWorld)).DrawBar;
+  DrawBar;
 end;
 
 procedure TSceneGameMenu.Update(var Key: word);

@@ -29,7 +29,7 @@ var
   C: TCity;
   I: Integer;
 begin
-  Game.Map.Draw(Self.Width, Self.Height - 1);
+  DrawMap(Self.Width, Self.Height - 1);
 
   DrawFrame(10, 5, 60, 15);
 
@@ -41,13 +41,14 @@ begin
   DrawText(12, 10, 'PASSENGERS: ' + IntToStr(C.Passengers.Airport));
   DrawText(12, 11, 'BAGS OF MAIL: ' + IntToStr(C.Mail.Airport));
 
-  for I := 0 to Length(Game.Aircraft) - 1 do
-    DrawButton(42, I + 9, (Game.Aircraft[I].X = C.X) and
-      (Game.Aircraft[I].Y = C.Y), Chr(Ord('A') + I), Game.Aircraft[I].Name);
+  for I := 0 to Length(Game.Vehicles.Aircraft) - 1 do
+    DrawButton(42, I + 9, (Game.Vehicles.Aircraft[I].X = C.X) and
+      (Game.Vehicles.Aircraft[I].Y = C.Y), Chr(Ord('A') + I),
+      Game.Vehicles.Aircraft[I].Name);
 
   DrawButton(17, 'ESC', 'CLOSE');
 
-  TSceneWorld(Scenes.GetScene(scWorld)).DrawBar;
+  DrawBar;
 end;
 
 procedure TSceneAirport.Update(var Key: word);
@@ -66,9 +67,10 @@ begin
     TK_H:
       Scenes.SetScene(scHangar);
     TK_V: // Test
-      if Length(Game.Aircraft) < 7 then
-        Game.Aircrafts.AddAircraft('Aircraft #' + IntToStr(Length(Game.Aircraft)
-          + 1), Game.Map.CurrentCity, 25);
+      if Length(Game.Vehicles.Aircraft) < 7 then
+        Game.Vehicles.AddAircraft('Aircraft #' +
+          IntToStr(Length(Game.Vehicles.Aircraft) + 1),
+          Game.Map.CurrentCity, 25);
 
   end;
 end;

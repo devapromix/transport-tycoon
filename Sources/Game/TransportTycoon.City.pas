@@ -3,7 +3,7 @@
 interface
 
 const
-  TownNameStr: array [0 .. 2] of string = ('EDINGTON', 'GRANINGVILLE',
+  TownNameStr: array [0 .. 2] of string = ('EDINGTON 1', 'GRANINGVILLE 2',
     'TRABURG');
   AirportSizeStr: array [0 .. 5] of string = ('None', 'Small Airport',
     'Commuter Airport', 'City Airport', 'Metropolitan Airport',

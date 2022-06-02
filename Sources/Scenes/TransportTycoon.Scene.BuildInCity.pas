@@ -33,7 +33,7 @@ var
   S: string;
   F: Boolean;
 begin
-  Game.Map.Draw(Self.Width, Self.Height - 1);
+  DrawMap(Self.Width, Self.Height - 1);
 
   DrawFrame(10, 5, 60, 15);
 
@@ -50,7 +50,7 @@ begin
   terminal_color('white');
   DrawButton(17, 'ESC', 'CLOSE');
 
-  TSceneWorld(Scenes.GetScene(scWorld)).DrawBar;
+  DrawBar;
 end;
 
 procedure TSceneBuildInCity.Update(var Key: Word);

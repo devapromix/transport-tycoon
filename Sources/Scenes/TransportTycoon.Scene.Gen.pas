@@ -25,7 +25,7 @@ uses
 
 procedure TSceneGen.Render;
 begin
-  Game.Map.Draw(Self.Width, Self.Height - 1);
+  Game.Map.Draw(Self.Width, Self.Height);
 
   DrawFrame(10, 5, 60, 15);
   DrawTitle('WORLD GENERATION');
