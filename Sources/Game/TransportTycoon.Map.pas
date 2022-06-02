@@ -45,7 +45,7 @@ const
   MapSizeInt: array [TMapSize] of Integer = (80, 160, 320, 640);
   MapNoOfTownsStr: array [1 .. 4] of string = ('Very Low', 'Low',
     'Normal', 'High');
-  MapNoOfTownsInt: array [1 .. 4] of Byte = (3, 5, 7, 9);
+  MapNoOfTownsInt: array [1 .. 4] of Byte = (2, 3, 5, 7);
 
 type
 

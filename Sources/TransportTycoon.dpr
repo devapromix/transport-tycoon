@@ -17,7 +17,10 @@ uses
   TransportTycoon.Scene.GameMenu in 'Scenes\TransportTycoon.Scene.GameMenu.pas',
   TransportTycoon.Scene.Hangar in 'Scenes\TransportTycoon.Scene.Hangar.pas',
   TransportTycoon.Vehicle in 'Game\TransportTycoon.Vehicle.pas',
-  TransportTycoon.Vehicles in 'Game\TransportTycoon.Vehicles.pas';
+  TransportTycoon.Vehicles in 'Game\TransportTycoon.Vehicles.pas',
+  TransportTycoon.Scene.Aircraft in 'Scenes\TransportTycoon.Scene.Aircraft.pas',
+  TransportTycoon.Scene.Orders in 'Scenes\TransportTycoon.Scene.Orders.pas',
+  TransportTycoon.Scene.Aircrafts in 'Scenes\TransportTycoon.Scene.Aircrafts.pas';
 
 var
   Key: Word = 0;

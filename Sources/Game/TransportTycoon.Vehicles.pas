@@ -11,6 +11,7 @@ type
   private
 
   public
+    CurrentVehicle: Integer;
     Aircraft: array of TAircraft;
     constructor Create;
     destructor Destroy; override;
@@ -53,7 +54,7 @@ end;
 
 constructor TVehicles.Create;
 begin
-
+  CurrentVehicle := 0;
 end;
 
 destructor TVehicles.Destroy;

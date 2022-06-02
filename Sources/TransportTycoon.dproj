@@ -118,6 +118,9 @@
         <DCCReference Include="Scenes\TransportTycoon.Scene.Hangar.pas"/>
         <DCCReference Include="Game\TransportTycoon.Vehicle.pas"/>
         <DCCReference Include="Game\TransportTycoon.Vehicles.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.Aircraft.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.Orders.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.Aircrafts.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

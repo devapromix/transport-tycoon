@@ -4,7 +4,7 @@ interface
 
 type
   TSceneEnum = (scMainMenu, scGameMenu, scGen, scWorld, scCity, scBuildInCity,
-    scAirport, scHangar);
+    scAirport, scHangar, scAircraft, scAircrafts, scOrders);
 
 type
 
@@ -65,7 +65,10 @@ uses
   TransportTycoon.Scene.World,
   TransportTycoon.Scene.BuildInCity,
   TransportTycoon.Scene.Airport,
-  TransportTycoon.Scene.Hangar;
+  TransportTycoon.Scene.Hangar,
+  TransportTycoon.Scene.Aircraft,
+  TransportTycoon.Scene.Orders,
+  TransportTycoon.Scene.Aircrafts;
 
 { TScene }
 
@@ -196,6 +199,9 @@ begin
   FScene[scBuildInCity] := TSceneBuildInCity.Create;
   FScene[scAirport] := TSceneAirport.Create;
   FScene[scHangar] := TSceneHangar.Create;
+  FScene[scAircraft] := TSceneAircraft.Create;
+  FScene[scAircrafts] := TSceneAircrafts.Create;
+  FScene[scOrders] := TSceneOrders.Create;
 end;
 
 procedure TScenes.Update(var Key: word);

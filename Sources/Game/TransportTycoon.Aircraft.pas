@@ -45,8 +45,10 @@ type
     procedure Step; override;
     procedure Load;
     procedure UnLoad;
-    procedure AddOrder(const AId: Integer; const AName: string;
-      const AX, AY: Integer);
+    procedure AddOrder(const TownIndex: Integer); overload;
+    procedure AddOrder(const TownIndex: Integer; const AName: string;
+      const AX, AY: Integer); overload;
+    function IsOrder(const TownIndex: Integer): Boolean;
     procedure Draw; override;
   end;
 
@@ -60,17 +62,23 @@ uses
 
 { TPlane }
 
-procedure TAircraft.AddOrder(const AId: Integer; const AName: string;
+procedure TAircraft.AddOrder(const TownIndex: Integer; const AName: string;
   const AX, AY: Integer);
 begin
-  if Game.Map.City[AId].Airport > 0 then
+  if Game.Map.City[TownIndex].Airport > 0 then
   begin
     SetLength(Order, Length(Order) + 1);
-    Order[High(Order)].Id := AId;
+    Order[High(Order)].Id := TownIndex;
     Order[High(Order)].Name := AName;
     Order[High(Order)].X := AX;
     Order[High(Order)].Y := AY;
   end;
+end;
+
+procedure TAircraft.AddOrder(const TownIndex: Integer);
+begin
+  with Game.Map.City[TownIndex] do
+    AddOrder(TownIndex, Name, X, Y);
 end;
 
 constructor TAircraft.Create(const AName: string;
@@ -134,6 +142,19 @@ begin
   Result := (X <> CX) or (Y <> CY);
 end;
 
+function TAircraft.IsOrder(const TownIndex: Integer): Boolean;
+var
+  I: Integer;
+begin
+  Result := False;
+  for I := 0 to Length(Order) - 1 do
+    if Order[I].Id = TownIndex then
+    begin
+      Result := True;
+      Exit;
+    end;
+end;
+
 procedure TAircraft.Step;
 begin
   if Length(Order) > 0 then
@@ -143,8 +164,8 @@ begin
       Inc(FT);
       if Order[OrderIndex].Id <> LastAirportId then
         UnLoad;
-      FState := 'Obs';
-      if FT > (7 - (Game.Map.City[Order[OrderIndex].Id].Airport)) then
+      FState := 'Service';
+      if FT > (15 - (Game.Map.City[Order[OrderIndex].Id].Airport * 2)) then
       begin
         FT := 0;
         FH := Random(2);
@@ -161,7 +182,7 @@ end;
 
 procedure TAircraft.UnLoad;
 begin
-  FState := 'UnLoad';
+  FState := 'Unload';
   LastAirportId := Order[OrderIndex].Id;
   if Passengers > 0 then
   begin

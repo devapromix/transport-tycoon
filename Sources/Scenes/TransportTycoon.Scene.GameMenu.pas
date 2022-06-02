@@ -40,7 +40,7 @@ begin
   DrawButton(12, 12, False, 'C', 'LIST OF ROAD VEHICLES');
   DrawButton(12, 13, False, 'T', 'LIST OF TRAINS');
   DrawButton(12, 14, False, 'S', 'LIST OF SHIPS');
-  DrawButton(12, 15, False, 'A', 'LIST OF AIRCRAFTS');
+  DrawButton(12, 15, 'A', 'LIST OF AIRCRAFTS');
 
   DrawButton(42, 14, False, 'B', 'BUILD');
   DrawButton(42, 15, 'X', 'CLEAR LAND');
@@ -56,6 +56,11 @@ procedure TSceneGameMenu.Update(var Key: word);
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
+    if (MX >= 12) and (MX <= 38) then
+      case MY of
+        15:
+          Key := TK_A;
+      end;
     if (MX >= 42) and (MX <= 68) then
       case MY of
         15:
@@ -77,6 +82,8 @@ begin
       begin
         Scenes.SetScene(scWorld);
       end;
+    TK_A:
+      Scenes.SetScene(scAircrafts);
     TK_Q:
       begin
         Game.IsPause := True;

@@ -11,7 +11,7 @@ type
 
   public
     procedure Render; override;
-    procedure Update(var Key: word); override;
+    procedure Update(var Key: Word); override;
   end;
 
 implementation
@@ -34,7 +34,7 @@ begin
   DrawFrame(10, 5, 60, 15);
 
   C := Game.Map.City[Game.Map.CurrentCity];
-  DrawTitle(UpperCase(C.Name + ' AIRPORT'));
+  DrawTitle(C.Name + ' AIRPORT');
 
   terminal_color('white');
   DrawText(12, 9, 'SIZE: ' + UpperCase(AirportSizeStr[C.Airport]));
@@ -51,7 +51,7 @@ begin
   DrawBar;
 end;
 
-procedure TSceneAirport.Update(var Key: word);
+procedure TSceneAirport.Update(var Key: Word);
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
@@ -64,6 +64,11 @@ begin
   case Key of
     TK_ESCAPE:
       Scenes.SetScene(scCity);
+    TK_A .. TK_G:
+      begin
+        Game.Vehicles.CurrentVehicle := Key - TK_A;
+        Scenes.SetScene(scAircraft);
+      end;
     TK_H:
       Scenes.SetScene(scHangar);
     TK_V: // Test
