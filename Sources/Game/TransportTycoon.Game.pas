@@ -29,6 +29,7 @@ type
     Year: Integer;
     Construction: Integer;
     NewVehicles: Integer;
+    Other: Integer;
     AircraftIncome: Integer;
     Vehicles: TVehicles;
     constructor Create;
@@ -125,6 +126,7 @@ begin
   AircraftIncome := 0;
   Construction := 0;
   NewVehicles := 0;
+  Other := 0;
   Map.Gen;
   FCompanyName := TownNameStr[Math.RandomRange(0, Length(Map.City))] +
     ' TRANSPORT';

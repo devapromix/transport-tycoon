@@ -24,10 +24,11 @@ uses
 
 procedure TSceneWorld.ClearLand;
 begin
-  if (Game.Money >= 10) then
+  if (Game.Money >= 100) then
   begin
     Game.Map.Cell[MX][Game.Map.Top + MY] := tlDirt;
-    Game.ModifyMoney(-10);
+    Inc(Game.Other, 100);
+    Game.ModifyMoney(-100);
   end;
 end;
 

@@ -25,7 +25,8 @@ type
       Button, Text: string); overload;
     procedure DrawButton(const X, Y: Integer; Button, Text: string); overload;
     procedure DrawButton(const Y: Integer; Button, Text: string); overload;
-    procedure DrawTitle(const Title: string);
+    procedure DrawTitle(const Y: Integer; const Title: string); overload;
+    procedure DrawTitle(const Title: string); overload;
     procedure DrawFrame(const X, Y, W, H: Integer);
     procedure DrawMap(const AWidth, AHeight: Integer);
     procedure DrawBar;
@@ -79,10 +80,15 @@ begin
   terminal_print(X, Y, Text);
 end;
 
+procedure TScene.DrawTitle(const Y: Integer; const Title: string);
+begin
+  terminal_print(Width div 2, Y, TK_ALIGN_CENTER,
+    '[c=yellow]' + UpperCase(Title) + '[/c]');
+end;
+
 procedure TScene.DrawTitle(const Title: string);
 begin
-  terminal_print(Width div 2, 7, TK_ALIGN_CENTER,
-    '[c=yellow]' + UpperCase(Title) + '[/c]');
+  DrawTitle(7, Title);
 end;
 
 procedure TScene.DrawButton(const X, Y: Integer; Button, Text: string);
@@ -181,7 +187,7 @@ end;
 procedure TScene.DrawMoney(const X, Y, Money: Integer);
 begin
   if Money = 0 then
-    terminal_print(X, Y, '$0');
+    Exit;
   if Money > 0 then
     terminal_print(X, Y, Format('[c=green]+$%d[/c]', [Money]));
   if Money < 0 then
