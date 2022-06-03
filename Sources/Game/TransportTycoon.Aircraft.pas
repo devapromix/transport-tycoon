@@ -67,7 +67,8 @@ uses
   BearLibTerminal,
   Math,
   SysUtils,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Finances;
 
 { TPlane }
 
@@ -191,15 +192,14 @@ end;
 
 procedure TAircraft.UnLoad;
 var
-M: Integer;
+  M: Integer;
 begin
   FState := 'Unload';
   LastAirportId := Order[OrderIndex].Id;
   if Passengers > 0 then
   begin
     M := Passengers * (Distance div 10);
-    Inc(Game.AircraftIncome, M);
-    Game.ModifyMoney(M);
+    Game.ModifyMoney(ttAircraftIncome, M);
     FDistance := 0;
     FPassengers := 0;
   end;

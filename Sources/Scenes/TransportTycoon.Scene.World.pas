@@ -20,15 +20,15 @@ uses
   BearLibTerminal,
   SysUtils,
   TransportTycoon.Map,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Finances;
 
 procedure TSceneWorld.ClearLand;
 begin
   if (Game.Money >= 100) then
   begin
     Game.Map.Cell[MX][Game.Map.Top + MY] := tlDirt;
-    Inc(Game.Other, 100);
-    Game.ModifyMoney(-100);
+    Game.ModifyMoney(ttConstruction, -100);
   end;
 end;
 

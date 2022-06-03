@@ -46,7 +46,8 @@ implementation
 uses
   Math,
   SysUtils,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Finances;
 
 function TCity.AirportCost: Integer;
 begin
@@ -63,8 +64,7 @@ begin
   NeedMoney := AirportCost;
   if (FAirport < 5) and (Game.Money >= NeedMoney) then
   begin
-    Inc(Game.Construction, NeedMoney);
-    Game.ModifyMoney(-NeedMoney);
+    Game.ModifyMoney(ttConstruction, -NeedMoney);
     Inc(FAirport);
   end;
 end;

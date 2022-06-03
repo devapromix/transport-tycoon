@@ -6,7 +6,8 @@ uses
   Classes,
   SysUtils,
   TransportTycoon.Map,
-  TransportTycoon.Vehicles;
+  TransportTycoon.Vehicles,
+  TransportTycoon.Finances;
 
 const
   MonStr: array [1 .. 12] of string = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -18,6 +19,11 @@ type
     FMoney: Integer;
     FCompanyName: string;
     FCompanyInavgurated: Integer;
+    FFinances: TFinances;
+    FLoan: Integer;
+  public const
+    MaxLoan = 200000;
+    StartMoney = MaxLoan div 2;
   public
     IsClearLand: Boolean;
     IsPause: Boolean;
@@ -27,10 +33,6 @@ type
     Day: Integer;
     Month: Integer;
     Year: Integer;
-    Construction: Integer;
-    NewVehicles: Integer;
-    Other: Integer;
-    AircraftIncome: Integer;
     Vehicles: TVehicles;
     constructor Create;
     destructor Destroy; override;
@@ -38,10 +40,14 @@ type
     procedure Step;
     procedure New;
     property Money: Integer read FMoney;
-    procedure ModifyMoney(const AMoney: Integer);
+    procedure ModifyMoney(const AMoney: Integer); overload;
+    procedure ModifyMoney(const ValueEnum: TValueEnum;
+      const AMoney: Integer); overload;
+    property Loan: Integer read FLoan;
     procedure CityGrow;
     property CompanyName: string read FCompanyName;
     property CompanyInavgurated: Integer read FCompanyInavgurated;
+    property Finances: TFinances read FFinances write FFinances;
   end;
 
 var
@@ -58,6 +64,7 @@ uses
 
 constructor TGame.Create;
 begin
+  FFinances := TFinances.Create;
   IsClearLand := False;
   IsPause := True;
   Self.New;
@@ -71,7 +78,14 @@ destructor TGame.Destroy;
 begin
   Map.Free;
   Vehicles.Free;
+  FFinances.Free;
   inherited Destroy;
+end;
+
+procedure TGame.ModifyMoney(const ValueEnum: TValueEnum; const AMoney: Integer);
+begin
+  Finances.ModifyValue(ValueEnum, Abs(AMoney));
+  FMoney := FMoney + AMoney;
 end;
 
 procedure TGame.ModifyMoney(const AMoney: Integer);
@@ -105,6 +119,7 @@ begin
     Day := 1;
     Inc(Month);
     Self.CityGrow;
+    Game.ModifyMoney(ttLoanInterest, -(Game.Loan div 600));
   end;
   if Month > 12 then
   begin
@@ -122,11 +137,9 @@ begin
   IsGame := True;
   IsClearLand := False;
   Turn := 0;
-  FMoney := 100000;
-  AircraftIncome := 0;
-  Construction := 0;
-  NewVehicles := 0;
-  Other := 0;
+  FMoney := StartMoney;
+  FLoan := StartMoney;
+  FFinances.Clear;
   Map.Gen;
   FCompanyName := TownNameStr[Math.RandomRange(0, Length(Map.City))] +
     ' TRANSPORT';

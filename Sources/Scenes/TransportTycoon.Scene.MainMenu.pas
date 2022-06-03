@@ -25,15 +25,15 @@ procedure TSceneMainMenu.Render;
 begin
   Game.Map.Draw(Self.Width, Self.Height);
 
-  DrawFrame(10, 5, 60, 15);
-  DrawTitle('TRANSPORT TYCOON');
+  DrawFrame(20, 6, 40, 13);
+  DrawTitle(8, 'TRANSPORT TYCOON');
 
   DrawButton(11, 'ENTER', 'NEW GAME');
   DrawButton(12, Game.IsGame, 'ESC', 'CONTINUE');
   terminal_color('white');
   DrawButton(13, 'Q', 'QUIT');
 
-  DrawText(32, 17, 'APROMIX (C) 2022');
+  DrawText(32, 16, 'APROMIX (C) 2022');
 end;
 
 procedure TSceneMainMenu.Update(var Key: word);

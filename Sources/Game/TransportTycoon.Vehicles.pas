@@ -25,7 +25,8 @@ implementation
 
 uses
   BearLibTerminal,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Finances;
 
 procedure TVehicles.AddAircraft(const AName: string;
   const ACityIndex, AMaxPassengers: Integer);
@@ -42,8 +43,7 @@ begin
       Aircraft[High(Aircraft)].AddOrder(ACityIndex,
         Game.Map.City[ACityIndex].Name, Game.Map.City[ACityIndex].X,
         Game.Map.City[ACityIndex].Y);
-      Game.ModifyMoney(-1000);
-      Inc(Game.NewVehicles, 1000);
+      Game.ModifyMoney(ttNewVehicles, -1000);
     end;
 end;
 
