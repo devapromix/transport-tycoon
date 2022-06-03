@@ -4,7 +4,7 @@ interface
 
 type
   TSceneEnum = (scMainMenu, scGameMenu, scGen, scWorld, scCity, scBuildInCity,
-    scAirport, scHangar, scAircraft, scAircrafts, scOrders);
+    scAirport, scHangar, scAircraft, scAircrafts, scOrders, scFinances);
 
 type
 
@@ -18,6 +18,7 @@ type
     procedure Render; virtual; abstract;
     procedure Update(var Key: word); virtual; abstract;
     procedure DrawText(const X, Y: Integer; Text: string);
+    procedure DrawMoney(const X, Y, Money: Integer);
     procedure DrawButton(const X, Y: Integer; IsActive: Boolean;
       Button, Text: string); overload;
     procedure DrawButton(const Y: Integer; IsActive: Boolean;
@@ -68,7 +69,8 @@ uses
   TransportTycoon.Scene.Hangar,
   TransportTycoon.Scene.Aircraft,
   TransportTycoon.Scene.Orders,
-  TransportTycoon.Scene.Aircrafts;
+  TransportTycoon.Scene.Aircrafts,
+  TransportTycoon.Scene.Finances;
 
 { TScene }
 
@@ -176,6 +178,16 @@ begin
   Game.Vehicles.Draw;
 end;
 
+procedure TScene.DrawMoney(const X, Y, Money: Integer);
+begin
+  if Money = 0 then
+    terminal_print(X, Y, '$0');
+  if Money > 0 then
+    terminal_print(X, Y, Format('[c=green]+$%d[/c]', [Money]));
+  if Money < 0 then
+    terminal_print(X, Y, Format('[c=red]-$%d[/c]', [Abs(Money)]));
+end;
+
 function TScene.Width: Integer;
 begin
   Result := terminal_state(TK_WIDTH);
@@ -202,6 +214,7 @@ begin
   FScene[scAircraft] := TSceneAircraft.Create;
   FScene[scAircrafts] := TSceneAircrafts.Create;
   FScene[scOrders] := TSceneOrders.Create;
+  FScene[scFinances] := TSceneFinances.Create;
 end;
 
 procedure TScenes.Update(var Key: word);

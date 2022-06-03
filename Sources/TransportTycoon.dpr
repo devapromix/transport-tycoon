@@ -21,7 +21,8 @@ uses
   TransportTycoon.Scene.Aircraft in 'Scenes\TransportTycoon.Scene.Aircraft.pas',
   TransportTycoon.Scene.Orders in 'Scenes\TransportTycoon.Scene.Orders.pas',
   TransportTycoon.Scene.Aircrafts in 'Scenes\TransportTycoon.Scene.Aircrafts.pas',
-  TransportTycoon.Order in 'Game\TransportTycoon.Order.pas';
+  TransportTycoon.Order in 'Game\TransportTycoon.Order.pas',
+  TransportTycoon.Scene.Finances in 'Scenes\TransportTycoon.Scene.Finances.pas';
 
 var
   Key: Word = 0;

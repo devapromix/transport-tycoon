@@ -32,7 +32,7 @@ begin
   DrawFrame(10, 5, 60, 15);
   DrawTitle(Game.CompanyName);
 
-  DrawButton(12, 9, False, 'F', 'COMPANY FINANCES INFO');
+  DrawButton(12, 9, 'F', 'COMPANY FINANCES INFO');
   DrawButton(42, 9, False, 'G', 'GENERAL COMPANY INFO');
 
   DrawButton(12, 10, False, 'N', 'TOWN DIRECTORY');
@@ -40,7 +40,8 @@ begin
   DrawButton(12, 12, False, 'C', 'LIST OF ROAD VEHICLES');
   DrawButton(12, 13, False, 'T', 'LIST OF TRAINS');
   DrawButton(12, 14, False, 'S', 'LIST OF SHIPS');
-  DrawButton(12, 15, 'A', 'LIST OF AIRCRAFTS');
+  DrawButton(12, 15, Length(Game.Vehicles.Aircraft) > 0, 'A',
+    'LIST OF AIRCRAFTS');
 
   DrawButton(42, 14, False, 'B', 'BUILD');
   DrawButton(42, 15, 'X', 'CLEAR LAND');
@@ -58,8 +59,11 @@ begin
   begin
     if (MX >= 12) and (MX <= 38) then
       case MY of
+        9:
+          Key := TK_F;
         15:
-          Key := TK_A;
+          if Length(Game.Vehicles.Aircraft) > 0 then
+            Key := TK_A;
       end;
     if (MX >= 42) and (MX <= 68) then
       case MY of
@@ -84,6 +88,8 @@ begin
       end;
     TK_A:
       Scenes.SetScene(scAircrafts);
+    TK_F:
+      Scenes.SetScene(scFinances);
     TK_Q:
       begin
         Game.IsPause := True;

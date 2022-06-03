@@ -24,9 +24,12 @@ type
     IsGame: Boolean;
     Map: TMap;
     Turn: Integer;
-    Day: Byte;
-    Month: Byte;
-    Year: Word;
+    Day: Integer;
+    Month: Integer;
+    Year: Integer;
+    Construction: Integer;
+    NewVehicles: Integer;
+    AircraftIncome: Integer;
     Vehicles: TVehicles;
     constructor Create;
     destructor Destroy; override;
@@ -47,7 +50,8 @@ implementation
 
 uses
   Math,
-  TransportTycoon.City;
+  TransportTycoon.City,
+  TransportTycoon.Scenes;
 
 { TGame }
 
@@ -105,6 +109,7 @@ begin
   begin
     Month := 1;
     Inc(Year);
+    Scenes.SetScene(scFinances);
   end;
 
   Vehicles.Step;
@@ -117,6 +122,9 @@ begin
   IsClearLand := False;
   Turn := 0;
   FMoney := 100000;
+  AircraftIncome := 0;
+  Construction := 0;
+  NewVehicles := 0;
   Map.Gen;
   FCompanyName := TownNameStr[Math.RandomRange(0, Length(Map.City))] +
     ' TRANSPORT';

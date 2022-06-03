@@ -39,16 +39,11 @@ begin
         Game.Map.City[ACityIndex].X, Game.Map.City[ACityIndex].Y,
         AMaxPassengers);
 
-      { Aircraft[High(Aircraft)].AddOrder(ACityIndex,
+      Aircraft[High(Aircraft)].AddOrder(ACityIndex,
         Game.Map.City[ACityIndex].Name, Game.Map.City[ACityIndex].X,
-        Game.Map.City[ACityIndex].Y); }
-      // Test
-      Aircraft[High(Aircraft)].AddOrder(1, Game.Map.City[1].Name,
-        Game.Map.City[1].X, Game.Map.City[1].Y);
-      Aircraft[High(Aircraft)].AddOrder(0, Game.Map.City[0].Name,
-        Game.Map.City[0].X, Game.Map.City[0].Y);
-
+        Game.Map.City[ACityIndex].Y);
       Game.ModifyMoney(-1000);
+      Inc(Game.NewVehicles, 1000);
     end;
 end;
 

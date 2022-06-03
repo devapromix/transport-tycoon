@@ -3,8 +3,8 @@
 interface
 
 const
-  TownNameStr: array [0 .. 2] of string = ('EDINGTON 1', 'GRANINGVILLE 2',
-    'TRABURG');
+  TownNameStr: array [0 .. 4] of string = ('Edington', 'Graningville',
+    'Traburg', 'Nordington', 'Grufingley');
   AirportSizeStr: array [0 .. 5] of string = ('None', 'Small Airport',
     'Commuter Airport', 'City Airport', 'Metropolitan Airport',
     'International Airport');
@@ -63,6 +63,7 @@ begin
   NeedMoney := AirportCost;
   if (FAirport < 5) and (Game.Money >= NeedMoney) then
   begin
+    Inc(Game.Construction, NeedMoney);
     Game.ModifyMoney(-NeedMoney);
     Inc(FAirport);
   end;

@@ -190,12 +190,16 @@ begin
 end;
 
 procedure TAircraft.UnLoad;
+var
+M: Integer;
 begin
   FState := 'Unload';
   LastAirportId := Order[OrderIndex].Id;
   if Passengers > 0 then
   begin
-    Game.ModifyMoney(Passengers * (Distance div 10));
+    M := Passengers * (Distance div 10);
+    Inc(Game.AircraftIncome, M);
+    Game.ModifyMoney(M);
     FDistance := 0;
     FPassengers := 0;
   end;
