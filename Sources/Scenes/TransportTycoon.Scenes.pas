@@ -98,15 +98,18 @@ begin
 end;
 
 procedure TScene.DrawBar;
+var
+  Y: Integer;
 begin
+  Y := Self.Height - 1;
   terminal_color('white');
   terminal_bkcolor('black');
-  terminal_clear_area(0, 24, 80, 1);
-  DrawText(0, 24, Format('$%d', [Game.Money]));
-  DrawText(12, 24, Format('Turn:%d', [Game.Turn]));
-  DrawText(56, 24, Format('%s %d, %d', [MonStr[Game.Month], Game.Day,
+  terminal_clear_area(0, Y, 80, 1);
+  DrawText(0, Y, Format('$%d', [Game.Money]));
+  DrawText(12, Y, Format('Turn:%d', [Game.Turn]));
+  DrawText(56, Y, Format('%s %d, %d', [MonStr[Game.Month], Game.Day,
     Game.Year]));
-  DrawButton(70, 24, 'ESC', 'MENU');
+  DrawButton(70, Y, 'ESC', 'MENU');
 end;
 
 procedure TScene.DrawButton(const Y: Integer; Button, Text: string);

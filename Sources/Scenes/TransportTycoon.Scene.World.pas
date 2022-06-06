@@ -54,10 +54,10 @@ begin
   DrawBar;
 
   if Tile[Game.Map.Cell[MX][Game.Map.Top + MY]].Tile = Tile[tlCity].Tile then
-    DrawText(30, 24, Game.Map.City[Game.Map.GetCurrentCity(MX,
+    DrawText(30, Height - 1, Game.Map.City[Game.Map.GetCurrentCity(MX,
       Game.Map.Top + MY)].Name)
   else
-    DrawText(30, 24, Tile[Game.Map.Cell[MX][Game.Map.Top + MY]].Name);
+    DrawText(30, Height - 1, Tile[Game.Map.Cell[MX][Game.Map.Top + MY]].Name);
 end;
 
 procedure TSceneWorld.Update(var Key: Word);
