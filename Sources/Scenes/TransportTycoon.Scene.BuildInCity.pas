@@ -35,7 +35,7 @@ var
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
-  DrawFrame(10, 5, 60, 15);
+  DrawFrame(10, 7, 60, 15);
 
   C := Game.Map.City[Game.Map.CurrentCity];
   DrawTitle('BUILD IN ' + C.Name);
@@ -45,10 +45,9 @@ begin
   S := '';
   if C.Airport < 5 then
     S := ' ($' + IntToStr(C.AirportCost) + ')';
-  DrawButton(12, 9, F, 'A', 'Build ' + AirportSizeStr[N] + S);
+  DrawButton(12, 11, F, 'A', 'Build ' + AirportSizeStr[N] + S);
 
-  terminal_color('white');
-  DrawButton(17, 'ESC', 'CLOSE');
+  AddButton(19, 'Esc', 'Close');
 
   DrawBar;
 end;
@@ -61,12 +60,12 @@ begin
   begin
     if (MX >= 35) and (MX <= 45) then
       case MY of
-        17:
+        19:
           Key := TK_ESCAPE;
       end;
-    if (MX >= 12) and (MX <= 46) then
+    if (MX >= 12) and (MX <= 67) then
       case MY of
-        9:
+        11:
           Key := TK_A;
       end;
   end;

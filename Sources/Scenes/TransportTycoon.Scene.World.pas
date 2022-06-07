@@ -64,7 +64,7 @@ procedure TSceneWorld.Update(var Key: Word);
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
-    if (MY = 24) and (MX >= 70) then
+    if (MY = Self.Height - 1) and (MX >= 70) then
       Key := TK_ESCAPE;
     if (Game.Map.Cell[MX][Game.Map.Top + MY] = tlCity) and not Game.IsClearLand
     then

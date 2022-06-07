@@ -7,12 +7,17 @@ type
     scAirport, scHangar, scAircraft, scAircrafts, scOrders, scFinances);
 
 type
+  TButtonRec = record
+    ButtonIsActive: Boolean;
+    ButtonKey: string;
+    ButtonLabel: string;
+  end;
 
-  { TScene }
-
+type
   TScene = class(TObject)
   private
-
+    FButtons: array [0 .. 4] of TButtonRec;
+    FButtonsY: Integer;
   public
     MX, MY: Integer;
     procedure Render; virtual; abstract;
@@ -25,10 +30,19 @@ type
       Button, Text: string); overload;
     procedure DrawButton(const X, Y: Integer; Button, Text: string); overload;
     procedure DrawButton(const Y: Integer; Button, Text: string); overload;
+    function MakeButton(const IsActive: Boolean;
+      const Button, Text: string): string;
     procedure DrawTitle(const Y: Integer; const Title: string); overload;
     procedure DrawTitle(const Title: string); overload;
     procedure DrawFrame(const X, Y, W, H: Integer);
     procedure DrawMap(const AWidth, AHeight: Integer);
+    procedure ClearButtons;
+    procedure AddButton(const Y: Integer; const Button, Text: string); overload;
+    procedure AddButton(const Y: Integer; const IsActive: Boolean;
+      const Button, Text: string); overload;
+    function GetButton(const N: Integer): TButtonRec;
+    function GetButtonsY: Integer;
+    procedure RenderButtons;
     procedure DrawBar;
     function Width: Integer;
     function Height: Integer;
@@ -88,13 +102,55 @@ end;
 
 procedure TScene.DrawTitle(const Title: string);
 begin
-  DrawTitle(7, Title);
+  DrawTitle(9, Title);
+end;
+
+function TScene.GetButton(const N: Integer): TButtonRec;
+begin
+  Result := FButtons[N];
+end;
+
+function TScene.GetButtonsY: Integer;
+begin
+  Result := FButtonsY;
 end;
 
 procedure TScene.DrawButton(const X, Y: Integer; Button, Text: string);
 begin
   terminal_print(X, Y, Format('[c=light yellow][[%s]][/c] [c=white]%s[/c]',
     [UpperCase(Button), UpperCase(Text)]));
+end;
+
+procedure TScene.AddButton(const Y: Integer; const Button, Text: string);
+begin
+  AddButton(Y, True, Button, Text);
+end;
+
+procedure TScene.AddButton(const Y: Integer; const IsActive: Boolean;
+  const Button, Text: string);
+var
+  I: Integer;
+begin
+  FButtonsY := Y;
+  for I := Low(FButtons) to High(FButtons) do
+    if (FButtons[I].ButtonKey = '') then
+    begin
+      FButtons[I].ButtonIsActive := IsActive;
+      FButtons[I].ButtonKey := Button;
+      FButtons[I].ButtonLabel := Text;
+      Exit;
+    end;
+end;
+
+procedure TScene.ClearButtons;
+var
+  I: Integer;
+begin
+  for I := Low(FButtons) to High(FButtons) do
+  begin
+    FButtons[I].ButtonKey := '';
+    FButtons[I].ButtonLabel := '';
+  end;
 end;
 
 procedure TScene.DrawBar;
@@ -141,29 +197,15 @@ end;
 
 procedure TScene.DrawButton(const Y: Integer; IsActive: Boolean;
   Button, Text: string);
-var
-  CB, CT: string;
 begin
-  if IsActive then
-  begin
-    CB := 'light yellow';
-    CT := 'white';
-  end
-  else
-  begin
-    CB := 'gray';
-    CT := 'gray';
-  end;
   terminal_print(Width div 2, Y, TK_ALIGN_CENTER,
-    Format('[c=' + CB + '][[%s]][/c] [c=' + CT + ']%s[/c]', [UpperCase(Button),
-    UpperCase(Text)]));
+    MakeButton(IsActive, Button, Text));
 end;
 
 procedure TScene.DrawFrame(const X, Y, W, H: Integer);
 var
   I: Integer;
 begin
-  // terminal_bkcolor('black');
   terminal_clear_area(X, Y, W, H);
   for I := X + 1 to X + W - 2 do
   begin
@@ -207,6 +249,43 @@ begin
   Result := terminal_state(TK_HEIGHT);
 end;
 
+function TScene.MakeButton(const IsActive: Boolean;
+  const Button, Text: string): string;
+var
+  CB, CT: string;
+begin
+  if IsActive then
+  begin
+    CB := 'light yellow';
+    CT := 'white';
+  end
+  else
+  begin
+    CB := 'gray';
+    CT := 'gray';
+  end;
+  Result := Format('[c=' + CB + '][[%s]][/c] [c=' + CT + ']%s[/c]',
+    [UpperCase(Button), UpperCase(Text)]);
+end;
+
+procedure TScene.RenderButtons;
+var
+  I: Integer;
+  S: string;
+begin
+  S := '';
+  for I := Low(FButtons) to High(FButtons) do
+    if (FButtons[I].ButtonKey <> '') then
+    begin
+      S := S + MakeButton(FButtons[I].ButtonIsActive, FButtons[I].ButtonKey,
+        FButtons[I].ButtonLabel);
+      if (I < High(FButtons)) and (FButtons[I + 1].ButtonKey <> '') then
+        S := S + ' | ';
+    end;
+  terminal_bkcolor(0);
+  terminal_print(Width div 2, FButtonsY, TK_ALIGN_CENTER, S);
+end;
+
 { TScenes }
 
 constructor TScenes.Create;
@@ -244,7 +323,11 @@ begin
   if (FScene[Scene] <> nil) then
     with FScene[Scene] do
     begin
+      ClearButtons;
       Render;
+      RenderButtons;
+      terminal_color('white');
+      terminal_print(0, 0, Format('%dx%d', [MX, MY]));
     end;
   terminal_bkcolor(0);
 end;

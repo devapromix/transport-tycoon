@@ -28,7 +28,7 @@ var
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
-  DrawFrame(10, 5, 60, 15);
+  DrawFrame(10, 7, 60, 15);
   with Game.Vehicles do
   begin
     DrawTitle(UpperCase(Aircraft[CurrentVehicle].Name));
@@ -36,9 +36,10 @@ begin
     terminal_color('white');
     with Aircraft[CurrentVehicle] do
     begin
-      DrawText(12, 9, Format('Passengers: %d/%d', [Passengers, MaxPassengers]));
+      DrawText(12, 11, Format('Passengers: %d/%d',
+        [Passengers, MaxPassengers]));
 
-      DrawText(12, 15, Format('State: %s', [State]));
+      DrawText(12, 17, Format('State: %s', [State]));
 
       for I := 0 to Length(Order) - 1 do
       begin
@@ -46,14 +47,13 @@ begin
           terminal_color('white')
         else
           terminal_color('gray');
-        DrawText(34, I + 9, 'Go to ' + Order[I].Name + ' Airport');
+        DrawText(34, I + 11, 'Go to ' + Order[I].Name + ' Airport');
       end;
     end;
   end;
 
-  DrawButton(28, 17, 'O', 'ORDERS');
-  DrawText(39, 17, '|');
-  DrawButton(41, 17, 'ESC', 'CLOSE');
+  AddButton(19, 'O', 'Orders');
+  AddButton(19, 'Esc', 'Close');
 
   DrawBar;
 end;
@@ -64,12 +64,12 @@ begin
   begin
     if (MX >= 28) and (MX <= 37) then
       case MY of
-        17:
+        19:
           Key := TK_O;
       end;
     if (MX >= 41) and (MX <= 51) then
       case MY of
-        17:
+        19:
           Key := TK_ESCAPE;
       end;
   end;

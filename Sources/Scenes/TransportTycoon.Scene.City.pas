@@ -30,20 +30,19 @@ var
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
-  DrawFrame(10, 5, 60, 15);
+  DrawFrame(10, 8, 60, 13);
 
   C := Game.Map.City[Game.Map.CurrentCity];
-  DrawTitle(C.Name);
+  DrawTitle(10, C.Name);
   terminal_color('white');
-  DrawText(12, 9, 'POPULATION: ' + IntToStr(C.Population));
-  DrawText(12, 10, 'HOUSES: ' + IntToStr(C.Houses));
-  DrawButton(34, 9, C.Airport > 0, 'A', 'AIRPORT: ' + AirportSizeStr
+  DrawText(12, 12, 'Population: ' + IntToStr(C.Population));
+  DrawText(12, 13, 'Houses: ' + IntToStr(C.Houses));
+  DrawButton(34, 12, C.Airport > 0, 'A', 'Airport: ' + AirportSizeStr
     [C.Airport]);
   terminal_color('white');
 
-  DrawButton(29, 17, 'B', 'BUILD');
-  DrawText(39, 17, '|');
-  DrawButton(41, 17, 'ESC', 'CLOSE');
+  AddButton(18, 'B', 'Build');
+  AddButton(18, 'ESC', 'Close');
 
   DrawBar;
 end;
@@ -57,17 +56,17 @@ begin
   begin
     if (MX >= 29) and (MX <= 37) then
       case MY of
-        17:
+        18:
           Key := TK_B;
       end;
     if (MX >= 41) and (MX <= 51) then
       case MY of
-        17:
+        18:
           Key := TK_ESCAPE;
       end;
     if (MX >= 34) and (MX <= 69) then
       case MY of
-        9:
+        12:
           Key := TK_A;
       end;
   end;

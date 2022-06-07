@@ -31,22 +31,21 @@ var
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
-  DrawFrame(10, 5, 60, 15);
+  DrawFrame(10, 7, 60, 15);
 
   C := Game.Map.City[Game.Map.CurrentCity];
 
   DrawTitle(C.Name + ' Airport Hangar');
 
   for I := 0 to Length(AircraftBase) - 1 do
-    DrawButton(12, I + 9, Chr(Ord('A') + I), AircraftBase[I].Name);
+    DrawButton(12, I + 11, Chr(Ord('A') + I), AircraftBase[I].Name);
 
   I := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
     Length(AircraftBase) - 1);
-  DrawText(42, 9, AircraftBase[I].Name);
+  DrawText(42, 11, AircraftBase[I].Name);
 
-  DrawButton(22, 17, 'ENTER', 'BUY AIRCRAFT');
-  DrawText(43, 17, '|');
-  DrawButton(45, 17, 'ESC', 'CLOSE');
+  AddButton(19, 'Enter', 'Buy Aircraft');
+  AddButton(19, 'Esc', 'Close');
 
   DrawBar;
 end;
@@ -57,17 +56,17 @@ begin
   begin
     if (MX >= 12) and (MX <= 38) then
       case MY of
-        9 .. 15:
-          Key := TK_A + (MY - 9);
+        11 .. 17:
+          Key := TK_A + (MY - 11);
       end;
-    if (MX >= 22) and (MX <= 41) then
+    if (MX >= 23) and (MX <= 42) then
       case MY of
-        17:
+        19:
           Key := TK_ENTER;
       end;
-    if (MX >= 45) and (MX <= 55) then
+    if (MX >= 46) and (MX <= 56) then
       case MY of
-        17:
+        19:
           Key := TK_ESCAPE;
       end;
   end;

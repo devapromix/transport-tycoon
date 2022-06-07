@@ -29,7 +29,7 @@ var
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
-  DrawFrame(10, 5, 60, 15);
+  DrawFrame(10, 7, 60, 15);
   with Game.Vehicles do
   begin
     DrawTitle(Aircraft[CurrentVehicle].Name + ' Orders');
@@ -38,12 +38,12 @@ begin
     begin
       F := not(Aircraft[CurrentVehicle].IsOrder(TownID) or
         (Game.Map.City[TownID].Airport = 0));
-      DrawButton(12, TownID + 9, F, Chr(Ord('A') + TownID),
+      DrawButton(12, TownID + 11, F, Chr(Ord('A') + TownID),
         'Go to ' + Game.Map.City[TownID].Name + ' Airport');
     end;
   end;
 
-  DrawButton(17, 'ESC', 'CLOSE');
+  AddButton(19, 'Esc', 'Close');
 
   DrawBar;
 end;
@@ -55,9 +55,9 @@ var
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
-    if (MX >= 36) and (MX <= 46) then
+    if (MX >= 35) and (MX <= 45) then
       case MY of
-        17:
+        19:
           Key := TK_ESCAPE;
       end;
   end;

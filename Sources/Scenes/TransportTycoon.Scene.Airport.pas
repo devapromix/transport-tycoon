@@ -31,24 +31,23 @@ var
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
-  DrawFrame(10, 5, 60, 15);
+  DrawFrame(10, 7, 60, 15);
 
   C := Game.Map.City[Game.Map.CurrentCity];
-  DrawTitle(C.Name + ' AIRPORT');
+  DrawTitle(C.Name + ' Airport');
 
   terminal_color('white');
-  DrawText(12, 9, 'SIZE: ' + UpperCase(AirportSizeStr[C.Airport]));
-  DrawText(12, 10, 'PASSENGERS: ' + IntToStr(C.Passengers.Airport));
-  DrawText(12, 11, 'BAGS OF MAIL: ' + IntToStr(C.Mail.Airport));
+  DrawText(12, 11, 'Size: ' + AirportSizeStr[C.Airport]);
+  DrawText(12, 12, 'Passengers: ' + IntToStr(C.Passengers.Airport));
+  DrawText(12, 13, 'Bags of mail: ' + IntToStr(C.Mail.Airport));
 
   for I := 0 to Length(Game.Vehicles.Aircraft) - 1 do
-    DrawButton(42, I + 9, (Game.Vehicles.Aircraft[I].X = C.X) and
+    DrawButton(42, I + 11, (Game.Vehicles.Aircraft[I].X = C.X) and
       (Game.Vehicles.Aircraft[I].Y = C.Y), Chr(Ord('A') + I),
       Game.Vehicles.Aircraft[I].Name);
 
-  DrawButton(28, 17, 'H', 'HANGAR');
-  DrawText(39, 17, '|');
-  DrawButton(41, 17, 'ESC', 'CLOSE');
+  AddButton(19, 'H', 'Hangar');
+  AddButton(19, 'Esc', 'Close');
 
   DrawBar;
 end;
@@ -57,14 +56,19 @@ procedure TSceneAirport.Update(var Key: Word);
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
+    if (MX >= 42) and (MX <= 66) then
+      case MY of
+        11 .. 17:
+          Key := TK_A + (MY - 11);
+      end;
     if (MX >= 28) and (MX <= 37) then
       case MY of
-        17:
+        19:
           Key := TK_H;
       end;
     if (MX >= 41) and (MX <= 51) then
       case MY of
-        17:
+        19:
           Key := TK_ESCAPE;
       end;
   end;
