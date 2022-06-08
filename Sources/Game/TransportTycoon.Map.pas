@@ -45,7 +45,7 @@ const
   MapSizeInt: array [TMapSize] of Integer = (80, 160, 320, 640);
   MapNoOfTownsStr: array [1 .. 4] of string = ('Very Low', 'Low',
     'Normal', 'High');
-  MapNoOfTownsInt: array [1 .. 4] of Byte = (2, 3, 5, 7);
+  MapNoOfTownsInt: array [1 .. 4] of Byte = (3, 5, 8, 11);
 
 type
 
@@ -59,10 +59,10 @@ type
     FLeft: Word;
   public
     Size: TMapSize;
-    NoOfTowns: Byte;
+    NoOfTowns: Integer;
     Cell: array [0 .. 79, 0 .. 79] of Tiles;
     City: array of TCity;
-    CurrentCity: Byte;
+    CurrentCity: Integer;
     constructor Create;
     destructor Destroy; override;
     procedure Clear;
@@ -73,6 +73,7 @@ type
     property Height: Word read FHeight;
     function GetCurrentCity(const AX, AY: Integer): ShortInt;
     function EnterInCity(const AX, AY: Integer): Boolean;
+    function WorldPop: Integer;
   end;
 
 implementation
@@ -174,6 +175,15 @@ begin
       Result := I;
       Exit;
     end;
+end;
+
+function TMap.WorldPop: Integer;
+var
+  I: Integer;
+begin
+  Result := 0;
+  for I := 0 to Length(City) - 1 do
+    Result := Result + City[I].Population;
 end;
 
 end.

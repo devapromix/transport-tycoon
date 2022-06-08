@@ -4,7 +4,8 @@ interface
 
 type
   TSceneEnum = (scMainMenu, scGameMenu, scGen, scWorld, scCity, scBuildInCity,
-    scAirport, scHangar, scAircraft, scAircrafts, scOrders, scFinances);
+    scAirport, scHangar, scAircraft, scAircrafts, scOrders, scFinances,
+    scTowns);
 
 type
   TButtonRec = record
@@ -22,7 +23,8 @@ type
     MX, MY: Integer;
     procedure Render; virtual; abstract;
     procedure Update(var Key: word); virtual; abstract;
-    procedure DrawText(const X, Y: Integer; Text: string);
+    procedure DrawText(const X, Y: Integer; Text: string); overload;
+    procedure DrawText(const Y: Integer; Text: string); overload;
     procedure DrawMoney(const X, Y, Money: Integer);
     procedure DrawButton(const X, Y: Integer; IsActive: Boolean;
       Button, Text: string); overload;
@@ -85,7 +87,8 @@ uses
   TransportTycoon.Scene.Aircraft,
   TransportTycoon.Scene.Orders,
   TransportTycoon.Scene.Aircrafts,
-  TransportTycoon.Scene.Finances;
+  TransportTycoon.Scene.Finances,
+  TransportTycoon.Scene.Towns;
 
 { TScene }
 
@@ -98,6 +101,11 @@ procedure TScene.DrawTitle(const Y: Integer; const Title: string);
 begin
   terminal_print(Width div 2, Y, TK_ALIGN_CENTER,
     '[c=yellow]' + UpperCase(Title) + '[/c]');
+end;
+
+procedure TScene.DrawText(const Y: Integer; Text: string);
+begin
+  terminal_print(Width div 2, Y, TK_ALIGN_CENTER, Text);
 end;
 
 procedure TScene.DrawTitle(const Title: string);
@@ -301,6 +309,7 @@ begin
   FScene[scHangar] := TSceneHangar.Create;
   FScene[scAircraft] := TSceneAircraft.Create;
   FScene[scAircrafts] := TSceneAircrafts.Create;
+  FScene[scTowns] := TSceneTowns.Create;
   FScene[scOrders] := TSceneOrders.Create;
   FScene[scFinances] := TSceneFinances.Create;
 end;

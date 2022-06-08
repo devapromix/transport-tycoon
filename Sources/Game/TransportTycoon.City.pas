@@ -3,8 +3,9 @@
 interface
 
 const
-  TownNameStr: array [0 .. 4] of string = ('Edington', 'Graningville',
-    'Traburg', 'Nordington', 'Grufingley');
+  TownNameStr: array [0 .. 12] of string = ('Edington', 'Graningville',
+    'Traburg', 'Nordington', 'Grufingley', 'Funtfield', 'Sadtown', 'Lanwell',
+    'Granbridge', 'Trenington', 'Gadstone', 'Chendhattan', 'Drinningwille');
   AirportSizeStr: array [0 .. 5] of string = ('None', 'Small Airport',
     'Commuter Airport', 'City Airport', 'Metropolitan Airport',
     'International Airport');

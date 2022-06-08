@@ -35,7 +35,7 @@ begin
   DrawButton(12, 11, 'F', 'COMPANY FINANCES INFO');
   DrawButton(42, 11, False, 'G', 'GENERAL COMPANY INFO');
 
-  DrawButton(12, 12, False, 'N', 'TOWN DIRECTORY');
+  DrawButton(12, 12, 'N', 'TOWN DIRECTORY');
 
   DrawButton(12, 14, False, 'C', 'LIST OF ROAD VEHICLES');
   DrawButton(12, 15, False, 'T', 'LIST OF TRAINS');
@@ -60,6 +60,8 @@ begin
       case MY of
         11:
           Key := TK_F;
+        12:
+          Key := TK_N;
         17:
           Key := TK_A;
       end;
@@ -89,6 +91,8 @@ begin
         Scenes.SetScene(scAircrafts);
     TK_F:
       Scenes.SetScene(scFinances);
+    TK_N:
+      Scenes.SetScene(scTowns);
     TK_Q:
       begin
         Game.IsPause := True;

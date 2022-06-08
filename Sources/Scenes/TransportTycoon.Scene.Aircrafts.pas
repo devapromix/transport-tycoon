@@ -35,7 +35,7 @@ begin
   for I := 0 to Length(Game.Vehicles.Aircraft) - 1 do
     DrawButton(12, I + 11, Chr(Ord('A') + I), Game.Vehicles.Aircraft[I].Name);
 
-  AddButton(19, 'ESC', 'CLOSE');
+  AddButton(19, 'Esc', 'Close');
 
   DrawBar;
 end;
