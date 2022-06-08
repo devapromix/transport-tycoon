@@ -94,13 +94,11 @@ end;
 procedure TSceneFinances.Update(var Key: Word);
 begin
   if (Key = TK_MOUSE_LEFT) then
-  begin
-    if (MX >= 36) and (MX <= 46) then
-      case MY of
-        26:
-          Key := TK_ESCAPE;
-      end;
-  end;
+    if (GetButtonsY = MY) then
+    begin
+      if (MX >= 35) and (MX <= 45) then
+        Key := TK_ESCAPE;
+    end;
   case Key of
     TK_ESCAPE:
       Scenes.SetScene(scWorld);

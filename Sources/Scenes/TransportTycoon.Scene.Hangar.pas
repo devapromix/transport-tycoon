@@ -44,7 +44,7 @@ begin
     Length(AircraftBase) - 1);
   DrawText(42, 11, AircraftBase[I].Name);
 
-  AddButton(19, 'Enter', 'Buy Aircraft');
+  AddButton(19, Length(Game.Vehicles.Aircraft) < 7, 'Enter', 'Buy Aircraft');
   AddButton(19, 'Esc', 'Close');
 
   DrawBar;
@@ -59,16 +59,15 @@ begin
         11 .. 17:
           Key := TK_A + (MY - 11);
       end;
-    if (MX >= 23) and (MX <= 42) then
-      case MY of
-        19:
+    if (GetButtonsY = MY) then
+    begin
+      case MX of
+        23 .. 42:
           Key := TK_ENTER;
-      end;
-    if (MX >= 46) and (MX <= 56) then
-      case MY of
-        19:
+        46 .. 56:
           Key := TK_ESCAPE;
       end;
+    end;
   end;
   case Key of
     TK_ESCAPE:

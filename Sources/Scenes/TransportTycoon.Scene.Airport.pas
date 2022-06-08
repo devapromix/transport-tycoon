@@ -53,24 +53,30 @@ begin
 end;
 
 procedure TSceneAirport.Update(var Key: Word);
+var
+  C: TCity;
+  I: Integer;
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
     if (MX >= 42) and (MX <= 66) then
+    begin
+      C := Game.Map.City[Game.Map.CurrentCity];
+      I := MY - 11;
       case MY of
         11 .. 17:
-          Key := TK_A + (MY - 11);
+          if (Game.Vehicles.Aircraft[I].X = C.X) and
+            (Game.Vehicles.Aircraft[I].Y = C.Y) then
+            Key := TK_A + I;
       end;
-    if (MX >= 28) and (MX <= 37) then
-      case MY of
-        19:
-          Key := TK_H;
-      end;
-    if (MX >= 41) and (MX <= 51) then
-      case MY of
-        19:
-          Key := TK_ESCAPE;
-      end;
+    end;
+    if (GetButtonsY = MY) then
+    begin
+      if (MX >= 28) and (MX <= 37) then
+        Key := TK_H;
+      if (MX >= 41) and (MX <= 51) then
+        Key := TK_ESCAPE;
+    end;
   end;
   case Key of
     TK_ESCAPE:
