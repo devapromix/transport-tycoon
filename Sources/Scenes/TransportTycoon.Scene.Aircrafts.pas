@@ -28,14 +28,14 @@ var
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
-  DrawFrame(10, 5, 60, 15);
+  DrawFrame(10, 7, 60, 15);
 
   DrawTitle(Game.CompanyName + ' AIRCRAFTS');
 
   for I := 0 to Length(Game.Vehicles.Aircraft) - 1 do
-    DrawButton(12, I + 9, Chr(Ord('A') + I), Game.Vehicles.Aircraft[I].Name);
+    DrawButton(12, I + 11, Chr(Ord('A') + I), Game.Vehicles.Aircraft[I].Name);
 
-  DrawButton(17, 'ESC', 'CLOSE');
+  AddButton(19, 'ESC', 'CLOSE');
 
   DrawBar;
 end;
@@ -46,14 +46,12 @@ begin
   begin
     if (MX >= 12) and (MX <= 38) then
       case MY of
-        9 .. 15:
-          Key := TK_A + (MY - 9);
+        11 .. 17:
+          Key := TK_A + (MY - 11);
       end;
-    if (MX >= 36) and (MX <= 46) then
-      case MY of
-        17:
-          Key := TK_ESCAPE;
-      end;
+    if (GetButtonsY = MY) then
+      if (MX >= 35) and (MX <= 45) then
+        Key := TK_ESCAPE;
   end;
   case Key of
     TK_ESCAPE:

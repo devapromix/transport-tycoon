@@ -27,7 +27,6 @@ procedure TSceneFinances.Render;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
-  terminal_composition(TK_ON);
   DrawFrame(8, 0, 64, 29);
   DrawTitle(2, Game.CompanyName + ' Finances');
 
@@ -35,6 +34,7 @@ begin
   DrawText(50, 4, IntToStr(Game.Year + 1));
   DrawText(60, 4, IntToStr(Game.Year + 2));
 
+  terminal_composition(TK_ON);
   DrawText(10, 5, 'Road Vehicle Income:');
   DrawMoney(40, 5, Game.Finances.Value[ttRoadVehicleIncome]);
   DrawText(10, 6, 'Train Income:');
@@ -49,9 +49,13 @@ begin
   DrawText(30, 9, 'Total:');
 
   DrawText(10, 11, 'Road Vehicle Running Costs:');
+  DrawMoney(40, 11, -Game.Finances.Value[ttRoadVehicleRunningCosts]);
   DrawText(10, 12, 'Train Running Costs:');
+  DrawMoney(40, 12, -Game.Finances.Value[ttTrainRunningCosts]);
   DrawText(10, 13, 'Ship Running Costs:');
+  DrawMoney(40, 13, -Game.Finances.Value[ttShipRunningCosts]);
   DrawText(10, 14, 'Aircraft Running Costs:');
+  DrawMoney(40, 14, -Game.Finances.Value[ttAircraftRunningCosts]);
   DrawText(40, 14, '_________');
   DrawText(50, 14, '_________');
   DrawText(60, 14, '_________');
@@ -80,11 +84,11 @@ begin
   DrawMoney(30, 23, Game.Loan);
   DrawText(40, 23, Format('Max. Loan: $%d', [Game.MaxLoan]));
   DrawMoney(30, 24, Game.Money - Game.Loan);
+  terminal_composition(TK_OFF);
 
-  DrawButton(26, 'ESC', 'CLOSE');
+  AddButton(26, 'ESC', 'CLOSE');
 
   DrawBar;
-  terminal_composition(TK_OFF);
 end;
 
 procedure TSceneFinances.Update(var Key: Word);

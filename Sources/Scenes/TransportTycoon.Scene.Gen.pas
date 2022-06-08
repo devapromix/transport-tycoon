@@ -27,38 +27,31 @@ procedure TSceneGen.Render;
 begin
   Game.Map.Draw(Self.Width, Self.Height);
 
-  DrawFrame(10, 5, 60, 15);
+  DrawFrame(10, 7, 60, 15);
   DrawTitle('WORLD GENERATION');
 
-  DrawText(12, 9, 'Map size: ' + MapSizeStr[Game.Map.Size]);
-  DrawText(42, 9, 'No. of towns: ' + MapNoOfTownsStr[Game.Map.NoOfTowns]);
+  DrawText(12, 11, 'Map size: ' + MapSizeStr[Game.Map.Size]);
+  DrawText(42, 11, 'No. of towns: ' + MapNoOfTownsStr[Game.Map.NoOfTowns]);
 
   // DrawText(12, 10, "[[C]] Rivers: " + gen_rivers_str());
   // DrawText(42, 10, "[[D]] No. of ind.: " + gen_indust_str());
 
   // DrawText(12, 11, "[[E]] Sea level: " + gen_sea_level_str());
-  DrawText(42, 11, Format('Date: %s %d, %d', [MonStr[Game.Month], Game.Day,
+  DrawText(42, 13, Format('Date: %s %d, %d', [MonStr[Game.Month], Game.Day,
     Game.Year]));
 
-  DrawButton(23, 17, 'ENTER', 'GENERATE');
-  DrawText(40, 17, '|');
-  DrawButton(42, 17, 'ESC', 'BACK');
+  AddButton(19, 'ENTER', 'GENERATE');
+  AddButton(19, 'ESC', 'BACK');
 end;
 
 procedure TSceneGen.Update(var Key: word);
 begin
-  if (Key = TK_MOUSE_LEFT) then
+  if (Key = TK_MOUSE_LEFT) and (GetButtonsY = MY) then
   begin
-    if (MX >= 23) and (MX < 39) then
-      case MY of
-        17:
-          Key := TK_ENTER;
-      end;
-    if (MX >= 42) and (MX < 52) then
-      case MY of
-        17:
-          Key := TK_ESCAPE;
-      end;
+    if (MX >= 26) and (MX <= 41) then
+      Key := TK_ENTER;
+    if (MX >= 45) and (MX <= 54) then
+      Key := TK_ESCAPE;
   end;
   case Key of
     TK_ESCAPE:

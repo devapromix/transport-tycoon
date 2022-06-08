@@ -29,26 +29,25 @@ procedure TSceneGameMenu.Render;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
-  DrawFrame(10, 5, 60, 15);
-  DrawTitle(Game.CompanyName);
+  DrawFrame(10, 7, 60, 15);
+  DrawTitle(9, Game.CompanyName);
 
-  DrawButton(12, 9, 'F', 'COMPANY FINANCES INFO');
-  DrawButton(42, 9, False, 'G', 'GENERAL COMPANY INFO');
+  DrawButton(12, 11, 'F', 'COMPANY FINANCES INFO');
+  DrawButton(42, 11, False, 'G', 'GENERAL COMPANY INFO');
 
-  DrawButton(12, 10, False, 'N', 'TOWN DIRECTORY');
+  DrawButton(12, 12, False, 'N', 'TOWN DIRECTORY');
 
-  DrawButton(12, 12, False, 'C', 'LIST OF ROAD VEHICLES');
-  DrawButton(12, 13, False, 'T', 'LIST OF TRAINS');
-  DrawButton(12, 14, False, 'S', 'LIST OF SHIPS');
-  DrawButton(12, 15, Length(Game.Vehicles.Aircraft) > 0, 'A',
+  DrawButton(12, 14, False, 'C', 'LIST OF ROAD VEHICLES');
+  DrawButton(12, 15, False, 'T', 'LIST OF TRAINS');
+  DrawButton(12, 16, False, 'S', 'LIST OF SHIPS');
+  DrawButton(12, 17, Length(Game.Vehicles.Aircraft) > 0, 'A',
     'LIST OF AIRCRAFTS');
 
-  DrawButton(42, 14, False, 'B', 'BUILD');
-  DrawButton(42, 15, 'X', 'CLEAR LAND');
+  DrawButton(42, 16, False, 'B', 'BUILD');
+  DrawButton(42, 17, 'X', 'CLEAR LAND');
 
-  DrawButton(29, 17, 'Q', 'QUIT');
-  DrawText(38, 17, '|');
-  DrawButton(40, 17, 'ESC', 'CLOSE');
+  AddButton(19, 'Q', 'QUIT');
+  AddButton(19, 'ESC', 'CLOSE');
 
   DrawBar;
 end;
@@ -59,25 +58,24 @@ begin
   begin
     if (MX >= 12) and (MX <= 38) then
       case MY of
-        9:
+        11:
           Key := TK_F;
-        15:
-          if Length(Game.Vehicles.Aircraft) > 0 then
-            Key := TK_A;
+        17:
+          Key := TK_A;
       end;
     if (MX >= 42) and (MX <= 68) then
       case MY of
-        15:
+        17:
           Key := TK_X;
       end;
     if (MX >= 29) and (MX <= 36) then
       case MY of
-        17:
+        19:
           Key := TK_Q;
       end;
     if (MX >= 40) and (MX <= 50) then
       case MY of
-        17:
+        19:
           Key := TK_ESCAPE;
       end;
   end;
@@ -87,7 +85,8 @@ begin
         Scenes.SetScene(scWorld);
       end;
     TK_A:
-      Scenes.SetScene(scAircrafts);
+      if Length(Game.Vehicles.Aircraft) > 0 then
+        Scenes.SetScene(scAircrafts);
     TK_F:
       Scenes.SetScene(scFinances);
     TK_Q:

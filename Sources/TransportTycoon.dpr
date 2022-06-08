@@ -7,7 +7,8 @@ uses
   TransportTycoon.Game in 'Game\TransportTycoon.Game.pas',
   TransportTycoon.Scenes in 'Scenes\TransportTycoon.Scenes.pas',
   TransportTycoon.Scene.City in 'Scenes\TransportTycoon.Scene.City.pas',
-  TransportTycoon.Scene.BuildInCity in 'Scenes\TransportTycoon.Scene.BuildInCity.pas',
+  TransportTycoon.Scene.BuildInCity
+    in 'Scenes\TransportTycoon.Scene.BuildInCity.pas',
   TransportTycoon.Scene.World in 'Scenes\TransportTycoon.Scene.World.pas',
   TransportTycoon.City in 'Game\TransportTycoon.City.pas',
   TransportTycoon.Scene.Airport in 'Scenes\TransportTycoon.Scene.Airport.pas',
@@ -20,7 +21,8 @@ uses
   TransportTycoon.Vehicles in 'Game\TransportTycoon.Vehicles.pas',
   TransportTycoon.Scene.Aircraft in 'Scenes\TransportTycoon.Scene.Aircraft.pas',
   TransportTycoon.Scene.Orders in 'Scenes\TransportTycoon.Scene.Orders.pas',
-  TransportTycoon.Scene.Aircrafts in 'Scenes\TransportTycoon.Scene.Aircrafts.pas',
+  TransportTycoon.Scene.Aircrafts
+    in 'Scenes\TransportTycoon.Scene.Aircrafts.pas',
   TransportTycoon.Order in 'Game\TransportTycoon.Order.pas',
   TransportTycoon.Scene.Finances in 'Scenes\TransportTycoon.Scene.Finances.pas',
   TransportTycoon.Finances in 'Game\TransportTycoon.Finances.pas';

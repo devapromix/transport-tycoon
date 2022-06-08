@@ -25,26 +25,26 @@ procedure TSceneMainMenu.Render;
 begin
   Game.Map.Draw(Self.Width, Self.Height);
 
-  DrawFrame(20, 6, 40, 13);
-  DrawTitle(8, 'TRANSPORT TYCOON');
+  DrawFrame(20, 8, 40, 13);
+  DrawTitle(10, 'TRANSPORT TYCOON');
 
-  DrawButton(11, 'ENTER', 'NEW GAME');
-  DrawButton(12, Game.IsGame, 'ESC', 'CONTINUE');
+  DrawButton(13, 'ENTER', 'NEW GAME');
+  DrawButton(14, Game.IsGame, 'ESC', 'CONTINUE');
   terminal_color('white');
-  DrawButton(13, 'Q', 'QUIT');
+  DrawButton(15, 'Q', 'QUIT');
 
-  DrawText(32, 16, 'APROMIX (C) 2022');
+  DrawText(32, 18, 'APROMIX (C) 2022');
 end;
 
 procedure TSceneMainMenu.Update(var Key: word);
 begin
   if (Key = TK_MOUSE_LEFT) then
     case MY of
-      11:
-        Key := TK_ENTER;
-      12:
-        Key := TK_ESCAPE;
       13:
+        Key := TK_ENTER;
+      14:
+        Key := TK_ESCAPE;
+      15:
         Key := TK_Q;
     end;
   case Key of
