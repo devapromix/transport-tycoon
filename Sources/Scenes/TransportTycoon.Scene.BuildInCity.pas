@@ -21,7 +21,6 @@ uses
   Math,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Scene.World,
   TransportTycoon.City;
 
 { TSceneBuildInCity }

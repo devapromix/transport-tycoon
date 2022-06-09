@@ -33,8 +33,6 @@ begin
 end;
 
 procedure TSceneWorld.Render;
-var
-  I: Integer;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 

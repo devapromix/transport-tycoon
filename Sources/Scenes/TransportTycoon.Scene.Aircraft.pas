@@ -18,7 +18,6 @@ implementation
 
 uses
   BearLibTerminal,
-  Math,
   SysUtils,
   TransportTycoon.Game;
 

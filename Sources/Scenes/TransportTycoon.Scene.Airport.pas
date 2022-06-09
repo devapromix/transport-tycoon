@@ -18,10 +18,8 @@ implementation
 
 uses
   BearLibTerminal,
-  Math,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Scene.World,
   TransportTycoon.City;
 
 procedure TSceneAirport.Render;

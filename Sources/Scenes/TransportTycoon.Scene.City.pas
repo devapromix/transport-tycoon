@@ -21,7 +21,6 @@ uses
   BearLibTerminal,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Scene.World,
   TransportTycoon.City;
 
 procedure TSceneCity.Render;

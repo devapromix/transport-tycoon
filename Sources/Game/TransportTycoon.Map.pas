@@ -45,7 +45,7 @@ const
   MapSizeInt: array [TMapSize] of Integer = (80, 160, 320, 640);
   MapNoOfTownsStr: array [1 .. 4] of string = ('Very Low', 'Low',
     'Normal', 'High');
-  MapNoOfTownsInt: array [1 .. 4] of Byte = (3, 5, 8, 11);
+  MapNoOfTownsInt: array [1 .. 4] of Integer = (3, 5, 8, 11);
 
 type
 
@@ -71,7 +71,7 @@ type
     property Top: Word read FTop write FTop;
     property Left: Word read FLeft write FLeft;
     property Height: Word read FHeight;
-    function GetCurrentCity(const AX, AY: Integer): ShortInt;
+    function GetCurrentCity(const AX, AY: Integer): Integer;
     function EnterInCity(const AX, AY: Integer): Boolean;
     function WorldPop: Integer;
   end;
@@ -164,13 +164,13 @@ begin
   end;
 end;
 
-function TMap.GetCurrentCity(const AX, AY: Integer): ShortInt;
+function TMap.GetCurrentCity(const AX, AY: Integer): Integer;
 var
   I: Integer;
 begin
   Result := -1;
   for I := 0 to Length(City) - 1 do
-    if (City[I].X = AX) and (City[I].X = AX) then
+    if (City[I].X = AX) and (City[I].Y = AY) then
     begin
       Result := I;
       Exit;
