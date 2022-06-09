@@ -43,9 +43,11 @@ begin
   I := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
     Length(AircraftBase) - 1);
   DrawText(42, 11, AircraftBase[I].Name);
-  DrawText(42, 12, Format('Max. Passengers: %d',
-    [AircraftBase[I].MaxPassengers]));
-  DrawText(42, 13, Format('Speed: %d', [AircraftBase[I].Speed]));
+  DrawText(42, 12, Format('Passengers: %d',
+    [AircraftBase[I].Passengers]));
+  DrawText(42, 13, Format('Bags of mail: %d',
+    [AircraftBase[I].BagsOfMail]));
+  DrawText(42, 14, Format('Speed: %d km/h', [AircraftBase[I].Speed]));
 
   AddButton(19, Length(Game.Vehicles.Aircraft) < 7, 'Enter', 'Buy Aircraft');
   AddButton(19, 'Esc', 'Close');
@@ -91,7 +93,7 @@ begin
           I := Game.Vehicles.CurrentVehicle;
           Game.Vehicles.AddAircraft(Format('Aircraft #%d (%s)',
             [Length(Game.Vehicles.Aircraft) + 1, AircraftBase[I].Name]),
-            Game.Map.CurrentCity, AircraftBase[I].MaxPassengers);
+            Game.Map.CurrentCity, I);
           Scenes.SetScene(scAirport);
         end;
       end;

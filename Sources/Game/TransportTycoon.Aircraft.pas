@@ -9,16 +9,17 @@ uses
 type
   TAircraftBase = record
     Name: string;
-    MaxPassengers: Word;
+    Passengers: Word;
+    BagsOfMail: Word;
     Speed: Word;
   end;
 
 const
   AircraftBase: array [0 .. 1] of TAircraftBase = (
     // #1
-    (Name: 'Toreador MT-4'; MaxPassengers: 25; Speed: 420),
+    (Name: 'Toreador MT-4'; Passengers: 25; BagsOfMail: 4; Speed: 420),
     // #2
-    (Name: 'Rotor JG'; MaxPassengers: 30; Speed: 400)
+    (Name: 'Rotor JG'; Passengers: 30; BagsOfMail: 3; Speed: 400)
     //
     );
 
@@ -31,19 +32,22 @@ type
     FY: Integer;
     FX: Integer;
     FDistance: Integer;
+    FState: string;
     FPassengers: Integer;
     FMaxPassengers: Integer;
-    FState: string;
+    FBagsOfMail: Integer;
+    FMaxBagsOfMail: Integer;
   public
     Order: array of TOrder;
     OrderIndex, LastAirportId: Integer;
-    constructor Create(const AName: string;
-      const AX, AY, AMaxPassengers: Integer);
+    constructor Create(const AName: string; const AX, AY, ID: Integer);
     function Move(const AX, AY: Integer): Boolean; override;
     property Name: string read FName;
     property Distance: Integer read FDistance;
     property Passengers: Integer read FPassengers write FPassengers;
     property MaxPassengers: Integer read FMaxPassengers;
+    property BagsOfMail: Integer read FBagsOfMail write FBagsOfMail;
+    property MaxBagsOfMail: Integer read FMaxBagsOfMail;
     property X: Integer read FX;
     property Y: Integer read FY;
     property State: string read FState;
@@ -73,7 +77,7 @@ begin
   if Game.Map.City[TownIndex].Airport > 0 then
   begin
     SetLength(Order, Length(Order) + 1);
-    Order[High(Order)].Id := TownIndex;
+    Order[High(Order)].ID := TownIndex;
     Order[High(Order)].Name := AName;
     Order[High(Order)].X := AX;
     Order[High(Order)].Y := AY;
@@ -86,8 +90,7 @@ begin
     AddOrder(TownIndex, Name, X, Y);
 end;
 
-constructor TAircraft.Create(const AName: string;
-  const AX, AY, AMaxPassengers: Integer);
+constructor TAircraft.Create(const AName: string; const AX, AY, ID: Integer);
 begin
   FName := AName;
   FX := AX;
@@ -95,8 +98,10 @@ begin
   FT := 0;
   FH := 0;
   FState := 'Wait';
-  FMaxPassengers := AMaxPassengers;
+  FMaxPassengers := AircraftBase[ID].Passengers;
   FPassengers := 0;
+  FMaxBagsOfMail := AircraftBase[ID].BagsOfMail;
+  FBagsOfMail := 0;
   OrderIndex := 0;
   LastAirportId := 0;
   FDistance := 0;
@@ -110,12 +115,19 @@ end;
 procedure TAircraft.Load;
 begin
   FState := 'Load';
-  while (Game.Map.City[Order[OrderIndex].Id].Passengers > 0) and
+  while (Game.Map.City[Order[OrderIndex].ID].Passengers > 0) and
     (Passengers < MaxPassengers) do
   begin
-    with Game.Map.City[Order[OrderIndex].Id] do
+    with Game.Map.City[Order[OrderIndex].ID] do
       Passengers := Passengers - 1;
     Inc(FPassengers);
+  end;
+  while (Game.Map.City[Order[OrderIndex].ID].BagsOfMail > 0) and
+    (BagsOfMail < MaxBagsOfMail) do
+  begin
+    with Game.Map.City[Order[OrderIndex].ID] do
+      BagsOfMail := BagsOfMail - 1;
+    Inc(FBagsOfMail);
   end;
 end;
 
@@ -153,7 +165,7 @@ var
 begin
   Result := False;
   for I := 0 to Length(Order) - 1 do
-    if Order[I].Id = TownIndex then
+    if Order[I].ID = TownIndex then
     begin
       Result := True;
       Exit;
@@ -167,10 +179,10 @@ begin
     if not Move(Order[OrderIndex].X, Order[OrderIndex].Y) then
     begin
       Inc(FT);
-      if Order[OrderIndex].Id <> LastAirportId then
+      if Order[OrderIndex].ID <> LastAirportId then
         UnLoad;
       FState := 'Service';
-      if FT > (15 - (Game.Map.City[Order[OrderIndex].Id].Airport * 2)) then
+      if FT > (15 - (Game.Map.City[Order[OrderIndex].ID].Airport * 2)) then
       begin
         FT := 0;
         FH := Random(2);
@@ -190,14 +202,20 @@ var
   M: Integer;
 begin
   FState := 'Unload';
-  LastAirportId := Order[OrderIndex].Id;
+  LastAirportId := Order[OrderIndex].ID;
   if Passengers > 0 then
   begin
     M := Passengers * (Distance div 10);
     Game.ModifyMoney(ttAircraftIncome, M);
-    FDistance := 0;
-    FPassengers := 0;
+    Passengers := 0;
   end;
+  if BagsOfMail > 0 then
+  begin
+    M := BagsOfMail * (Distance div 7);
+    Game.ModifyMoney(ttAircraftIncome, M);
+    BagsOfMail := 0;
+  end;
+  FDistance := 0;
 end;
 
 end.

@@ -17,7 +17,7 @@ type
     FX, FY: Integer;
     FPopulation: Integer;
     FPassengers: Integer;
-    FMail: Integer;
+    FBagsOfMail: Integer;
     FHouses: Word;
     FAirport: Integer;
     function GrowModif: Byte;
@@ -25,7 +25,7 @@ type
     constructor Create(const AName: string; const AX, AY: Integer);
     property Population: Integer read FPopulation;
     property Passengers: Integer read FPassengers write FPassengers;
-    property Mail: Integer read FMail write FMail;
+    property BagsOfMail: Integer read FBagsOfMail write FBagsOfMail;
     property Houses: Word read FHouses;
     property Name: string read FName;
     property X: Integer read FX;
@@ -73,7 +73,7 @@ begin
   FPopulation := Math.RandomRange(250, 1500);
   FHouses := Population div 30;
   FPassengers := 0;
-  FMail := 0;
+  FBagsOfMail := 0;
   FAirport := 0;
 end;
 
@@ -85,12 +85,12 @@ begin
   begin
     FPassengers := (FPopulation div Math.RandomRange(40, 50) * Airport)
       + Math.RandomRange(1, 10);
-    FMail := (FPopulation div Math.RandomRange(160, 190) * Airport);
+    FBagsOfMail := (FPopulation div Math.RandomRange(160, 190) * Airport);
   end
   else
   begin
     FPassengers := 0;
-    FMail := 0;
+    FBagsOfMail := 0;
   end;
 end;
 
