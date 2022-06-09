@@ -28,7 +28,7 @@ uses
 procedure TSceneBuildInCity.Render;
 var
   C: TCity;
-  N: Byte;
+  N: Integer;
   S: string;
   F: Boolean;
 begin

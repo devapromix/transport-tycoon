@@ -20,7 +20,7 @@ type
     FBagsOfMail: Integer;
     FHouses: Word;
     FAirport: Integer;
-    function GrowModif: Byte;
+    function GrowModif: Integer;
   public
     constructor Create(const AName: string; const AX, AY: Integer);
     property Population: Integer read FPopulation;
@@ -70,8 +70,8 @@ begin
   FName := AName;
   FX := AX;
   FY := AY;
-  FPopulation := Math.RandomRange(250, 1500);
-  FHouses := Population div 30;
+  FPopulation := 0;
+  ModifyPopulation(Math.RandomRange(250, 1500));
   FPassengers := 0;
   FBagsOfMail := 0;
   FAirport := 0;
@@ -83,8 +83,8 @@ begin
     ModifyPopulation(Math.RandomRange(GrowModif * 8, GrowModif * 12));
   if Airport > 0 then
   begin
-    FPassengers := (FPopulation div Math.RandomRange(40, 50) * Airport)
-      + Math.RandomRange(1, 10);
+    FPassengers := (FPopulation div Math.RandomRange(40, 50) * Airport) +
+      Math.RandomRange(1, 10);
     FBagsOfMail := (FPopulation div Math.RandomRange(160, 190) * Airport);
   end
   else
@@ -94,7 +94,7 @@ begin
   end;
 end;
 
-function TCity.GrowModif: Byte;
+function TCity.GrowModif: Integer;
 begin
   Result := Airport { + Seaport + Trainstation } + 5;
 end;
@@ -102,7 +102,7 @@ end;
 procedure TCity.ModifyPopulation(const APopulation: Integer);
 begin
   FPopulation := FPopulation + APopulation;
-  FHouses := Population div 30;
+  FHouses := FPopulation div 30;
 end;
 
 end.

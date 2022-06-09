@@ -40,7 +40,7 @@ begin
   DrawText(12, 13, 'Bags of mail: ' + IntToStr(C.BagsOfMail));
 
   for I := 0 to Length(Game.Vehicles.Aircraft) - 1 do
-    DrawButton(42, I + 11, (Game.Vehicles.Aircraft[I].X = C.X) and
+    DrawButton(32, I + 11, (Game.Vehicles.Aircraft[I].X = C.X) and
       (Game.Vehicles.Aircraft[I].Y = C.Y), Chr(Ord('A') + I),
       Game.Vehicles.Aircraft[I].Name);
 
@@ -57,7 +57,7 @@ var
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
-    if (MX >= 42) and (MX <= 66) then
+    if (MX >= 32) and (MX <= 66) then
     begin
       C := Game.Map.City[Game.Map.CurrentCity];
       I := MY - 11;

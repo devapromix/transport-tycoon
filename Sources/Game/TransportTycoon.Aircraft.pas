@@ -11,15 +11,23 @@ type
     Name: string;
     Passengers: Word;
     BagsOfMail: Word;
+    Cost: Word;
+    RunningCost: Word;
     Speed: Word;
+    Since: Word;
   end;
 
 const
-  AircraftBase: array [0 .. 1] of TAircraftBase = (
+  AircraftBase: array [0 .. 2] of TAircraftBase = (
     // #1
-    (Name: 'Toreador MT-4'; Passengers: 25; BagsOfMail: 4; Speed: 420),
+    (Name: 'Toreador MT-4'; Passengers: 25; BagsOfMail: 4; Cost: 22000;
+    RunningCost: 2000; Speed: 420; Since: 1930),
     // #2
-    (Name: 'Rotor JG'; Passengers: 30; BagsOfMail: 3; Speed: 400)
+    (Name: 'Rotor JG'; Passengers: 30; BagsOfMail: 3; Cost: 24000;
+    RunningCost: 2200; Speed: 400; Since: 1940),
+    // #3
+    (Name: 'Raxton ML'; Passengers: 35; BagsOfMail: 4; Cost: 28000;
+    RunningCost: 2400; Speed: 450; Since: 1950)
     //
     );
 
@@ -65,6 +73,7 @@ implementation
 
 uses
   BearLibTerminal,
+  Math,
   SysUtils,
   TransportTycoon.Game,
   TransportTycoon.Finances;
@@ -185,7 +194,7 @@ begin
       if FT > (15 - (Game.Map.City[Order[OrderIndex].ID].Airport * 2)) then
       begin
         FT := 0;
-        FH := Random(2);
+        FH := RandomRange(0, 2);
         Load;
         Inc(OrderIndex);
         if (OrderIndex > High(Order)) then

@@ -28,7 +28,7 @@ begin
   DrawMap(Self.Width, Self.Height - 1);
 
   DrawFrame(10, 7, 60, 15);
-  DrawTitle(9, Game.CompanyName);
+  DrawTitle(9, Game.Company.Name);
 
   DrawButton(12, 11, 'F', 'COMPANY FINANCES INFO');
   DrawButton(42, 11, False, 'G', 'GENERAL COMPANY INFO');

@@ -6,6 +6,7 @@ uses
   Classes,
   SysUtils,
   TransportTycoon.Map,
+  TransportTycoon.Company,
   TransportTycoon.Vehicles,
   TransportTycoon.Finances;
 
@@ -17,10 +18,11 @@ type
   TGame = class(TObject)
   private
     FMoney: Integer;
-    FCompanyName: string;
-    FCompanyInavgurated: Integer;
     FFinances: TFinances;
     FLoan: Integer;
+    FCompany: TCompany;
+    FVehicles: TVehicles;
+    FMap: TMap;
   public const
     MaxLoan = 200000;
     StartMoney = MaxLoan div 2;
@@ -28,26 +30,25 @@ type
     IsClearLand: Boolean;
     IsPause: Boolean;
     IsGame: Boolean;
-    Map: TMap;
     Turn: Integer;
     Day: Integer;
     Month: Integer;
     Year: Integer;
-    Vehicles: TVehicles;
     constructor Create;
     destructor Destroy; override;
     procedure Clear;
     procedure Step;
     procedure New;
+    procedure CityGrow;
     property Money: Integer read FMoney;
     procedure ModifyMoney(const AMoney: Integer); overload;
     procedure ModifyMoney(const ValueEnum: TValueEnum;
       const AMoney: Integer); overload;
     property Loan: Integer read FLoan;
-    procedure CityGrow;
-    property CompanyName: string read FCompanyName;
-    property CompanyInavgurated: Integer read FCompanyInavgurated;
+    property Company: TCompany read FCompany;
     property Finances: TFinances read FFinances write FFinances;
+    property Vehicles: TVehicles read FVehicles;
+    property Map: TMap read FMap;
   end;
 
 var
@@ -64,21 +65,23 @@ uses
 
 constructor TGame.Create;
 begin
+  FCompany := TCompany.Create;
   FFinances := TFinances.Create;
   IsClearLand := False;
   IsPause := True;
   Self.New;
   Year := 1950;
-  Map := TMap.Create;
-  Map.Gen;
-  Vehicles := TVehicles.Create;
+  FMap := TMap.Create;
+  FMap.Gen;
+  FVehicles := TVehicles.Create;
 end;
 
 destructor TGame.Destroy;
 begin
-  Map.Free;
-  Vehicles.Free;
+  FMap.Free;
+  FVehicles.Free;
   FFinances.Free;
+  FCompany.Free;
   inherited Destroy;
 end;
 
@@ -141,9 +144,7 @@ begin
   FLoan := StartMoney;
   FFinances.Clear;
   Map.Gen;
-  FCompanyName := TownNameStr[Math.RandomRange(0, Length(Map.City))] +
-    ' TRANSPORT';
-  FCompanyInavgurated := Self.Year;
+  Company.Clear;
 end;
 
 initialization

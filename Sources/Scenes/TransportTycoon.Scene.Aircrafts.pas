@@ -29,7 +29,7 @@ begin
 
   DrawFrame(10, 7, 60, 15);
 
-  DrawTitle(Game.CompanyName + ' AIRCRAFTS');
+  DrawTitle(Game.Company.Name + ' AIRCRAFTS');
 
   for I := 0 to Length(Game.Vehicles.Aircraft) - 1 do
     DrawButton(12, I + 11, Chr(Ord('A') + I), Game.Vehicles.Aircraft[I].Name);

@@ -27,7 +27,7 @@ begin
   DrawMap(Self.Width, Self.Height - 1);
 
   DrawFrame(8, 0, 64, 29);
-  DrawTitle(2, Game.CompanyName + ' Finances');
+  DrawTitle(2, Game.Company.Name + ' Finances');
 
   DrawText(40, 4, IntToStr(Game.Year));
   DrawText(50, 4, IntToStr(Game.Year + 1));

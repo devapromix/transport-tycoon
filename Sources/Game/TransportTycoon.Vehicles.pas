@@ -3,11 +3,13 @@
 interface
 
 uses
-  TransportTycoon.Vehicle,
   TransportTycoon.Aircraft;
 
 type
-  TVehicles = class(TVehicle)
+
+  { TVehicles }
+
+  TVehicles = class
   private
 
   public
@@ -15,8 +17,8 @@ type
     Aircraft: array of TAircraft;
     constructor Create;
     destructor Destroy; override;
-    procedure Draw; override;
-    procedure Step; override;
+    procedure Draw;
+    procedure Step;
     procedure AddAircraft(const AName: string;
       const ACityIndex, AMaxPassengers: Integer);
   end;
