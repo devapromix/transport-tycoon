@@ -11,26 +11,21 @@ const
     'International Airport');
 
 type
-  TCargo = record
-    Airport: Cardinal;
-  end;
-
-type
   TCity = class(TObject)
   private
     FName: string;
     FX, FY: Integer;
     FPopulation: Integer;
-    FPassengers: TCargo;
-    FMail: TCargo;
+    FPassengers: Integer;
+    FMail: Integer;
     FHouses: Word;
     FAirport: Integer;
     function GrowModif: Byte;
   public
     constructor Create(const AName: string; const AX, AY: Integer);
-    property Population: Integer read FPopulation write FPopulation;
-    property Passengers: TCargo read FPassengers;
-    property Mail: TCargo read FMail;
+    property Population: Integer read FPopulation;
+    property Passengers: Integer read FPassengers write FPassengers;
+    property Mail: Integer read FMail write FMail;
     property Houses: Word read FHouses;
     property Name: string read FName;
     property X: Integer read FX;
@@ -77,8 +72,8 @@ begin
   FY := AY;
   FPopulation := Math.RandomRange(250, 1500);
   FHouses := Population div 30;
-  FPassengers.Airport := 0;
-  FMail.Airport := 0;
+  FPassengers := 0;
+  FMail := 0;
   FAirport := 0;
 end;
 
@@ -88,14 +83,14 @@ begin
     ModifyPopulation(Math.RandomRange(GrowModif * 8, GrowModif * 12));
   if Airport > 0 then
   begin
-    FPassengers.Airport := (FPopulation div Math.RandomRange(40, 50) * Airport)
+    FPassengers := (FPopulation div Math.RandomRange(40, 50) * Airport)
       + Math.RandomRange(1, 10);
-    FMail.Airport := (FPopulation div Math.RandomRange(160, 190) * Airport);
+    FMail := (FPopulation div Math.RandomRange(160, 190) * Airport);
   end
   else
   begin
-    FPassengers.Airport := 0;
-    FMail.Airport := 0;
+    FPassengers := 0;
+    FMail := 0;
   end;
 end;
 

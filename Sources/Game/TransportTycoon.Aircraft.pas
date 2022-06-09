@@ -3,28 +3,24 @@
 interface
 
 uses
-  TransportTycoon.Vehicle;
+  TransportTycoon.Vehicle,
+  TransportTycoon.Order;
 
 type
   TAircraftBase = record
     Name: string;
+    MaxPassengers: Word;
+    Speed: Word;
   end;
 
 const
   AircraftBase: array [0 .. 1] of TAircraftBase = (
     // #1
-    (Name: 'Toreador MT-4'),
+    (Name: 'Toreador MT-4'; MaxPassengers: 25; Speed: 420),
     // #2
-    (Name: 'Rotor JG')
+    (Name: 'Rotor JG'; MaxPassengers: 30; Speed: 400)
     //
     );
-
-type
-  TOrder = record
-    Id: Integer;
-    Name: string;
-    X, Y: Integer;
-  end;
 
 type
   TAircraft = class(TVehicle)
@@ -43,10 +39,10 @@ type
     OrderIndex, LastAirportId: Integer;
     constructor Create(const AName: string;
       const AX, AY, AMaxPassengers: Integer);
-    function Fly(const CX, CY: Integer): Boolean;
+    function Move(const AX, AY: Integer): Boolean; override;
     property Name: string read FName;
     property Distance: Integer read FDistance;
-    property Passengers: Integer read FPassengers;
+    property Passengers: Integer read FPassengers write FPassengers;
     property MaxPassengers: Integer read FMaxPassengers;
     property X: Integer read FX;
     property Y: Integer read FY;
@@ -114,41 +110,41 @@ end;
 procedure TAircraft.Load;
 begin
   FState := 'Load';
-  while (Game.Map.City[Order[OrderIndex].Id].Population > 0) and
+  while (Game.Map.City[Order[OrderIndex].Id].Passengers > 0) and
     (Passengers < MaxPassengers) do
   begin
     with Game.Map.City[Order[OrderIndex].Id] do
-      ModifyPopulation(-1);
+      Passengers := Passengers - 1;
     Inc(FPassengers);
   end;
 end;
 
-function TAircraft.Fly(const CX, CY: Integer): Boolean;
+function TAircraft.Move(const AX, AY: Integer): Boolean;
 begin
   FState := 'Fly';
   if FH = 0 then
   begin
-    if FX < CX then
+    if FX < AX then
       FX := FX + 1;
-    if FY < CY then
+    if FY < AY then
       FY := FY + 1;
-    if FX > CX then
+    if FX > AX then
       FX := FX - 1;
-    if FY > CY then
+    if FY > AY then
       FY := FY - 1;
   end
   else
   begin
-    if FY > CY then
+    if FY > AY then
       FY := FY - 1;
-    if FX > CX then
+    if FX > AX then
       FX := FX - 1;
-    if FY < CY then
+    if FY < AY then
       FY := FY + 1;
-    if FX < CX then
+    if FX < AX then
       FX := FX + 1;
   end;
-  Result := (X <> CX) or (Y <> CY);
+  Result := (FX <> AX) or (FY <> AY);
 end;
 
 function TAircraft.IsOrder(const TownIndex: Integer): Boolean;
@@ -168,7 +164,7 @@ procedure TAircraft.Step;
 begin
   if Length(Order) > 0 then
   begin
-    if not Fly(Order[OrderIndex].X, Order[OrderIndex].Y) then
+    if not Move(Order[OrderIndex].X, Order[OrderIndex].Y) then
     begin
       Inc(FT);
       if Order[OrderIndex].Id <> LastAirportId then

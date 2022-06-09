@@ -43,6 +43,9 @@ begin
   I := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
     Length(AircraftBase) - 1);
   DrawText(42, 11, AircraftBase[I].Name);
+  DrawText(42, 12, Format('Max. Passengers: %d',
+    [AircraftBase[I].MaxPassengers]));
+  DrawText(42, 13, Format('Speed: %d', [AircraftBase[I].Speed]));
 
   AddButton(19, Length(Game.Vehicles.Aircraft) < 7, 'Enter', 'Buy Aircraft');
   AddButton(19, 'Esc', 'Close');
@@ -51,6 +54,8 @@ begin
 end;
 
 procedure TSceneHangar.Update(var Key: Word);
+var
+  I: Integer;
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
@@ -83,9 +88,10 @@ begin
       begin
         if Length(Game.Vehicles.Aircraft) < 7 then
         begin
-          Game.Vehicles.AddAircraft('Aircraft #' +
-            IntToStr(Length(Game.Vehicles.Aircraft) + 1),
-            Game.Map.CurrentCity, 25);
+          I := Game.Vehicles.CurrentVehicle;
+          Game.Vehicles.AddAircraft(Format('Aircraft #%d (%s)',
+            [Length(Game.Vehicles.Aircraft) + 1, AircraftBase[I].Name]),
+            Game.Map.CurrentCity, AircraftBase[I].MaxPassengers);
           Scenes.SetScene(scAirport);
         end;
       end;

@@ -33,7 +33,7 @@ begin
   terminal_color('white');
   DrawButton(15, 'Q', 'QUIT');
 
-  DrawText(32, 18, 'APROMIX (C) 2022');
+  DrawText(18, 'Apromix (C) 2022');
 end;
 
 procedure TSceneMainMenu.Update(var Key: word);

@@ -36,8 +36,8 @@ begin
 
   terminal_color('white');
   DrawText(12, 11, 'Size: ' + AirportSizeStr[C.Airport]);
-  DrawText(12, 12, 'Passengers: ' + IntToStr(C.Passengers.Airport));
-  DrawText(12, 13, 'Bags of mail: ' + IntToStr(C.Mail.Airport));
+  DrawText(12, 12, 'Passengers: ' + IntToStr(C.Passengers));
+  DrawText(12, 13, 'Bags of mail: ' + IntToStr(C.Mail));
 
   for I := 0 to Length(Game.Vehicles.Aircraft) - 1 do
     DrawButton(42, I + 11, (Game.Vehicles.Aircraft[I].X = C.X) and
