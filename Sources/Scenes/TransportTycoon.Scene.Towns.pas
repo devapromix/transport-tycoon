@@ -19,7 +19,8 @@ implementation
 uses
   BearLibTerminal,
   SysUtils,
-  TransportTycoon.Game, TransportTycoon.Map;
+  TransportTycoon.Game,
+  TransportTycoon.Map;
 
 procedure TSceneTowns.Render;
 var

@@ -7,8 +7,8 @@ uses
 
 type
   TSceneEnum = (scMainMenu, scGameMenu, scGen, scWorld, scCity, scBuildInCity,
-    scAirport, scHangar, scAircraft, scAircrafts, scOrders, scFinances,
-    scTowns);
+    scAirport, scHangar, scAircraft, scAircrafts, scOrders, scFinances, scTowns,
+    scCompany);
 
 type
   TButtonRec = record
@@ -91,7 +91,8 @@ uses
   TransportTycoon.Scene.Orders,
   TransportTycoon.Scene.Aircrafts,
   TransportTycoon.Scene.Finances,
-  TransportTycoon.Scene.Towns;
+  TransportTycoon.Scene.Towns,
+  TransportTycoon.Scene.Company;
 
 { TScene }
 
@@ -316,6 +317,7 @@ begin
   FScene[scTowns] := TSceneTowns.Create;
   FScene[scOrders] := TSceneOrders.Create;
   FScene[scFinances] := TSceneFinances.Create;
+  FScene[scCompany] := TSceneCompany.Create;
 end;
 
 procedure TScenes.Update(var Key: word);

@@ -31,7 +31,7 @@ begin
   DrawTitle(9, Game.Company.Name);
 
   DrawButton(12, 11, 'F', 'COMPANY FINANCES INFO');
-  DrawButton(42, 11, False, 'G', 'GENERAL COMPANY INFO');
+  DrawButton(42, 11, 'G', 'GENERAL COMPANY INFO');
 
   DrawButton(12, 12, 'N', 'TOWN DIRECTORY');
 
@@ -65,6 +65,8 @@ begin
       end;
     if (MX >= 42) and (MX <= 68) then
       case MY of
+        11:
+          Key := TK_G;
         17:
           Key := TK_X;
       end;
@@ -89,6 +91,8 @@ begin
         Scenes.SetScene(scAircrafts);
     TK_F:
       Scenes.SetScene(scFinances);
+    TK_G:
+      Scenes.SetScene(scCompany);
     TK_N:
       Scenes.SetScene(scTowns);
     TK_Q:

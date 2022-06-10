@@ -110,6 +110,8 @@ begin
         Game.Map.Top := Game.Map.Top + 1;
     TK_F:
       Scenes.SetScene(scFinances);
+    TK_G:
+      Scenes.SetScene(scCompany);
     TK_N:
       Scenes.SetScene(scTowns);
   end;

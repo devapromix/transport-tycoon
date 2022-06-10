@@ -25,7 +25,8 @@ uses
   TransportTycoon.Scene.Finances in 'Scenes\TransportTycoon.Scene.Finances.pas',
   TransportTycoon.Finances in 'Game\TransportTycoon.Finances.pas',
   TransportTycoon.Scene.Towns in 'Scenes\TransportTycoon.Scene.Towns.pas',
-  TransportTycoon.Company in 'Game\TransportTycoon.Company.pas';
+  TransportTycoon.Company in 'Game\TransportTycoon.Company.pas',
+  TransportTycoon.Scene.Company in 'Scenes\TransportTycoon.Scene.Company.pas';
 
 var
   Key: Word = 0;
