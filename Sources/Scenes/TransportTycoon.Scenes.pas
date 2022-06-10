@@ -2,6 +2,9 @@
 
 interface
 
+uses
+  BearLibTerminal;
+
 type
   TSceneEnum = (scMainMenu, scGameMenu, scGen, scWorld, scCity, scBuildInCity,
     scAirport, scHangar, scAircraft, scAircrafts, scOrders, scFinances,
@@ -25,7 +28,8 @@ type
     procedure Update(var Key: word); virtual; abstract;
     procedure DrawText(const X, Y: Integer; Text: string); overload;
     procedure DrawText(const Y: Integer; Text: string); overload;
-    procedure DrawMoney(const X, Y, Money: Integer);
+    procedure DrawMoney(const X, Y, Money: Integer;
+      const Align: Integer = TK_ALIGN_RIGHT);
     procedure DrawButton(const X, Y: Integer; IsActive: Boolean;
       Button, Text: string); overload;
     procedure DrawButton(const Y: Integer; IsActive: Boolean;
@@ -71,7 +75,6 @@ var
 implementation
 
 uses
-  BearLibTerminal,
   SysUtils,
   Graphics,
   TransportTycoon.Map,
@@ -169,7 +172,7 @@ begin
   terminal_color('white');
   terminal_bkcolor('black');
   terminal_clear_area(0, Y, 80, 1);
-  DrawText(0, Y, Format('$%d', [Game.Money]));
+  DrawMoney(0, Y, Game.Money, TK_ALIGN_LEFT);
   DrawText(12, Y, Format('Turn:%d', [Game.Turn]));
   DrawText(56, Y, Format('%s %d, %d', [MonStr[Game.Month], Game.Day,
     Game.Year]));
@@ -237,14 +240,15 @@ begin
   Game.Vehicles.Draw;
 end;
 
-procedure TScene.DrawMoney(const X, Y, Money: Integer);
+procedure TScene.DrawMoney(const X, Y, Money: Integer;
+  const Align: Integer = TK_ALIGN_RIGHT);
 begin
   if Money = 0 then
-    Exit;
+    terminal_print(X, Y, Align, Format('[c=white]$%d[/c]', [Money]));
   if Money > 0 then
-    terminal_print(X, Y, Format('[c=green]+$%d[/c]', [Money]));
+    terminal_print(X, Y, Align, Format('[c=green]+$%d[/c]', [Money]));
   if Money < 0 then
-    terminal_print(X, Y, Format('[c=red]-$%d[/c]', [Abs(Money)]));
+    terminal_print(X, Y, Align, Format('[c=red]-$%d[/c]', [Abs(Money)]));
 end;
 
 function TScene.Width: Integer;

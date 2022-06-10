@@ -28,7 +28,7 @@ var
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
-  DrawFrame(10, 7, 60, 15);
+  DrawFrame(20, 7, 40, 15);
   with Game.Vehicles do
   begin
     DrawTitle(Aircraft[CurrentVehicle].Name + ' Orders');
@@ -37,7 +37,7 @@ begin
     begin
       F := not(Aircraft[CurrentVehicle].IsOrder(TownID) or
         (Game.Map.City[TownID].Airport = 0));
-      DrawButton(12, TownID + 11, F, Chr(Ord('A') + TownID),
+      DrawButton(22, TownID + 11, F, Chr(Ord('A') + TownID),
         'Go to ' + Game.Map.City[TownID].Name + ' Airport');
     end;
   end;
@@ -54,7 +54,7 @@ var
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
-    if (MX >= 12) and (MX <= 66) then
+    if (MX >= 22) and (MX <= 56) then
       case MY of
         11 .. 17:
           Key := TK_A + (MY - 11);

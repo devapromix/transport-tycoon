@@ -12,6 +12,8 @@ type
   TVehicles = class
   private
 
+  public const
+    MaxAircrafts = 7;
   public
     CurrentVehicle: Integer;
     Aircraft: array of TAircraft;
@@ -20,7 +22,7 @@ type
     procedure Draw;
     procedure Step;
     procedure AddAircraft(const AName: string;
-      const ACityIndex, AMaxPassengers: Integer);
+      const ACityIndex, AircraftID: Integer);
   end;
 
 implementation
@@ -31,21 +33,21 @@ uses
   TransportTycoon.Finances;
 
 procedure TVehicles.AddAircraft(const AName: string;
-  const ACityIndex, AMaxPassengers: Integer);
+  const ACityIndex, AircraftID: Integer);
 begin
-  if ((Game.Map.City[ACityIndex].Airport > 0) and (Game.Money >= 1000)) then
+  if ((Game.Map.City[ACityIndex].Airport > 0) and
+    (Game.Money >= AircraftBase[AircraftID].Cost)) then
     with Game.Vehicles do
     begin
       SetLength(Aircraft, Length(Aircraft) + 1);
 
       Aircraft[High(Aircraft)] := TAircraft.Create(AName,
-        Game.Map.City[ACityIndex].X, Game.Map.City[ACityIndex].Y,
-        AMaxPassengers);
+        Game.Map.City[ACityIndex].X, Game.Map.City[ACityIndex].Y, AircraftID);
 
       Aircraft[High(Aircraft)].AddOrder(ACityIndex,
         Game.Map.City[ACityIndex].Name, Game.Map.City[ACityIndex].X,
         Game.Map.City[ACityIndex].Y);
-      Game.ModifyMoney(ttNewVehicles, -1000);
+      Game.ModifyMoney(ttNewVehicles, -AircraftBase[AircraftID].Cost);
     end;
 end;
 

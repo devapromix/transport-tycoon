@@ -22,12 +22,14 @@ uses
   SysUtils,
   TransportTycoon.Game,
   TransportTycoon.City,
-  TransportTycoon.Aircraft;
+  TransportTycoon.Aircraft,
+  TransportTycoon.Vehicles;
 
 procedure TSceneHangar.Render;
 var
   C: TCity;
-  I: Integer;
+  I, J: Integer;
+  S: string;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
@@ -42,14 +44,22 @@ begin
 
   I := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
     Length(AircraftBase) - 1);
+  terminal_composition(TK_ON);
   DrawText(42, 11, AircraftBase[I].Name);
-  DrawText(42, 12, Format('Passengers: %d',
-    [AircraftBase[I].Passengers]));
-  DrawText(42, 13, Format('Bags of mail: %d',
-    [AircraftBase[I].BagsOfMail]));
+  S := '';
+  for J := 1 to Length(AircraftBase[I].Name) do
+    S := S + '_';
+  DrawText(42, 11, S);
+  terminal_composition(TK_OFF);
+  DrawText(42, 12, Format('Passengers: %d', [AircraftBase[I].Passengers]));
+  DrawText(42, 13, Format('Bags of mail: %d', [AircraftBase[I].BagsOfMail]));
   DrawText(42, 14, Format('Speed: %d km/h', [AircraftBase[I].Speed]));
+  DrawText(42, 15, Format('Cost: $%d', [AircraftBase[I].Cost]));
+  DrawText(42, 16, Format('Running Cost: $%d/y',
+    [AircraftBase[I].RunningCost]));
 
-  AddButton(19, Length(Game.Vehicles.Aircraft) < 7, 'Enter', 'Buy Aircraft');
+  AddButton(19, Length(Game.Vehicles.Aircraft) < TVehicles.MaxAircrafts,
+    'Enter', 'Buy Aircraft');
   AddButton(19, 'Esc', 'Close');
 
   DrawBar;
@@ -88,13 +98,16 @@ begin
       end;
     TK_ENTER:
       begin
-        if Length(Game.Vehicles.Aircraft) < 7 then
+        if Length(Game.Vehicles.Aircraft) < TVehicles.MaxAircrafts then
         begin
           I := Game.Vehicles.CurrentVehicle;
-          Game.Vehicles.AddAircraft(Format('Aircraft #%d (%s)',
-            [Length(Game.Vehicles.Aircraft) + 1, AircraftBase[I].Name]),
-            Game.Map.CurrentCity, I);
-          Scenes.SetScene(scAirport);
+          if (Game.Money >= AircraftBase[I].Cost) then
+          begin
+            Game.Vehicles.AddAircraft(Format('Aircraft #%d (%s)',
+              [Length(Game.Vehicles.Aircraft) + 1, AircraftBase[I].Name]),
+              Game.Map.CurrentCity, I);
+            Scenes.SetScene(scAirport);
+          end;
         end;
       end;
   end;

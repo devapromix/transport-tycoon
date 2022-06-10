@@ -108,6 +108,10 @@ begin
     TK_DOWN:
       if (Game.Map.Top <= Game.Map.Height - Self.Height) then
         Game.Map.Top := Game.Map.Top + 1;
+    TK_F:
+      Scenes.SetScene(scFinances);
+    TK_N:
+      Scenes.SetScene(scTowns);
   end;
 end;
 

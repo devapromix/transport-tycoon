@@ -29,18 +29,18 @@ var
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
-  DrawFrame(10, 7, 60, 15);
+  DrawFrame(5, 7, 70, 15);
 
   C := Game.Map.City[Game.Map.CurrentCity];
   DrawTitle(C.Name + ' Airport');
 
   terminal_color('white');
-  DrawText(12, 11, 'Size: ' + AirportSizeStr[C.Airport]);
-  DrawText(12, 12, 'Passengers: ' + IntToStr(C.Passengers));
-  DrawText(12, 13, 'Bags of mail: ' + IntToStr(C.BagsOfMail));
+  DrawText(7, 11, 'Size: ' + AirportSizeStr[C.Airport]);
+  DrawText(7, 12, 'Passengers: ' + IntToStr(C.Passengers));
+  DrawText(7, 13, 'Bags of mail: ' + IntToStr(C.BagsOfMail));
 
   for I := 0 to Length(Game.Vehicles.Aircraft) - 1 do
-    DrawButton(32, I + 11, (Game.Vehicles.Aircraft[I].X = C.X) and
+    DrawButton(37, I + 11, (Game.Vehicles.Aircraft[I].X = C.X) and
       (Game.Vehicles.Aircraft[I].Y = C.Y), Chr(Ord('A') + I),
       Game.Vehicles.Aircraft[I].Name);
 
@@ -57,7 +57,7 @@ var
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
-    if (MX >= 32) and (MX <= 66) then
+    if (MX >= 37) and (MX <= 71) then
     begin
       C := Game.Map.City[Game.Map.CurrentCity];
       I := MY - 11;
