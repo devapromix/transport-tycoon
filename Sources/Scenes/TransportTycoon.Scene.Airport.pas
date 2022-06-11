@@ -55,17 +55,15 @@ var
   C: TCity;
   I: Integer;
 begin
+  C := Game.Map.City[Game.Map.CurrentCity];
   if (Key = TK_MOUSE_LEFT) then
   begin
     if (MX >= 37) and (MX <= 71) then
     begin
-      C := Game.Map.City[Game.Map.CurrentCity];
       I := MY - 11;
       case MY of
         11 .. 17:
-          if (Game.Vehicles.Aircraft[I].X = C.X) and
-            (Game.Vehicles.Aircraft[I].Y = C.Y) then
-            Key := TK_A + I;
+          Key := TK_A + I;
       end;
     end;
     if (GetButtonsY = MY) then
@@ -81,8 +79,13 @@ begin
       Scenes.SetScene(scCity);
     TK_A .. TK_G:
       begin
-        Game.Vehicles.CurrentVehicle := Key - TK_A;
-        Scenes.SetScene(scAircraft);
+        I := Key - TK_A;
+        if (Game.Vehicles.Aircraft[I].X = C.X) and
+          (Game.Vehicles.Aircraft[I].Y = C.Y) then
+        begin
+          Game.Vehicles.CurrentVehicle := I;
+          Scenes.SetScene(scAircraft);
+        end;
       end;
     TK_H:
       Scenes.SetScene(scHangar);

@@ -24,6 +24,7 @@ uses
 procedure TSceneAircraft.Render;
 var
   I: Integer;
+  C: Char;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
@@ -45,10 +46,11 @@ begin
       for I := 0 to Length(Order) - 1 do
       begin
         if (OrderIndex = I) then
-          terminal_color('white')
+          C := '>'
         else
-          terminal_color('gray');
-        DrawText(34, I + 11, 'Go to ' + Order[I].Name + ' Airport');
+          C := #32;
+        DrawText(32, I + 11, C);
+        DrawButton(34, I + 11, Chr(Ord('A') + I), 'Go to ' + Order[I].Name + ' Airport');
       end;
     end;
   end;
@@ -60,6 +62,8 @@ begin
 end;
 
 procedure TSceneAircraft.Update(var Key: Word);
+var
+  I: Integer;
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
@@ -75,6 +79,18 @@ begin
       end;
   end;
   case Key of
+    TK_A..TK_G:
+      with Game.Vehicles do
+      begin
+        I := Key - TK_A;
+        with Aircraft[CurrentVehicle] do
+        begin
+          if (I > Length(Order) - 1) then
+            Exit;
+          DelOrder(I);
+          Scenes.Render;
+        end;
+      end;
     TK_ESCAPE:
       Scenes.SetScene(scWorld);
     TK_O:

@@ -32,6 +32,9 @@ const
     );
 
 type
+
+  { TAircraft }
+
   TAircraft = class(TVehicle)
   private
     FName: string;
@@ -65,6 +68,7 @@ type
     procedure AddOrder(const TownIndex: Integer); overload;
     procedure AddOrder(const TownIndex: Integer; const AName: string;
       const AX, AY: Integer); overload;
+    procedure DelOrder(const AOrderIndex: Integer);
     function IsOrder(const TownIndex: Integer): Boolean;
     procedure Draw; override;
   end;
@@ -90,6 +94,27 @@ begin
     Order[High(Order)].Name := AName;
     Order[High(Order)].X := AX;
     Order[High(Order)].Y := AY;
+  end;
+end;
+
+procedure TAircraft.DelOrder(const AOrderIndex: Integer);
+var
+  I: Integer;
+begin
+  if (Length(Order) > 0) then
+  begin
+    if AOrderIndex > High(Order) then
+      Exit;
+    if AOrderIndex < Low(Order) then
+      Exit;
+    if AOrderIndex = High(Order) then
+    begin
+      SetLength(Order, Length(Order) - 1);
+      Exit;
+    end;
+    for i := AOrderIndex + 1 to Length(Order)-1 do
+     Order[i - 1] := Order[i];
+    SetLength(Order, Length(Order) - 1);
   end;
 end;
 
