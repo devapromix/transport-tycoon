@@ -28,21 +28,21 @@ var
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
-  DrawFrame(20, 7, 40, 15);
+  DrawFrame(20, 5, 40, 19);
   with Game.Vehicles do
   begin
-    DrawTitle(Aircraft[CurrentVehicle].Name + ' Orders');
+    DrawTitle(7, Aircraft[CurrentVehicle].Name + ' Orders');
 
     for TownID := 0 to Length(Game.Map.City) - 1 do
     begin
       F := not(Aircraft[CurrentVehicle].IsOrder(TownID) or
         (Game.Map.City[TownID].Airport = 0));
-      DrawButton(22, TownID + 11, F, Chr(Ord('A') + TownID),
+      DrawButton(22, TownID + 9, F, Chr(Ord('A') + TownID),
         'Go to ' + Game.Map.City[TownID].Name + ' Airport');
     end;
   end;
 
-  AddButton(19, 'Esc', 'Close');
+  AddButton(21, 'Esc', 'Close');
 
   DrawBar;
 end;
@@ -56,8 +56,8 @@ begin
   begin
     if (MX >= 22) and (MX <= 56) then
       case MY of
-        11 .. 17:
-          Key := TK_A + (MY - 11);
+        9 .. 19:
+          Key := TK_A + (MY - 9);
       end;
     if (GetButtonsY = MY) then
     begin
@@ -68,7 +68,7 @@ begin
   case Key of
     TK_ESCAPE:
       Scenes.SetScene(scAircraft);
-    TK_A .. TK_G:
+    TK_A .. TK_K:
       with Game.Vehicles do
       begin
         TownID := Key - TK_A;

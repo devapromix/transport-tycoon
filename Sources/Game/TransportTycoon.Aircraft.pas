@@ -214,13 +214,13 @@ begin
   LastAirportId := Order[OrderIndex].ID;
   if Passengers > 0 then
   begin
-    M := Passengers * (Distance div 10);
+    M := (Passengers * (Distance div 10)) * 5;
     Game.ModifyMoney(ttAircraftIncome, M);
     Passengers := 0;
   end;
   if BagsOfMail > 0 then
   begin
-    M := BagsOfMail * (Distance div 7);
+    M := (BagsOfMail * (Distance div 7)) * 4;
     Game.ModifyMoney(ttAircraftIncome, M);
     BagsOfMail := 0;
   end;
