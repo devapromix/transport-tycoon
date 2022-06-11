@@ -23,8 +23,6 @@ uses
   TransportTycoon.Game,
   TransportTycoon.City;
 
-{ TSceneBuildInCity }
-
 procedure TSceneBuildInCity.Render;
 var
   C: TCity;
@@ -34,7 +32,7 @@ var
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
-  DrawFrame(10, 7, 60, 15);
+  DrawFrame(15, 7, 50, 15);
 
   C := Game.Map.City[Game.Map.CurrentCity];
   DrawTitle('BUILD IN ' + C.Name);
@@ -44,7 +42,7 @@ begin
   S := '';
   if C.Airport < 5 then
     S := ' ($' + IntToStr(C.AirportCost) + ')';
-  DrawButton(12, 11, F, 'A', 'Build ' + AirportSizeStr[N] + S);
+  DrawButton(17, 11, F, 'A', 'Build ' + AirportSizeStr[N] + S);
 
   AddButton(19, 'Esc', 'Close');
 
@@ -62,7 +60,7 @@ begin
         19:
           Key := TK_ESCAPE;
       end;
-    if (MX >= 12) and (MX <= 67) then
+    if (MX >= 17) and (MX <= 62) then
       case MY of
         11:
           Key := TK_A;

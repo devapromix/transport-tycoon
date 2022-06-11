@@ -48,7 +48,7 @@ uses
 function TCity.AirportCost: Integer;
 begin
   if (FAirport < 5) then
-    Result := (FAirport + 1) * 1000
+    Result := (FAirport + 1) * 8000
   else
     Result := 0;
 end;

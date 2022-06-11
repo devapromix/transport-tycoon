@@ -35,7 +35,8 @@ var
 begin
   Randomize;
   terminal_open();
-  terminal_set('window: size=80x30, title="Transport Tycoon";');
+  terminal_set('window: size=80x30, title="Transport Tycoon v.'
+    + Game.Version + '";');
   terminal_set('input: filter={keyboard, mouse+}');
   Scenes := TScenes.Create;
   Scenes.SetScene(scMainMenu);
