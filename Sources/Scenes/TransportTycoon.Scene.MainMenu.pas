@@ -56,7 +56,7 @@ begin
       end;
     TK_ENTER:
       begin
-        Game.Year := 1950;
+        Game.Calendar.Clear;
         Game.IsGame := False;
         Scenes.SetScene(scGen);
       end;

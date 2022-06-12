@@ -26,7 +26,7 @@ procedure TCompany.Clear;
 begin
   FName := TownNameStr[Math.RandomRange(0, Length(Game.Map.City))] +
     ' TRANSPORT';
-  FInavgurated := Game.Year;
+  FInavgurated := Game.Calendar.Year;
 end;
 
 constructor TCompany.Create;

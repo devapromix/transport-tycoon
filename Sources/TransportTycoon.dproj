@@ -105,28 +105,29 @@
         <DCCReference Include="Third-Party\BearLibTerminal\BearLibTerminal.pas"/>
         <DCCReference Include="Game\TransportTycoon.Map.pas"/>
         <DCCReference Include="Game\TransportTycoon.Game.pas"/>
+        <DCCReference Include="Game\TransportTycoon.City.pas"/>
+        <DCCReference Include="Game\TransportTycoon.Company.pas"/>
+        <DCCReference Include="Game\TransportTycoon.Finances.pas"/>
+        <DCCReference Include="Game\TransportTycoon.Order.pas"/>
+        <DCCReference Include="Game\TransportTycoon.Vehicle.pas"/>
+        <DCCReference Include="Game\TransportTycoon.Vehicles.pas"/>
+        <DCCReference Include="Game\TransportTycoon.Aircraft.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scenes.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.City.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.BuildInCity.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.World.pas"/>
-        <DCCReference Include="Game\TransportTycoon.City.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Airport.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.MainMenu.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Gen.pas"/>
-        <DCCReference Include="Game\TransportTycoon.Aircraft.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.GameMenu.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Hangar.pas"/>
-        <DCCReference Include="Game\TransportTycoon.Vehicle.pas"/>
-        <DCCReference Include="Game\TransportTycoon.Vehicles.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Aircraft.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Orders.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Aircrafts.pas"/>
-        <DCCReference Include="Game\TransportTycoon.Order.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Finances.pas"/>
-        <DCCReference Include="Game\TransportTycoon.Finances.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Towns.pas"/>
-        <DCCReference Include="Game\TransportTycoon.Company.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Company.pas"/>
+        <DCCReference Include="Game\TransportTycoon.Calendar.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

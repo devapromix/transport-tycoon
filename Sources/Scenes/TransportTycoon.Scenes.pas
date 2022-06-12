@@ -175,8 +175,7 @@ begin
   terminal_clear_area(0, Y, 80, 1);
   DrawMoney(0, Y, Game.Money, TK_ALIGN_LEFT);
   DrawText(12, Y, Format('Turn:%d', [Game.Turn]));
-  DrawText(56, Y, Format('%s %d, %d', [MonStr[Game.Month], Game.Day,
-    Game.Year]));
+  DrawText(56, Y, Game.Calendar.GetDate);
   DrawButton(70, Y, 'ESC', 'MENU');
 end;
 

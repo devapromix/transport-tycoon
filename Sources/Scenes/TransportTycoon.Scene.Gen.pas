@@ -26,22 +26,21 @@ procedure TSceneGen.Render;
 begin
   Game.Map.Draw(Self.Width, Self.Height);
 
-  DrawFrame(10, 7, 60, 15);
-  DrawTitle('WORLD GENERATION');
+  DrawFrame(10, 9, 60, 11);
+  DrawTitle(11, 'WORLD GENERATION');
 
-  DrawText(12, 11, 'Map size: ' + MapSizeStr[Game.Map.Size]);
-  DrawButton(42, 11, 'A', 'No. of towns: ' + MapNoOfTownsStr
+  DrawText(12, 13, 'Map size: ' + MapSizeStr[Game.Map.Size]);
+  DrawButton(42, 13, 'A', 'No. of towns: ' + MapNoOfTownsStr
     [Game.Map.NoOfTowns]);
+  DrawButton(42, 14, 'B', Format('Date: %s', [Game.Calendar.GetDate]));
 
   // DrawText(12, 10, "[[C]] Rivers: " + gen_rivers_str());
   // DrawText(42, 10, "[[D]] No. of ind.: " + gen_indust_str());
 
   // DrawText(12, 11, "[[E]] Sea level: " + gen_sea_level_str());
-  DrawText(42, 13, Format('Date: %s %d, %d', [MonStr[Game.Month], Game.Day,
-    Game.Year]));
 
-  AddButton(19, 'Enter', 'Generate');
-  AddButton(19, 'Esc', 'Back');
+  AddButton(17, 'Enter', 'Generate');
+  AddButton(17, 'Esc', 'Back');
 end;
 
 procedure TSceneGen.Update(var Key: word);
@@ -57,8 +56,10 @@ begin
     end;
     if (MX >= 42) and (MX <= 66) then
       case MY of
-        11:
+        13:
           Key := TK_A;
+        14:
+          Key := TK_B;
       end;
   end;
   case Key of
@@ -69,6 +70,11 @@ begin
         Inc(Game.Map.NoOfTowns);
         if (Game.Map.NoOfTowns > 4) then
           Game.Map.NoOfTowns := 1;
+      end;
+    TK_B:
+      begin
+        Game.Calendar.NextYear;
+        Scenes.Render;
       end;
     TK_ENTER:
       begin

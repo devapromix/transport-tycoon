@@ -30,9 +30,9 @@ begin
   DrawTitle(2, Game.Company.Name + ' Finances');
 
   terminal_composition(TK_ON);
-  DrawText(45, 4, IntToStr(Game.Year));
-  DrawText(55, 4, IntToStr(Game.Year + 1));
-  DrawText(65, 4, IntToStr(Game.Year + 2));
+  DrawText(45, 4, IntToStr(Game.Calendar.Year));
+  DrawText(55, 4, IntToStr(Game.Calendar.Year + 1));
+  DrawText(65, 4, IntToStr(Game.Calendar.Year + 2));
   DrawText(45, 4, '____');
   DrawText(55, 4, '____');
   DrawText(65, 4, '____');

@@ -6,13 +6,10 @@ uses
   Classes,
   SysUtils,
   TransportTycoon.Map,
+  TransportTycoon.Calendar,
   TransportTycoon.Company,
   TransportTycoon.Vehicles,
   TransportTycoon.Finances;
-
-const
-  MonStr: array [1 .. 12] of string = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
 
 type
   TGame = class(TObject)
@@ -23,6 +20,7 @@ type
     FCompany: TCompany;
     FVehicles: TVehicles;
     FMap: TMap;
+    FCalendar: TCalendar;
   public const
     MaxLoan = 200000;
     StartMoney = MaxLoan div 2;
@@ -32,9 +30,6 @@ type
     IsPause: Boolean;
     IsGame: Boolean;
     Turn: Integer;
-    Day: Integer;
-    Month: Integer;
-    Year: Integer;
     constructor Create;
     destructor Destroy; override;
     procedure Clear;
@@ -48,6 +43,7 @@ type
     property Company: TCompany read FCompany;
     property Finances: TFinances read FFinances write FFinances;
     property Vehicles: TVehicles read FVehicles;
+    property Calendar: TCalendar read FCalendar;
     property Map: TMap read FMap;
   end;
 
@@ -65,13 +61,11 @@ uses
 
 constructor TGame.Create;
 begin
+  FCalendar := TCalendar.Create;
   FCompany := TCompany.Create;
   FFinances := TFinances.Create;
   IsClearLand := False;
   IsPause := True;
-  Day := 1;
-  Month := 1;
-  Year := 1950;
   FMap := TMap.Create;
   FMap.Gen;
   FVehicles := TVehicles.Create;
@@ -83,6 +77,7 @@ begin
   FVehicles.Free;
   FFinances.Free;
   FCompany.Free;
+  FCalendar.Free;
   inherited Destroy;
 end;
 
@@ -109,40 +104,22 @@ procedure TGame.Step;
 begin
   if not IsGame or IsPause then
     Exit;
-
   Inc(Turn);
-  Inc(Day);
-  if Day > 30 then
-  begin
-    Day := 1;
-    Inc(Month);
-    Self.CityGrow;
-    Game.Vehicles.RunningCosts;
-    Game.ModifyMoney(ttLoanInterest, -(Game.Loan div 600));
-  end;
-  if Month > 12 then
-  begin
-    Month := 1;
-    Inc(Year);
-    Scenes.SetScene(scFinances);
-  end;
-
-  Vehicles.Step;
+  FCalendar.Step;
+  FVehicles.Step;
 end;
 
 procedure TGame.Clear;
 begin
-  Day := 1;
-  Month := 1;
   Turn := 0;
   IsGame := True;
   IsClearLand := False;
   FMoney := StartMoney;
   FLoan := StartMoney;
   FFinances.Clear;
-  Map.Gen;
-  Company.Clear;
-  Vehicles.Clear;
+  FMap.Gen;
+  FCompany.Clear;
+  FVehicles.Clear;
 end;
 
 initialization
