@@ -24,6 +24,7 @@ type
     procedure AddAircraft(const AName: string;
       const ACityIndex, AircraftID: Integer);
     procedure RunningCosts;
+    procedure Clear;
   end;
 
 implementation
@@ -66,6 +67,15 @@ begin
     M := AircraftBase[J].RunningCost div 12;
     Game.ModifyMoney(ttAircraftRunningCosts, -M);
   end;
+end;
+
+procedure TVehicles.Clear;
+var
+  I: Integer;
+begin
+  for I := 0 to Length(Aircraft) - 1 do
+    Aircraft[I].Free;
+  SetLength(Aircraft, 0);
 end;
 
 constructor TVehicles.Create;

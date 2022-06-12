@@ -39,7 +39,6 @@ type
     destructor Destroy; override;
     procedure Clear;
     procedure Step;
-    procedure New;
     procedure CityGrow;
     property Money: Integer read FMoney;
     procedure ModifyMoney(const AMoney: Integer); overload;
@@ -70,7 +69,8 @@ begin
   FFinances := TFinances.Create;
   IsClearLand := False;
   IsPause := True;
-  Self.New;
+  Day := 1;
+  Month := 1;
   Year := 1950;
   FMap := TMap.Create;
   FMap.Gen;
@@ -95,12 +95,6 @@ end;
 procedure TGame.ModifyMoney(const AMoney: Integer);
 begin
   FMoney := FMoney + AMoney;
-end;
-
-procedure TGame.New;
-begin
-  Day := 1;
-  Month := 1;
 end;
 
 procedure TGame.CityGrow;
@@ -138,7 +132,8 @@ end;
 
 procedure TGame.Clear;
 begin
-  Self.New;
+  Day := 1;
+  Month := 1;
   Turn := 0;
   IsGame := True;
   IsClearLand := False;
@@ -147,6 +142,7 @@ begin
   FFinances.Clear;
   Map.Gen;
   Company.Clear;
+  Vehicles.Clear;
 end;
 
 initialization
