@@ -139,9 +139,9 @@ end;
 procedure TGame.Clear;
 begin
   Self.New;
+  Turn := 0;
   IsGame := True;
   IsClearLand := False;
-  Turn := 0;
   FMoney := StartMoney;
   FLoan := StartMoney;
   FFinances.Clear;

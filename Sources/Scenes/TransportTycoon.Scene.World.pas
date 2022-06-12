@@ -73,6 +73,8 @@ begin
     if (Game.Map.Cell[MX][Game.Map.Top + MY] in [tlTree, tlSmallTree, tlBush])
     then
     begin
+      if  not Game.IsClearLand
+        then Exit;
       ClearLand;
       Scenes.Render;
       Exit;
