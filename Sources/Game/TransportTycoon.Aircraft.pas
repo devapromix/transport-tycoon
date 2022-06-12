@@ -20,14 +20,14 @@ type
 const
   AircraftBase: array [0 .. 2] of TAircraftBase = (
     // #1
-    (Name: 'Toreador MT-4'; Passengers: 25; BagsOfMail: 4; Cost: 22000;
-    RunningCost: 2000; Speed: 420; Since: 1930),
+    (Name: 'Toreador MT-4'; Passengers: 25; BagsOfMail: 3; Cost: 22000;
+    RunningCost: 130*12; Speed: 400; Since: 1950),
     // #2
-    (Name: 'Rotor JG'; Passengers: 30; BagsOfMail: 3; Cost: 24000;
-    RunningCost: 2200; Speed: 400; Since: 1940),
+    (Name: 'Rotor JG'; Passengers: 30; BagsOfMail: 4; Cost: 24000;
+    RunningCost: 140*12; Speed: 420; Since: 1950),
     // #3
-    (Name: 'Raxton ML'; Passengers: 35; BagsOfMail: 4; Cost: 28000;
-    RunningCost: 2400; Speed: 450; Since: 1950)
+    (Name: 'Raxton ML'; Passengers: 35; BagsOfMail: 5; Cost: 28000;
+    RunningCost: 150*12; Speed: 450; Since: 1955)
     //
     );
 
@@ -239,13 +239,13 @@ begin
   LastAirportId := Order[OrderIndex].ID;
   if Passengers > 0 then
   begin
-    M := (Passengers * (Distance div 10)) * 5;
+    M := (Passengers * (Distance div 10)) * 7;
     Game.ModifyMoney(ttAircraftIncome, M);
     Passengers := 0;
   end;
   if BagsOfMail > 0 then
   begin
-    M := (BagsOfMail * (Distance div 7)) * 4;
+    M := (BagsOfMail * (Distance div 7)) * 8;
     Game.ModifyMoney(ttAircraftIncome, M);
     BagsOfMail := 0;
   end;

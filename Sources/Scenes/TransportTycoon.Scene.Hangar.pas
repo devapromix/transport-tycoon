@@ -40,7 +40,8 @@ begin
   DrawTitle(C.Name + ' Airport Hangar');
 
   for I := 0 to Length(AircraftBase) - 1 do
-    DrawButton(12, I + 11, Chr(Ord('A') + I), AircraftBase[I].Name);
+    if AircraftBase[I].Since <= Game.Year then
+      DrawButton(12, I + 11, Chr(Ord('A') + I), AircraftBase[I].Name);
 
   I := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
     Length(AircraftBase) - 1);
@@ -91,9 +92,12 @@ begin
       Scenes.SetScene(scAirport);
     TK_A .. TK_G:
       begin
-        if Key - TK_A > Length(AircraftBase) - 1 then
+        I := Key - TK_A;
+        if I > Length(AircraftBase) - 1 then
           Exit;
-        Game.Vehicles.CurrentVehicle := Key - TK_A;
+        if AircraftBase[I].Since > Game.Year then
+          Exit;
+        Game.Vehicles.CurrentVehicle := I;
         Scenes.Render;
       end;
     TK_ENTER:

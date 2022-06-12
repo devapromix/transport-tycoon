@@ -123,6 +123,7 @@ begin
     Day := 1;
     Inc(Month);
     Self.CityGrow;
+    Game.Vehicles.RunningCosts;
     Game.ModifyMoney(ttLoanInterest, -(Game.Loan div 600));
   end;
   if Month > 12 then

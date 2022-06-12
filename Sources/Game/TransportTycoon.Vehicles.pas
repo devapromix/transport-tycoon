@@ -23,6 +23,7 @@ type
     procedure Step;
     procedure AddAircraft(const AName: string;
       const ACityIndex, AircraftID: Integer);
+    procedure RunningCosts;
   end;
 
 implementation
@@ -44,11 +45,27 @@ begin
       Aircraft[High(Aircraft)] := TAircraft.Create(AName,
         Game.Map.City[ACityIndex].X, Game.Map.City[ACityIndex].Y, AircraftID);
 
-      Aircraft[High(Aircraft)].AddOrder(ACityIndex,
+      with Aircraft[High(Aircraft)] do
+      begin
+        AddOrder(ACityIndex,
         Game.Map.City[ACityIndex].Name, Game.Map.City[ACityIndex].X,
         Game.Map.City[ACityIndex].Y);
-      Game.ModifyMoney(ttNewVehicles, -AircraftBase[AircraftID].Cost);
+        Game.ModifyMoney(ttNewVehicles, -AircraftBase[AircraftID].Cost);
+        VehicleID := AircraftID;
+      end;
     end;
+end;
+
+procedure TVehicles.RunningCosts;
+var
+  I, J, M: Integer;
+begin
+  for I := 0 to Length(Aircraft) - 1 do
+  begin
+    J := Self.Aircraft[I].VehicleID;
+    M := AircraftBase[J].RunningCost div 12;
+    Game.ModifyMoney(ttAircraftRunningCosts, -M);
+  end;
 end;
 
 constructor TVehicles.Create;
