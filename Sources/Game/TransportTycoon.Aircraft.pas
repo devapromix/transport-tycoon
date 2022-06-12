@@ -101,7 +101,7 @@ procedure TAircraft.DelOrder(const AOrderIndex: Integer);
 var
   I: Integer;
 begin
-  if (Length(Order) > 0) then
+  if (Length(Order) > 1) then
   begin
     if AOrderIndex > High(Order) then
       Exit;
