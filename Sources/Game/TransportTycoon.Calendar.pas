@@ -15,6 +15,7 @@ type
     function DaysPerMonth(const AMonth: Byte): Byte;
   public const
     StartYear = 1950;
+    FinishYear = 2050;
   public
     constructor Create;
     procedure Clear;
@@ -64,7 +65,8 @@ end;
 
 procedure TCalendar.NextYear;
 begin
-  Inc(FYear);
+  if FYear < FinishYear then
+    Inc(FYear);
 end;
 
 procedure TCalendar.OnMonth;
