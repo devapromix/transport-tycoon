@@ -12,11 +12,11 @@ type
     FDay: Word;
     FYear: Word;
     FMonth: Word;
+    function DaysPerMonth(const AMonth: Byte): Byte;
   public const
     StartYear = 1950;
   public
     constructor Create;
-    destructor Destroy; override;
     procedure Clear;
     procedure Step;
     property Day: Word read FDay write FDay;
@@ -24,6 +24,8 @@ type
     property Year: Word read FYear write FYear;
     function GetDate: string;
     procedure NextYear;
+    procedure OnMonth();
+    procedure OnYear();
   end;
 
 implementation
@@ -46,10 +48,12 @@ begin
   Clear;
 end;
 
-destructor TCalendar.Destroy;
+function TCalendar.DaysPerMonth(const AMonth: Byte): Byte;
+const
+  DaysInMonth: array [1 .. 12] of Byte = (31, 28, 31, 30, 31, 30, 31, 31, 30,
+    31, 30, 31);
 begin
-
-  inherited;
+  Result := DaysInMonth[AMonth];
 end;
 
 function TCalendar.GetDate: string;
@@ -63,22 +67,32 @@ begin
   Inc(FYear);
 end;
 
+procedure TCalendar.OnMonth;
+begin
+  Game.CityGrow;
+  Game.Vehicles.RunningCosts;
+  Game.ModifyMoney(ttLoanInterest, -(Game.Loan div 600));
+end;
+
+procedure TCalendar.OnYear;
+begin
+  Scenes.SetScene(scFinances);
+end;
+
 procedure TCalendar.Step;
 begin
   Inc(FDay);
-  if FDay > 30 then
+  if (FDay > DaysPerMonth(FMonth)) then
   begin
     FDay := 1;
     Inc(FMonth);
-    Game.CityGrow;
-    Game.Vehicles.RunningCosts;
-    Game.ModifyMoney(ttLoanInterest, -(Game.Loan div 600));
+    OnMonth;
   end;
-  if FMonth > 12 then
+  if (FMonth > 12) then
   begin
     FMonth := 1;
     Inc(FYear);
-    Scenes.SetScene(scFinances);
+    OnYear;
   end;
 end;
 
