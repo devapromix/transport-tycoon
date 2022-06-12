@@ -18,7 +18,7 @@ type
   end;
 
 const
-  AircraftBase: array [0 .. 2] of TAircraftBase = (
+  AircraftBase: array [0 .. 3] of TAircraftBase = (
     // #1
     (Name: 'Toreador MT-4'; Passengers: 25; BagsOfMail: 3; Cost: 22000;
     RunningCost: 130*12; Speed: 400; Since: 1950),
@@ -26,8 +26,11 @@ const
     (Name: 'Rotor JG'; Passengers: 30; BagsOfMail: 4; Cost: 24000;
     RunningCost: 140*12; Speed: 420; Since: 1950),
     // #3
-    (Name: 'Raxton ML'; Passengers: 35; BagsOfMail: 5; Cost: 28000;
-    RunningCost: 150*12; Speed: 450; Since: 1955)
+    (Name: 'Raxton ML'; Passengers: 35; BagsOfMail: 5; Cost: 27000;
+    RunningCost: 150*12; Speed: 450; Since: 1955),
+    // #4
+    (Name: 'Tornado S9'; Passengers: 45; BagsOfMail: 5; Cost: 30000;
+    RunningCost: 160*12; Speed: 500; Since: 1960)
     //
     );
 
