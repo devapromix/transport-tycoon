@@ -68,6 +68,7 @@ type
     procedure Clear;
     procedure Draw(const AWidth, AHeight: Integer);
     procedure Gen;
+    procedure CityGrows;
     property Top: Word read FTop write FTop;
     property Left: Word read FLeft write FLeft;
     property Height: Word read FHeight;
@@ -162,6 +163,14 @@ begin
     SetLength(City, I + 1);
     City[I] := TCity.Create(TownNameStr[I], X, Y);
   end;
+end;
+
+procedure TMap.CityGrows;
+var
+  I: Integer;
+begin
+  for I := 0 to Length(City) - 1 do
+    City[I].Grow;
 end;
 
 function TMap.GetCurrentCity(const AX, AY: Integer): Integer;

@@ -34,7 +34,6 @@ type
     destructor Destroy; override;
     procedure Clear;
     procedure Step;
-    procedure CityGrow;
     property Money: Integer read FMoney;
     procedure ModifyMoney(const AMoney: Integer); overload;
     procedure ModifyMoney(const ValueEnum: TValueEnum;
@@ -90,14 +89,6 @@ end;
 procedure TGame.ModifyMoney(const AMoney: Integer);
 begin
   FMoney := FMoney + AMoney;
-end;
-
-procedure TGame.CityGrow;
-var
-  I: Integer;
-begin
-  for I := 0 to Length(Map.City) - 1 do
-    Map.City[I].Grow;
 end;
 
 procedure TGame.Step;
