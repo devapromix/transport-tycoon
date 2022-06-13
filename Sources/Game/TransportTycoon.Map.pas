@@ -77,6 +77,7 @@ type
     function GetCurrentCity(const AX, AY: Integer): Integer;
     function EnterInCity(const AX, AY: Integer): Boolean;
     function WorldPop: Integer;
+    function GetDist(const X1, Y1, X2, Y2: Integer): Integer;
   end;
 
 implementation
@@ -105,7 +106,8 @@ var
 begin
   Result := False;
   for I := 0 to Length(City) - 1 do
-    if (City[I].X = AX) and (City[I].Y = AY) then
+    if ((City[I].X = AX) and (City[I].Y = AY))
+      or (GetDist(City[I].X, City[I].Y, AX, AY) < 15) then
     begin
       Result := True;
       Exit;
@@ -225,6 +227,11 @@ begin
   Result := 0;
   for I := 0 to Length(City) - 1 do
     Result := Result + City[I].Population;
+end;
+
+function TMap.GetDist(const X1, Y1, X2, Y2: Integer): Integer;
+begin
+  Result := Round(Sqrt(Sqr(X2 - X1) + Sqr(Y2 - Y1)));
 end;
 
 end.

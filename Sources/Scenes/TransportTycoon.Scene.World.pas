@@ -6,9 +6,13 @@ uses
   TransportTycoon.Scenes;
 
 type
+
+  { TSceneWorld }
+
   TSceneWorld = class(TScene)
   private
     procedure ClearLand;
+    procedure TownInfo(const X, Y, TownID: Word);
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -32,7 +36,17 @@ begin
   end;
 end;
 
+procedure TSceneWorld.TownInfo(const X, Y, TownID: Word);
+begin
+  terminal_bkcolor('darkest gray');
+  DrawFrame(X, Y, 20, 7);
+  DrawText(X + 10, Y + 2, '[c=yellow]' + UpperCase(Game.Map.City[TownID].Name) + '[/c]', TK_ALIGN_CENTER);
+  DrawText(X + 10, Y + 4, 'Pop.: ' + IntToStr(Game.Map.City[TownID].Population), TK_ALIGN_CENTER);
+end;
+
 procedure TSceneWorld.Render;
+var
+  I, VX, VY: Integer;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
@@ -52,8 +66,20 @@ begin
   DrawBar;
 
   if Tile[Game.Map.Cell[MX][Game.Map.Top + MY]].Tile = Tile[tlCity].Tile then
-    DrawText(30, Height - 1, Game.Map.City[Game.Map.GetCurrentCity(MX,
-      Game.Map.Top + MY)].Name)
+  begin
+    I := Game.Map.GetCurrentCity(MX,
+      Game.Map.Top + MY);
+    DrawText(30, Height - 1, Game.Map.City[I].Name);
+    if (MY < Height - 10) then
+      VY := MY + 1
+    else
+      VY := MY - 7;
+    if (MX < Width - (Width div 2)) then
+      VX := MX + 1
+    else
+      VX := MX - 20;
+    TownInfo(VX, VY, I);
+  end
   else
     DrawText(30, Height - 1, Tile[Game.Map.Cell[MX][Game.Map.Top + MY]].Name);
 end;

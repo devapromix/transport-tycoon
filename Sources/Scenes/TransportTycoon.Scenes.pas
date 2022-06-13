@@ -26,7 +26,7 @@ type
     MX, MY: Integer;
     procedure Render; virtual; abstract;
     procedure Update(var Key: word); virtual; abstract;
-    procedure DrawText(const X, Y: Integer; Text: string); overload;
+    procedure DrawText(const X, Y: Integer; Text: string; const Align: Integer = TK_ALIGN_LEFT); overload;
     procedure DrawText(const Y: Integer; Text: string); overload;
     procedure DrawMoney(const X, Y, Money: Integer;
       const Align: Integer = TK_ALIGN_RIGHT);
@@ -96,9 +96,9 @@ uses
 
 { TScene }
 
-procedure TScene.DrawText(const X, Y: Integer; Text: string);
+procedure TScene.DrawText(const X, Y: Integer; Text: string; const Align: Integer = TK_ALIGN_LEFT);
 begin
-  terminal_print(X, Y, Text);
+  terminal_print(X, Y, Align, Text);
 end;
 
 procedure TScene.DrawTitle(const Y: Integer; const Title: string);
@@ -171,7 +171,7 @@ var
 begin
   Y := Self.Height - 1;
   terminal_color('white');
-  terminal_bkcolor('black');
+  terminal_bkcolor('darkest gray');
   terminal_clear_area(0, Y, 80, 1);
   DrawMoney(0, Y, Game.Money, TK_ALIGN_LEFT);
   DrawText(12, Y, Format('Turn:%d', [Game.Turn]));
