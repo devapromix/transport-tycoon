@@ -6,7 +6,8 @@ uses
   TransportTycoon.City;
 
 type
-  Tiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlCity);
+  Tiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlCity, tlSand,
+    tlWater);
 
 type
   TTile = record
@@ -28,7 +29,11 @@ const
     //
     (Name: 'Bush'; Tile: 'b'; Color: 'dark green'),
     //
-    (Name: 'City'; Tile: '#'; Color: 'lighter yellow')
+    (Name: 'City'; Tile: '#'; Color: 'lighter yellow'),
+    //
+    (Name: 'Sand'; Tile: ':'; Color: 'yellow'),
+    //
+    (Name: 'Water'; Tile: '='; Color: 'blue')
     //
     );
 
@@ -165,11 +170,12 @@ end;
 
 procedure TMap.Gen;
 var
-  X, Y, I: Integer;
+  X, Y, I, J, N: Integer;
   TownName: string;
 begin
   Self.Clear;
   for Y := 0 to FHeight - 1 do
+  begin
     for X := 0 to FWidth - 1 do
     begin
       case Math.RandomRange(0, 15) of
@@ -185,6 +191,44 @@ begin
         Cell[X][Y] := tlGrass;
       end;
     end;
+    J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2);
+    for X := 0 to J do
+      Cell[X][Y] := tlWater;
+    J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2);
+    for X := FWidth - 1 downto FWidth - J - 1 do
+      Cell[X][Y] := tlWater;
+  end;
+  for X := 0 to FWidth - 1 do
+  begin
+    J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2);
+    for Y := 0 to J do
+      Cell[X][Y] := tlWater;
+    J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2);
+    for Y := FHeight - 1 downto FHeight - J - 1 do
+      Cell[X][Y] := tlWater;
+  end;
+  //
+  for Y := 1 to FHeight - 2 do
+  begin
+    for X := 1 to FWidth - 2 do
+    begin
+      if (Cell[X][Y] <> tlWater)  and (((Cell[X+1][Y] = tlWater)and(Cell[X-1][Y] = tlWater))
+      or((Cell[X][Y+1] = tlWater)and(Cell[X][Y-1] = tlWater))
+      ) then
+        Cell[X][Y] := tlWater;
+    end;
+  end;
+  //
+  for Y := 1 to FHeight - 2 do
+  begin
+    for X := 1 to FWidth - 2 do
+    begin
+      if (Cell[X][Y] <> tlWater)  and (((Cell[X+1][Y] = tlWater)and(Cell[X-1][Y] = tlWater)
+      and(Cell[X][Y+1] = tlWater)and(Cell[X][Y-1] = tlWater))
+      ) then
+        Cell[X][Y] := tlWater;
+    end;
+  end;
   //
   for I := 0 to MapNoOfTownsInt[NoOfTowns] - 1 do
   begin
@@ -192,6 +236,31 @@ begin
       X := (Math.RandomRange(1, FWidth div 10) * 10) + (Math.RandomRange(0, 10) - 5);
       Y := (Math.RandomRange(1, FHeight div 10) * 10) + (Math.RandomRange(0, 10) - 5);
       TownName := TCity.GenName;
+
+      for N := 2 to 5 do
+      begin
+        if (Cell[X - N][Y] = tlWater) then
+        begin
+          X := X - (N - 1);
+          Break;
+        end;
+        if (Cell[X + N][Y] = tlWater) then
+        begin
+          X := X + (N - 1);
+          Break;
+        end;
+        if (Cell[X][Y - N] = tlWater) then
+        begin
+          Y := Y - (N - 1);
+          Break;
+        end;
+        if (Cell[X][Y + N] = tlWater) then
+        begin
+          Y := Y + (N - 1);
+          Break;
+        end;
+      end;
+
     until not HasTownName(TownName) and not HasTownLocation(X, Y);
     Cell[X][Y] := tlCity;
     SetLength(City, I + 1);

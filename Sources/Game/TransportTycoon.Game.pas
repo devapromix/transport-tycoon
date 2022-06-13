@@ -51,13 +51,6 @@ var
 
 implementation
 
-uses
-  Math,
-  TransportTycoon.City,
-  TransportTycoon.Scenes;
-
-{ TGame }
-
 constructor TGame.Create;
 begin
   FCalendar := TCalendar.Create;
