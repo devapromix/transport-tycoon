@@ -57,6 +57,8 @@ type
     FWidth: Word;
     FHeight: Word;
     FLeft: Word;
+    function HasTownName(const ATownName: string): Boolean;
+    function HasTownLocation(const AX, AY: Integer): Boolean;
   public
     Size: TMapSize;
     NoOfTowns: Integer;
@@ -83,6 +85,32 @@ uses
   Math,
   SysUtils,
   BearLibTerminal;
+
+function TMap.HasTownName(const ATownName: string): Boolean;
+var
+  I: Integer;
+begin
+  Result := False;
+  for I := 0 to Length(City) - 1 do
+    if City[I].Name = ATownName then
+    begin
+      Result := True;
+      Exit;
+    end;
+end;
+
+function TMap.HasTownLocation(const AX, AY: Integer): Boolean;
+var
+  I: Integer;
+begin
+  Result := False;
+  for I := 0 to Length(City) - 1 do
+    if (City[I].X = AX) and (City[I].Y = AY) then
+    begin
+      Result := True;
+      Exit;
+    end;
+end;
 
 constructor TMap.Create;
 begin
@@ -136,6 +164,7 @@ end;
 procedure TMap.Gen;
 var
   X, Y, I: Integer;
+  TownName: string;
 begin
   Self.Clear;
   for Y := 0 to FHeight - 1 do
@@ -157,11 +186,14 @@ begin
   //
   for I := 0 to MapNoOfTownsInt[NoOfTowns] - 1 do
   begin
-    X := Math.RandomRange(1, 78);
-    Y := Math.RandomRange(1, 78);
+    repeat
+      X := (Math.RandomRange(1, FWidth div 10) * 10) + (Math.RandomRange(0, 10) - 5);
+      Y := (Math.RandomRange(1, FHeight div 10) * 10) + (Math.RandomRange(0, 10) - 5);
+      TownName := TCity.GenName;
+    until not HasTownName(TownName) and not HasTownLocation(X, Y);
     Cell[X][Y] := tlCity;
     SetLength(City, I + 1);
-    City[I] := TCity.Create(TownNameStr[I], X, Y);
+    City[I] := TCity.Create(TownName, X, Y);
   end;
 end;
 

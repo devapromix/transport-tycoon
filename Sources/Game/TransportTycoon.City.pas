@@ -3,14 +3,14 @@
 interface
 
 const
-  TownNameStr: array [0 .. 12] of string = ('Edington', 'Graningville',
-    'Traburg', 'Nordington', 'Grufingley', 'Funtfield', 'Sadtown', 'Lanwell',
-    'Granbridge', 'Trenington', 'Gadstone', 'Chendhattan', 'Drinningwille');
   AirportSizeStr: array [0 .. 5] of string = ('None', 'Small Airport',
     'Commuter Airport', 'City Airport', 'Metropolitan Airport',
     'International Airport');
 
 type
+
+  { TCity }
+
   TCity = class(TObject)
   private
     FName: string;
@@ -35,12 +35,14 @@ type
     procedure BuildAirport;
     function AirportCost: Integer;
     procedure Grow;
+    class function GenName: string;
   end;
 
 implementation
 
 uses
   Math,
+  Classes,
   SysUtils,
   TransportTycoon.Game,
   TransportTycoon.Finances;
@@ -92,6 +94,26 @@ begin
     FPassengers := 0;
     FBagsOfMail := 0;
   end;
+end;
+
+class function TCity.GenName: string;
+var
+  S: array [0 .. 1] of TStringList;
+  I: Integer;
+begin
+  for I := 0 to 1 do
+    S[I] := TStringList.Create;
+  S[0].DelimitedText :=
+    '"Eding","Graning","Vorg","Tra","Nording","Agring","Gran","Funt","Grufing",' +
+    '"Trening","Chend","Drinning"';
+  S[1].DelimitedText :=
+    '"ville","burg","ley","field","town","well","bridge","ton","stone","hattan"';
+    Result := '';
+    for I := 0 to 1 do
+    begin
+      Result := Result + S[I][Random(S[I].Count - 1)];
+      S[I].Free;
+    end;
 end;
 
 function TCity.GrowModif: Integer;
