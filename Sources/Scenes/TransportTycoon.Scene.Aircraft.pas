@@ -50,7 +50,8 @@ begin
         else
           C := #32;
         DrawText(32, I + 11, C);
-        DrawButton(34, I + 11, Chr(Ord('A') + I), 'Go to ' + Order[I].Name + ' Airport');
+        DrawButton(34, I + 11, Chr(Ord('A') + I), 'Go to ' + Order[I].Name +
+          ' Airport');
       end;
     end;
   end;
@@ -79,7 +80,7 @@ begin
       end;
   end;
   case Key of
-    TK_A..TK_G:
+    TK_A .. TK_G:
       with Game.Vehicles do
       begin
         I := Key - TK_A;

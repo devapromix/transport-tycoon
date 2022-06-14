@@ -93,6 +93,7 @@ type
     property Top: Word read FTop write FTop;
     property Left: Word read FLeft write FLeft;
     property Height: Word read FHeight;
+    property Width: Word read FWidth;
     function GetCurrentCity(const AX, AY: Integer): Integer;
     function EnterInCity(const AX, AY: Integer): Boolean;
     function WorldPop: Integer;
@@ -140,7 +141,7 @@ end;
 
 constructor TMap.Create;
 begin
-  Self.Size := msTiny;
+  Self.Size := msSmall;
   SeaLevel := msVeryLow;
   FWidth := 80;
   FHeight := 80;
@@ -153,8 +154,7 @@ var
 begin
   for I := 0 to Length(City) - 1 do
     City[I].Free;
-
-  inherited Destroy;
+  inherited;
 end;
 
 procedure TMap.Clear;
@@ -176,8 +176,8 @@ begin
   for Y := 0 to AHeight - 1 do
     for X := 0 to AWidth - 1 do
     begin
-      terminal_color(Tile[Cell[X][Top + Y]].Color);
-      terminal_put(X, Y, Tile[Cell[X][Top + Y]].Tile);
+      terminal_color(Tile[Cell[Left + X][Top + Y]].Color);
+      terminal_put(X, Y, Tile[Cell[Left + X][Top + Y]].Tile);
     end;
   terminal_color('white');
 end;
@@ -208,7 +208,7 @@ begin
           Cell[X][Y] := tlSand;
         2:
           Cell[X][Y] := tlRock;
-        3..6:
+        3 .. 6:
           AddTree(X, Y);
       else
         Cell[X][Y] := tlGrass;
@@ -338,29 +338,21 @@ begin
     if (Round(Random(6)) = 1) and (VX > 10) then
     begin
       VX := VX - 1;
-      // if (GetTileEnum(X, Y, Z) <> ABaseTileEnum) then
-      // Continue;
       Cell[VX][VY] := ATile;
     end;
     if (Round(Random(6)) = 1) and (VX < FWidth - 11) then
     begin
       VX := VX + 1;
-      // if (GetTileEnum(X, Y, Z) <> ABaseTileEnum) then
-      // Continue;
       Cell[VX][VY] := ATile;
     end;
     if (Round(Random(6)) = 1) and (VY > 10) then
     begin
       VY := VY - 1;
-      // if (GetTileEnum(X, Y, Z) <> ABaseTileEnum) then
-      // Continue;
       Cell[VX][VY] := ATile;
     end;
     if (Round(Random(6)) = 1) and (VY < FHeight - 11) then
     begin
       VY := VY + 1;
-      // if (GetTileEnum(X, Y, Z) <> ABaseTileEnum) then
-      // Continue;
       Cell[VX][VY] := ATile;
     end;
   end;

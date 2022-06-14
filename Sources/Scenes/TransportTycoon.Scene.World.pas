@@ -6,9 +6,6 @@ uses
   TransportTycoon.Scenes;
 
 type
-
-  { TSceneWorld }
-
   TSceneWorld = class(TScene)
   private
     procedure ClearLand;
@@ -31,7 +28,7 @@ procedure TSceneWorld.ClearLand;
 begin
   if (Game.Money >= 100) then
   begin
-    Game.Map.Cell[MX][Game.Map.Top + MY] := tlDirt;
+    Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY] := tlDirt;
     Game.ModifyMoney(ttConstruction, -100);
   end;
 end;
@@ -40,8 +37,10 @@ procedure TSceneWorld.TownInfo(const X, Y, TownID: Word);
 begin
   terminal_bkcolor('darkest gray');
   DrawFrame(X, Y, 20, 7);
-  DrawText(X + 10, Y + 2, '[c=yellow]' + UpperCase(Game.Map.City[TownID].Name) + '[/c]', TK_ALIGN_CENTER);
-  DrawText(X + 10, Y + 4, 'Pop.: ' + IntToStr(Game.Map.City[TownID].Population), TK_ALIGN_CENTER);
+  DrawText(X + 10, Y + 2, '[c=yellow]' + UpperCase(Game.Map.City[TownID].Name) +
+    '[/c]', TK_ALIGN_CENTER);
+  DrawText(X + 10, Y + 4, 'Pop.: ' + IntToStr(Game.Map.City[TownID].Population),
+    TK_ALIGN_CENTER);
 end;
 
 procedure TSceneWorld.Render;
@@ -61,14 +60,13 @@ begin
     terminal_put(MX, MY, $2588);
   end;
   terminal_color('black');
-  terminal_put(MX, MY, Tile[Game.Map.Cell[MX][Game.Map.Top + MY]].Tile);
+  terminal_put(MX, MY, Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY]].Tile);
 
   DrawBar;
 
-  if Tile[Game.Map.Cell[MX][Game.Map.Top + MY]].Tile = Tile[tlCity].Tile then
+  if Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY]].Tile = Tile[tlCity].Tile then
   begin
-    I := Game.Map.GetCurrentCity(MX,
-      Game.Map.Top + MY);
+    I := Game.Map.GetCurrentCity(Game.Map.Left + MX, Game.Map.Top + MY);
     DrawText(30, Height - 1, Game.Map.City[I].Name);
     if (MY < Height - 10) then
       VY := MY + 1
@@ -81,7 +79,7 @@ begin
     TownInfo(VX, VY, I);
   end
   else
-    DrawText(30, Height - 1, Tile[Game.Map.Cell[MX][Game.Map.Top + MY]].Name);
+    DrawText(30, Height - 1, Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY]].Name);
 end;
 
 procedure TSceneWorld.Update(var Key: Word);
@@ -90,17 +88,17 @@ begin
   begin
     if (MY = Self.Height - 1) and (MX >= 70) then
       Key := TK_ESCAPE;
-    if (Game.Map.Cell[MX][Game.Map.Top + MY] = tlCity) and not Game.IsClearLand
+    if (Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY] = tlCity) and not Game.IsClearLand
     then
     begin
-      if Game.Map.EnterInCity(MX, Game.Map.Top + MY) then
+      if Game.Map.EnterInCity(Game.Map.Left + MX, Game.Map.Top + MY) then
         Scenes.SetScene(scCity);
     end;
-    if (Game.Map.Cell[MX][Game.Map.Top + MY] in [tlTree, tlSmallTree, tlBush])
+    if (Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY] in [tlTree, tlSmallTree, tlBush])
     then
     begin
-      if  not Game.IsClearLand
-        then Exit;
+      if not Game.IsClearLand then
+        Exit;
       ClearLand;
       Scenes.Render;
       Exit;
@@ -127,9 +125,11 @@ begin
         Scenes.SetScene(scGameMenu);
       end;
     TK_LEFT:
-      ;
+      if (Game.Map.Left > 0) then
+        Game.Map.Left := Game.Map.Left - 1;
     TK_RIGHT:
-      ;
+      if (Game.Map.Left <= Game.Map.Width - Self.Width) then
+        Game.Map.Left := Game.Map.Left + 1;
     TK_UP:
       if (Game.Map.Top > 0) then
         Game.Map.Top := Game.Map.Top - 1;

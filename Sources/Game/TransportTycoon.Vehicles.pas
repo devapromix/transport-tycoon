@@ -6,9 +6,6 @@ uses
   TransportTycoon.Aircraft;
 
 type
-
-  { TVehicles }
-
   TVehicles = class
   private
 
@@ -48,9 +45,8 @@ begin
 
       with Aircraft[High(Aircraft)] do
       begin
-        AddOrder(ACityIndex,
-        Game.Map.City[ACityIndex].Name, Game.Map.City[ACityIndex].X,
-        Game.Map.City[ACityIndex].Y);
+        AddOrder(ACityIndex, Game.Map.City[ACityIndex].Name,
+          Game.Map.City[ACityIndex].X, Game.Map.City[ACityIndex].Y);
         Game.ModifyMoney(ttNewVehicles, -AircraftBase[AircraftID].Cost);
         VehicleID := AircraftID;
       end;

@@ -36,7 +36,7 @@ var
   Tmp: Word = 0;
 
 begin
-  Randomize;
+  Randomize();
   terminal_open();
   terminal_set('window: size=80x30, title="Transport Tycoon v.' +
     Game.Version + '";');

@@ -104,16 +104,16 @@ begin
   for I := 0 to 1 do
     S[I] := TStringList.Create;
   S[0].DelimitedText :=
-    '"Eding","Graning","Vorg","Tra","Nording","Agring","Gran","Funt","Grufing",' +
-    '"Trening","Chend","Drinning"';
+    '"Eding","Graning","Vorg","Tra","Nording","Agring","Gran","Funt","Grufing",'
+    + '"Trening","Chend","Drinning"';
   S[1].DelimitedText :=
     '"ville","burg","ley","field","town","well","bridge","ton","stone","hattan"';
-    Result := '';
-    for I := 0 to 1 do
-    begin
-      Result := Result + S[I][Random(S[I].Count - 1)];
-      S[I].Free;
-    end;
+  Result := '';
+  for I := 0 to 1 do
+  begin
+    Result := Result + S[I][Random(S[I].Count - 1)];
+    S[I].Free;
+  end;
 end;
 
 function TCity.GrowModif: Integer;

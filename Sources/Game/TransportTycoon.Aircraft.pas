@@ -21,16 +21,16 @@ const
   AircraftBase: array [0 .. 3] of TAircraftBase = (
     // #1
     (Name: 'Toreador MT-4'; Passengers: 25; BagsOfMail: 3; Cost: 22000;
-    RunningCost: 130*12; Speed: 400; Since: 1950),
+    RunningCost: 130 * 12; Speed: 400; Since: 1950),
     // #2
     (Name: 'Rotor JG'; Passengers: 30; BagsOfMail: 4; Cost: 24000;
-    RunningCost: 140*12; Speed: 420; Since: 1950),
+    RunningCost: 140 * 12; Speed: 420; Since: 1950),
     // #3
     (Name: 'Raxton ML'; Passengers: 35; BagsOfMail: 5; Cost: 27000;
-    RunningCost: 150*12; Speed: 450; Since: 1955),
+    RunningCost: 150 * 12; Speed: 450; Since: 1955),
     // #4
     (Name: 'Tornado S9'; Passengers: 45; BagsOfMail: 5; Cost: 30000;
-    RunningCost: 160*12; Speed: 500; Since: 1960)
+    RunningCost: 160 * 12; Speed: 500; Since: 1960)
     //
     );
 
@@ -115,8 +115,8 @@ begin
       SetLength(Order, Length(Order) - 1);
       Exit;
     end;
-    for i := AOrderIndex + 1 to Length(Order)-1 do
-     Order[i - 1] := Order[i];
+    for I := AOrderIndex + 1 to Length(Order) - 1 do
+      Order[I - 1] := Order[I];
     SetLength(Order, Length(Order) - 1);
   end;
 end;

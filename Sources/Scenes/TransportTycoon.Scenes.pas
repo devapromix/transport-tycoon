@@ -26,7 +26,8 @@ type
     MX, MY: Integer;
     procedure Render; virtual; abstract;
     procedure Update(var Key: word); virtual; abstract;
-    procedure DrawText(const X, Y: Integer; Text: string; const Align: Integer = TK_ALIGN_LEFT); overload;
+    procedure DrawText(const X, Y: Integer; Text: string;
+      const Align: Integer = TK_ALIGN_LEFT); overload;
     procedure DrawText(const Y: Integer; Text: string); overload;
     procedure DrawMoney(const X, Y, Money: Integer;
       const Align: Integer = TK_ALIGN_RIGHT);
@@ -96,7 +97,8 @@ uses
 
 { TScene }
 
-procedure TScene.DrawText(const X, Y: Integer; Text: string; const Align: Integer = TK_ALIGN_LEFT);
+procedure TScene.DrawText(const X, Y: Integer; Text: string;
+  const Align: Integer = TK_ALIGN_LEFT);
 begin
   terminal_print(X, Y, Align, Text);
 end;

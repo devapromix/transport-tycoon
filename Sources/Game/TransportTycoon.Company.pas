@@ -24,8 +24,8 @@ uses
 
 procedure TCompany.Clear;
 begin
-  FName := Game.Map.City[Math.RandomRange(0, Length(Game.Map.City))].Name
-   + ' TRANSPORT';
+  FName := Game.Map.City[Math.RandomRange(0, Length(Game.Map.City))].Name +
+    ' TRANSPORT';
   FInavgurated := Game.Calendar.Year;
 end;
 
