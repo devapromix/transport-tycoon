@@ -77,6 +77,8 @@ type
     function HasNormalTile(const AX, AY: Integer): Boolean;
     procedure AddSpot(const AX, AY: Integer; const ATile: Tiles);
     procedure AddTree(const AX, AY: Integer);
+    procedure Resize;
+    function SizeCoef: Integer;
   public
     Size: TMapSize;
     SeaLevel: TMapSeaLevel;
@@ -120,6 +122,21 @@ begin
     end;
 end;
 
+procedure TMap.Resize;
+begin
+  FTop := 0;
+  FLeft := 0;
+  FWidth := MapSizeInt[Size];
+  FHeight := MapSizeInt[Size];
+  SetLength(Cell, FWidth, FHeight);
+
+end;
+
+function TMap.SizeCoef: Integer;
+begin
+  Result := (Ord(Size) + 1) * (Ord(Size) + 1);
+end;
+
 function TMap.HasNormalTile(const AX, AY: Integer): Boolean;
 begin
   Result := Cell[AX][AY] in NormalTiles;
@@ -144,11 +161,7 @@ begin
   Self.Size := msTiny;
   SeaLevel := msVeryLow;
   NoOfTowns := 1;
-  FTop := 0;
-  FLeft := 0;
-  FWidth := MapSizeInt[Size];
-  FHeight := MapSizeInt[Size];
-  SetLength(Cell, FWidth, FHeight);
+  Resize;
 end;
 
 destructor TMap.Destroy;
@@ -164,11 +177,7 @@ procedure TMap.Clear;
 var
   X, Y: Integer;
 begin
-  FTop := 0;
-  FLeft := 0;
-  FWidth := MapSizeInt[Size];
-  FHeight := MapSizeInt[Size];
-  SetLength(Cell, FWidth, FHeight);
+  Resize;
   for Y := 0 to FHeight - 1 do
     for X := 0 to FWidth - 1 do
       Cell[X][Y] := tlGrass;
@@ -202,7 +211,7 @@ begin
   Self.Clear;
   D := 0;
   if (SeaLevel >= msNormal) then
-    D := 5;
+    D := 5 + SizeCoef;
   for Y := 0 to FHeight - 1 do
   begin
     for X := 0 to FWidth - 1 do
@@ -232,8 +241,8 @@ begin
   end;
   for I := 0 to 14 do
   begin
-    X := Math.RandomRange(10, FWidth - 11);
-    Y := Math.RandomRange(10, FWidth - 11);
+    X := Math.RandomRange((SizeCoef + 10), FWidth - (SizeCoef + 10));
+    Y := Math.RandomRange((SizeCoef + 10), FWidth - (SizeCoef + 10));
     case RandomRange(0, 4) of
       0:
         AddSpot(X, Y, tlDirt);
@@ -256,9 +265,9 @@ begin
       for Y := FHeight - 1 downto FHeight - J - 1 do
         Cell[X][Y] := tlWater;
     end;
-    D := 9;
-    if (SeaLevel >= msHigh) then
-      D := 30;
+    D := SizeCoef * 9;
+    if (SeaLevel = msHigh) then
+      D := SizeCoef * 25;
     if (SeaLevel >= msNormal) then
     begin
       for I := 0 to D do
@@ -338,25 +347,25 @@ var
 begin
   VX := AX;
   VY := AY;
-  VSize := RandomRange(100, 300);
+  VSize := RandomRange(100, 300) * SizeCoef;
   for I := 0 to VSize do
   begin
-    if (Round(Random(6)) = 1) and (VX > 10) then
+    if (RandomRange(0, 6) = 0) and (VX > (SizeCoef + 10)) then
     begin
       VX := VX - 1;
       Cell[VX][VY] := ATile;
     end;
-    if (Round(Random(6)) = 1) and (VX < FWidth - 11) then
+    if (RandomRange(0, 6) = 0) and (VX < FWidth - (SizeCoef + 10)) then
     begin
       VX := VX + 1;
       Cell[VX][VY] := ATile;
     end;
-    if (Round(Random(6)) = 1) and (VY > 10) then
+    if (RandomRange(0, 6) = 0) and (VY > (SizeCoef + 10)) then
     begin
       VY := VY - 1;
       Cell[VX][VY] := ATile;
     end;
-    if (Round(Random(6)) = 1) and (VY < FHeight - 11) then
+    if (RandomRange(0, 6) = 0) and (VY < FHeight - (SizeCoef + 10)) then
     begin
       VY := VY + 1;
       Cell[VX][VY] := ATile;

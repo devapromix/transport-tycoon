@@ -60,11 +60,13 @@ begin
     terminal_put(MX, MY, $2588);
   end;
   terminal_color('black');
-  terminal_put(MX, MY, Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY]].Tile);
+  terminal_put(MX, MY, Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top +
+    MY]].Tile);
 
   DrawBar;
 
-  if Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY]].Tile = Tile[tlCity].Tile then
+  if Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY]].Tile = Tile
+    [tlCity].Tile then
   begin
     I := Game.Map.GetCurrentCity(Game.Map.Left + MX, Game.Map.Top + MY);
     DrawText(30, Height - 1, Game.Map.City[I].Name);
@@ -79,7 +81,8 @@ begin
     TownInfo(VX, VY, I);
   end
   else
-    DrawText(30, Height - 1, Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY]].Name);
+    DrawText(30, Height - 1, Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top
+      + MY]].Name);
 end;
 
 procedure TSceneWorld.Update(var Key: Word);
@@ -88,14 +91,14 @@ begin
   begin
     if (MY = Self.Height - 1) and (MX >= 70) then
       Key := TK_ESCAPE;
-    if (Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY] = tlCity) and not Game.IsClearLand
-    then
+    if (Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY] = tlCity) and
+      not Game.IsClearLand then
     begin
       if Game.Map.EnterInCity(Game.Map.Left + MX, Game.Map.Top + MY) then
         Scenes.SetScene(scCity);
     end;
-    if (Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY] in [tlTree, tlSmallTree, tlBush])
-    then
+    if (Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY]
+      in [tlTree, tlSmallTree, tlBush]) then
     begin
       if not Game.IsClearLand then
         Exit;
