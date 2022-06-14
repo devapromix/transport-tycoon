@@ -30,16 +30,14 @@ begin
   DrawTitle(11, 'WORLD GENERATION');
 
   DrawButton(12, 13, 'F', 'Map size: ' + MapSizeStr[Game.Map.Size]);
+  DrawButton(12, 14, 'H', 'Rivers: ' + MapRiversStr[Game.Map.Rivers]);
+  DrawButton(12, 15, 'J', 'No. of indust.: ' + MapNoOfIndStr[Game.Map.NoOfInd]);
+
   DrawButton(42, 13, 'A', 'No. of towns: ' + MapNoOfTownsStr
     [Game.Map.NoOfTowns]);
   DrawButton(42, 14, 'B', Format('Sea level: %s',
     [MapSeaLevelStr[Game.Map.SeaLevel]]));
   DrawButton(42, 15, 'C', Format('Date: %s', [Game.Calendar.GetDate]));
-
-  // DrawText(12, 10, "[[C]] Rivers: " + gen_rivers_str());
-  // DrawText(42, 10, "[[D]] No. of ind.: " + gen_indust_str());
-
-  // DrawText(12, 11, "[[E]] Sea level: " + gen_sea_level_str());
 
   AddButton(17, 'Enter', 'Generate');
   AddButton(17, 'Esc', 'Back');
@@ -60,6 +58,10 @@ begin
       case MY of
         13:
           Key := TK_F;
+        14:
+          Key := TK_H;
+        15:
+          Key := TK_J;
       end;
     if (MX >= 42) and (MX <= 66) then
       case MY of
@@ -97,6 +99,20 @@ begin
         Inc(Game.Map.Size);
         if (Game.Map.Size > msLarge) then
           Game.Map.Size := msTiny;
+        Scenes.Render;
+      end;
+    TK_H:
+      begin
+        Inc(Game.Map.Rivers);
+        if (Game.Map.Rivers > mrMany) then
+          Game.Map.Rivers := mrNone;
+        Scenes.Render;
+      end;
+    TK_J:
+      begin
+        Inc(Game.Map.NoOfInd);
+        if (Game.Map.NoOfInd > niHigh) then
+          Game.Map.NoOfInd := niVeryLow;
         Scenes.Render;
       end;
     TK_ENTER:

@@ -49,15 +49,19 @@ type
 
 type
   TMapSize = (msTiny, msSmall, msMedium, msLarge);
-
-type
   TMapSeaLevel = (msVeryLow, msLow, msNormal, msHigh);
+  TMapNoOfInd = (niVeryLow, niLow, niNormal, niHigh);
+  TMapRivers = (mrNone, mrFew, mrMedium, mrMany);
 
 const
   MapSizeStr: array [TMapSize] of string = ('Tiny', 'Small', 'Medium', 'Large');
   MapSizeInt: array [TMapSize] of Integer = (80, 160, 320, 640);
   MapSeaLevelStr: array [TMapSeaLevel] of string = ('Very Low', 'Low',
     'Normal', 'High');
+  MapNoOfIndStr: array [TMapNoOfInd] of string = ('Very Low', 'Low',
+    'Normal', 'High');
+  MapRiversStr: array [TMapRivers] of string = ('None', 'Few',
+    'Medium', 'Many');
   MapNoOfTownsStr: array [1 .. 4] of string = ('Very Low', 'Low',
     'Normal', 'High');
   MapNoOfTownsInt: array [1 .. 4] of Integer = (3, 5, 8, 11);
@@ -82,7 +86,9 @@ type
   public
     Size: TMapSize;
     SeaLevel: TMapSeaLevel;
+    Rivers: TMapRivers;
     NoOfTowns: Integer;
+    NoOfInd: TMapNoOfInd;
     Cell: array of array of Tiles;
     City: array of TCity;
     CurrentCity: Integer;
@@ -160,6 +166,8 @@ begin
   Self.Size := msTiny;
   SeaLevel := msVeryLow;
   NoOfTowns := 1;
+  Rivers := mrNone;
+  NoOfInd := niVeryLow;
   Resize;
 end;
 
