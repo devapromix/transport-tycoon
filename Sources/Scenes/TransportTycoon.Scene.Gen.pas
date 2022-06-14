@@ -32,7 +32,9 @@ begin
   DrawText(12, 13, 'Map size: ' + MapSizeStr[Game.Map.Size]);
   DrawButton(42, 13, 'A', 'No. of towns: ' + MapNoOfTownsStr
     [Game.Map.NoOfTowns]);
-  DrawButton(42, 14, 'B', Format('Date: %s', [Game.Calendar.GetDate]));
+  DrawButton(42, 14, 'B', Format('Sea level: %s',
+    [MapSeaLevelStr[Game.Map.SeaLevel]]));
+  DrawButton(42, 15, 'C', Format('Date: %s', [Game.Calendar.GetDate]));
 
   // DrawText(12, 10, "[[C]] Rivers: " + gen_rivers_str());
   // DrawText(42, 10, "[[D]] No. of ind.: " + gen_indust_str());
@@ -60,6 +62,8 @@ begin
           Key := TK_A;
         14:
           Key := TK_B;
+        15:
+          Key := TK_C;
       end;
   end;
   case Key of
@@ -72,6 +76,13 @@ begin
           Game.Map.NoOfTowns := 1;
       end;
     TK_B:
+      begin
+        Inc(Game.Map.SeaLevel);
+        if (Game.Map.SeaLevel > msHigh) then
+          Game.Map.SeaLevel := msVeryLow;
+        Scenes.Render;
+      end;
+    TK_C:
       begin
         Game.Calendar.NextYear;
         Scenes.Render;
