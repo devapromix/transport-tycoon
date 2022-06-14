@@ -76,6 +76,7 @@ type
     function HasTownLocation(const AX, AY: Integer): Boolean;
     function HasNormalTile(const AX, AY: Integer): Boolean;
     procedure AddSpot(const AX, AY: Integer; const ATile: Tiles);
+    procedure AddTree(const AX, AY: Integer);
   public
     Size: TMapSize;
     SeaLevel: TMapSeaLevel;
@@ -204,11 +205,11 @@ begin
         0:
           Cell[X][Y] := tlDirt;
         1:
-          Cell[X][Y] := tlTree;
+          Cell[X][Y] := tlSand;
         2:
-          Cell[X][Y] := tlSmallTree;
-        3:
-          Cell[X][Y] := tlBush;
+          Cell[X][Y] := tlRock;
+        3..6:
+          AddTree(X, Y);
       else
         Cell[X][Y] := tlGrass;
       end;
@@ -364,6 +365,18 @@ begin
     end;
   end;
 
+end;
+
+procedure TMap.AddTree(const AX, AY: Integer);
+begin
+  case RandomRange(0, 4) of
+    0:
+      Cell[AX][AY] := tlTree;
+    1:
+      Cell[AX][AY] := tlSmallTree;
+  else
+    Cell[AX][AY] := tlBush;
+  end;
 end;
 
 procedure TMap.CityGrows;
