@@ -29,7 +29,7 @@ begin
   DrawFrame(10, 9, 60, 11);
   DrawTitle(11, 'WORLD GENERATION');
 
-  DrawText(12, 13, 'Map size: ' + MapSizeStr[Game.Map.Size]);
+  DrawButton(12, 13, 'F', 'Map size: ' + MapSizeStr[Game.Map.Size]);
   DrawButton(42, 13, 'A', 'No. of towns: ' + MapNoOfTownsStr
     [Game.Map.NoOfTowns]);
   DrawButton(42, 14, 'B', Format('Sea level: %s',
@@ -56,6 +56,11 @@ begin
       if (MX >= 45) and (MX <= 54) then
         Key := TK_ESCAPE;
     end;
+    if (MX >= 12) and (MX <= 36) then
+      case MY of
+        13:
+          Key := TK_F;
+      end;
     if (MX >= 42) and (MX <= 66) then
       case MY of
         13:
@@ -85,6 +90,13 @@ begin
     TK_C:
       begin
         Game.Calendar.NextYear;
+        Scenes.Render;
+      end;
+    TK_F:
+      begin
+        Inc(Game.Map.Size);
+        if (Game.Map.Size > msLarge) then
+          Game.Map.Size := msTiny;
         Scenes.Render;
       end;
     TK_ENTER:

@@ -81,7 +81,7 @@ type
     Size: TMapSize;
     SeaLevel: TMapSeaLevel;
     NoOfTowns: Integer;
-    Cell: array [0 .. 79, 0 .. 79] of Tiles;
+    Cell: array of array of Tiles;
     City: array of TCity;
     CurrentCity: Integer;
     constructor Create;
@@ -141,11 +141,14 @@ end;
 
 constructor TMap.Create;
 begin
-  Self.Size := msSmall;
+  Self.Size := msTiny;
   SeaLevel := msVeryLow;
-  FWidth := 80;
-  FHeight := 80;
   NoOfTowns := 1;
+  FTop := 0;
+  FLeft := 0;
+  FWidth := MapSizeInt[Size];
+  FHeight := MapSizeInt[Size];
+  SetLength(Cell, FWidth, FHeight);
 end;
 
 destructor TMap.Destroy;
@@ -163,6 +166,9 @@ var
 begin
   FTop := 0;
   FLeft := 0;
+  FWidth := MapSizeInt[Size];
+  FHeight := MapSizeInt[Size];
+  SetLength(Cell, FWidth, FHeight);
   for Y := 0 to FHeight - 1 do
     for X := 0 to FWidth - 1 do
       Cell[X][Y] := tlGrass;

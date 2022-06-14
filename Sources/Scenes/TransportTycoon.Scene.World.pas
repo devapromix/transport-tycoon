@@ -128,7 +128,7 @@ begin
       if (Game.Map.Left > 0) then
         Game.Map.Left := Game.Map.Left - 1;
     TK_RIGHT:
-      if (Game.Map.Left <= Game.Map.Width - Self.Width) then
+      if (Game.Map.Left < Game.Map.Width - Self.Width) then
         Game.Map.Left := Game.Map.Left + 1;
     TK_UP:
       if (Game.Map.Top > 0) then
