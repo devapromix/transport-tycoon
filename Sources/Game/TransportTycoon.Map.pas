@@ -129,7 +129,6 @@ begin
   FWidth := MapSizeInt[Size];
   FHeight := MapSizeInt[Size];
   SetLength(Cell, FWidth, FHeight);
-
 end;
 
 function TMap.SizeCoef: Integer;

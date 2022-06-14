@@ -58,6 +58,7 @@ begin
       begin
         Game.Calendar.Clear;
         Game.IsGame := False;
+        Game.LoadSettings;
         Scenes.SetScene(scGen);
       end;
     TK_Q:

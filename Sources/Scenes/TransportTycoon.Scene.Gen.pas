@@ -104,6 +104,7 @@ begin
         Game.Clear;
         Game.Map.Gen;
         Game.IsPause := False;
+        Game.SaveSettings;
         Scenes.SetScene(scWorld);
       end;
   end;
