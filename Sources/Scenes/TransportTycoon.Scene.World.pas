@@ -65,24 +65,27 @@ begin
 
   DrawBar;
 
-  if Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY]].Tile = Tile
-    [tlCity].Tile then
+  if (MY < Self.Height - 1) then
   begin
-    I := Game.Map.GetCurrentCity(Game.Map.Left + MX, Game.Map.Top + MY);
-    DrawText(40, Height - 1, Game.Map.City[I].Name);
-    if (MY < Height - 10) then
-      VY := MY + 1
+    if Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY]].Tile = Tile
+      [tlCity].Tile then
+    begin
+      I := Game.Map.GetCurrentCity(Game.Map.Left + MX, Game.Map.Top + MY);
+      DrawText(40, Height - 1, Game.Map.City[I].Name);
+      if (MY < Height - 10) then
+        VY := MY + 1
+      else
+        VY := MY - 7;
+      if (MX < Width - (Width div 2)) then
+        VX := MX + 1
+      else
+        VX := MX - 20;
+      TownInfo(VX, VY, I);
+    end
     else
-      VY := MY - 7;
-    if (MX < Width - (Width div 2)) then
-      VX := MX + 1
-    else
-      VX := MX - 20;
-    TownInfo(VX, VY, I);
-  end
-  else
-    DrawText(40, Height - 1, Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top
-      + MY]].Name);
+      DrawText(40, Height - 1,
+        Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY]].Name);
+  end;
 end;
 
 procedure TSceneWorld.Update(var Key: Word);
