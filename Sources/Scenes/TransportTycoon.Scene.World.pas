@@ -69,7 +69,7 @@ begin
     [tlCity].Tile then
   begin
     I := Game.Map.GetCurrentCity(Game.Map.Left + MX, Game.Map.Top + MY);
-    DrawText(30, Height - 1, Game.Map.City[I].Name);
+    DrawText(40, Height - 1, Game.Map.City[I].Name);
     if (MY < Height - 10) then
       VY := MY + 1
     else
@@ -81,7 +81,7 @@ begin
     TownInfo(VX, VY, I);
   end
   else
-    DrawText(30, Height - 1, Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top
+    DrawText(40, Height - 1, Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top
       + MY]].Name);
 end;
 
@@ -89,8 +89,15 @@ procedure TSceneWorld.Update(var Key: Word);
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
-    if (MY = Self.Height - 1) and (MX >= 70) then
-      Key := TK_ESCAPE;
+    if (MY = Self.Height - 1) then
+    begin
+      if (MX >= 70) then
+        Key := TK_ESCAPE;
+      if (MX <= 10) then
+        Key := TK_F;
+      if (MX >= 25) and (MX <= 34) then
+        Key := TK_P;
+    end;
     if (Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY] = tlCity) and
       not Game.IsClearLand then
     begin
@@ -145,6 +152,11 @@ begin
       Scenes.SetScene(scCompany);
     TK_N:
       Scenes.SetScene(scTowns);
+    TK_P:
+      begin
+        Game.IsPause := not Game.IsPause;
+        Scenes.Render
+      end;
   end;
 end;
 

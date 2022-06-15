@@ -41,11 +41,12 @@ begin
   DrawButton(12, 17, Length(Game.Vehicles.Aircraft) > 0, 'A',
     'LIST OF AIRCRAFTS');
 
-  DrawButton(42, 16, False, 'B', 'BUILD');
-  DrawButton(42, 17, 'X', 'CLEAR LAND');
+  DrawButton(42, 15, False, 'B', 'Build');
+  DrawButton(42, 16, 'P', 'Pause game');
+  DrawButton(42, 17, 'X', 'Clear land');
 
-  AddButton(19, 'Q', 'QUIT');
-  AddButton(19, 'ESC', 'CLOSE');
+  AddButton(19, 'Q', 'Quit');
+  AddButton(19, 'ESC', 'Close');
 
   DrawBar;
 end;
@@ -67,6 +68,8 @@ begin
       case MY of
         11:
           Key := TK_G;
+        16:
+          Key := TK_P;
         17:
           Key := TK_X;
       end;
@@ -104,6 +107,11 @@ begin
       begin
         Game.IsClearLand := True;
         Scenes.SetScene(scWorld);
+      end;
+    TK_P:
+      begin
+        Game.IsPause := not Game.IsPause;
+        Scenes.Render
       end;
   end;
 end;

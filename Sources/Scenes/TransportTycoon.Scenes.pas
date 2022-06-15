@@ -179,6 +179,10 @@ begin
   DrawText(12, Y, Format('Turn:%d', [Game.Turn]));
   DrawText(56, Y, Game.Calendar.GetDate);
   DrawButton(70, Y, 'ESC', 'MENU');
+  if Game.IsPause then
+    DrawText(25, Height - 1, '[c=yellow][[P]][/c] [c=red]PAUSED[/c]')
+  else
+    DrawButton(25, Y, 'P', 'Pause');
 end;
 
 procedure TScene.DrawButton(const Y: Integer; Button, Text: string);
