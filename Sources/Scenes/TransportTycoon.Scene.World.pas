@@ -97,21 +97,24 @@ begin
         Key := TK_F;
       if (MX >= 25) and (MX <= 34) then
         Key := TK_P;
-    end;
-    if (Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY] = tlCity) and
-      not Game.IsClearLand then
+    end
+    else
     begin
-      if Game.Map.EnterInCity(Game.Map.Left + MX, Game.Map.Top + MY) then
-        Scenes.SetScene(scCity);
-    end;
-    if (Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY]
-      in [tlTree, tlSmallTree, tlBush]) then
-    begin
-      if not Game.IsClearLand then
+      if (Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY] = tlCity) and
+        not Game.IsClearLand then
+      begin
+        if Game.Map.EnterInCity(Game.Map.Left + MX, Game.Map.Top + MY) then
+          Scenes.SetScene(scCity);
+      end;
+      if (Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY]
+        in [tlTree, tlSmallTree, tlBush]) then
+      begin
+        if not Game.IsClearLand then
+          Exit;
+        ClearLand;
+        Scenes.Render;
         Exit;
-      ClearLand;
-      Scenes.Render;
-      Exit;
+      end;
     end;
   end;
   if (Key = TK_MOUSE_RIGHT) then
