@@ -30,7 +30,7 @@ type
       const Align: Integer = TK_ALIGN_LEFT); overload;
     procedure DrawText(const Y: Integer; Text: string); overload;
     procedure DrawMoney(const X, Y, Money: Integer;
-      const Align: Integer = TK_ALIGN_RIGHT);
+      const Align: Integer = TK_ALIGN_RIGHT; F: Boolean = False);
     procedure DrawButton(const X, Y: Integer; IsActive: Boolean;
       Button, Text: string); overload;
     procedure DrawButton(const Y: Integer; IsActive: Boolean;
@@ -175,7 +175,7 @@ begin
   terminal_color('white');
   terminal_bkcolor('darkest gray');
   terminal_clear_area(0, Y, 80, 1);
-  DrawMoney(0, Y, Game.Money, TK_ALIGN_LEFT);
+  DrawMoney(0, Y, Game.Money, TK_ALIGN_LEFT, True);
   DrawText(12, Y, Format('Turn:%d', [Game.Turn]));
   DrawText(56, Y, Game.Calendar.GetDate);
   DrawButton(70, Y, 'ESC', 'MENU');
@@ -243,12 +243,15 @@ begin
 end;
 
 procedure TScene.DrawMoney(const X, Y, Money: Integer;
-  const Align: Integer = TK_ALIGN_RIGHT);
+  const Align: Integer = TK_ALIGN_RIGHT; F: Boolean = False);
 begin
   if Money = 0 then
     terminal_print(X, Y, Align, Format('[c=white]$%d[/c]', [Money]));
   if Money > 0 then
-    terminal_print(X, Y, Align, Format('[c=green]+$%d[/c]', [Money]));
+    if F then
+      terminal_print(X, Y, Align, Format('[c=green]$%d[/c]', [Money]))
+    else
+      terminal_print(X, Y, Align, Format('[c=green]+$%d[/c]', [Money]));
   if Money < 0 then
     terminal_print(X, Y, Align, Format('[c=red]-$%d[/c]', [Abs(Money)]));
 end;
