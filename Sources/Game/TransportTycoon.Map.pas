@@ -50,6 +50,7 @@ type
 type
   TMapSize = (msTiny, msSmall, msMedium, msLarge);
   TMapSeaLevel = (msVeryLow, msLow, msNormal, msHigh);
+  TMapNoOfTowns = (ntVeryLow, ntLow, ntNormal, ntHigh);
   TMapNoOfInd = (niVeryLow, niLow, niNormal, niHigh);
   TMapRivers = (mrNone, mrFew, mrMedium, mrMany);
 
@@ -76,6 +77,12 @@ type
     FWidth: Word;
     FHeight: Word;
     FLeft: Word;
+    FCurrentCity: Integer;
+    FNoOfInd: TMapNoOfInd;
+    FNoOfTowns: Integer;
+    FRivers: TMapRivers;
+    FSeaLevel: TMapSeaLevel;
+    FSize: TMapSize;
     function HasTownName(const ATownName: string): Boolean;
     function HasTownLocation(const AX, AY: Integer): Boolean;
     function HasNormalTile(const AX, AY: Integer): Boolean;
@@ -84,28 +91,33 @@ type
     procedure Resize;
     function SizeCoef: Integer;
   public
-    Size: TMapSize;
-    SeaLevel: TMapSeaLevel;
-    Rivers: TMapRivers;
-    NoOfTowns: Integer;
-    NoOfInd: TMapNoOfInd;
     Cell: array of array of Tiles;
     City: array of TCity;
-    CurrentCity: Integer;
     constructor Create;
     destructor Destroy; override;
-    procedure Clear;
-    procedure Draw(const AWidth, AHeight: Integer);
-    procedure Gen;
-    procedure CityGrows;
     property Top: Word read FTop write FTop;
     property Left: Word read FLeft write FLeft;
     property Height: Word read FHeight;
     property Width: Word read FWidth;
+    property CurrentCity: Integer read FCurrentCity write FCurrentCity;
+    property Size: TMapSize read FSize write FSize;
+    property SeaLevel: TMapSeaLevel read FSeaLevel write FSeaLevel;
+    property Rivers: TMapRivers read FRivers write FRivers;
+    property NoOfTowns: Integer read FNoOfTowns write FNoOfTowns;
+    property NoOfInd: TMapNoOfInd read FNoOfInd write FNoOfInd;
+    procedure Clear;
+    procedure Draw(const AWidth, AHeight: Integer);
+    procedure Gen;
+    procedure CityGrows;
     function GetCurrentCity(const AX, AY: Integer): Integer;
     function EnterInCity(const AX, AY: Integer): Boolean;
     function WorldPop: Integer;
     function GetDist(const X1, Y1, X2, Y2: Integer): Integer;
+    procedure NextNoOfInd;
+    procedure NextNoOfTowns;
+    procedure NextSeaLevel;
+    procedure NextRivers;
+    procedure NextSize;
   end;
 
 implementation
@@ -126,6 +138,41 @@ begin
       Result := True;
       Exit;
     end;
+end;
+
+procedure TMap.NextNoOfInd;
+begin
+  Inc(FNoOfInd);
+  if (FNoOfInd > niHigh) then
+    FNoOfInd := niVeryLow;
+end;
+
+procedure TMap.NextNoOfTowns;
+begin
+  Inc(FNoOfTowns);
+  if (FNoOfTowns > 4) then
+    FNoOfTowns := 1;
+end;
+
+procedure TMap.NextRivers;
+begin
+  Inc(FRivers);
+  if (FRivers > mrMany) then
+    FRivers := mrNone;
+end;
+
+procedure TMap.NextSeaLevel;
+begin
+  Inc(FSeaLevel);
+  if (FSeaLevel > msHigh) then
+    FSeaLevel := msVeryLow;
+end;
+
+procedure TMap.NextSize;
+begin
+  Inc(FSize);
+  if (FSize > msLarge) then
+    FSize := msTiny;
 end;
 
 procedure TMap.Resize;
@@ -163,11 +210,11 @@ end;
 
 constructor TMap.Create;
 begin
-  Self.Size := msTiny;
-  SeaLevel := msVeryLow;
-  NoOfTowns := 1;
-  Rivers := mrNone;
-  NoOfInd := niVeryLow;
+  FSize := msTiny;
+  FSeaLevel := msVeryLow;
+  FNoOfTowns := 1;
+  FRivers := mrNone;
+  FNoOfInd := niVeryLow;
   Resize;
 end;
 
@@ -206,8 +253,8 @@ end;
 
 function TMap.EnterInCity(const AX, AY: Integer): Boolean;
 begin
-  CurrentCity := GetCurrentCity(AX, AY);
-  Result := CurrentCity >= 0;
+  FCurrentCity := GetCurrentCity(AX, AY);
+  Result := FCurrentCity >= 0;
 end;
 
 procedure TMap.Gen;

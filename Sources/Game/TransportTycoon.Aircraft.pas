@@ -51,9 +51,10 @@ type
     FMaxPassengers: Integer;
     FBagsOfMail: Integer;
     FMaxBagsOfMail: Integer;
+    FLastAirportId: Integer;
   public
     Order: array of TOrder;
-    OrderIndex, LastAirportId: Integer;
+    OrderIndex: Integer;
     constructor Create(const AName: string; const AX, AY, ID: Integer);
     function Move(const AX, AY: Integer): Boolean; override;
     property Name: string read FName;
@@ -65,6 +66,7 @@ type
     property X: Integer read FX;
     property Y: Integer read FY;
     property State: string read FState;
+    property LastAirportId: Integer write FLastAirportId;
     procedure Step; override;
     procedure Load;
     procedure UnLoad;
@@ -216,7 +218,7 @@ begin
     if not Move(Order[OrderIndex].X, Order[OrderIndex].Y) then
     begin
       Inc(FT);
-      if Order[OrderIndex].ID <> LastAirportId then
+      if Order[OrderIndex].ID <> FLastAirportId then
         UnLoad;
       FState := 'Service';
       if FT > (15 - (Game.Map.City[Order[OrderIndex].ID].Airport * 2)) then

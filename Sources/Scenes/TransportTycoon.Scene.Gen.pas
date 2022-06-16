@@ -89,15 +89,12 @@ begin
       Scenes.SetScene(scMainMenu);
     TK_A:
       begin
-        Inc(Game.Map.NoOfTowns);
-        if (Game.Map.NoOfTowns > 4) then
-          Game.Map.NoOfTowns := 1;
+        Game.Map.NextNoOfTowns;
+        Scenes.Render;
       end;
     TK_B:
       begin
-        Inc(Game.Map.SeaLevel);
-        if (Game.Map.SeaLevel > msHigh) then
-          Game.Map.SeaLevel := msVeryLow;
+        Game.Map.NextSeaLevel;
         Scenes.Render;
       end;
     TK_C:
@@ -107,23 +104,17 @@ begin
       end;
     TK_F:
       begin
-        Inc(Game.Map.Size);
-        if (Game.Map.Size > msLarge) then
-          Game.Map.Size := msTiny;
+        Game.Map.NextSize;
         Scenes.Render;
       end;
     TK_H:
       begin
-        Inc(Game.Map.Rivers);
-        if (Game.Map.Rivers > mrMany) then
-          Game.Map.Rivers := mrNone;
+        Game.Map.NextRivers;
         Scenes.Render;
       end;
     TK_J:
       begin
-        Inc(Game.Map.NoOfInd);
-        if (Game.Map.NoOfInd > niHigh) then
-          Game.Map.NoOfInd := niVeryLow;
+        Game.Map.NextNoOfInd;
         Scenes.Render;
       end;
     TK_ENTER:
