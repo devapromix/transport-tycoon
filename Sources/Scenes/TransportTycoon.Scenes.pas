@@ -20,12 +20,13 @@ type
 type
   TScene = class(TObject)
   private
-    FButtons: array [0 .. 4] of TButtonRec;
+    FMX: Integer;
+    FMY: Integer;
     FButtonsY: Integer;
+    FButtons: array [0 .. 4] of TButtonRec;
   public
-    MX, MY: Integer;
     procedure Render; virtual; abstract;
-    procedure Update(var Key: word); virtual; abstract;
+    procedure Update(var Key: Word); virtual; abstract;
     procedure DrawText(const X, Y: Integer; Text: string;
       const Align: Integer = TK_ALIGN_LEFT); overload;
     procedure DrawText(const Y: Integer; Text: string); overload;
@@ -53,6 +54,8 @@ type
     procedure DrawBar;
     function Width: Integer;
     function Height: Integer;
+    property MX: Integer read FMX write FMX;
+    property MY: Integer read FMY write FMY;
   end;
 
 type
@@ -64,7 +67,7 @@ type
     constructor Create;
     destructor Destroy; override;
     procedure Render; override;
-    procedure Update(var Key: word); override;
+    procedure Update(var Key: Word); override;
     property Scene: TSceneEnum read FSceneEnum write FSceneEnum;
     function GetScene(I: TSceneEnum): TScene;
     procedure SetScene(SceneEnum: TSceneEnum);
@@ -324,7 +327,7 @@ begin
   FScene[scCompany] := TSceneCompany.Create;
 end;
 
-procedure TScenes.Update(var Key: word);
+procedure TScenes.Update(var Key: Word);
 begin
   if (FScene[Scene] <> nil) then
     with FScene[Scene] do

@@ -52,9 +52,9 @@ type
     FBagsOfMail: Integer;
     FMaxBagsOfMail: Integer;
     FLastAirportId: Integer;
+    FOrderIndex: Integer;
   public
     Order: array of TOrder;
-    OrderIndex: Integer;
     constructor Create(const AName: string; const AX, AY, ID: Integer);
     function Move(const AX, AY: Integer): Boolean; override;
     property Name: string read FName;
@@ -67,6 +67,7 @@ type
     property Y: Integer read FY;
     property State: string read FState;
     property LastAirportId: Integer write FLastAirportId;
+    property OrderIndex: Integer read FOrderIndex;
     procedure Step; override;
     procedure Load;
     procedure UnLoad;
@@ -141,7 +142,7 @@ begin
   FPassengers := 0;
   FMaxBagsOfMail := AircraftBase[ID].BagsOfMail;
   FBagsOfMail := 0;
-  OrderIndex := 0;
+  FOrderIndex := 0;
   LastAirportId := 0;
   FDistance := 0;
 end;
@@ -226,9 +227,9 @@ begin
         FT := 0;
         FH := RandomRange(0, 2);
         Load;
-        Inc(OrderIndex);
+        FOrderIndex := FOrderIndex + 1;
         if (OrderIndex > High(Order)) then
-          OrderIndex := 0;
+          FOrderIndex := 0;
       end;
     end
     else

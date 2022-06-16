@@ -8,14 +8,14 @@ uses
 type
   TVehicles = class
   private
-
+    FCurrentVehicle: Integer;
   public const
     MaxAircrafts = 7;
   public
-    CurrentVehicle: Integer;
     Aircraft: array of TAircraft;
     constructor Create;
     destructor Destroy; override;
+    property CurrentVehicle: Integer read FCurrentVehicle write FCurrentVehicle;
     procedure Draw;
     procedure Step;
     procedure AddAircraft(const AName: string;
