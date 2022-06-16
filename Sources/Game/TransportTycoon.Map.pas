@@ -68,9 +68,6 @@ const
   MapNoOfTownsInt: array [1 .. 4] of Integer = (3, 5, 8, 11);
 
 type
-
-  { TMap }
-
   TMap = class(TObject)
   private
     FTop: Word;

@@ -8,7 +8,7 @@ uses
 type
   TSceneTowns = class(TScene)
   private
-
+    procedure ScrollTo(const X, Y: Integer);
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -17,10 +17,17 @@ type
 implementation
 
 uses
-  BearLibTerminal,
+  Math,
   SysUtils,
+  BearLibTerminal,
   TransportTycoon.Game,
   TransportTycoon.Map;
+
+procedure TSceneTowns.ScrollTo(const X, Y: Integer);
+begin
+  Game.Map.Left := EnsureRange(X - (Width div 2), 0, Game.Map.Width - Width);
+  Game.Map.Top := EnsureRange(Y - (Height div 2), 0, Game.Map.Height - Height);
+end;
 
 procedure TSceneTowns.Render;
 var
@@ -44,6 +51,8 @@ begin
 end;
 
 procedure TSceneTowns.Update(var Key: Word);
+var
+  I: Integer;
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
@@ -60,10 +69,13 @@ begin
     TK_ESCAPE:
       Scenes.SetScene(scWorld);
     TK_A .. TK_K:
+      with Game.Map do
       begin
-        if (Key - TK_A < Length(Game.Map.City)) then
+        I := Key - TK_A;
+        if (I < Length(City)) then
         begin
-          Game.Map.CurrentCity := Key - TK_A;
+          CurrentCity := I;
+          ScrollTo(City[I].X, City[I].Y);
           Scenes.SetScene(scCity);
         end;
       end;
