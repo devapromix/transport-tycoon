@@ -22,24 +22,18 @@ type
     FMap: TMap;
     FCalendar: TCalendar;
     FIsDebug: Boolean;
+    FTurn: Integer;
+    FIsPause: Boolean;
+    FIsGame: Boolean;
+    FIsClearLand: Boolean;
   public const
     MaxLoan = 200000;
     StartMoney = MaxLoan div 2;
     Version = '0.1';
   public
-    IsClearLand: Boolean;
-    IsPause: Boolean;
-    IsGame: Boolean;
-    Turn: Integer;
     constructor Create;
     destructor Destroy; override;
-    procedure Clear;
-    procedure Step;
-    function GetPath(SubDir: string): string;
     property Money: Integer read FMoney;
-    procedure ModifyMoney(const AMoney: Integer); overload;
-    procedure ModifyMoney(const ValueEnum: TValueEnum;
-      const AMoney: Integer); overload;
     property Loan: Integer read FLoan;
     property Company: TCompany read FCompany;
     property Finances: TFinances read FFinances write FFinances;
@@ -47,6 +41,16 @@ type
     property Calendar: TCalendar read FCalendar;
     property Map: TMap read FMap;
     property IsDebug: Boolean read FIsDebug;
+    property Turn: Integer read FTurn;
+    property IsClearLand: Boolean read FIsClearLand write FIsClearLand;
+    property IsPause: Boolean read FIsPause write FIsPause;
+    property IsGame: Boolean read FIsGame write FIsGame;
+    procedure Clear;
+    procedure Step;
+    function GetPath(SubDir: string): string;
+    procedure ModifyMoney(const AMoney: Integer); overload;
+    procedure ModifyMoney(const ValueEnum: TValueEnum;
+      const AMoney: Integer); overload;
     procedure LoadSettings;
     procedure SaveSettings;
   end;
@@ -73,8 +77,8 @@ begin
   FCalendar := TCalendar.Create;
   FCompany := TCompany.Create;
   FFinances := TFinances.Create;
-  IsClearLand := False;
-  IsPause := True;
+  FIsClearLand := False;
+  FIsPause := True;
   FMap := TMap.Create;
   FMap.Gen;
   FVehicles := TVehicles.Create;
@@ -148,16 +152,16 @@ procedure TGame.Step;
 begin
   if not IsGame or IsPause then
     Exit;
-  Inc(Turn);
+  Inc(FTurn);
   FCalendar.Step;
   FVehicles.Step;
 end;
 
 procedure TGame.Clear;
 begin
-  Turn := 0;
-  IsGame := True;
-  IsClearLand := False;
+  FTurn := 0;
+  FIsGame := True;
+  FIsClearLand := False;
   FMoney := StartMoney;
   FLoan := StartMoney;
   FFinances.Clear;
