@@ -73,6 +73,17 @@ begin
           Key := TK_C;
       end;
   end;
+  if (Key = TK_MOUSE_RIGHT) then
+  begin
+    if (MX >= 42) and (MX <= 66) then
+      case MY of
+        15:
+          begin
+            Game.Calendar.PrevYear;
+            Scenes.Render;
+          end;
+      end;
+  end;
   case Key of
     TK_ESCAPE:
       Scenes.SetScene(scMainMenu);

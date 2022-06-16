@@ -24,6 +24,7 @@ type
     property Month: Word read FMonth write FMonth;
     property Year: Word read FYear write FYear;
     function GetDate: string;
+    procedure PrevYear;
     procedure NextYear;
     procedure OnMonth();
     procedure OnYear();
@@ -79,6 +80,12 @@ end;
 procedure TCalendar.OnYear;
 begin
   Scenes.SetScene(scFinances);
+end;
+
+procedure TCalendar.PrevYear;
+begin
+  if FYear > StartYear then
+    Dec(FYear);
 end;
 
 procedure TCalendar.Step;
