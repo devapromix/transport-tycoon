@@ -57,6 +57,7 @@ var
 implementation
 
 uses
+  Math,
   IniFiles;
 
 constructor TGame.Create;
@@ -102,8 +103,13 @@ begin
   IniFile := TMemIniFile.Create(GetPath('') + 'Settings.ini', TEncoding.UTF8);
   try
     Game.Map.Size := TMapSize(IniFile.ReadInteger('Main', 'MapSize', 0));
-    Game.Map.SeaLevel := TMapSeaLevel(IniFile.ReadInteger('Main', 'SeaLevel', 0));
+    Game.Map.SeaLevel := TMapSeaLevel(IniFile.ReadInteger('Main',
+      'SeaLevel', 0));
     Game.Map.NoOfTowns := IniFile.ReadInteger('Main', 'NoOfTowns', 1);
+    Game.Calendar.Year := EnsureRange(IniFile.ReadInteger('Main', 'Year',
+      TCalendar.StartYear), TCalendar.StartYear, TCalendar.FinishYear);
+    Game.Map.Rivers := TMapRivers(IniFile.ReadInteger('Main', 'Rivers', 0));
+    Game.Map.NoOfInd := TMapNoOfInd(IniFile.ReadInteger('Main', 'NoOfInd', 0));
   finally
     FreeAndNil(IniFile);
   end;
@@ -129,6 +135,9 @@ begin
     IniFile.WriteInteger('Main', 'MapSize', Ord(Game.Map.Size));
     IniFile.WriteInteger('Main', 'SeaLevel', Ord(Game.Map.SeaLevel));
     IniFile.WriteInteger('Main', 'NoOfTowns', Game.Map.NoOfTowns);
+    IniFile.WriteInteger('Main', 'Year', Game.Calendar.Year);
+    IniFile.WriteInteger('Main', 'Rivers', Ord(Game.Map.Rivers));
+    IniFile.WriteInteger('Main', 'NoOfInd', Ord(Game.Map.NoOfInd));
     IniFile.UpdateFile;
   finally
     FreeAndNil(IniFile);

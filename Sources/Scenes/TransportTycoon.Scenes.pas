@@ -347,7 +347,11 @@ begin
       RenderButtons;
       terminal_color('white');
       if Game.IsDebug then
-        terminal_print(0, 0, Format('%dx%d', [MX, MY]));
+      begin
+        terminal_print(0, 0, Format('X:%d, Y:%d', [Game.Map.Left + MX,
+          Game.Map.Top + MY]));
+        terminal_print(0, 1, Format('MX:%d, MY:%d', [MX, MY]));
+      end;
     end;
   terminal_bkcolor(0);
 end;
