@@ -95,8 +95,6 @@ uses
   TransportTycoon.Scene.Towns,
   TransportTycoon.Scene.Company;
 
-{ TScene }
-
 procedure TScene.DrawText(const X, Y: Integer; Text: string;
   const Align: Integer = TK_ALIGN_LEFT);
 begin
@@ -307,8 +305,6 @@ begin
   terminal_print(Width div 2, FButtonsY, TK_ALIGN_CENTER, S);
 end;
 
-{ TScenes }
-
 constructor TScenes.Create;
 begin
   inherited;
@@ -350,7 +346,8 @@ begin
       Render;
       RenderButtons;
       terminal_color('white');
-      terminal_print(0, 0, Format('%dx%d', [MX, MY]));
+      if Game.IsDebug then
+        terminal_print(0, 0, Format('%dx%d', [MX, MY]));
     end;
   terminal_bkcolor(0);
 end;

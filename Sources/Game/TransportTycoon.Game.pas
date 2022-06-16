@@ -21,6 +21,7 @@ type
     FVehicles: TVehicles;
     FMap: TMap;
     FCalendar: TCalendar;
+    FIsDebug: Boolean;
   public const
     MaxLoan = 200000;
     StartMoney = MaxLoan div 2;
@@ -45,6 +46,7 @@ type
     property Vehicles: TVehicles read FVehicles;
     property Calendar: TCalendar read FCalendar;
     property Map: TMap read FMap;
+    property IsDebug: Boolean read FIsDebug;
     procedure LoadSettings;
     procedure SaveSettings;
   end;
@@ -58,7 +60,15 @@ uses
   IniFiles;
 
 constructor TGame.Create;
+var
+  I: Integer;
 begin
+  FIsDebug := False;
+  for I := 1 to ParamCount do
+  begin
+    if (LowerCase(ParamStr(I)) = '-debug') then
+      FIsDebug := True;
+  end;
   FCalendar := TCalendar.Create;
   FCompany := TCompany.Create;
   FFinances := TFinances.Create;
