@@ -8,7 +8,7 @@ uses
 type
   TSceneTowns = class(TScene)
   private
-    procedure ScrollTo(const X, Y: Integer);
+
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -17,17 +17,10 @@ type
 implementation
 
 uses
-  Math,
   SysUtils,
   BearLibTerminal,
   TransportTycoon.Game,
   TransportTycoon.Map;
-
-procedure TSceneTowns.ScrollTo(const X, Y: Integer);
-begin
-  Game.Map.Left := EnsureRange(X - (Width div 2), 0, Game.Map.Width - Width);
-  Game.Map.Top := EnsureRange(Y - (Height div 2), 0, Game.Map.Height - Height);
-end;
 
 procedure TSceneTowns.Render;
 var

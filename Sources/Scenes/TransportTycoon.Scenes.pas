@@ -18,6 +18,9 @@ type
   end;
 
 type
+
+  { TScene }
+
   TScene = class(TObject)
   private
     FMX: Integer;
@@ -56,6 +59,11 @@ type
     function Height: Integer;
     property MX: Integer read FMX write FMX;
     property MY: Integer read FMY write FMY;
+    procedure ScrollTo(const X, Y: Integer);
+    procedure ScrollUp;
+    procedure ScrollDown;
+    procedure ScrollLeft;
+    procedure ScrollRight;
   end;
 
 type
@@ -79,6 +87,7 @@ var
 implementation
 
 uses
+  Math,
   SysUtils,
   Graphics,
   TransportTycoon.Map,
@@ -269,6 +278,36 @@ end;
 function TScene.Height: Integer;
 begin
   Result := terminal_state(TK_HEIGHT);
+end;
+
+procedure TScene.ScrollTo(const X, Y: Integer);
+begin
+  Game.Map.Left := EnsureRange(X - (Width div 2), 0, Game.Map.Width - Width);
+  Game.Map.Top := EnsureRange(Y - (Height div 2), 0, Game.Map.Height - Height);
+end;
+
+procedure TScene.ScrollUp;
+begin
+  if (Game.Map.Top > 0) then
+    Game.Map.Top := Game.Map.Top - 1;
+end;
+
+procedure TScene.ScrollDown;
+begin
+  if (Game.Map.Top <= Game.Map.Height - Self.Height) then
+    Game.Map.Top := Game.Map.Top + 1;
+end;
+
+procedure TScene.ScrollLeft;
+begin
+  if (Game.Map.Left > 0) then
+    Game.Map.Left := Game.Map.Left - 1;
+end;
+
+procedure TScene.ScrollRight;
+begin
+  if (Game.Map.Left < Game.Map.Width - Self.Width) then
+    Game.Map.Left := Game.Map.Left + 1;
 end;
 
 function TScene.MakeButton(const IsActive: Boolean;

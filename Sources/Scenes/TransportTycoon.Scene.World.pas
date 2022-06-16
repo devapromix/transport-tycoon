@@ -86,6 +86,10 @@ begin
       DrawText(40, Height - 1,
         Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY]].Name);
   end;
+  if (MY = Self.Height - 2) then ScrollDown;
+  if (MY = 0) then ScrollUp;
+  if (MX = Self.Width - 1) then ScrollRight;
+  if (MX = 0) then ScrollLeft;
 end;
 
 procedure TSceneWorld.Update(var Key: Word);
@@ -141,17 +145,13 @@ begin
         Scenes.SetScene(scGameMenu);
       end;
     TK_LEFT:
-      if (Game.Map.Left > 0) then
-        Game.Map.Left := Game.Map.Left - 1;
+      ScrollLeft;
     TK_RIGHT:
-      if (Game.Map.Left < Game.Map.Width - Self.Width) then
-        Game.Map.Left := Game.Map.Left + 1;
+      ScrollRight;
     TK_UP:
-      if (Game.Map.Top > 0) then
-        Game.Map.Top := Game.Map.Top - 1;
+      ScrollUp;
     TK_DOWN:
-      if (Game.Map.Top <= Game.Map.Height - Self.Height) then
-        Game.Map.Top := Game.Map.Top + 1;
+      ScrollDown;
     TK_F:
       Scenes.SetScene(scFinances);
     TK_G:
