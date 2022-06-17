@@ -33,35 +33,37 @@ var
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
-  DrawFrame(10, 7, 60, 15);
+  DrawFrame(10, 6, 60, 17);
 
   C := Game.Map.City[Game.Map.CurrentCity];
 
-  DrawTitle(C.Name + ' Airport Hangar');
+  DrawTitle(8, C.Name + ' Airport Hangar');
 
   for I := 0 to Length(AircraftBase) - 1 do
     if AircraftBase[I].Since <= Game.Calendar.Year then
-      DrawButton(12, I + 11, Chr(Ord('A') + I), AircraftBase[I].Name);
+      DrawButton(12, I + 10, Chr(Ord('A') + I), AircraftBase[I].Name);
 
   I := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
     Length(AircraftBase) - 1);
+  terminal_color('yellow');
   terminal_composition(TK_ON);
-  DrawText(42, 11, AircraftBase[I].Name);
+  DrawText(42, 10, AircraftBase[I].Name);
   S := '';
   for J := 1 to Length(AircraftBase[I].Name) do
     S := S + '_';
-  DrawText(42, 11, S);
+  DrawText(42, 10, S);
   terminal_composition(TK_OFF);
-  DrawText(42, 12, Format('Passengers: %d', [AircraftBase[I].Passengers]));
-  DrawText(42, 13, Format('Bags of mail: %d', [AircraftBase[I].BagsOfMail]));
-  DrawText(42, 14, Format('Speed: %d km/h', [AircraftBase[I].Speed]));
-  DrawText(42, 15, Format('Cost: $%d', [AircraftBase[I].Cost]));
-  DrawText(42, 16, Format('Running Cost: $%d/y',
+  terminal_color('white');
+  DrawText(42, 11, Format('Passengers: %d', [AircraftBase[I].Passengers]));
+  DrawText(42, 12, Format('Bags of mail: %d', [AircraftBase[I].BagsOfMail]));
+  DrawText(42, 13, Format('Speed: %d km/h', [AircraftBase[I].Speed]));
+  DrawText(42, 14, Format('Cost: $%d', [AircraftBase[I].Cost]));
+  DrawText(42, 15, Format('Running Cost: $%d/y',
     [AircraftBase[I].RunningCost]));
 
-  AddButton(19, Length(Game.Vehicles.Aircraft) < TVehicles.MaxAircrafts,
+  AddButton(20, Length(Game.Vehicles.Aircraft) < TVehicles.MaxAircrafts,
     'Enter', 'Buy Aircraft');
-  AddButton(19, 'Esc', 'Close');
+  AddButton(20, 'Esc', 'Close');
 
   DrawBar;
 end;
@@ -74,8 +76,8 @@ begin
   begin
     if (MX >= 12) and (MX <= 38) then
       case MY of
-        11 .. 17:
-          Key := TK_A + (MY - 11);
+        10 .. 18:
+          Key := TK_A + (MY - 10);
       end;
     if (GetButtonsY = MY) then
     begin
@@ -90,7 +92,7 @@ begin
   case Key of
     TK_ESCAPE:
       Scenes.SetScene(scAirport);
-    TK_A .. TK_G:
+    TK_A .. TK_I:
       begin
         I := Key - TK_A;
         if I > Length(AircraftBase) - 1 then

@@ -18,7 +18,7 @@ type
   end;
 
 const
-  AircraftBase: array [0 .. 3] of TAircraftBase = (
+  AircraftBase: array [0 .. 8] of TAircraftBase = (
     // #1
     (Name: 'Toreador MT-4'; Passengers: 25; BagsOfMail: 3; Cost: 22000;
     RunningCost: 130 * 12; Speed: 400; Since: 1950),
@@ -30,7 +30,22 @@ const
     RunningCost: 150 * 12; Speed: 450; Since: 1955),
     // #4
     (Name: 'Tornado S9'; Passengers: 45; BagsOfMail: 5; Cost: 30000;
-    RunningCost: 160 * 12; Speed: 500; Since: 1960)
+    RunningCost: 160 * 12; Speed: 500; Since: 1965),
+    // #5
+    (Name: 'ExOA-H7'; Passengers: 55; BagsOfMail: 7; Cost: 33000;
+    RunningCost: 170 * 12; Speed: 700; Since: 1970),
+    // #6
+    (Name: 'AIN D88'; Passengers: 75; BagsOfMail: 7; Cost: 35000;
+    RunningCost: 180 * 12; Speed: 800; Since: 1980),
+    // #7
+    (Name: 'HeWi C4'; Passengers: 100; BagsOfMail: 8; Cost: 38000;
+    RunningCost: 190 * 12; Speed: 850; Since: 1990),
+    // #8
+    (Name: 'UtBotS FL'; Passengers: 120; BagsOfMail: 10; Cost: 40000;
+    RunningCost: 200 * 12; Speed: 900; Since: 2000),
+    // #9
+    (Name: 'Venus M2'; Passengers: 150; BagsOfMail: 12; Cost: 50000;
+    RunningCost: 210 * 12; Speed: 1000; Since: 2020)
     //
     );
 
