@@ -38,6 +38,8 @@ begin
   DrawText(12, 13, 'Houses: ' + IntToStr(C.Houses));
   DrawButton(34, 12, C.Airport > 0, 'A', 'Airport: ' + AirportSizeStr
     [C.Airport]);
+  if (Game.Map.CurrentCity = Game.Company.TownID) then
+    DrawButton(34, 16, 'G', 'Company Headquarters');
   terminal_color('white');
 
   AddButton(18, 'B', 'Build');
@@ -67,6 +69,8 @@ begin
       case MY of
         12:
           Key := TK_A;
+        16:
+          Key := TK_G;
       end;
   end;
   case Key of
@@ -77,6 +81,9 @@ begin
         Scenes.SetScene(scAirport);
     TK_B:
       Scenes.SetScene(scBuildInCity);
+    TK_G:
+      if (Game.Map.CurrentCity = Game.Company.TownID) then
+        Scenes.SetScene(scCompany);
   end;
 end;
 

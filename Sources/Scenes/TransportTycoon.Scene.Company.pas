@@ -27,7 +27,9 @@ begin
 
   DrawFrame(20, 8, 40, 13);
   DrawTitle(10, Game.Company.Name);
-  DrawText(22, 12, 'Inavgurated: ' + IntToStr(Game.Company.Inavgurated));
+  DrawText(22, 12, 'Company headquarters in ' + Game.Map.City
+    [Game.Company.TownID].Name);
+  DrawText(22, 13, 'Inavgurated: ' + IntToStr(Game.Company.Inavgurated));
 
   AddButton(18, 'Esc', 'Close');
 
