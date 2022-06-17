@@ -40,6 +40,8 @@ begin
 end;
 
 procedure TSceneAircrafts.Update(var Key: Word);
+var
+  I: Integer;
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
@@ -57,9 +59,12 @@ begin
       Scenes.SetScene(scWorld);
     TK_A .. TK_G:
       begin
-        if Key - TK_A > Length(Game.Vehicles.Aircraft) - 1 then
+        I := Key - TK_A;
+        if I > Length(Game.Vehicles.Aircraft) - 1 then
           Exit;
-        Game.Vehicles.CurrentVehicle := Key - TK_A;
+        Game.Vehicles.CurrentVehicle := I;
+        with Game.Vehicles.Aircraft[I] do
+          ScrollTo(X, Y);
         Scenes.SetScene(scAircraft);
       end;
   end;

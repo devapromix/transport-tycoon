@@ -19,11 +19,13 @@ implementation
 uses
   BearLibTerminal,
   SysUtils,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Aircraft;
 
 procedure TSceneAircraft.Render;
 var
   I: Integer;
+  S: string;
   C: Char;
 begin
   DrawMap(Self.Width, Self.Height - 1);
@@ -33,12 +35,20 @@ begin
   begin
     DrawTitle(UpperCase(Aircraft[CurrentVehicle].Name));
 
-    terminal_color('white');
     with Aircraft[CurrentVehicle] do
     begin
-      DrawText(12, 11, Format('Passengers: %d/%d',
+      terminal_color('yellow');
+      terminal_composition(TK_ON);
+      DrawText(12, 11, AircraftBase[VehicleID].Name);
+      S := '';
+      for I := 1 to Length(AircraftBase[VehicleID].Name) do
+        S := S + '_';
+      DrawText(12, 11, S);
+      terminal_composition(TK_OFF);
+      terminal_color('white');
+      DrawText(12, 12, Format('Passengers: %d/%d',
         [Passengers, MaxPassengers]));
-      DrawText(12, 12, Format('Bags of mail: %d/%d',
+      DrawText(12, 13, Format('Bags of mail: %d/%d',
         [BagsOfMail, MaxBagsOfMail]));
 
       DrawText(12, 17, Format('State: %s', [State]));
@@ -50,8 +60,8 @@ begin
         else
           C := #32;
         DrawText(32, I + 11, C);
-        DrawButton(34, I + 11, Chr(Ord('A') + I), 'Go to ' + Order[I].Name +
-          ' Airport');
+        DrawButton(34, I + 11, Length(Order) > 1, Chr(Ord('A') + I),
+          'Go to ' + Order[I].Name + ' Airport');
       end;
     end;
   end;

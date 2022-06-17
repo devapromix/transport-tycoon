@@ -80,7 +80,6 @@ type
     FRivers: TMapRivers;
     FSeaLevel: TMapSeaLevel;
     FSize: TMapSize;
-    function HasTownName(const ATownName: string): Boolean;
     function HasTownLocation(const AX, AY: Integer): Boolean;
     function HasNormalTile(const AX, AY: Integer): Boolean;
     procedure AddSpot(const AX, AY: Integer; const ATile: Tiles);
@@ -103,6 +102,7 @@ type
     property NoOfTowns: Integer read FNoOfTowns write FNoOfTowns;
     property NoOfInd: TMapNoOfInd read FNoOfInd write FNoOfInd;
     procedure Clear;
+    function HasTownName(const ATownName: string): Boolean;
     procedure Draw(const AWidth, AHeight: Integer);
     procedure Gen;
     procedure CityGrows;
@@ -351,6 +351,9 @@ begin
     end;
   end;
   //
+  for I := 0 to Length(City) - 1 do
+    City[I].Free;
+  SetLength(City, 0);
   for I := 0 to MapNoOfTownsInt[NoOfTowns] - 1 do
   begin
     repeat

@@ -18,14 +18,15 @@ type
 implementation
 
 uses
-  Math,
   TransportTycoon.City,
   TransportTycoon.Game;
 
 procedure TCompany.Clear;
 begin
-  FName := Game.Map.City[Math.RandomRange(0, Length(Game.Map.City))].Name +
-    ' TRANSPORT';
+  repeat
+    FName := TCity.GenName;
+  until Game.Map.HasTownName(FName);
+  FName := FName + ' TRANSPORT';
   FInavgurated := Game.Calendar.Year;
 end;
 
