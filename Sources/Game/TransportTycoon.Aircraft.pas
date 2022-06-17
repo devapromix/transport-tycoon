@@ -164,7 +164,7 @@ end;
 
 procedure TAircraft.Draw;
 begin
-  terminal_print(FX, FY - Game.Map.Top, '@');
+  terminal_print(FX - Game.Map.Left, FY - Game.Map.Top, '@');
 end;
 
 procedure TAircraft.Load;
