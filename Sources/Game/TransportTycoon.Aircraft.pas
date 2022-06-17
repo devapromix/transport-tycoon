@@ -91,9 +91,14 @@ uses
   Math,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Finances;
+  TransportTycoon.Finances,
+  TransportTycoon.PathFind,
+  TransportTycoon.Map;
 
-{ TPlane }
+function IsPath(X, Y: Integer): Boolean; stdcall;
+begin
+  Result := True;
+end;
 
 procedure TAircraft.AddOrder(const TownIndex: Integer; const AName: string;
   const AX, AY: Integer);
@@ -174,16 +179,14 @@ begin
 end;
 
 function TAircraft.Move(const AX, AY: Integer): Boolean;
+var
+  NX, NY: Integer;
 begin
   FState := 'Fly';
-  if X < AX then
-    SetLocation(X + 1, Y);
-  if Y < AY then
-    SetLocation(X, Y + 1);
-  if X > AX then
-    SetLocation(X - 1, Y);
-  if Y > AY then
-    SetLocation(X, Y - 1);
+  if not IsMove(Game.Map.Width, Game.Map.Height, X, Y, AX, AY, @IsPath, NX, NY)
+  then
+    Exit;
+  SetLocation(NX, NY);
   Result := (X <> AX) or (Y <> AY);
 end;
 

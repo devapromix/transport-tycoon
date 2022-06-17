@@ -130,6 +130,7 @@
         <DCCReference Include="Scenes\TransportTycoon.Scene.Company.pas"/>
         <DCCReference Include="Game\TransportTycoon.Calendar.pas"/>
         <DCCReference Include="Game\TransportTycoon.MapObject.pas"/>
+        <DCCReference Include="Game\TransportTycoon.PathFind.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

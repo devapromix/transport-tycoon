@@ -6,6 +6,9 @@ uses
   TransportTycoon.MapObject;
 
 type
+  TGetXYVal = function(X, Y: Integer): Boolean; stdcall;
+
+type
   TVehicle = class(TMapObject)
   private
     FVehicleID: Integer;
