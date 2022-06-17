@@ -2,19 +2,17 @@
 
 interface
 
+uses
+  TransportTycoon.MapObject;
+
 const
   AirportSizeStr: array [0 .. 5] of string = ('None', 'Small Airport',
     'Commuter Airport', 'City Airport', 'Metropolitan Airport',
     'International Airport');
 
 type
-
-  { TCity }
-
-  TCity = class(TObject)
+  TCity = class(TMapObject)
   private
-    FName: string;
-    FX, FY: Integer;
     FPopulation: Integer;
     FPassengers: Integer;
     FBagsOfMail: Integer;
@@ -27,9 +25,6 @@ type
     property Passengers: Integer read FPassengers write FPassengers;
     property BagsOfMail: Integer read FBagsOfMail write FBagsOfMail;
     property Houses: Word read FHouses;
-    property Name: string read FName;
-    property X: Integer read FX;
-    property Y: Integer read FY;
     property Airport: Integer read FAirport;
     procedure ModifyPopulation(const APopulation: Integer);
     procedure BuildAirport;
@@ -69,9 +64,7 @@ end;
 
 constructor TCity.Create(const AName: string; const AX, AY: Integer);
 begin
-  FName := AName;
-  FX := AX;
-  FY := AY;
+  inherited Create(AName, AX, AY);
   FPopulation := 0;
   ModifyPopulation(Math.RandomRange(250, 1500));
   FPassengers := 0;
@@ -105,9 +98,10 @@ begin
     S[I] := TStringList.Create;
   S[0].DelimitedText :=
     '"Eding","Graning","Vorg","Tra","Nording","Agring","Gran","Funt","Grufing",'
-    + '"Trening","Chend","Drinning"';
+    + '"Trening","Chend","Drinning","Tor"';
   S[1].DelimitedText :=
-    '"ville","burg","ley","field","town","well","bridge","ton","stone","hattan"';
+    '"ville","burg","ley","ly","field","town","well","bridge","ton","stone",' +
+    '"hattan"';
   Result := '';
   for I := 0 to 1 do
   begin

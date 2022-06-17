@@ -2,8 +2,11 @@
 
 interface
 
+uses
+  TransportTycoon.MapObject;
+
 type
-  TVehicle = class(TObject)
+  TVehicle = class(TMapObject)
   private
     FVehicleID: Integer;
   public

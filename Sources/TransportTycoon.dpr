@@ -14,8 +14,7 @@ uses
   TransportTycoon.Aircraft in 'Game\TransportTycoon.Aircraft.pas',
   TransportTycoon.Scenes in 'Scenes\TransportTycoon.Scenes.pas',
   TransportTycoon.Scene.City in 'Scenes\TransportTycoon.Scene.City.pas',
-  TransportTycoon.Scene.BuildInCity
-    in 'Scenes\TransportTycoon.Scene.BuildInCity.pas',
+  TransportTycoon.Scene.BuildInCity in 'Scenes\TransportTycoon.Scene.BuildInCity.pas',
   TransportTycoon.Scene.World in 'Scenes\TransportTycoon.Scene.World.pas',
   TransportTycoon.Scene.Airport in 'Scenes\TransportTycoon.Scene.Airport.pas',
   TransportTycoon.Scene.MainMenu in 'Scenes\TransportTycoon.Scene.MainMenu.pas',
@@ -24,12 +23,12 @@ uses
   TransportTycoon.Scene.Hangar in 'Scenes\TransportTycoon.Scene.Hangar.pas',
   TransportTycoon.Scene.Aircraft in 'Scenes\TransportTycoon.Scene.Aircraft.pas',
   TransportTycoon.Scene.Orders in 'Scenes\TransportTycoon.Scene.Orders.pas',
-  TransportTycoon.Scene.Aircrafts
-    in 'Scenes\TransportTycoon.Scene.Aircrafts.pas',
+  TransportTycoon.Scene.Aircrafts in 'Scenes\TransportTycoon.Scene.Aircrafts.pas',
   TransportTycoon.Scene.Finances in 'Scenes\TransportTycoon.Scene.Finances.pas',
   TransportTycoon.Scene.Towns in 'Scenes\TransportTycoon.Scene.Towns.pas',
   TransportTycoon.Scene.Company in 'Scenes\TransportTycoon.Scene.Company.pas',
-  TransportTycoon.Calendar in 'Game\TransportTycoon.Calendar.pas';
+  TransportTycoon.Calendar in 'Game\TransportTycoon.Calendar.pas',
+  TransportTycoon.MapObject in 'Game\TransportTycoon.MapObject.pas';
 
 var
   Key: Word = 0;

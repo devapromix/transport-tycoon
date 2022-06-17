@@ -50,16 +50,9 @@ const
     );
 
 type
-
-  { TAircraft }
-
   TAircraft = class(TVehicle)
   private
-    FName: string;
-    FH: Integer;
     FT: Integer;
-    FY: Integer;
-    FX: Integer;
     FDistance: Integer;
     FState: string;
     FPassengers: Integer;
@@ -72,14 +65,11 @@ type
     Order: array of TOrder;
     constructor Create(const AName: string; const AX, AY, ID: Integer);
     function Move(const AX, AY: Integer): Boolean; override;
-    property Name: string read FName;
     property Distance: Integer read FDistance;
     property Passengers: Integer read FPassengers write FPassengers;
     property MaxPassengers: Integer read FMaxPassengers;
     property BagsOfMail: Integer read FBagsOfMail write FBagsOfMail;
     property MaxBagsOfMail: Integer read FMaxBagsOfMail;
-    property X: Integer read FX;
-    property Y: Integer read FY;
     property State: string read FState;
     property LastAirportId: Integer write FLastAirportId;
     property OrderIndex: Integer read FOrderIndex;
@@ -147,11 +137,8 @@ end;
 
 constructor TAircraft.Create(const AName: string; const AX, AY, ID: Integer);
 begin
-  FName := AName;
-  FX := AX;
-  FY := AY;
+  inherited Create(AName, AX, AY);
   FT := 0;
-  FH := 0;
   FState := 'Wait';
   FMaxPassengers := AircraftBase[ID].Passengers;
   FPassengers := 0;
@@ -164,7 +151,7 @@ end;
 
 procedure TAircraft.Draw;
 begin
-  terminal_print(FX - Game.Map.Left, FY - Game.Map.Top, '@');
+  terminal_print(X - Game.Map.Left, Y - Game.Map.Top, '@');
 end;
 
 procedure TAircraft.Load;
@@ -189,29 +176,15 @@ end;
 function TAircraft.Move(const AX, AY: Integer): Boolean;
 begin
   FState := 'Fly';
-  if FH = 0 then
-  begin
-    if FX < AX then
-      FX := FX + 1;
-    if FY < AY then
-      FY := FY + 1;
-    if FX > AX then
-      FX := FX - 1;
-    if FY > AY then
-      FY := FY - 1;
-  end
-  else
-  begin
-    if FY > AY then
-      FY := FY - 1;
-    if FX > AX then
-      FX := FX - 1;
-    if FY < AY then
-      FY := FY + 1;
-    if FX < AX then
-      FX := FX + 1;
-  end;
-  Result := (FX <> AX) or (FY <> AY);
+  if X < AX then
+    SetLocation(X + 1, Y);
+  if Y < AY then
+    SetLocation(X, Y + 1);
+  if X > AX then
+    SetLocation(X - 1, Y);
+  if Y > AY then
+    SetLocation(X, Y - 1);
+  Result := (X <> AX) or (Y <> AY);
 end;
 
 function TAircraft.IsOrder(const TownIndex: Integer): Boolean;
@@ -240,7 +213,6 @@ begin
       if FT > (15 - (Game.Map.City[Order[OrderIndex].ID].Airport * 2)) then
       begin
         FT := 0;
-        FH := RandomRange(0, 2);
         Load;
         FOrderIndex := FOrderIndex + 1;
         if (OrderIndex > High(Order)) then
