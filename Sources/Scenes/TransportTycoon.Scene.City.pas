@@ -38,7 +38,8 @@ begin
   DrawText(12, 13, 'Houses: ' + IntToStr(C.Houses));
   DrawButton(34, 12, C.Airport > 0, 'A', 'Airport: ' + AirportSizeStr
     [C.Airport]);
-  if (Game.Map.CurrentCity = Game.Company.TownID) then
+  if (Game.Map.CurrentCity = Game.Company.TownID) and
+    (Game.Map.City[Game.Map.CurrentCity].CompanyHeadquarters > 0) then
     DrawButton(34, 16, 'G', 'Company Headquarters');
   terminal_color('white');
 
@@ -82,7 +83,8 @@ begin
     TK_B:
       Scenes.SetScene(scBuildInCity);
     TK_G:
-      if (Game.Map.CurrentCity = Game.Company.TownID) then
+      if (Game.Map.CurrentCity = Game.Company.TownID) and
+        (Game.Map.City[Game.Map.CurrentCity].CompanyHeadquarters > 0) then
         Scenes.SetScene(scCompany);
   end;
 end;

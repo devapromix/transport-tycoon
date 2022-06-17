@@ -18,7 +18,10 @@ type
     FBagsOfMail: Integer;
     FHouses: Word;
     FAirport: Integer;
+    FCompanyHeadquarters: Integer;
     function GrowModif: Integer;
+  public const
+    HQCost = 250;
   public
     constructor Create(const AName: string; const AX, AY: Integer);
     property Population: Integer read FPopulation;
@@ -26,8 +29,10 @@ type
     property BagsOfMail: Integer read FBagsOfMail write FBagsOfMail;
     property Houses: Word read FHouses;
     property Airport: Integer read FAirport;
+    property CompanyHeadquarters: Integer read FCompanyHeadquarters;
     procedure ModifyPopulation(const APopulation: Integer);
     procedure BuildAirport;
+    procedure BuildCompanyHeadquarters;
     function AirportCost: Integer;
     procedure Grow;
     class function GenName: string;
@@ -62,6 +67,17 @@ begin
   end;
 end;
 
+procedure TCity.BuildCompanyHeadquarters;
+var
+  NeedMoney: Integer;
+begin
+  NeedMoney := HQCost;
+  if (FCompanyHeadquarters = 0) and (Game.Map.CurrentCity = Game.Company.TownID)
+    and (Game.Money >= NeedMoney) then
+    Game.ModifyMoney(ttConstruction, -NeedMoney);
+  FCompanyHeadquarters := 1;
+end;
+
 constructor TCity.Create(const AName: string; const AX, AY: Integer);
 begin
   inherited Create(AName, AX, AY);
@@ -70,6 +86,7 @@ begin
   FPassengers := 0;
   FBagsOfMail := 0;
   FAirport := 0;
+  FCompanyHeadquarters := 0;
 end;
 
 procedure TCity.Grow;

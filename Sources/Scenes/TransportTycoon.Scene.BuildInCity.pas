@@ -37,12 +37,17 @@ begin
   C := Game.Map.City[Game.Map.CurrentCity];
   DrawTitle('BUILD IN ' + C.Name);
 
+  S := '';
   F := (Game.Money >= C.AirportCost) and (C.Airport < 5);
   N := Math.EnsureRange(C.Airport + 1, 0, 5);
-  S := '';
   if C.Airport < 5 then
     S := ' ($' + IntToStr(C.AirportCost) + ')';
   DrawButton(17, 11, F, 'A', 'Build ' + AirportSizeStr[N] + S);
+
+  F := (Game.Money >= TCity.HQCost) and (C.CompanyHeadquarters = 0);
+  if C.CompanyHeadquarters = 0 then
+    DrawButton(17, 17, F, 'G', 'Build Company Headquarters ($' +
+      IntToStr(TCity.HQCost) + ')');
 
   AddButton(19, 'Esc', 'Close');
 
@@ -64,6 +69,8 @@ begin
       case MY of
         11:
           Key := TK_A;
+        17:
+          Key := TK_G;
       end;
   end;
   case Key of
@@ -78,7 +85,15 @@ begin
           Scenes.SetScene(scAirport);
         end;
       end;
-
+    TK_G:
+      begin
+        C := Game.Map.City[Game.Map.CurrentCity];
+        if (Game.Money >= TCity.HQCost) and (C.CompanyHeadquarters = 0) then
+        begin
+          C.BuildCompanyHeadquarters;
+          Scenes.SetScene(scCompany);
+        end;
+      end;
   end;
 end;
 
