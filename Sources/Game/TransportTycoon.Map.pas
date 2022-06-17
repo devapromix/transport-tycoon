@@ -10,6 +10,8 @@ type
     tlSand, tlWater);
 
 const
+  AllTiles = [tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlCity, tlRock,
+    tlSand, tlWater];
   NormalTiles = [tlGrass, tlDirt, tlSand];
 
 type

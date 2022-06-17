@@ -33,8 +33,16 @@ begin
   DrawTitle(6, 'TOWNS');
 
   for I := 0 to Length(Game.Map.City) - 1 do
-    DrawButton(27, I + 8, Chr(Ord('A') + I),
-      Format('%s (%d)', [Game.Map.City[I].Name, Game.Map.City[I].Population]));
+  begin
+    if (Game.Company.TownID = I) then
+      DrawButton(27, I + 8, Chr(Ord('A') + I),
+        Format('%s (%d)', [Game.Map.City[I].Name, Game.Map.City[I].Population]
+        ), 'yellow')
+    else
+      DrawButton(27, I + 8, Chr(Ord('A') + I),
+        Format('%s (%d)', [Game.Map.City[I].Name,
+        Game.Map.City[I].Population]));
+  end;
 
   DrawText(20, Format('World population: %d', [Game.Map.WorldPop]));
 

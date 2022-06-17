@@ -18,9 +18,6 @@ type
   end;
 
 type
-
-  { TScene }
-
   TScene = class(TObject)
   private
     FMX: Integer;
@@ -40,6 +37,8 @@ type
     procedure DrawButton(const Y: Integer; IsActive: Boolean;
       Button, Text: string); overload;
     procedure DrawButton(const X, Y: Integer; Button, Text: string); overload;
+    procedure DrawButton(const X, Y: Integer;
+      Button, Text, Color: string); overload;
     procedure DrawButton(const Y: Integer; Button, Text: string); overload;
     function MakeButton(const IsActive: Boolean;
       const Button, Text: string): string;
@@ -200,6 +199,12 @@ begin
   terminal_print(Width div 2, Y, TK_ALIGN_CENTER,
     Format('[c=light yellow][[%s]][/c] [c=white]%s[/c]', [UpperCase(Button),
     UpperCase(Text)]));
+end;
+
+procedure TScene.DrawButton(const X, Y: Integer; Button, Text, Color: string);
+begin
+  terminal_print(X, Y, Format('[c=light yellow][[%s]][/c] [c=%s]%s[/c]',
+    [UpperCase(Button), Color, UpperCase(Text)]));
 end;
 
 procedure TScene.DrawButton(const X, Y: Integer; IsActive: Boolean;

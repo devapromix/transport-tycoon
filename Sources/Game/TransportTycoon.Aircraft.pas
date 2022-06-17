@@ -86,8 +86,6 @@ type
 implementation
 
 uses
-  BearLibTerminal,
-  Math,
   SysUtils,
   TransportTycoon.Game,
   TransportTycoon.Finances,
@@ -96,7 +94,7 @@ uses
 
 function IsPath(X, Y: Integer): Boolean; stdcall;
 begin
-  Result := True;
+  Result := Game.Map.Cell[X][Y] in AllTiles;
 end;
 
 procedure TAircraft.AddOrder(const TownIndex: Integer; const AName: string;
@@ -177,6 +175,8 @@ var
   NX, NY: Integer;
 begin
   FState := 'Fly';
+  NX := 0;
+  NY := 0;
   if not IsMove(Game.Map.Width, Game.Map.Height, X, Y, AX, AY, @IsPath, NX, NY)
   then
     Exit;
