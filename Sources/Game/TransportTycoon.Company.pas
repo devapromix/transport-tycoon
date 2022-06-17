@@ -5,40 +5,32 @@ interface
 type
   TCompany = class(TObject)
   private
-    FName: string;
     FInavgurated: Integer;
+    FTownID: Integer;
   public
-    constructor Create;
-    destructor Destroy; override;
-    property Name: string read FName;
     property Inavgurated: Integer read FInavgurated;
+    property TownID: Integer read FTownID;
     procedure Clear;
+    function Name: string;
   end;
 
 implementation
 
 uses
+  Math,
   TransportTycoon.City,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Map;
 
 procedure TCompany.Clear;
 begin
-  repeat
-    FName := TCity.GenName;
-  until Game.Map.HasTownName(FName);
-  FName := FName + ' TRANSPORT';
+  FTownID := RandomRange(0, MapNoOfTownsInt[Game.Map.NoOfTowns]);
   FInavgurated := Game.Calendar.Year;
 end;
 
-constructor TCompany.Create;
+function TCompany.Name: string;
 begin
-
-end;
-
-destructor TCompany.Destroy;
-begin
-
-  inherited;
+  Result := Game.Map.City[Game.Company.TownID].Name + ' TRANSPORT';
 end;
 
 end.
