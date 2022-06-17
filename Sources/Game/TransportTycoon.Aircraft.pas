@@ -81,7 +81,6 @@ type
       const AX, AY: Integer); overload;
     procedure DelOrder(const AOrderIndex: Integer);
     function IsOrder(const TownIndex: Integer): Boolean;
-    procedure Draw; override;
   end;
 
 implementation
@@ -152,11 +151,6 @@ begin
   FOrderIndex := 0;
   LastAirportId := 0;
   FDistance := 0;
-end;
-
-procedure TAircraft.Draw;
-begin
-  terminal_print(X - Game.Map.Left, Y - Game.Map.Top, '@');
 end;
 
 procedure TAircraft.Load;

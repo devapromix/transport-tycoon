@@ -3,9 +3,10 @@
 interface
 
 type
-  TGetXYVal = function(X, Y: Integer): Boolean; stdcall;
+  TGetXY = function(X, Y: Integer): Boolean; stdcall;
 
-function IsMove(MapX, MapY, FromX, FromY, ToX, ToY: Integer; Callback: TGetXYVal; var TargetX, TargetY: Integer): Boolean;
+function IsMove(MapX, MapY, FromX, FromY, ToX, ToY: Integer; Callback: TGetXY;
+  var TargetX, TargetY: Integer): Boolean;
 
 implementation
 
@@ -61,7 +62,8 @@ end;
 var
   NOpen: Integer = 0;
 
-function IsMove(MapX, MapY, FromX, FromY, ToX, ToY: Integer; Callback: TGetXYVal; var TargetX, TargetY: Integer): Boolean;
+function IsMove(MapX, MapY, FromX, FromY, ToX, ToY: Integer; Callback: TGetXY;
+  var TargetX, TargetY: Integer): Boolean;
 
   procedure HeapSwap(I, J: Integer);
   var
@@ -98,7 +100,8 @@ function IsMove(MapX, MapY, FromX, FromY, ToX, ToY: Integer; Callback: TGetXYVal
       LargestChild := I;
       if Open[LeftChild].Cost < Open[LargestChild].Cost then
         LargestChild := LeftChild;
-      if (RightChild < NOpen) and (Open[RightChild].Cost < Open[LargestChild].Cost) then
+      if (RightChild < NOpen) and
+        (Open[RightChild].Cost < Open[LargestChild].Cost) then
         LargestChild := RightChild;
       if LargestChild = I then
         Exit;
@@ -113,18 +116,14 @@ function IsMove(MapX, MapY, FromX, FromY, ToX, ToY: Integer; Callback: TGetXYVal
       Exit;
     with Cells[X * MapY + Y] do
     begin
-      if CostWay > 0 then // if OpenID > 0 then
-      begin
-        // if CostWay <= NewCost then
+      if CostWay > 0 then
         Exit;
-      end;
       if not Callback(X, Y) then
         Exit;
       if NOpen >= MAXLEN then
         Exit;
       Open[NOpen].X := X;
       Open[NOpen].Y := Y;
-      // TODO??
       CostWay := NewCost;
       Open[NOpen].Cost := CostWay + Heuristic(abs(X - FromX), abs(Y - FromY));
       Inc(NOpen);
@@ -142,7 +141,6 @@ begin
     Exit;
   if not Callback(ToX, ToY) then
     Exit;
-  // if not Callback(FromX, FromY) then exit;
   if (FromX = ToX) and (FromY = ToY) then
   begin
     Result := True;
@@ -165,7 +163,6 @@ begin
   // exit;
 
   NOpen := 0;
-  // FillChar(Cells, SizeOf(Cells), 0);
   AddToOpen(ToX, ToY, -1, -1, 0);
   repeat
     CurX := Open[0].X;
@@ -173,7 +170,6 @@ begin
     if (CurX = FromX) and (CurY = FromY) then
     begin
       Result := True;
-      // Inc(TOTAL, Open[0].Cost);
       with Cells[CurX * MapY + CurY] do
       begin
         TargetX := Parent.X;
@@ -183,10 +179,7 @@ begin
     end;
     with Cells[CurX * MapY + CurY] do
     begin
-      // IsClosed := True;
-      // inc(CHECKED);
       HeapSwap(0, NOpen - 1);
-      // Open[0] := Open[NOpen-1];
       Dec(NOpen);
       Heapify(0);
       AddToOpen(CurX - 1, CurY, CurX, CurY, CostWay + KNORM);

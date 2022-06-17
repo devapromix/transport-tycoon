@@ -13,12 +13,21 @@ type
   private
     FVehicleID: Integer;
   public
-    procedure Draw; virtual; abstract;
+    procedure Draw;
     procedure Step; virtual; abstract;
     function Move(const AX, AY: Integer): Boolean; virtual; abstract;
     property VehicleID: Integer read FVehicleID write FVehicleID;
   end;
 
 implementation
+
+uses
+  BearLibTerminal,
+  TransportTycoon.Game;
+
+procedure TVehicle.Draw;
+begin
+  terminal_print(X - Game.Map.Left, Y - Game.Map.Top, '@');
+end;
 
 end.
