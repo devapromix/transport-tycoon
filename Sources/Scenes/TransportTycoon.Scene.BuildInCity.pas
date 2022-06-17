@@ -44,9 +44,9 @@ begin
     S := ' ($' + IntToStr(C.AirportCost) + ')';
   DrawButton(17, 11, F, 'A', 'Build ' + AirportSizeStr[N] + S);
 
-  F := (Game.Money >= TCity.HQCost) and (C.CompanyHeadquarters = 0);
-  if C.CompanyHeadquarters = 0 then
-    DrawButton(17, 17, F, 'G', 'Build Company Headquarters ($' +
+  if (Game.Money >= TCity.HQCost) and (C.CompanyHeadquarters = 0) and
+    (Game.Map.CurrentCity = Game.Company.TownID) then
+    DrawButton(17, 17, 'G', 'Build Company Headquarters ($' +
       IntToStr(TCity.HQCost) + ')');
 
   AddButton(19, 'Esc', 'Close');
@@ -88,7 +88,8 @@ begin
     TK_G:
       begin
         C := Game.Map.City[Game.Map.CurrentCity];
-        if (Game.Money >= TCity.HQCost) and (C.CompanyHeadquarters = 0) then
+        if (Game.Map.CurrentCity = Game.Company.TownID) and
+          (Game.Money >= TCity.HQCost) and (C.CompanyHeadquarters = 0) then
         begin
           C.BuildCompanyHeadquarters;
           Scenes.SetScene(scCompany);
