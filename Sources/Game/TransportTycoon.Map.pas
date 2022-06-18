@@ -457,10 +457,7 @@ begin
   Result := -1;
   for I := 0 to Length(City) - 1 do
     if (City[I].X = AX) and (City[I].Y = AY) then
-    begin
-      Result := I;
-      Exit;
-    end;
+      Exit(I);
 end;
 
 function TMap.WorldPop: Integer;

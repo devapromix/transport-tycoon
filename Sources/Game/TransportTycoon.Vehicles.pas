@@ -21,6 +21,7 @@ type
     procedure AddAircraft(const AName: string;
       const ACityIndex, AircraftID: Integer);
     procedure RunningCosts;
+    function GetCurrentAircraft(const AX, AY: Integer): Integer;
     procedure Clear;
   end;
 
@@ -97,6 +98,16 @@ begin
     Aircraft[I].Draw;
 
   terminal_color('white');
+end;
+
+function TVehicles.GetCurrentAircraft(const AX, AY: Integer): Integer;
+var
+  I: Integer;
+begin
+  Result := -1;
+  for I := 0 to Length(Aircraft) - 1 do
+    if ((Aircraft[I].X = AX) and (Aircraft[I].Y = AY)) then
+      Exit(I);
 end;
 
 procedure TVehicles.Step;

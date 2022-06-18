@@ -86,13 +86,19 @@ begin
       DrawText(40, Height - 1,
         Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY]].Name);
   end;
-  if (MY = Self.Height - 2) then ScrollDown;
-  if (MY = 0) then ScrollUp;
-  if (MX = Self.Width - 1) then ScrollRight;
-  if (MX = 0) then ScrollLeft;
+  if (MY = Self.Height - 2) then
+    ScrollDown;
+  if (MY = 0) then
+    ScrollUp;
+  if (MX = Self.Width - 1) then
+    ScrollRight;
+  if (MX = 0) then
+    ScrollLeft;
 end;
 
 procedure TSceneWorld.Update(var Key: Word);
+var
+  VX, VY, I: Integer;
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
@@ -107,14 +113,24 @@ begin
     end
     else
     begin
-      if (Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY] = tlCity) and
-        not Game.IsClearLand then
+      VX := Game.Map.Left + MX;
+      VY := Game.Map.Top + MY;
+      if not Game.IsClearLand then
       begin
-        if Game.Map.EnterInCity(Game.Map.Left + MX, Game.Map.Top + MY) then
+        I := Game.Vehicles.GetCurrentAircraft(VX, VY);
+        if I >= 0 then
+        begin
+          Game.Vehicles.CurrentVehicle := I;
+          Scenes.SetScene(scAircraft);
+          Exit;
+        end;
+      end;
+      if not Game.IsClearLand and (Game.Map.Cell[VX][VY] = tlCity) then
+      begin
+        if Game.Map.EnterInCity(VX, VY) then
           Scenes.SetScene(scCity);
       end;
-      if (Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY]
-        in [tlTree, tlSmallTree, tlBush]) then
+      if (Game.Map.Cell[VX][VY] in [tlTree, tlSmallTree, tlBush]) then
       begin
         if not Game.IsClearLand then
           Exit;
