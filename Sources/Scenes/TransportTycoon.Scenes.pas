@@ -24,6 +24,8 @@ type
     FMY: Integer;
     FButtonsY: Integer;
     FButtons: array [0 .. 4] of TButtonRec;
+    FRX: Integer;
+    FRY: Integer;
   public
     procedure Render; virtual; abstract;
     procedure Update(var Key: Word); virtual; abstract;
@@ -58,6 +60,8 @@ type
     function Height: Integer;
     property MX: Integer read FMX write FMX;
     property MY: Integer read FMY write FMY;
+    property RX: Integer read FRX write FRX;
+    property RY: Integer read FRY write FRY;
     procedure ScrollTo(const X, Y: Integer);
     procedure ScrollUp;
     procedure ScrollDown;
@@ -378,6 +382,8 @@ begin
     begin
       MX := terminal_state(TK_MOUSE_X);
       MY := terminal_state(TK_MOUSE_Y);
+      RX := Game.Map.Left + MX;
+      RY := Game.Map.Top + MY;
       Update(Key);
     end;
 end;
@@ -395,8 +401,7 @@ begin
       terminal_color('white');
       if Game.IsDebug then
       begin
-        terminal_print(0, 0, Format('X:%d, Y:%d', [Game.Map.Left + MX,
-          Game.Map.Top + MY]));
+        terminal_print(0, 0, Format('X:%d, Y:%d', [RX, RY]));
         terminal_print(0, 1, Format('MX:%d, MY:%d', [MX, MY]));
       end;
     end;

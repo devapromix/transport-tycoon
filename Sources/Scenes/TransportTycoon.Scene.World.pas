@@ -10,6 +10,7 @@ type
   private
     procedure ClearLand;
     procedure TownInfo(const X, Y, TownID: Word);
+    procedure AircraftInfo(const X, Y, AircraftID: Word);
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -24,11 +25,22 @@ uses
   TransportTycoon.Game,
   TransportTycoon.Finances;
 
+procedure TSceneWorld.AircraftInfo(const X, Y, AircraftID: Word);
+begin
+  terminal_bkcolor('darkest gray');
+  DrawFrame(X, Y, 40, 5);
+  DrawText(X + 20, Y + 2, '[c=yellow]' + UpperCase(Game.Vehicles.Aircraft
+    [AircraftID].Name) + '[/c]', TK_ALIGN_CENTER);
+  terminal_color('yellow');
+  terminal_bkcolor('gray');
+  terminal_put(MX, MY, '@');
+end;
+
 procedure TSceneWorld.ClearLand;
 begin
   if (Game.Money >= 100) then
   begin
-    Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY] := tlDirt;
+    Game.Map.Cell[RX][RY] := tlDirt;
     Game.ModifyMoney(ttConstruction, -100);
   end;
 end;
@@ -41,6 +53,9 @@ begin
     '[/c]', TK_ALIGN_CENTER);
   DrawText(X + 10, Y + 4, 'Pop.: ' + IntToStr(Game.Map.City[TownID].Population),
     TK_ALIGN_CENTER);
+  terminal_color('yellow');
+  terminal_bkcolor('gray');
+  terminal_put(MX, MY, '#');
 end;
 
 procedure TSceneWorld.Render;
@@ -60,17 +75,15 @@ begin
     terminal_put(MX, MY, $2588);
   end;
   terminal_color('black');
-  terminal_put(MX, MY, Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top +
-    MY]].Tile);
+  terminal_put(MX, MY, Tile[Game.Map.Cell[RX][RY]].Tile);
 
   DrawBar;
 
   if (MY < Self.Height - 1) then
   begin
-    if Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY]].Tile = Tile
-      [tlCity].Tile then
+    if Tile[Game.Map.Cell[RX][RY]].Tile = Tile[tlCity].Tile then
     begin
-      I := Game.Map.GetCurrentCity(Game.Map.Left + MX, Game.Map.Top + MY);
+      I := Game.Map.GetCurrentCity(RX, RY);
       DrawText(40, Height - 1, Game.Map.City[I].Name);
       if (MY < Height - 10) then
         VY := MY + 1
@@ -83,8 +96,25 @@ begin
       TownInfo(VX, VY, I);
     end
     else
-      DrawText(40, Height - 1,
-        Tile[Game.Map.Cell[Game.Map.Left + MX][Game.Map.Top + MY]].Name);
+    begin
+      I := Game.Vehicles.GetCurrentAircraft(RX, RY);
+      if I >= 0 then
+      begin
+        DrawText(40, Height - 1, Format('Aircraft #%d',
+          [Game.Vehicles.Aircraft[I].VehicleID + 1]));
+        if (MY < Height - 10) then
+          VY := MY + 1
+        else
+          VY := MY - 7;
+        if (MX < Width - (Width div 2)) then
+          VX := MX + 1
+        else
+          VX := MX - 20;
+        AircraftInfo(VX, VY, I);
+      end
+      else
+        DrawText(40, Height - 1, Tile[Game.Map.Cell[RX][RY]].Name);
+    end;
   end;
   if (MY = Self.Height - 2) then
     ScrollDown;
@@ -98,7 +128,7 @@ end;
 
 procedure TSceneWorld.Update(var Key: Word);
 var
-  VX, VY, I: Integer;
+  I: Integer;
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
@@ -113,17 +143,15 @@ begin
     end
     else
     begin
-      VX := Game.Map.Left + MX;
-      VY := Game.Map.Top + MY;
       if not Game.IsClearLand then
       begin
-        if (Game.Map.Cell[VX][VY] = tlCity) then
+        if (Game.Map.Cell[RX][RY] = tlCity) then
         begin
-          if Game.Map.EnterInCity(VX, VY) then
+          if Game.Map.EnterInCity(RX, RY) then
             Scenes.SetScene(scCity);
-            Exit;
+          Exit;
         end;
-        I := Game.Vehicles.GetCurrentAircraft(VX, VY);
+        I := Game.Vehicles.GetCurrentAircraft(RX, RY);
         if I >= 0 then
         begin
           Game.Vehicles.CurrentVehicle := I;
@@ -131,7 +159,7 @@ begin
           Exit;
         end;
       end;
-      if (Game.Map.Cell[VX][VY] in [tlTree, tlSmallTree, tlBush]) then
+      if (Game.Map.Cell[RX][RY] in [tlTree, tlSmallTree, tlBush]) then
       begin
         if not Game.IsClearLand then
           Exit;
