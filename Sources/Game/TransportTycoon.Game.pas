@@ -29,7 +29,7 @@ type
   public const
     MaxLoan = 200000;
     StartMoney = MaxLoan div 2;
-    Version = '0.1';
+    Version = '0.2';
   public
     constructor Create;
     destructor Destroy; override;
