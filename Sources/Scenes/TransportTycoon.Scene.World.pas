@@ -117,6 +117,12 @@ begin
       VY := Game.Map.Top + MY;
       if not Game.IsClearLand then
       begin
+        if (Game.Map.Cell[VX][VY] = tlCity) then
+        begin
+          if Game.Map.EnterInCity(VX, VY) then
+            Scenes.SetScene(scCity);
+            Exit;
+        end;
         I := Game.Vehicles.GetCurrentAircraft(VX, VY);
         if I >= 0 then
         begin
@@ -124,11 +130,6 @@ begin
           Scenes.SetScene(scAircraft);
           Exit;
         end;
-      end;
-      if not Game.IsClearLand and (Game.Map.Cell[VX][VY] = tlCity) then
-      begin
-        if Game.Map.EnterInCity(VX, VY) then
-          Scenes.SetScene(scCity);
       end;
       if (Game.Map.Cell[VX][VY] in [tlTree, tlSmallTree, tlBush]) then
       begin
