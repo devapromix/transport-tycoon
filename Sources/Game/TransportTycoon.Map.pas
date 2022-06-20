@@ -28,9 +28,9 @@ const
     //
     (Name: 'Dirt'; Tile: ':'; Color: 'darker yellow'),
     //
-    (Name: 'Tree'; Tile: 'T'; Color: 'green'),
+    (Name: 'Oak'; Tile: 'f'; Color: 'green'),
     //
-    (Name: 'Small Tree'; Tile: 't'; Color: 'dark green'),
+    (Name: 'Pine'; Tile: 't'; Color: 'dark green'),
     //
     (Name: 'Bush'; Tile: 'b'; Color: 'dark green'),
     //

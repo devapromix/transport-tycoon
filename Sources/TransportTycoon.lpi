@@ -31,7 +31,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="26">
+    <Units Count="30">
       <Unit0>
         <Filename Value="TransportTycoon.dpr"/>
         <IsPartOfProject Value="True"/>
@@ -136,6 +136,22 @@
         <Filename Value="Scenes\TransportTycoon.Scene.Company.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit25>
+      <Unit26>
+        <Filename Value="Game\TransportTycoon.Calendar.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit26>
+      <Unit27>
+        <Filename Value="Game\TransportTycoon.MapObject.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit27>
+      <Unit28>
+        <Filename Value="Game\TransportTycoon.PathFind.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit28>
+      <Unit29>
+        <Filename Value="Game\TransportTycoon.Industries.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit29>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

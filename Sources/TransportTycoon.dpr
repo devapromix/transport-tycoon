@@ -29,7 +29,8 @@ uses
   TransportTycoon.Scene.Company in 'Scenes\TransportTycoon.Scene.Company.pas',
   TransportTycoon.Calendar in 'Game\TransportTycoon.Calendar.pas',
   TransportTycoon.MapObject in 'Game\TransportTycoon.MapObject.pas',
-  TransportTycoon.PathFind in 'Game\TransportTycoon.PathFind.pas';
+  TransportTycoon.PathFind in 'Game\TransportTycoon.PathFind.pas',
+  TransportTycoon.Industries in 'Game\TransportTycoon.Industries.pas';
 
 var
   Key: Word = 0;
