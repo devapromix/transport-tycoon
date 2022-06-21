@@ -3,15 +3,18 @@
 interface
 
 uses
-  TransportTycoon.City;
+  TransportTycoon.City,
+  TransportTycoon.Industries;
 
 type
   Tiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlCity, tlRock,
-    tlSand, tlWater);
+    tlSand, tlWater, tlForestIndustry, tlSawmillIndustry);
 
 const
   AllTiles = [tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlCity, tlRock,
-    tlSand, tlWater];
+    tlSand, tlWater, tlForestIndustry];
+
+const
   NormalTiles = [tlGrass, tlDirt, tlSand];
 
 type
@@ -40,7 +43,11 @@ const
     //
     (Name: 'Sand'; Tile: ':'; Color: 'yellow'),
     //
-    (Name: 'Water'; Tile: '='; Color: 'blue')
+    (Name: 'Water'; Tile: '='; Color: 'blue'),
+    //
+    (Name: 'Forest'; Tile: 'F'; Color: 'lighter yellow'),
+    //
+    (Name: 'Sawmill'; Tile: 'S'; Color: 'lighter yellow')
     //
     );
 
@@ -91,6 +98,7 @@ type
   public
     Cell: array of array of Tiles;
     City: array of TCity;
+    Industry: array of TIndustry;
     constructor Create;
     destructor Destroy; override;
     property Top: Word read FTop write FTop;
@@ -260,7 +268,9 @@ procedure TMap.Gen;
 var
   X, Y, I, J, N, D: Integer;
   TownName: string;
+  IndustryType: TIndustryType;
 begin
+  // Terrain
   Self.Clear;
   D := 0;
   if (SeaLevel >= msNormal) then
@@ -340,7 +350,6 @@ begin
           Cell[X][Y] := tlWater;
       end;
     end;
-    //
     for Y := 1 to FHeight - 2 do
     begin
       for X := 1 to FWidth - 2 do
@@ -352,7 +361,7 @@ begin
       end;
     end;
   end;
-  //
+  // Towns
   for I := 0 to Length(City) - 1 do
     City[I].Free;
   SetLength(City, 0);
@@ -394,6 +403,33 @@ begin
     Cell[X][Y] := tlCity;
     SetLength(City, I + 1);
     City[I] := TCity.Create(TownName, X, Y);
+  end;
+  // Industries
+  I := 0;
+  for IndustryType := Succ(Low(TIndustryType)) to High(TIndustryType) do
+  begin
+    repeat
+      X := (Math.RandomRange(1, FWidth div 10) * 10) +
+        (Math.RandomRange(0, 10) - 5);
+      Y := (Math.RandomRange(1, FHeight div 10) * 10) +
+        (Math.RandomRange(0, 10) - 5);
+    until not HasTownLocation(X, Y) and HasNormalTile(X, Y);
+    case IndustryType of
+      inForest:
+        begin
+          SetLength(Industry, I + 1);
+          Cell[X][Y] := tlForestIndustry;
+          Industry[I] := TForestIndustry.Create(X, Y);
+          Inc(I);
+        end;
+      inSawmill:
+        begin
+          SetLength(Industry, I + 1);
+          Cell[X][Y] := tlSawmillIndustry;
+          Industry[I] := TSawmillIndustry.Create(X, Y);
+          Inc(I);
+        end;
+    end;
   end;
 end;
 
