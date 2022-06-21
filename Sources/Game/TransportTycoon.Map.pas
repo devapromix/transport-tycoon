@@ -106,6 +106,7 @@ type
     procedure AddTree(const AX, AY: Integer);
     procedure Resize;
     function SizeCoef: Integer;
+    function MapIndCount: Integer;
   public
     Cell: array of array of Tiles;
     City: array of TCity;
@@ -209,6 +210,15 @@ begin
   Result := (Ord(Size) + 1) * (Ord(Size) + 1);
 end;
 
+function TMap.MapIndCount: Integer;
+begin
+  Result := MapNoOfInd[NoOfInd];
+  if (Size = msTiny) then
+    Result := MapNoOfInd[niVeryLow];
+  if (Size = msSmall) then
+    Result := MapNoOfInd[niLow];
+end;
+
 function TMap.HasNormalTile(const AX, AY: Integer): Boolean;
 begin
   Result := Cell[AX][AY] in NormalTiles;
@@ -221,7 +231,8 @@ begin
   Result := False;
   for I := 0 to Length(Industry) - 1 do
     if ((Industry[I].X = AX) and (Industry[I].Y = AY)) or
-      (GetDist(Industry[I].X, Industry[I].Y, AX, AY) < (Ord(Size) + 1) * 2) then
+      (GetDist(Industry[I].X, Industry[I].Y, AX, AY) <
+      (Self.Width div 10)) then
       Exit(True);
 end;
 
@@ -427,7 +438,7 @@ begin
   end;
   // Industries
   I := 0;
-  for J := 0 to MapNoOfInd[NoOfInd] - 1 do
+  for J := 0 to MapIndCount - 1 do
   begin
   for IndustryType := Succ(Low(TIndustryType)) to High(TIndustryType) do
   begin
@@ -436,7 +447,7 @@ begin
         (Math.RandomRange(0, 10) - 5);
       Y := (Math.RandomRange(1, FHeight div 10) * 10) +
         (Math.RandomRange(0, 10) - 5);
-    until not HasTownLocation(X, Y) and HasNormalTile(X, Y) and
+    until HasNormalTile(X, Y) and not HasTownLocation(X, Y) and
       not HasIndustryLocation(X, Y);
     if IndustryType = inNone then
       Continue;
