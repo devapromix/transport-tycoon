@@ -9,7 +9,7 @@ type
   TCargo = (cgNone, cgGoods, cgCoal, cgWood);
 
 type
-  TIndustryType = (inNone, inPowerPlant, inCoalMine, inForest, inSawmill);
+  TIndustryType = (inNone, inCoalMine, inPowerPlant, inForest, inSawmill);
 
 type
 
@@ -49,6 +49,26 @@ type
     constructor Create(const AX, AY: Integer);
   end;
 
+type
+
+  { TCoalMineIndustry }
+
+  TCoalMineIndustry = class(TIndustry)
+  private
+  public
+    constructor Create(const AX, AY: Integer);
+  end;
+
+type
+
+  { TPowerPlantIndustry }
+
+  TPowerPlantIndustry = class(TIndustry)
+  private
+  public
+    constructor Create(const AX, AY: Integer);
+  end;
+
 implementation
 
 uses
@@ -59,9 +79,9 @@ uses
 constructor TIndustry.Create(const AName: string; const AX, AY: Integer);
 begin
   inherited Create(AName, AX, AY);
+  FIndustryType := inNone;
   FAccepts := cgNone;
   FProduces := cgNone;
-  FIndustryType := inNone;
   FProducesAmount := 0;
 end;
 
@@ -70,8 +90,8 @@ end;
 constructor TForestIndustry.Create(const AX, AY: Integer);
 begin
   inherited Create('Forest', AX, AY);
-  FProduces := cgWood;
   FIndustryType := inForest;
+  FProduces := cgWood;
 end;
 
 { TSawmillIndustry }
@@ -79,9 +99,27 @@ end;
 constructor TSawmillIndustry.Create(const AX, AY: Integer);
 begin
   inherited Create('Sawmill', AX, AY);
+  FIndustryType := inSawmill;
   FAccepts := cgWood;
   FProduces := cgGoods;
-  FIndustryType := inSawmill;
+end;
+
+{ TCoalMineIndustry }
+
+constructor TCoalMineIndustry.Create(const AX, AY: Integer);
+begin
+  inherited Create('Coal Mine', AX, AY);
+  FIndustryType := inCoalMine;
+  FProduces := cgCoal;
+end;
+
+{ TPowerPlantIndustry }
+
+constructor TPowerPlantIndustry.Create(const AX, AY: Integer);
+begin
+  inherited Create('Power Plant', AX, AY);
+  FIndustryType := inPowerPlant;
+  FAccepts := cgCoal;
 end;
 
 end.

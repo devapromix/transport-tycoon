@@ -8,11 +8,13 @@ uses
 
 type
   Tiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlCity, tlRock,
-    tlSand, tlWater, tlForestIndustry, tlSawmillIndustry);
+    tlSand, tlWater, tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
+    tlPowerPlantIndustry);
 
 const
   AllTiles = [tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlCity, tlRock,
-    tlSand, tlWater, tlForestIndustry];
+    tlSand, tlWater, tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
+    tlPowerPlantIndustry];
 
 const
   NormalTiles = [tlGrass, tlDirt, tlSand];
@@ -47,7 +49,11 @@ const
     //
     (Name: 'Forest'; Tile: 'F'; Color: 'lighter yellow'),
     //
-    (Name: 'Sawmill'; Tile: 'S'; Color: 'lighter yellow')
+    (Name: 'Sawmill'; Tile: 'S'; Color: 'lighter yellow'),
+    //
+    (Name: 'Coal Mine'; Tile: 'C'; Color: 'lighter yellow'),
+    //
+    (Name: 'Power Plant'; Tile: 'P'; Color: 'lighter yellow')
     //
     );
 
@@ -75,20 +81,25 @@ const
   MapNoOfTownsStr: array [1 .. 4] of string = ('Very Low', 'Low',
     'Normal', 'High');
   MapNoOfTownsInt: array [1 .. 4] of Integer = (3, 5, 8, 11);
+  MapNoOfInd: array [TMapNoOfInd] of Integer = (1, 2, 3, 5);
 
 type
+
+  { TMap }
+
   TMap = class(TObject)
   private
+    FNoOfInd: TMapNoOfInd;
     FTop: Word;
     FWidth: Word;
     FHeight: Word;
     FLeft: Word;
     FCurrentCity: Integer;
-    FNoOfInd: TMapNoOfInd;
     FNoOfTowns: Integer;
     FRivers: TMapRivers;
     FSeaLevel: TMapSeaLevel;
     FSize: TMapSize;
+    function HasIndustryLocation(const AX, AY: Integer): Boolean;
     function HasTownLocation(const AX, AY: Integer): Boolean;
     function HasNormalTile(const AX, AY: Integer): Boolean;
     procedure AddSpot(const AX, AY: Integer; const ATile: Tiles);
@@ -133,6 +144,8 @@ uses
   Math,
   SysUtils,
   BearLibTerminal;
+
+{ TMap }
 
 function TMap.HasTownName(const ATownName: string): Boolean;
 var
@@ -201,6 +214,17 @@ begin
   Result := Cell[AX][AY] in NormalTiles;
 end;
 
+function TMap.HasIndustryLocation(const AX, AY: Integer): Boolean;
+var
+  I: Integer;
+begin
+  Result := False;
+  for I := 0 to Length(Industry) - 1 do
+    if ((Industry[I].X = AX) and (Industry[I].Y = AY)) or
+      (GetDist(Industry[I].X, Industry[I].Y, AX, AY) < (Ord(Size) + 1) * 2) then
+      Exit(True);
+end;
+
 function TMap.HasTownLocation(const AX, AY: Integer): Boolean;
 var
   I: Integer;
@@ -209,10 +233,7 @@ begin
   for I := 0 to Length(City) - 1 do
     if ((City[I].X = AX) and (City[I].Y = AY)) or
       (GetDist(City[I].X, City[I].Y, AX, AY) < 15) then
-    begin
-      Result := True;
-      Exit;
-    end;
+      Exit(True);
 end;
 
 constructor TMap.Create;
@@ -406,6 +427,8 @@ begin
   end;
   // Industries
   I := 0;
+  for J := 0 to MapNoOfInd[NoOfInd] - 1 do
+  begin
   for IndustryType := Succ(Low(TIndustryType)) to High(TIndustryType) do
   begin
     repeat
@@ -413,8 +436,25 @@ begin
         (Math.RandomRange(0, 10) - 5);
       Y := (Math.RandomRange(1, FHeight div 10) * 10) +
         (Math.RandomRange(0, 10) - 5);
-    until not HasTownLocation(X, Y) and HasNormalTile(X, Y);
+    until not HasTownLocation(X, Y) and HasNormalTile(X, Y) and
+      not HasIndustryLocation(X, Y);
+    if IndustryType = inNone then
+      Continue;
     case IndustryType of
+      inCoalMine:
+        begin
+          SetLength(Industry, I + 1);
+          Cell[X][Y] := tlCoalMineIndustry;
+          Industry[I] := TCoalMineIndustry.Create(X, Y);
+          Inc(I);
+        end;
+      inPowerPlant:
+        begin
+          SetLength(Industry, I + 1);
+          Cell[X][Y] := tlPowerPlantIndustry;
+          Industry[I] := TPowerPlantIndustry.Create(X, Y);
+          Inc(I);
+        end;
       inForest:
         begin
           SetLength(Industry, I + 1);
@@ -430,6 +470,7 @@ begin
           Inc(I);
         end;
     end;
+  end;
   end;
 end;
 
