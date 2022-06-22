@@ -6,10 +6,14 @@ uses
   TransportTycoon.Scenes;
 
 type
+
+  { TSceneWorld }
+
   TSceneWorld = class(TScene)
   private
     procedure ClearLand;
     procedure TownInfo(const X, Y, TownID: Word);
+    procedure IndustryInfo(const X, Y, IndustryID: Word);
     procedure AircraftInfo(const X, Y, AircraftID: Word);
   public
     procedure Render; override;
@@ -24,6 +28,8 @@ uses
   TransportTycoon.Map,
   TransportTycoon.Game,
   TransportTycoon.Finances;
+
+{ TSceneWorld }
 
 procedure TSceneWorld.AircraftInfo(const X, Y, AircraftID: Word);
 begin
@@ -56,6 +62,17 @@ begin
   terminal_color('yellow');
   terminal_bkcolor('gray');
   terminal_put(MX, MY, '#');
+end;
+
+procedure TSceneWorld.IndustryInfo(const X, Y, IndustryID: Word);
+begin
+  terminal_bkcolor('darkest gray');
+  DrawFrame(X, Y, 20, 5);
+  DrawText(X + 10, Y + 2, '[c=yellow]' + UpperCase(Game.Map.Industry
+    [IndustryID].Name) + '[/c]', TK_ALIGN_CENTER);
+  terminal_color('yellow');
+  terminal_bkcolor('gray');
+  terminal_put(MX, MY, Tile[Game.Map.Cell[MX][MY]].Tile);
 end;
 
 procedure TSceneWorld.Render;
@@ -94,6 +111,20 @@ begin
       else
         VX := MX - 20;
       TownInfo(VX, VY, I);
+    end else
+    if Game.Map.Cell[RX][RY] in IndustryTiles then
+    begin
+      I := Game.Map.GetCurrentIndustry(RX, RY);
+      DrawText(40, Height - 1, Game.Map.Industry[I].Name);
+      if (MY < Height - 10) then
+        VY := MY + 1
+      else
+        VY := MY - 7;
+      if (MX < Width - (Width div 2)) then
+        VX := MX + 1
+      else
+        VX := MX - 20;
+      IndustryInfo(VX, VY, I);
     end
     else
     begin
