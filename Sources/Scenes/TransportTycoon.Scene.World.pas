@@ -151,6 +151,12 @@ begin
             Scenes.SetScene(scCity);
           Exit;
         end;
+        if (Game.Map.Cell[RX][RY] in IndustryTiles) then
+        begin
+          if Game.Map.EnterInIndustry(RX, RY) then
+            Scenes.SetScene(scIndustry);
+          Exit;
+        end;
         I := Game.Vehicles.GetCurrentAircraft(RX, RY);
         if I >= 0 then
         begin

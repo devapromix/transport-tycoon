@@ -18,6 +18,8 @@ const
 
 const
   NormalTiles = [tlGrass, tlDirt, tlSand];
+  IndustryTiles = [tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
+    tlPowerPlantIndustry];
 
 type
   TTile = record
@@ -99,6 +101,7 @@ type
     FRivers: TMapRivers;
     FSeaLevel: TMapSeaLevel;
     FSize: TMapSize;
+    FCurrentIndustry: Integer;
     function HasIndustryLocation(const AX, AY: Integer): Boolean;
     function HasTownLocation(const AX, AY: Integer): Boolean;
     function HasNormalTile(const AX, AY: Integer): Boolean;
@@ -118,6 +121,8 @@ type
     property Height: Word read FHeight;
     property Width: Word read FWidth;
     property CurrentCity: Integer read FCurrentCity write FCurrentCity;
+    property CurrentIndustry: Integer read FCurrentIndustry
+      write FCurrentIndustry;
     property Size: TMapSize read FSize write FSize;
     property SeaLevel: TMapSeaLevel read FSeaLevel write FSeaLevel;
     property Rivers: TMapRivers read FRivers write FRivers;
@@ -129,7 +134,9 @@ type
     procedure Gen;
     procedure CityGrows;
     function GetCurrentCity(const AX, AY: Integer): Integer;
+    function GetCurrentIndustry(const AX, AY: Integer): Integer;
     function EnterInCity(const AX, AY: Integer): Boolean;
+    function EnterInIndustry(const AX, AY: Integer): Boolean;
     function WorldPop: Integer;
     function GetDist(const X1, Y1, X2, Y2: Integer): Integer;
     procedure NextNoOfInd;
@@ -293,6 +300,12 @@ function TMap.EnterInCity(const AX, AY: Integer): Boolean;
 begin
   FCurrentCity := GetCurrentCity(AX, AY);
   Result := FCurrentCity >= 0;
+end;
+
+function TMap.EnterInIndustry(const AX, AY: Integer): Boolean;
+begin
+  FCurrentIndustry := GetCurrentIndustry(AX, AY);
+  Result := FCurrentIndustry >= 0;
 end;
 
 procedure TMap.Gen;
@@ -544,6 +557,16 @@ begin
   Result := -1;
   for I := 0 to Length(City) - 1 do
     if (City[I].X = AX) and (City[I].Y = AY) then
+      Exit(I);
+end;
+
+function TMap.GetCurrentIndustry(const AX, AY: Integer): Integer;
+var
+  I: Integer;
+begin
+  Result := -1;
+  for I := 0 to Length(Industry) - 1 do
+    if (Industry[I].X = AX) and (Industry[I].Y = AY) then
       Exit(I);
 end;
 

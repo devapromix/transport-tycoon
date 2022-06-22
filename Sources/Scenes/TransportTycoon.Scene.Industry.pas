@@ -1,4 +1,4 @@
-﻿unit TransportTycoon.Scene.Company;
+﻿unit TransportTycoon.Scene.Industry;
 
 interface
 
@@ -6,7 +6,10 @@ uses
   TransportTycoon.Scenes;
 
 type
-  TSceneCompany = class(TScene)
+
+  { TSceneIndustry }
+
+  TSceneIndustry = class(TScene)
   private
 
   public
@@ -19,26 +22,34 @@ implementation
 uses
   BearLibTerminal,
   SysUtils,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Industries;
 
-procedure TSceneCompany.Render;
+{ TSceneIndustry }
+
+var
+  Industry: TIndustry;
+
+procedure TSceneIndustry.Render;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
-  DrawFrame(20, 8, 40, 13);
-  DrawTitle(10, Game.Company.Name);
-  DrawText(22, 12, 'Inavgurated: ' + IntToStr(Game.Company.Inavgurated));
+  Industry := Game.Map.Industry[Game.Map.CurrentIndustry];
 
-  if (Game.Map.City[Game.Company.TownID].CompanyHeadquarters > 0) then
-    DrawText(22, 16, 'Company headquarters in ' + Game.Map.City
-      [Game.Company.TownID].Name);
+  DrawFrame(20, 8, 40, 13);
+  DrawTitle(10, Industry.Name);
+
+  with Industry do
+  begin
+
+  end;
 
   AddButton(18, 'Esc', 'Close');
 
   DrawBar;
 end;
 
-procedure TSceneCompany.Update(var Key: Word);
+procedure TSceneIndustry.Update(var Key: Word);
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin

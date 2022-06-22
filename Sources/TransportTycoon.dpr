@@ -30,7 +30,8 @@ uses
   TransportTycoon.Calendar in 'Game\TransportTycoon.Calendar.pas',
   TransportTycoon.MapObject in 'Game\TransportTycoon.MapObject.pas',
   TransportTycoon.PathFind in 'Game\TransportTycoon.PathFind.pas',
-  TransportTycoon.Industries in 'Game\TransportTycoon.Industries.pas';
+  TransportTycoon.Industries in 'Game\TransportTycoon.Industries.pas',
+  TransportTycoon.Scene.Industry in 'Scenes\TransportTycoon.Scene.Industry.pas';
 
 var
   Key: Word = 0;
