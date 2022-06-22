@@ -40,9 +40,8 @@ begin
   DrawText(7, 13, 'Bags of mail: ' + IntToStr(C.BagsOfMail));
 
   for I := 0 to Length(Game.Vehicles.Aircraft) - 1 do
-    DrawButton(37, I + 11, (Game.Vehicles.Aircraft[I].X = C.X) and
-      (Game.Vehicles.Aircraft[I].Y = C.Y), Chr(Ord('A') + I),
-      Game.Vehicles.Aircraft[I].Name);
+    DrawButton(37, I + 11, Game.Vehicles.Aircraft[I].InLocation(C.X, C.Y),
+      Chr(Ord('A') + I), Game.Vehicles.Aircraft[I].Name);
 
   AddButton(19, 'H', 'Hangar');
   AddButton(19, 'Esc', 'Close');
@@ -80,8 +79,7 @@ begin
     TK_A .. TK_G:
       begin
         I := Key - TK_A;
-        if (Game.Vehicles.Aircraft[I].X = C.X) and
-          (Game.Vehicles.Aircraft[I].Y = C.Y) then
+        if Game.Vehicles.Aircraft[I].InLocation(C.X, C.Y) then
         begin
           Game.Vehicles.CurrentVehicle := I;
           Scenes.SetScene(scAircraft);
