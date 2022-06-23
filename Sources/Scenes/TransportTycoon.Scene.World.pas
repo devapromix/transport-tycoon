@@ -38,9 +38,7 @@ begin
   DrawFrame(X, Y, 40, 5);
   DrawText(X + 20, Y + 2, '[c=yellow]' + UpperCase(Game.Vehicles.Aircraft
     [AircraftID].Name) + '[/c]', TK_ALIGN_CENTER);
-  terminal_color('yellow');
-  terminal_bkcolor('gray');
-  terminal_put(MX, MY, '@');
+  DrawText(MX, MY, '@', 'yellow', 'gray');
 end;
 
 procedure TSceneWorld.ClearLand;
@@ -65,9 +63,7 @@ begin
     '[/c]', TK_ALIGN_CENTER);
   DrawText(X + 10, Y + 4, 'Pop.: ' + IntToStr(Game.Map.City[TownID].Population),
     TK_ALIGN_CENTER);
-  terminal_color('yellow');
-  terminal_bkcolor('gray');
-  terminal_put(MX, MY, '#');
+  DrawText(MX, MY, '#', 'yellow', 'gray');
 end;
 
 procedure TSceneWorld.IndustryInfo(const X, Y, IndustryID: Word);
@@ -76,9 +72,7 @@ begin
   DrawFrame(X, Y, 20, 5);
   DrawText(X + 10, Y + 2, '[c=yellow]' + UpperCase(Game.Map.Industry[IndustryID]
     .Name) + '[/c]', TK_ALIGN_CENTER);
-  terminal_color('yellow');
-  terminal_bkcolor('gray');
-  terminal_put(MX, MY, Tile[Game.Map.Cell[MX][MY]].Tile);
+  DrawText(MX, MY, Tile[Game.Map.Cell[MX][MY]].Tile, 'yellow', 'gray');
 end;
 
 procedure TSceneWorld.Render;

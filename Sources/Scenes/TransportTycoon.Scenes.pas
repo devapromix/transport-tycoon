@@ -29,6 +29,8 @@ type
   public
     procedure Render; virtual; abstract;
     procedure Update(var Key: Word); virtual; abstract;
+    procedure DrawText(const X, Y: Integer;
+      Text, Color, BkColor: string); overload;
     procedure DrawText(const X, Y: Integer; Text: string;
       const Align: Integer = TK_ALIGN_LEFT); overload;
     procedure DrawText(const Y: Integer; Text: string); overload;
@@ -126,6 +128,13 @@ end;
 procedure TScene.DrawText(const Y: Integer; Text: string);
 begin
   terminal_print(Width div 2, Y, TK_ALIGN_CENTER, Text);
+end;
+
+procedure TScene.DrawText(const X, Y: Integer; Text, Color, BkColor: string);
+begin
+  terminal_color(Color);
+  terminal_bkcolor(BkColor);
+  terminal_print(X, Y, Text);
 end;
 
 procedure TScene.DrawTitle(const Title: string);
