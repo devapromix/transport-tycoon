@@ -7,12 +7,12 @@ uses
   TransportTycoon.Industries;
 
 type
-  Tiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlCity, tlRock, tlSand,
+  Tiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlTown, tlRock, tlSand,
     tlWater, tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
     tlPowerPlantIndustry);
 
 const
-  AllTiles = [tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlCity, tlRock,
+  AllTiles = [tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlTown, tlRock,
     tlSand, tlWater, tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
     tlPowerPlantIndustry];
 
@@ -97,7 +97,7 @@ type
     FWidth: Word;
     FHeight: Word;
     FLeft: Word;
-    FCurrentCity: Integer;
+    FCurrentTown: Integer;
     FNoOfTowns: Integer;
     FRivers: TMapRivers;
     FSeaLevel: TMapSeaLevel;
@@ -121,7 +121,7 @@ type
     property Left: Word read FLeft write FLeft;
     property Height: Word read FHeight;
     property Width: Word read FWidth;
-    property CurrentCity: Integer read FCurrentCity write FCurrentCity;
+    property CurrentTown: Integer read FCurrentTown write FCurrentTown;
     property CurrentIndustry: Integer read FCurrentIndustry
       write FCurrentIndustry;
     property Size: TMapSize read FSize write FSize;
@@ -312,8 +312,8 @@ end;
 
 function TMap.EnterInCity(const AX, AY: Integer): Boolean;
 begin
-  FCurrentCity := GetCurrentCity(AX, AY);
-  Result := FCurrentCity >= 0;
+  FCurrentTown := GetCurrentCity(AX, AY);
+  Result := FCurrentTown >= 0;
 end;
 
 function TMap.EnterInIndustry(const AX, AY: Integer): Boolean;
@@ -458,7 +458,7 @@ begin
 
     until not HasTownName(TownName) and not HasTownLocation(X, Y) and
       HasNormalTile(X, Y);
-    Cell[X][Y] := tlCity;
+    Cell[X][Y] := tlTown;
     SetLength(Town, I + 1);
     Town[I] := TTown.Create(TownName, X, Y);
   end;

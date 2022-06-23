@@ -31,7 +31,7 @@ begin
 
   DrawFrame(5, 7, 70, 15);
 
-  C := Game.Map.Town[Game.Map.CurrentCity];
+  C := Game.Map.Town[Game.Map.CurrentTown];
   DrawTitle(C.Name + ' Airport');
 
   terminal_color('white');
@@ -54,7 +54,7 @@ var
   C: TTown;
   I: Integer;
 begin
-  C := Game.Map.Town[Game.Map.CurrentCity];
+  C := Game.Map.Town[Game.Map.CurrentTown];
   if (Key = TK_MOUSE_LEFT) then
   begin
     if (MX >= 37) and (MX <= 71) then
@@ -75,7 +75,7 @@ begin
   end;
   case Key of
     TK_ESCAPE:
-      Scenes.SetScene(scCity);
+      Scenes.SetScene(scTown);
     TK_A .. TK_G:
       begin
         I := Key - TK_A;

@@ -122,7 +122,7 @@ begin
 
   if (MY < Self.Height - 1) then
   begin
-    if Tile[Game.Map.Cell[RX][RY]].Tile = Tile[tlCity].Tile then
+    if Tile[Game.Map.Cell[RX][RY]].Tile = Tile[tlTown].Tile then
       TownInfo(Game.Map.GetCurrentCity(RX, RY))
     else if Game.Map.Cell[RX][RY] in IndustryTiles then
       IndustryInfo(Game.Map.GetCurrentIndustry(RX, RY))
@@ -164,10 +164,10 @@ begin
     begin
       if not Game.IsClearLand then
       begin
-        if (Game.Map.Cell[RX][RY] = tlCity) then
+        if (Game.Map.Cell[RX][RY] = tlTown) then
         begin
           if Game.Map.EnterInCity(RX, RY) then
-            Scenes.SetScene(scCity);
+            Scenes.SetScene(scTown);
           Exit;
         end;
         if (Game.Map.Cell[RX][RY] in IndustryTiles) then

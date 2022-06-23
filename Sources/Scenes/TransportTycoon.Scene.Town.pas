@@ -7,7 +7,7 @@ uses
 
 type
 
-  TSceneCity = class(TScene)
+  TSceneTown = class(TScene)
   private
 
   public
@@ -23,7 +23,7 @@ uses
   TransportTycoon.Game,
   TransportTycoon.Town;
 
-procedure TSceneCity.Render;
+procedure TSceneTown.Render;
 var
   C: TTown;
 begin
@@ -31,15 +31,15 @@ begin
 
   DrawFrame(10, 8, 60, 13);
 
-  C := Game.Map.Town[Game.Map.CurrentCity];
+  C := Game.Map.Town[Game.Map.CurrentTown];
   DrawTitle(10, C.Name);
   terminal_color('white');
   DrawText(12, 12, 'Population: ' + IntToStr(C.Population));
   DrawText(12, 13, 'Houses: ' + IntToStr(C.Houses));
   DrawButton(34, 12, C.Airport > 0, 'A', 'Airport: ' + AirportSizeStr
     [C.Airport]);
-  if (Game.Map.CurrentCity = Game.Company.TownID) and
-    (Game.Map.Town[Game.Map.CurrentCity].CompanyHeadquarters > 0) then
+  if (Game.Map.CurrentTown = Game.Company.TownID) and
+    (Game.Map.Town[Game.Map.CurrentTown].CompanyHeadquarters > 0) then
     DrawButton(34, 16, 'G', 'Company Headquarters');
   terminal_color('white');
 
@@ -49,11 +49,11 @@ begin
   DrawBar;
 end;
 
-procedure TSceneCity.Update(var Key: word);
+procedure TSceneTown.Update(var Key: word);
 var
   C: TTown;
 begin
-  C := Game.Map.Town[Game.Map.CurrentCity];
+  C := Game.Map.Town[Game.Map.CurrentTown];
   if (Key = TK_MOUSE_LEFT) then
   begin
     if (MX >= 29) and (MX <= 37) then
@@ -81,10 +81,10 @@ begin
       if (C.Airport > 0) then
         Scenes.SetScene(scAirport);
     TK_B:
-      Scenes.SetScene(scBuildInCity);
+      Scenes.SetScene(scBuildInTown);
     TK_G:
-      if (Game.Map.CurrentCity = Game.Company.TownID) and
-        (Game.Map.Town[Game.Map.CurrentCity].CompanyHeadquarters > 0) then
+      if (Game.Map.CurrentTown = Game.Company.TownID) and
+        (Game.Map.Town[Game.Map.CurrentTown].CompanyHeadquarters > 0) then
         Scenes.SetScene(scCompany);
   end;
 end;

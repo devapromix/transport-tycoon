@@ -75,9 +75,9 @@ begin
         I := Key - TK_A;
         if (I < Length(Town)) then
         begin
-          CurrentCity := I;
+          CurrentTown := I;
           ScrollTo(Town[I].X, Town[I].Y);
-          Scenes.SetScene(scCity);
+          Scenes.SetScene(scTown);
         end;
       end;
   end;

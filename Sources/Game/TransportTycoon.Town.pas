@@ -66,7 +66,7 @@ end;
 
 procedure TTown.BuildCompanyHeadquarters;
 begin
-  if (FCompanyHeadquarters = 0) and (Game.Map.CurrentCity = Game.Company.TownID)
+  if (FCompanyHeadquarters = 0) and (Game.Map.CurrentTown = Game.Company.TownID)
     and (Game.Money >= HQCost) then
     Game.ModifyMoney(ttConstruction, -HQCost);
   FCompanyHeadquarters := 1;

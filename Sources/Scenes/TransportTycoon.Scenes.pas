@@ -6,7 +6,7 @@ uses
   BearLibTerminal;
 
 type
-  TSceneEnum = (scMainMenu, scGameMenu, scGenMenu, scWorld, scCity, scBuildInCity,
+  TSceneEnum = (scMainMenu, scGameMenu, scGenMenu, scWorld, scTown, scBuildInTown,
     scAirport, scHangar, scAircraft, scAircrafts, scOrders, scFinances, scTowns,
     scCompany, scIndustry);
 
@@ -373,8 +373,8 @@ begin
   FScene[scGameMenu] := TSceneGameMenu.Create;
   FScene[scGenMenu] := TSceneGenMenu.Create;
   FScene[scWorld] := TSceneWorld.Create;
-  FScene[scCity] := TSceneCity.Create;
-  FScene[scBuildInCity] := TSceneBuildInCity.Create;
+  FScene[scTown] := TSceneTown.Create;
+  FScene[scBuildInTown] := TSceneBuildInTown.Create;
   FScene[scAirport] := TSceneAirport.Create;
   FScene[scHangar] := TSceneHangar.Create;
   FScene[scAircraft] := TSceneAircraft.Create;

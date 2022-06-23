@@ -6,7 +6,7 @@ uses
   TransportTycoon.Scenes;
 
 type
-  TSceneBuildInCity = class(TScene)
+  TSceneBuildInTown = class(TScene)
   private
 
   public
@@ -23,7 +23,7 @@ uses
   TransportTycoon.Game,
   TransportTycoon.Town;
 
-procedure TSceneBuildInCity.Render;
+procedure TSceneBuildInTown.Render;
 var
   C: TTown;
   N: Integer;
@@ -34,7 +34,7 @@ begin
 
   DrawFrame(15, 7, 50, 15);
 
-  C := Game.Map.Town[Game.Map.CurrentCity];
+  C := Game.Map.Town[Game.Map.CurrentTown];
   DrawTitle('BUILD IN ' + C.Name);
 
   S := '';
@@ -45,7 +45,7 @@ begin
   DrawButton(17, 11, F, 'A', 'Build ' + AirportSizeStr[N] + S);
 
   if (Game.Money >= TTown.HQCost) and (C.CompanyHeadquarters = 0) and
-    (Game.Map.CurrentCity = Game.Company.TownID) then
+    (Game.Map.CurrentTown = Game.Company.TownID) then
     DrawButton(17, 17, 'G', 'Build Company Headquarters ($' +
       IntToStr(TTown.HQCost) + ')');
 
@@ -54,7 +54,7 @@ begin
   DrawBar;
 end;
 
-procedure TSceneBuildInCity.Update(var Key: Word);
+procedure TSceneBuildInTown.Update(var Key: Word);
 var
   C: TTown;
 begin
@@ -75,10 +75,10 @@ begin
   end;
   case Key of
     TK_ESCAPE:
-      Scenes.SetScene(scCity);
+      Scenes.SetScene(scTown);
     TK_A:
       begin
-        C := Game.Map.Town[Game.Map.CurrentCity];
+        C := Game.Map.Town[Game.Map.CurrentTown];
         if (Game.Money >= C.AirportCost) and (C.Airport < 5) then
         begin
           C.BuildAirport;
@@ -87,8 +87,8 @@ begin
       end;
     TK_G:
       begin
-        C := Game.Map.Town[Game.Map.CurrentCity];
-        if (Game.Map.CurrentCity = Game.Company.TownID) and
+        C := Game.Map.Town[Game.Map.CurrentTown];
+        if (Game.Map.CurrentTown = Game.Company.TownID) and
           (Game.Money >= TTown.HQCost) and (C.CompanyHeadquarters = 0) then
         begin
           C.BuildCompanyHeadquarters;

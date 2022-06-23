@@ -35,7 +35,7 @@ begin
 
   DrawFrame(10, 6, 60, 17);
 
-  C := Game.Map.Town[Game.Map.CurrentCity];
+  C := Game.Map.Town[Game.Map.CurrentTown];
 
   DrawTitle(8, C.Name + ' Airport Hangar');
 
@@ -111,7 +111,7 @@ begin
           begin
             Game.Vehicles.AddAircraft(Format('Aircraft #%d (%s)',
               [Length(Game.Vehicles.Aircraft) + 1, AircraftBase[I].Name]),
-              Game.Map.CurrentCity, I);
+              Game.Map.CurrentTown, I);
             Scenes.SetScene(scAirport);
           end;
         end;
