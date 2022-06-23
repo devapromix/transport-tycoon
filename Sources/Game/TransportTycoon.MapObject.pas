@@ -20,6 +20,7 @@ type
     property Location: TLocation read FLocation write FLocation;
     procedure SetLocation(const AX, AY: Integer);
     function GetLocation: TLocation;
+    function InLocation(const AX, AY: Integer): Boolean;
     property X: Integer read FLocation.X;
     property Y: Integer read FLocation.Y;
     property Name: string read FName;
@@ -49,6 +50,11 @@ end;
 function TMapObject.GetLocation: TLocation;
 begin
   Result := FLocation;
+end;
+
+function TMapObject.InLocation(const AX, AY: Integer): Boolean;
+begin
+  Result := (X = AX) and (Y = AY);
 end;
 
 procedure TMapObject.SetLocation(const AX, AY: Integer);

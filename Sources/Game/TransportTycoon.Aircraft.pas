@@ -81,7 +81,6 @@ type
       const AX, AY: Integer); overload;
     procedure DelOrder(const AOrderIndex: Integer);
     function IsOrder(const TownIndex: Integer): Boolean;
-    function InLocation(const AX, AY: Integer): Boolean;
   end;
 
 implementation
@@ -183,11 +182,6 @@ begin
     Exit;
   SetLocation(NX, NY);
   Result := (X <> AX) or (Y <> AY);
-end;
-
-function TAircraft.InLocation(const AX, AY: Integer): Boolean;
-begin
-  Result := (X = AX) and (Y = AY)
 end;
 
 function TAircraft.IsOrder(const TownIndex: Integer): Boolean;

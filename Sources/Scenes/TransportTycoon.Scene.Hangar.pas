@@ -21,7 +21,7 @@ uses
   Math,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.City,
+  TransportTycoon.Town,
   TransportTycoon.Aircraft,
   TransportTycoon.Vehicles;
 
