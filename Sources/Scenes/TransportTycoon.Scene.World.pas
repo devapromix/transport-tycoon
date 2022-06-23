@@ -61,7 +61,7 @@ procedure TSceneWorld.TownInfo(const TownID: Word);
 var
   VX, VY: Integer;
 begin
-  TileInfo(Game.Map.City[TownID].Name);
+  TileInfo(Game.Map.Town[TownID].Name);
   if (MY < Height - 10) then
     VY := MY + 1
   else
@@ -72,9 +72,9 @@ begin
     VX := MX - 20;
   terminal_bkcolor('darkest gray');
   DrawFrame(VX, VY, 20, 7);
-  DrawText(VX + 10, VY + 2, '[c=yellow]' + UpperCase(Game.Map.City[TownID].Name)
+  DrawText(VX + 10, VY + 2, '[c=yellow]' + UpperCase(Game.Map.Town[TownID].Name)
     + '[/c]', TK_ALIGN_CENTER);
-  DrawText(VX + 10, VY + 4, 'Pop.: ' + IntToStr(Game.Map.City[TownID]
+  DrawText(VX + 10, VY + 4, 'Pop.: ' + IntToStr(Game.Map.Town[TownID]
     .Population), TK_ALIGN_CENTER);
   DrawText(MX, MY, '#', 'yellow', 'gray');
 end;

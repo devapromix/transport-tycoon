@@ -113,7 +113,7 @@ type
     function MapIndCount: Integer;
   public
     Cell: array of array of Tiles;
-    City: array of TCity;
+    Town: array of TTown;
     Industry: array of TIndustry;
     constructor Create;
     destructor Destroy; override;
@@ -164,8 +164,8 @@ var
   I: Integer;
 begin
   Result := False;
-  for I := 0 to Length(City) - 1 do
-    if City[I].Name = ATownName then
+  for I := 0 to Length(Town) - 1 do
+    if Town[I].Name = ATownName then
     begin
       Result := True;
       Exit;
@@ -251,9 +251,9 @@ var
   I: Integer;
 begin
   Result := False;
-  for I := 0 to Length(City) - 1 do
-    if ((City[I].X = AX) and (City[I].Y = AY)) or
-      (GetDist(City[I].X, City[I].Y, AX, AY) < 15) then
+  for I := 0 to Length(Town) - 1 do
+    if ((Town[I].X = AX) and (Town[I].Y = AY)) or
+      (GetDist(Town[I].X, Town[I].Y, AX, AY) < 15) then
       Exit(True);
 end;
 
@@ -271,8 +271,8 @@ destructor TMap.Destroy;
 var
   I: Integer;
 begin
-  for I := 0 to Length(City) - 1 do
-    City[I].Free;
+  for I := 0 to Length(Town) - 1 do
+    Town[I].Free;
   inherited;
 end;
 
@@ -420,9 +420,9 @@ begin
     end;
   end;
   // Towns
-  for I := 0 to Length(City) - 1 do
-    City[I].Free;
-  SetLength(City, 0);
+  for I := 0 to Length(Town) - 1 do
+    Town[I].Free;
+  SetLength(Town, 0);
   for I := 0 to MapNoOfTownsInt[NoOfTowns] - 1 do
   begin
     repeat
@@ -430,7 +430,7 @@ begin
         (Math.RandomRange(0, 10) - 5);
       Y := (Math.RandomRange(1, FHeight div 10) * 10) +
         (Math.RandomRange(0, 10) - 5);
-      TownName := TCity.GenName;
+      TownName := TTown.GenName;
 
       for N := 2 to 5 do
       begin
@@ -459,8 +459,8 @@ begin
     until not HasTownName(TownName) and not HasTownLocation(X, Y) and
       HasNormalTile(X, Y);
     Cell[X][Y] := tlCity;
-    SetLength(City, I + 1);
-    City[I] := TCity.Create(TownName, X, Y);
+    SetLength(Town, I + 1);
+    Town[I] := TTown.Create(TownName, X, Y);
   end;
   // Industries
   I := 0;
@@ -560,8 +560,8 @@ procedure TMap.CityGrows;
 var
   I: Integer;
 begin
-  for I := 0 to Length(City) - 1 do
-    City[I].Grow;
+  for I := 0 to Length(Town) - 1 do
+    Town[I].Grow;
 end;
 
 function TMap.GetCurrentCity(const AX, AY: Integer): Integer;
@@ -569,8 +569,8 @@ var
   I: Integer;
 begin
   Result := -1;
-  for I := 0 to Length(City) - 1 do
-    if (City[I].X = AX) and (City[I].Y = AY) then
+  for I := 0 to Length(Town) - 1 do
+    if (Town[I].X = AX) and (Town[I].Y = AY) then
       Exit(I);
 end;
 
@@ -589,8 +589,8 @@ var
   I: Integer;
 begin
   Result := 0;
-  for I := 0 to Length(City) - 1 do
-    Result := Result + City[I].Population;
+  for I := 0 to Length(Town) - 1 do
+    Result := Result + Town[I].Population;
 end;
 
 function TMap.GetDist(const X1, Y1, X2, Y2: Integer): Integer;

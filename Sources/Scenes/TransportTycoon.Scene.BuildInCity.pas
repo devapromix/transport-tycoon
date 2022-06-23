@@ -25,7 +25,7 @@ uses
 
 procedure TSceneBuildInCity.Render;
 var
-  C: TCity;
+  C: TTown;
   N: Integer;
   S: string;
   F: Boolean;
@@ -34,7 +34,7 @@ begin
 
   DrawFrame(15, 7, 50, 15);
 
-  C := Game.Map.City[Game.Map.CurrentCity];
+  C := Game.Map.Town[Game.Map.CurrentCity];
   DrawTitle('BUILD IN ' + C.Name);
 
   S := '';
@@ -44,10 +44,10 @@ begin
     S := ' ($' + IntToStr(C.AirportCost) + ')';
   DrawButton(17, 11, F, 'A', 'Build ' + AirportSizeStr[N] + S);
 
-  if (Game.Money >= TCity.HQCost) and (C.CompanyHeadquarters = 0) and
+  if (Game.Money >= TTown.HQCost) and (C.CompanyHeadquarters = 0) and
     (Game.Map.CurrentCity = Game.Company.TownID) then
     DrawButton(17, 17, 'G', 'Build Company Headquarters ($' +
-      IntToStr(TCity.HQCost) + ')');
+      IntToStr(TTown.HQCost) + ')');
 
   AddButton(19, 'Esc', 'Close');
 
@@ -56,7 +56,7 @@ end;
 
 procedure TSceneBuildInCity.Update(var Key: Word);
 var
-  C: TCity;
+  C: TTown;
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
@@ -78,7 +78,7 @@ begin
       Scenes.SetScene(scCity);
     TK_A:
       begin
-        C := Game.Map.City[Game.Map.CurrentCity];
+        C := Game.Map.Town[Game.Map.CurrentCity];
         if (Game.Money >= C.AirportCost) and (C.Airport < 5) then
         begin
           C.BuildAirport;
@@ -87,9 +87,9 @@ begin
       end;
     TK_G:
       begin
-        C := Game.Map.City[Game.Map.CurrentCity];
+        C := Game.Map.Town[Game.Map.CurrentCity];
         if (Game.Map.CurrentCity = Game.Company.TownID) and
-          (Game.Money >= TCity.HQCost) and (C.CompanyHeadquarters = 0) then
+          (Game.Money >= TTown.HQCost) and (C.CompanyHeadquarters = 0) then
         begin
           C.BuildCompanyHeadquarters;
           Scenes.SetScene(scCompany);

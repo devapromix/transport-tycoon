@@ -24,14 +24,14 @@ uses
 
 procedure TSceneAirport.Render;
 var
-  C: TCity;
+  C: TTown;
   I: Integer;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
   DrawFrame(5, 7, 70, 15);
 
-  C := Game.Map.City[Game.Map.CurrentCity];
+  C := Game.Map.Town[Game.Map.CurrentCity];
   DrawTitle(C.Name + ' Airport');
 
   terminal_color('white');
@@ -51,10 +51,10 @@ end;
 
 procedure TSceneAirport.Update(var Key: Word);
 var
-  C: TCity;
+  C: TTown;
   I: Integer;
 begin
-  C := Game.Map.City[Game.Map.CurrentCity];
+  C := Game.Map.Town[Game.Map.CurrentCity];
   if (Key = TK_MOUSE_LEFT) then
   begin
     if (MX >= 37) and (MX <= 71) then

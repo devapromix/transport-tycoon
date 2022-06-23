@@ -32,16 +32,16 @@ begin
 
   DrawTitle(6, 'TOWNS');
 
-  for I := 0 to Length(Game.Map.City) - 1 do
+  for I := 0 to Length(Game.Map.Town) - 1 do
   begin
     if (Game.Company.TownID = I) then
       DrawButton(27, I + 8, Chr(Ord('A') + I),
-        Format('%s (%d)', [Game.Map.City[I].Name, Game.Map.City[I].Population]
+        Format('%s (%d)', [Game.Map.Town[I].Name, Game.Map.Town[I].Population]
         ), 'yellow')
     else
       DrawButton(27, I + 8, Chr(Ord('A') + I),
-        Format('%s (%d)', [Game.Map.City[I].Name,
-        Game.Map.City[I].Population]));
+        Format('%s (%d)', [Game.Map.Town[I].Name,
+        Game.Map.Town[I].Population]));
   end;
 
   DrawText(20, Format('World population: %d', [Game.Map.WorldPop]));
@@ -73,10 +73,10 @@ begin
       with Game.Map do
       begin
         I := Key - TK_A;
-        if (I < Length(City)) then
+        if (I < Length(Town)) then
         begin
           CurrentCity := I;
-          ScrollTo(City[I].X, City[I].Y);
+          ScrollTo(Town[I].X, Town[I].Y);
           Scenes.SetScene(scCity);
         end;
       end;

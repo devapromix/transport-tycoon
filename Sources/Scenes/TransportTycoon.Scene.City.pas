@@ -25,13 +25,13 @@ uses
 
 procedure TSceneCity.Render;
 var
-  C: TCity;
+  C: TTown;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
   DrawFrame(10, 8, 60, 13);
 
-  C := Game.Map.City[Game.Map.CurrentCity];
+  C := Game.Map.Town[Game.Map.CurrentCity];
   DrawTitle(10, C.Name);
   terminal_color('white');
   DrawText(12, 12, 'Population: ' + IntToStr(C.Population));
@@ -39,7 +39,7 @@ begin
   DrawButton(34, 12, C.Airport > 0, 'A', 'Airport: ' + AirportSizeStr
     [C.Airport]);
   if (Game.Map.CurrentCity = Game.Company.TownID) and
-    (Game.Map.City[Game.Map.CurrentCity].CompanyHeadquarters > 0) then
+    (Game.Map.Town[Game.Map.CurrentCity].CompanyHeadquarters > 0) then
     DrawButton(34, 16, 'G', 'Company Headquarters');
   terminal_color('white');
 
@@ -51,9 +51,9 @@ end;
 
 procedure TSceneCity.Update(var Key: word);
 var
-  C: TCity;
+  C: TTown;
 begin
-  C := Game.Map.City[Game.Map.CurrentCity];
+  C := Game.Map.Town[Game.Map.CurrentCity];
   if (Key = TK_MOUSE_LEFT) then
   begin
     if (MX >= 29) and (MX <= 37) then
@@ -84,7 +84,7 @@ begin
       Scenes.SetScene(scBuildInCity);
     TK_G:
       if (Game.Map.CurrentCity = Game.Company.TownID) and
-        (Game.Map.City[Game.Map.CurrentCity].CompanyHeadquarters > 0) then
+        (Game.Map.Town[Game.Map.CurrentCity].CompanyHeadquarters > 0) then
         Scenes.SetScene(scCompany);
   end;
 end;

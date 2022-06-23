@@ -35,19 +35,19 @@ uses
 procedure TVehicles.AddAircraft(const AName: string;
   const ACityIndex, AircraftID: Integer);
 begin
-  if ((Game.Map.City[ACityIndex].Airport > 0) and
+  if ((Game.Map.Town[ACityIndex].Airport > 0) and
     (Game.Money >= AircraftBase[AircraftID].Cost)) then
     with Game.Vehicles do
     begin
       SetLength(Aircraft, Length(Aircraft) + 1);
 
       Aircraft[High(Aircraft)] := TAircraft.Create(AName,
-        Game.Map.City[ACityIndex].X, Game.Map.City[ACityIndex].Y, AircraftID);
+        Game.Map.Town[ACityIndex].X, Game.Map.Town[ACityIndex].Y, AircraftID);
 
       with Aircraft[High(Aircraft)] do
       begin
-        AddOrder(ACityIndex, Game.Map.City[ACityIndex].Name,
-          Game.Map.City[ACityIndex].X, Game.Map.City[ACityIndex].Y);
+        AddOrder(ACityIndex, Game.Map.Town[ACityIndex].Name,
+          Game.Map.Town[ACityIndex].X, Game.Map.Town[ACityIndex].Y);
         Game.ModifyMoney(ttNewVehicles, -AircraftBase[AircraftID].Cost);
         VehicleID := AircraftID;
       end;

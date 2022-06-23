@@ -29,8 +29,8 @@ begin
   DrawTitle(10, Game.Company.Name);
   DrawText(22, 12, 'Inavgurated: ' + IntToStr(Game.Company.Inavgurated));
 
-  if (Game.Map.City[Game.Company.TownID].CompanyHeadquarters > 0) then
-    DrawText(22, 16, 'Company headquarters in ' + Game.Map.City
+  if (Game.Map.Town[Game.Company.TownID].CompanyHeadquarters > 0) then
+    DrawText(22, 16, 'Company headquarters in ' + Game.Map.Town
       [Game.Company.TownID].Name);
 
   AddButton(18, 'Esc', 'Close');

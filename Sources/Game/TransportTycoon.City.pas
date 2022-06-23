@@ -11,7 +11,7 @@ const
     'International Airport');
 
 type
-  TCity = class(TMapObject)
+  TTown = class(TMapObject)
   private
     FPopulation: Integer;
     FPassengers: Integer;
@@ -47,7 +47,7 @@ uses
   TransportTycoon.Game,
   TransportTycoon.Finances;
 
-function TCity.AirportCost: Integer;
+function TTown.AirportCost: Integer;
 begin
   if (FAirport < 5) then
     Result := (FAirport + 1) * 8000
@@ -55,7 +55,7 @@ begin
     Result := 0;
 end;
 
-procedure TCity.BuildAirport;
+procedure TTown.BuildAirport;
 begin
   if (FAirport < 5) and (Game.Money >= AirportCost) then
   begin
@@ -64,7 +64,7 @@ begin
   end;
 end;
 
-procedure TCity.BuildCompanyHeadquarters;
+procedure TTown.BuildCompanyHeadquarters;
 begin
   if (FCompanyHeadquarters = 0) and (Game.Map.CurrentCity = Game.Company.TownID)
     and (Game.Money >= HQCost) then
@@ -72,7 +72,7 @@ begin
   FCompanyHeadquarters := 1;
 end;
 
-constructor TCity.Create(const AName: string; const AX, AY: Integer);
+constructor TTown.Create(const AName: string; const AX, AY: Integer);
 begin
   inherited Create(AName, AX, AY);
   FPopulation := 0;
@@ -83,7 +83,7 @@ begin
   FCompanyHeadquarters := 0;
 end;
 
-procedure TCity.Grow;
+procedure TTown.Grow;
 begin
   if Math.RandomRange(0, 25) <= GrowModif then
     ModifyPopulation(Math.RandomRange(GrowModif * 8, GrowModif * 12));
@@ -100,7 +100,7 @@ begin
   end;
 end;
 
-class function TCity.GenName: string;
+class function TTown.GenName: string;
 var
   S: array [0 .. 1] of TStringList;
   I: Integer;
@@ -121,12 +121,12 @@ begin
   end;
 end;
 
-function TCity.GrowModif: Integer;
+function TTown.GrowModif: Integer;
 begin
   Result := Airport { + Seaport + Trainstation } + 5;
 end;
 
-procedure TCity.ModifyPopulation(const APopulation: Integer);
+procedure TTown.ModifyPopulation(const APopulation: Integer);
 begin
   FPopulation := FPopulation + APopulation;
   FHouses := FPopulation div 30;

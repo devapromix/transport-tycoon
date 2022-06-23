@@ -27,7 +27,7 @@ uses
 
 procedure TSceneHangar.Render;
 var
-  C: TCity;
+  C: TTown;
   I, J: Integer;
   S: string;
 begin
@@ -35,7 +35,7 @@ begin
 
   DrawFrame(10, 6, 60, 17);
 
-  C := Game.Map.City[Game.Map.CurrentCity];
+  C := Game.Map.Town[Game.Map.CurrentCity];
 
   DrawTitle(8, C.Name + ' Airport Hangar');
 

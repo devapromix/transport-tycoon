@@ -101,7 +101,7 @@ end;
 procedure TAircraft.AddOrder(const TownIndex: Integer; const AName: string;
   const AX, AY: Integer);
 begin
-  if Game.Map.City[TownIndex].Airport > 0 then
+  if Game.Map.Town[TownIndex].Airport > 0 then
   begin
     SetLength(Order, Length(Order) + 1);
     Order[High(Order)].ID := TownIndex;
@@ -134,7 +134,7 @@ end;
 
 procedure TAircraft.AddOrder(const TownIndex: Integer);
 begin
-  with Game.Map.City[TownIndex] do
+  with Game.Map.Town[TownIndex] do
     AddOrder(TownIndex, Name, X, Y);
 end;
 
@@ -155,17 +155,17 @@ end;
 procedure TAircraft.Load;
 begin
   FState := 'Load';
-  while (Game.Map.City[Order[OrderIndex].ID].Passengers > 0) and
+  while (Game.Map.Town[Order[OrderIndex].ID].Passengers > 0) and
     (Passengers < MaxPassengers) do
   begin
-    with Game.Map.City[Order[OrderIndex].ID] do
+    with Game.Map.Town[Order[OrderIndex].ID] do
       Passengers := Passengers - 1;
     Inc(FPassengers);
   end;
-  while (Game.Map.City[Order[OrderIndex].ID].BagsOfMail > 0) and
+  while (Game.Map.Town[Order[OrderIndex].ID].BagsOfMail > 0) and
     (BagsOfMail < MaxBagsOfMail) do
   begin
-    with Game.Map.City[Order[OrderIndex].ID] do
+    with Game.Map.Town[Order[OrderIndex].ID] do
       BagsOfMail := BagsOfMail - 1;
     Inc(FBagsOfMail);
   end;
@@ -213,7 +213,7 @@ begin
       if Order[OrderIndex].ID <> FLastAirportId then
         UnLoad;
       FState := 'Service';
-      if FT > (15 - (Game.Map.City[Order[OrderIndex].ID].Airport * 2)) then
+      if FT > (15 - (Game.Map.Town[Order[OrderIndex].ID].Airport * 2)) then
       begin
         FT := 0;
         Load;
