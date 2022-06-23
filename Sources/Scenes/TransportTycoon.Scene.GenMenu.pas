@@ -1,4 +1,4 @@
-﻿unit TransportTycoon.Scene.Gen;
+﻿unit TransportTycoon.Scene.GenMenu;
 
 interface
 
@@ -6,7 +6,7 @@ uses
   TransportTycoon.Scenes;
 
 type
-  TSceneGen = class(TScene)
+  TSceneGenMenu = class(TScene)
   private
 
   public
@@ -22,7 +22,7 @@ uses
   TransportTycoon.Game,
   TransportTycoon.Map;
 
-procedure TSceneGen.Render;
+procedure TSceneGenMenu.Render;
 begin
   Game.Map.Draw(Self.Width, Self.Height);
 
@@ -43,7 +43,7 @@ begin
   AddButton(17, 'Esc', 'Back');
 end;
 
-procedure TSceneGen.Update(var Key: word);
+procedure TSceneGenMenu.Update(var Key: word);
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin

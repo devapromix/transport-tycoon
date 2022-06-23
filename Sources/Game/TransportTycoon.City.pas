@@ -56,25 +56,19 @@ begin
 end;
 
 procedure TCity.BuildAirport;
-var
-  NeedMoney: Integer;
 begin
-  NeedMoney := AirportCost;
-  if (FAirport < 5) and (Game.Money >= NeedMoney) then
+  if (FAirport < 5) and (Game.Money >= AirportCost) then
   begin
-    Game.ModifyMoney(ttConstruction, -NeedMoney);
+    Game.ModifyMoney(ttConstruction, -AirportCost);
     Inc(FAirport);
   end;
 end;
 
 procedure TCity.BuildCompanyHeadquarters;
-var
-  NeedMoney: Integer;
 begin
-  NeedMoney := HQCost;
   if (FCompanyHeadquarters = 0) and (Game.Map.CurrentCity = Game.Company.TownID)
-    and (Game.Money >= NeedMoney) then
-    Game.ModifyMoney(ttConstruction, -NeedMoney);
+    and (Game.Money >= HQCost) then
+    Game.ModifyMoney(ttConstruction, -HQCost);
   FCompanyHeadquarters := 1;
 end;
 

@@ -101,7 +101,7 @@
         <IsPartOfProject Value="True"/>
       </Unit16>
       <Unit17>
-        <Filename Value="Scenes\TransportTycoon.Scene.Gen.pas"/>
+        <Filename Value="Scenes\TransportTycoon.Scene.GenMenu.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit17>
       <Unit18>

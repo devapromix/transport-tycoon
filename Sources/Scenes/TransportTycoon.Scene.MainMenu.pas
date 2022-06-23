@@ -59,7 +59,7 @@ begin
         Game.Calendar.Clear;
         Game.IsGame := False;
         Game.LoadSettings;
-        Scenes.SetScene(scGen);
+        Scenes.SetScene(scGenMenu);
       end;
     TK_Q:
       terminal_close();
