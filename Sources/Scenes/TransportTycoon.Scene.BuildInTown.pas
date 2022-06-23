@@ -1,4 +1,4 @@
-﻿unit TransportTycoon.Scene.BuildInCity;
+﻿unit TransportTycoon.Scene.BuildInTown;
 
 interface
 
@@ -21,7 +21,7 @@ uses
   Math,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.City;
+  TransportTycoon.Town;
 
 procedure TSceneBuildInCity.Render;
 var

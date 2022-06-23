@@ -42,7 +42,7 @@ const
     //
     (Name: 'Bush'; Tile: 'b'; Color: 'dark green'),
     //
-    (Name: 'City'; Tile: '#'; Color: 'lighter yellow'),
+    (Name: 'Town'; Tile: '#'; Color: 'lighter yellow'),
     //
     (Name: 'Rock'; Tile: '^'; Color: 'dark gray'),
     //

@@ -69,7 +69,7 @@
         <IsPartOfProject Value="True"/>
       </Unit8>
       <Unit9>
-        <Filename Value="Game\TransportTycoon.City.pas"/>
+        <Filename Value="Game\TransportTycoon.Town.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit9>
       <Unit10>
@@ -81,11 +81,11 @@
         <IsPartOfProject Value="True"/>
       </Unit11>
       <Unit12>
-        <Filename Value="Scenes\TransportTycoon.Scene.City.pas"/>
+        <Filename Value="Scenes\TransportTycoon.Scene.Town.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit12>
       <Unit13>
-        <Filename Value="Scenes\TransportTycoon.Scene.BuildInCity.pas"/>
+        <Filename Value="Scenes\TransportTycoon.Scene.BuildInTown.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit13>
       <Unit14>
