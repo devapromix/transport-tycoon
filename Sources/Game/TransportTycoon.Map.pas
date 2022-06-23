@@ -18,6 +18,7 @@ const
 
 const
   NormalTiles = [tlGrass, tlDirt, tlSand];
+  TreeTiles = [tlTree, tlSmallTree, tlBush];
   IndustryTiles = [tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
     tlPowerPlantIndustry];
 
@@ -144,6 +145,7 @@ type
     procedure NextSeaLevel;
     procedure NextRivers;
     procedure NextSize;
+    procedure ClearLand(const AX, AY: Integer);
   end;
 
 implementation
@@ -151,7 +153,9 @@ implementation
 uses
   Math,
   SysUtils,
-  BearLibTerminal;
+  BearLibTerminal,
+  TransportTycoon.Game,
+  TransportTycoon.Finances;
 
 { TMap }
 
@@ -280,6 +284,16 @@ begin
   for Y := 0 to FHeight - 1 do
     for X := 0 to FWidth - 1 do
       Cell[X][Y] := tlGrass;
+end;
+
+procedure TMap.ClearLand(const AX, AY: Integer);
+begin
+  if (Cell[AX][AY] in TreeTiles) then
+    if (Game.Money >= 100) then
+    begin
+      Cell[AX][AY] := tlDirt;
+      Game.ModifyMoney(ttConstruction, -100);
+    end;
 end;
 
 procedure TMap.Draw(const AWidth, AHeight: Integer);

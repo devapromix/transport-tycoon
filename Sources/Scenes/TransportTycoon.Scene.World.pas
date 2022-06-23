@@ -11,7 +11,6 @@ type
 
   TSceneWorld = class(TScene)
   private
-    procedure ClearLand;
     procedure TownInfo(const TownID: Word);
     procedure IndustryInfo(const IndustryID: Word);
     procedure AircraftInfo(const AircraftID: Word);
@@ -31,15 +30,6 @@ uses
   TransportTycoon.Finances;
 
 { TSceneWorld }
-
-procedure TSceneWorld.ClearLand;
-begin
-  if (Game.Money >= 100) then
-  begin
-    Game.Map.Cell[RX][RY] := tlDirt;
-    Game.ModifyMoney(ttConstruction, -100);
-  end;
-end;
 
 procedure TSceneWorld.TileInfo(const S: string);
 begin
@@ -111,7 +101,7 @@ end;
 
 procedure TSceneWorld.Render;
 var
-  I, VX, VY: Integer;
+  I: Integer;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
@@ -194,11 +184,11 @@ begin
           Exit;
         end;
       end;
-      if (Game.Map.Cell[RX][RY] in [tlTree, tlSmallTree, tlBush]) then
+      if (Game.Map.Cell[RX][RY] in TreeTiles) then
       begin
         if not Game.IsClearLand then
           Exit;
-        ClearLand;
+        Game.Map.ClearLand(RX, RY);
         Scenes.Render;
         Exit;
       end;
