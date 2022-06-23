@@ -72,7 +72,7 @@ begin
   DrawFrame(X, Y, 20, 5);
   DrawText(X + 10, Y + 2, '[c=yellow]' + UpperCase(Game.Map.Industry[IndustryID]
     .Name) + '[/c]', TK_ALIGN_CENTER);
-  DrawText(MX, MY, Tile[Game.Map.Cell[MX][MY]].Tile, 'yellow', 'gray');
+  DrawText(MX, MY, Tile[Game.Map.Cell[RX][RY]].Tile, 'yellow', 'gray');
 end;
 
 procedure TSceneWorld.Render;
