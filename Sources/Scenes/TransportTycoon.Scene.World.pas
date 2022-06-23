@@ -15,6 +15,7 @@ type
     procedure TownInfo(const X, Y, TownID: Word);
     procedure IndustryInfo(const X, Y, IndustryID: Word);
     procedure AircraftInfo(const X, Y, AircraftID: Word);
+    procedure TileInfo(const S: string);
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -51,6 +52,11 @@ begin
   end;
 end;
 
+procedure TSceneWorld.TileInfo(const S: string);
+begin
+  DrawText(45, Height - 1, S, TK_ALIGN_CENTER);
+end;
+
 procedure TSceneWorld.TownInfo(const X, Y, TownID: Word);
 begin
   terminal_bkcolor('darkest gray');
@@ -68,8 +74,8 @@ procedure TSceneWorld.IndustryInfo(const X, Y, IndustryID: Word);
 begin
   terminal_bkcolor('darkest gray');
   DrawFrame(X, Y, 20, 5);
-  DrawText(X + 10, Y + 2, '[c=yellow]' + UpperCase(Game.Map.Industry
-    [IndustryID].Name) + '[/c]', TK_ALIGN_CENTER);
+  DrawText(X + 10, Y + 2, '[c=yellow]' + UpperCase(Game.Map.Industry[IndustryID]
+    .Name) + '[/c]', TK_ALIGN_CENTER);
   terminal_color('yellow');
   terminal_bkcolor('gray');
   terminal_put(MX, MY, Tile[Game.Map.Cell[MX][MY]].Tile);
@@ -101,7 +107,7 @@ begin
     if Tile[Game.Map.Cell[RX][RY]].Tile = Tile[tlCity].Tile then
     begin
       I := Game.Map.GetCurrentCity(RX, RY);
-      DrawText(40, Height - 1, Game.Map.City[I].Name);
+      TileInfo(Game.Map.City[I].Name);
       if (MY < Height - 10) then
         VY := MY + 1
       else
@@ -111,11 +117,11 @@ begin
       else
         VX := MX - 20;
       TownInfo(VX, VY, I);
-    end else
-    if Game.Map.Cell[RX][RY] in IndustryTiles then
+    end
+    else if Game.Map.Cell[RX][RY] in IndustryTiles then
     begin
       I := Game.Map.GetCurrentIndustry(RX, RY);
-      DrawText(40, Height - 1, Game.Map.Industry[I].Name);
+      TileInfo(Game.Map.Industry[I].Name);
       if (MY < Height - 10) then
         VY := MY + 1
       else
@@ -131,7 +137,7 @@ begin
       I := Game.Vehicles.GetCurrentAircraft(RX, RY);
       if I >= 0 then
       begin
-        DrawText(40, Height - 1, Format('Aircraft #%d',
+        TileInfo(Format('Aircraft #%d',
           [Game.Vehicles.Aircraft[I].VehicleID + 1]));
         if (MY < Height - 10) then
           VY := MY + 1
@@ -144,7 +150,7 @@ begin
         AircraftInfo(VX, VY, I);
       end
       else
-        DrawText(40, Height - 1, Tile[Game.Map.Cell[RX][RY]].Name);
+        TileInfo(Tile[Game.Map.Cell[RX][RY]].Name);
     end;
   end;
   if (MY = Self.Height - 2) then
