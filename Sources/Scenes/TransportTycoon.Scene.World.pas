@@ -14,7 +14,7 @@ type
     procedure TownInfo(const TownID: Word);
     procedure IndustryInfo(const IndustryID: Word);
     procedure AircraftInfo(const AircraftID: Word);
-    procedure TileInfo(const S: string);
+    procedure TileInfo(S: string);
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -23,6 +23,7 @@ type
 implementation
 
 uses
+  Math,
   BearLibTerminal,
   SysUtils,
   TransportTycoon.Map,
@@ -31,17 +32,24 @@ uses
 
 { TSceneWorld }
 
-procedure TSceneWorld.TileInfo(const S: string);
+procedure TSceneWorld.TileInfo(S: string);
+var
+  L: Integer;
 begin
+  L := Length(S);
+  if L > 18 then
+    S := Trim(Copy(S, 1, 14)) + '...';
   DrawText(45, Height - 1, S, TK_ALIGN_CENTER);
 end;
 
 procedure TSceneWorld.AircraftInfo(const AircraftID: Word);
 var
-  VX, VY: Integer;
+  VX, VY, L: Integer;
+  S: string;
 begin
-  TileInfo(Format('Aircraft #%d',
-    [Game.Vehicles.Aircraft[AircraftID].VehicleID + 1]));
+  S := Game.Vehicles.Aircraft[AircraftID].Name;
+  L := EnsureRange(Length(S) + 8, 20, 40);
+  TileInfo(S);
   if (MY < Height - 10) then
     VY := MY + 1
   else
@@ -49,19 +57,22 @@ begin
   if (MX < Width - (Width div 2)) then
     VX := MX + 1
   else
-    VX := MX - 40;
+    VX := MX - L;
   terminal_bkcolor('darkest gray');
-  DrawFrame(VX, VY, 40, 5);
-  DrawText(VX + 20, VY + 2, '[c=yellow]' + UpperCase(Game.Vehicles.Aircraft
-    [AircraftID].Name) + '[/c]', TK_ALIGN_CENTER);
+  DrawFrame(VX, VY, L, 5);
+  DrawText(VX + (L div 2), VY + 2, '[c=yellow]' + UpperCase(S) + '[/c]',
+    TK_ALIGN_CENTER);
   DrawText(MX, MY, '@', 'yellow', 'gray');
 end;
 
 procedure TSceneWorld.TownInfo(const TownID: Word);
 var
-  VX, VY: Integer;
+  VX, VY, L: Integer;
+  S: string;
 begin
-  TileInfo(Game.Map.Town[TownID].Name);
+  S := Game.Map.Town[TownID].Name;
+  L := EnsureRange(Length(S) + 8, 20, 40);
+  TileInfo(S);
   if (MY < Height - 10) then
     VY := MY + 1
   else
@@ -69,21 +80,24 @@ begin
   if (MX < Width - (Width div 2)) then
     VX := MX + 1
   else
-    VX := MX - 20;
+    VX := MX - L;
   terminal_bkcolor('darkest gray');
-  DrawFrame(VX, VY, 20, 7);
-  DrawText(VX + 10, VY + 2, '[c=yellow]' + UpperCase(Game.Map.Town[TownID].Name)
-    + '[/c]', TK_ALIGN_CENTER);
-  DrawText(VX + 10, VY + 4, 'Pop.: ' + IntToStr(Game.Map.Town[TownID]
-    .Population), TK_ALIGN_CENTER);
+  DrawFrame(VX, VY, L, 7);
+  DrawText(VX + (L div 2), VY + 2, '[c=yellow]' + UpperCase(S) + '[/c]',
+    TK_ALIGN_CENTER);
+  DrawText(VX + (L div 2), VY + 4,
+    'Pop.: ' + IntToStr(Game.Map.Town[TownID].Population), TK_ALIGN_CENTER);
   DrawText(MX, MY, '#', 'yellow', 'gray');
 end;
 
 procedure TSceneWorld.IndustryInfo(const IndustryID: Word);
 var
-  VX, VY: Integer;
+  VX, VY, L: Integer;
+  S: string;
 begin
-  TileInfo(Game.Map.Industry[IndustryID].Name);
+  S := Game.Map.Industry[IndustryID].Name;
+  L := Length(S) + 8;
+  TileInfo(S);
   if (MY < Height - 10) then
     VY := MY + 1
   else
@@ -91,11 +105,11 @@ begin
   if (MX < Width - (Width div 2)) then
     VX := MX + 1
   else
-    VX := MX - 30;
+    VX := MX - L;
   terminal_bkcolor('darkest gray');
-  DrawFrame(VX, VY, 30, 5);
-  DrawText(VX + 15, VY + 2, '[c=yellow]' +
-    UpperCase(Game.Map.Industry[IndustryID].Name) + '[/c]', TK_ALIGN_CENTER);
+  DrawFrame(VX, VY, L, 5);
+  DrawText(VX + (L div 2), VY + 2, '[c=yellow]' + UpperCase(S) + '[/c]',
+    TK_ALIGN_CENTER);
   DrawText(MX, MY, Tile[Game.Map.Cell[RX][RY]].Tile, 'yellow', 'gray');
 end;
 
