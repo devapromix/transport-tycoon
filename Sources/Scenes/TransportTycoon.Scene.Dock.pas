@@ -55,10 +55,10 @@ end;
 
 procedure TSceneDock.Update(var Key: Word);
 var
-  C: TTown;
+  Town: TTown;
   I: Integer;
 begin
-  C := Game.Map.Town[Game.Map.CurrentTown];
+  Town := Game.Map.Town[Game.Map.CurrentTown];
   if (Key = TK_MOUSE_LEFT) then
   begin
     if (MX >= 37) and (MX <= 71) then

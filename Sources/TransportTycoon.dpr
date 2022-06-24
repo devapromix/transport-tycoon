@@ -33,7 +33,8 @@ uses
   TransportTycoon.Industries in 'Game\TransportTycoon.Industries.pas',
   TransportTycoon.Scene.Industry in 'Scenes\TransportTycoon.Scene.Industry.pas',
   TransportTycoon.Scene.BuildNearIndustry in 'Scenes\TransportTycoon.Scene.BuildNearIndustry.pas',
-  TransportTycoon.Scene.Dock in 'Scenes\TransportTycoon.Scene.Dock.pas';
+  TransportTycoon.Scene.Dock in 'Scenes\TransportTycoon.Scene.Dock.pas',
+  TransportTycoon.Ship in 'Game\TransportTycoon.Ship.pas';
 
 var
   Key: Word = 0;
