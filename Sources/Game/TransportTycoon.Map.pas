@@ -146,6 +146,7 @@ type
     procedure NextRivers;
     procedure NextSize;
     procedure ClearLand(const AX, AY: Integer);
+    function GetNearTownName(const AX, AY: Integer): string;
   end;
 
 implementation
@@ -325,7 +326,7 @@ end;
 procedure TMap.Gen;
 var
   X, Y, I, J, N, D: Integer;
-  TownName: string;
+  TownName, S: string;
   IndustryType: TIndustryType;
 begin
   // Terrain
@@ -480,30 +481,34 @@ begin
       case IndustryType of
         inCoalMine:
           begin
+            S := GetNearTownName(X, Y);
             SetLength(Industry, I + 1);
             Cell[X][Y] := tlCoalMineIndustry;
-            Industry[I] := TCoalMineIndustry.Create(X, Y);
+            Industry[I] := TCoalMineIndustry.Create(S, X, Y);
             Inc(I);
           end;
         inPowerPlant:
           begin
+            S := GetNearTownName(X, Y);
             SetLength(Industry, I + 1);
             Cell[X][Y] := tlPowerPlantIndustry;
-            Industry[I] := TPowerPlantIndustry.Create(X, Y);
+            Industry[I] := TPowerPlantIndustry.Create(S, X, Y);
             Inc(I);
           end;
         inForest:
           begin
+            S := GetNearTownName(X, Y);
             SetLength(Industry, I + 1);
             Cell[X][Y] := tlForestIndustry;
-            Industry[I] := TForestIndustry.Create(X, Y);
+            Industry[I] := TForestIndustry.Create(S, X, Y);
             Inc(I);
           end;
         inSawmill:
           begin
+            S := GetNearTownName(X, Y);
             SetLength(Industry, I + 1);
             Cell[X][Y] := tlSawmillIndustry;
-            Industry[I] := TSawmillIndustry.Create(X, Y);
+            Industry[I] := TSawmillIndustry.Create(S, X, Y);
             Inc(I);
           end;
       end;
@@ -596,6 +601,23 @@ end;
 function TMap.GetDist(const X1, Y1, X2, Y2: Integer): Integer;
 begin
   Result := Round(Sqrt(Sqr(X2 - X1) + Sqr(Y2 - Y1)));
+end;
+
+function TMap.GetNearTownName(const AX, AY: Integer): string;
+var
+  I, D, Mx: Integer;
+begin
+  Mx := Width div 2;
+  Result := '';
+  for I := 0 to Length(Town) - 1 do
+  begin
+    D := GetDist(Town[I].X, Town[I].Y, AX, AY);
+    if D < Mx then
+    begin
+      Result := Town[I].Name;
+      Mx := D;
+    end;
+  end;
 end;
 
 end.

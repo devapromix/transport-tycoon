@@ -36,7 +36,7 @@ type
   TForestIndustry = class(TIndustry)
   private
   public
-    constructor Create(const AX, AY: Integer);
+    constructor Create(const AName: string; const AX, AY: Integer);
   end;
 
 type
@@ -46,7 +46,7 @@ type
   TSawmillIndustry = class(TIndustry)
   private
   public
-    constructor Create(const AX, AY: Integer);
+    constructor Create(const AName: string; const AX, AY: Integer);
   end;
 
 type
@@ -56,7 +56,7 @@ type
   TCoalMineIndustry = class(TIndustry)
   private
   public
-    constructor Create(const AX, AY: Integer);
+    constructor Create(const AName: string; const AX, AY: Integer);
   end;
 
 type
@@ -66,7 +66,7 @@ type
   TPowerPlantIndustry = class(TIndustry)
   private
   public
-    constructor Create(const AX, AY: Integer);
+    constructor Create(const AName: string; const AX, AY: Integer);
   end;
 
 implementation
@@ -87,18 +87,18 @@ end;
 
 { TForestIndustry }
 
-constructor TForestIndustry.Create(const AX, AY: Integer);
+constructor TForestIndustry.Create(const AName: string; const AX, AY: Integer);
 begin
-  inherited Create('Forest', AX, AY);
+  inherited Create(Trim(AName + ' Forest'), AX, AY);
   FIndustryType := inForest;
   FProduces := cgWood;
 end;
 
 { TSawmillIndustry }
 
-constructor TSawmillIndustry.Create(const AX, AY: Integer);
+constructor TSawmillIndustry.Create(const AName: string; const AX, AY: Integer);
 begin
-  inherited Create('Sawmill', AX, AY);
+  inherited Create(Trim(AName + ' Sawmill'), AX, AY);
   FIndustryType := inSawmill;
   FAccepts := cgWood;
   FProduces := cgGoods;
@@ -106,18 +106,20 @@ end;
 
 { TCoalMineIndustry }
 
-constructor TCoalMineIndustry.Create(const AX, AY: Integer);
+constructor TCoalMineIndustry.Create(const AName: string;
+  const AX, AY: Integer);
 begin
-  inherited Create('Coal Mine', AX, AY);
+  inherited Create(Trim(AName + ' Coal Mine'), AX, AY);
   FIndustryType := inCoalMine;
   FProduces := cgCoal;
 end;
 
 { TPowerPlantIndustry }
 
-constructor TPowerPlantIndustry.Create(const AX, AY: Integer);
+constructor TPowerPlantIndustry.Create(const AName: string;
+  const AX, AY: Integer);
 begin
-  inherited Create('Power Plant', AX, AY);
+  inherited Create(Trim(AName + ' Power Plant'), AX, AY);
   FIndustryType := inPowerPlant;
   FAccepts := cgCoal;
 end;

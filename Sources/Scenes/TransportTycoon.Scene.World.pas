@@ -91,10 +91,10 @@ begin
   if (MX < Width - (Width div 2)) then
     VX := MX + 1
   else
-    VX := MX - 20;
+    VX := MX - 30;
   terminal_bkcolor('darkest gray');
-  DrawFrame(VX, VY, 20, 5);
-  DrawText(VX + 10, VY + 2, '[c=yellow]' +
+  DrawFrame(VX, VY, 30, 5);
+  DrawText(VX + 15, VY + 2, '[c=yellow]' +
     UpperCase(Game.Map.Industry[IndustryID].Name) + '[/c]', TK_ALIGN_CENTER);
   DrawText(MX, MY, Tile[Game.Map.Cell[RX][RY]].Tile, 'yellow', 'gray');
 end;
