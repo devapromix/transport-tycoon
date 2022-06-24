@@ -9,8 +9,12 @@ const
   AirportSizeStr: array [0 .. 5] of string = ('None', 'Small Airport',
     'Commuter Airport', 'City Airport', 'Metropolitan Airport',
     'International Airport');
+  DockSizeStr: array [0 .. 1] of string = ('None', 'Dock');
 
 type
+
+  { TTown }
+
   TTown = class(TMapObject)
   private
     FPopulation: Integer;
@@ -19,9 +23,11 @@ type
     FHouses: Word;
     FAirport: Integer;
     FCompanyHeadquarters: Integer;
+    FDock: Integer;
     function GrowModif: Integer;
   public const
     HQCost = 250;
+    DockCost = 9000;
   public
     constructor Create(const AName: string; const AX, AY: Integer);
     property Population: Integer read FPopulation;
@@ -29,9 +35,11 @@ type
     property BagsOfMail: Integer read FBagsOfMail write FBagsOfMail;
     property Houses: Word read FHouses;
     property Airport: Integer read FAirport;
+    property Dock: Integer read FDock;
     property CompanyHeadquarters: Integer read FCompanyHeadquarters;
     procedure ModifyPopulation(const APopulation: Integer);
     procedure BuildAirport;
+    procedure BuildDock;
     procedure BuildCompanyHeadquarters;
     function AirportCost: Integer;
     procedure Grow;
@@ -46,6 +54,8 @@ uses
   SysUtils,
   TransportTycoon.Game,
   TransportTycoon.Finances;
+
+{ TTown }
 
 function TTown.AirportCost: Integer;
 begin
@@ -70,6 +80,15 @@ begin
     and (Game.Money >= HQCost) then
     Game.ModifyMoney(ttConstruction, -HQCost);
   FCompanyHeadquarters := 1;
+end;
+
+procedure TTown.BuildDock;
+begin
+  if (FDock = 0) and (Game.Money >= DockCost) then
+  begin
+    Game.ModifyMoney(ttConstruction, -DockCost);
+    FDock := 1;
+  end;
 end;
 
 constructor TTown.Create(const AName: string; const AX, AY: Integer);
@@ -109,7 +128,7 @@ begin
     S[I] := TStringList.Create;
   S[0].DelimitedText :=
     '"Eding","Graning","Vorg","Tra","Nording","Agring","Gran","Funt","Grufing",'
-    + '"Trening","Chend","Drinning","Tor"';
+    + '"Trening","Chend","Drinning","Long","Tor"';
   S[1].DelimitedText :=
     '"ville","burg","ley","ly","field","town","well","bridge","ton","stone",' +
     '"hattan"';
@@ -123,7 +142,7 @@ end;
 
 function TTown.GrowModif: Integer;
 begin
-  Result := Airport { + Seaport + Trainstation } + 5;
+  Result := Airport + Dock { + Trainstation } + 5;
 end;
 
 procedure TTown.ModifyPopulation(const APopulation: Integer);

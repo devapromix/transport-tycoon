@@ -31,7 +31,9 @@ uses
   TransportTycoon.MapObject in 'Game\TransportTycoon.MapObject.pas',
   TransportTycoon.PathFind in 'Game\TransportTycoon.PathFind.pas',
   TransportTycoon.Industries in 'Game\TransportTycoon.Industries.pas',
-  TransportTycoon.Scene.Industry in 'Scenes\TransportTycoon.Scene.Industry.pas';
+  TransportTycoon.Scene.Industry in 'Scenes\TransportTycoon.Scene.Industry.pas',
+  TransportTycoon.Scene.BuildNearIndustry in 'Scenes\TransportTycoon.Scene.BuildNearIndustry.pas',
+  TransportTycoon.Scene.Dock in 'Scenes\TransportTycoon.Scene.Dock.pas';
 
 var
   Key: Word = 0;

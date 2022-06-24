@@ -147,6 +147,7 @@ type
     procedure NextSize;
     procedure ClearLand(const AX, AY: Integer);
     function GetNearTownName(const AX, AY: Integer): string;
+    function IsNearTile(const AX, AY: Integer; const ATile: Tiles): Boolean;
   end;
 
 implementation
@@ -170,6 +171,21 @@ begin
     begin
       Result := True;
       Exit;
+    end;
+end;
+
+function TMap.IsNearTile(const AX, AY: Integer; const ATile: Tiles): Boolean;
+var
+  X, Y: Integer;
+begin
+  Result := False;
+  for X := AX - 1 to AX + 1 do
+    for Y := AY - 1 to AY + 1 do
+    begin
+      if (X = AX) and (Y = AY) then
+        Continue;
+      if (Cell[AX][AY] = ATile) then
+        Exit(True);
     end;
 end;
 

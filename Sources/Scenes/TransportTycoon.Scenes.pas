@@ -6,9 +6,9 @@ uses
   BearLibTerminal;
 
 type
-  TSceneEnum = (scMainMenu, scGameMenu, scGenMenu, scWorld, scTown, scBuildInTown,
-    scAirport, scHangar, scAircraft, scAircrafts, scOrders, scFinances, scTowns,
-    scCompany, scIndustry);
+  TSceneEnum = (scMainMenu, scGameMenu, scGenMenu, scWorld, scTown,
+    scBuildInTown, scAirport, scHangar, scAircraft, scAircrafts, scOrders,
+    scFinances, scTowns, scCompany, scIndustry, scBuildNearIndustry, scDock);
 
 type
   TButtonRec = record
@@ -111,7 +111,9 @@ uses
   TransportTycoon.Scene.Finances,
   TransportTycoon.Scene.Towns,
   TransportTycoon.Scene.Company,
-  TransportTycoon.Scene.Industry;
+  TransportTycoon.Scene.Industry,
+  TransportTycoon.Scene.BuildNearIndustry,
+  TransportTycoon.Scene.Dock;
 
 procedure TScene.DrawText(const X, Y: Integer; Text: string;
   const Align: Integer = TK_ALIGN_LEFT);
@@ -384,6 +386,8 @@ begin
   FScene[scFinances] := TSceneFinances.Create;
   FScene[scCompany] := TSceneCompany.Create;
   FScene[scIndustry] := TSceneIndustry.Create;
+  FScene[scBuildNearIndustry] := TSceneBuildNearIndustry.Create;
+  FScene[scDock] := TSceneDock.Create;
 end;
 
 procedure TScenes.Update(var Key: Word);

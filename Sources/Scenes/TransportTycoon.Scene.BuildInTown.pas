@@ -6,6 +6,9 @@ uses
   TransportTycoon.Scenes;
 
 type
+
+  { TSceneBuildInTown }
+
   TSceneBuildInTown = class(TScene)
   private
 
@@ -22,6 +25,9 @@ uses
   SysUtils,
   TransportTycoon.Game,
   TransportTycoon.Town;
+
+
+{ TSceneBuildInTown }
 
 procedure TSceneBuildInTown.Render;
 var
@@ -43,6 +49,12 @@ begin
   if C.Airport < 5 then
     S := ' ($' + IntToStr(C.AirportCost) + ')';
   DrawButton(17, 11, F, 'A', 'Build ' + AirportSizeStr[N] + S);
+
+  S := '';
+  F := (Game.Money >= C.DockCost) and (C.Dock = 0);
+  if C.Dock = 0 then
+    S := ' ($' + IntToStr(C.DockCost) + ')';
+  DrawButton(17, 12, F, 'B', 'Build Dock' + S);
 
   if (Game.Money >= TTown.HQCost) and (C.CompanyHeadquarters = 0) and
     (Game.Map.CurrentTown = Game.Company.TownID) then
@@ -69,6 +81,8 @@ begin
       case MY of
         11:
           Key := TK_A;
+        12:
+          Key := TK_B;
         17:
           Key := TK_G;
       end;
@@ -83,6 +97,15 @@ begin
         begin
           C.BuildAirport;
           Scenes.SetScene(scAirport);
+        end;
+      end;
+    TK_B:
+      begin
+        C := Game.Map.Town[Game.Map.CurrentTown];
+        if (Game.Money >= C.DockCost) and (C.Dock = 0) then
+        begin
+          C.BuildDock;
+          Scenes.SetScene(scDock);
         end;
       end;
     TK_G:
