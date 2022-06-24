@@ -94,7 +94,7 @@ uses
 
 function IsPath(X, Y: Integer): Boolean; stdcall;
 begin
-  Result := Game.Map.Cell[X][Y] in AllTiles;
+  Result := True;
 end;
 
 procedure TAircraft.AddOrder(const TownIndex: Integer; const AName: string;

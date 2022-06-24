@@ -12,11 +12,6 @@ type
     tlPowerPlantIndustry);
 
 const
-  AllTiles = [tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlTown, tlRock,
-    tlSand, tlWater, tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
-    tlPowerPlantIndustry];
-
-const
   NormalTiles = [tlGrass, tlDirt, tlSand];
   TreeTiles = [tlTree, tlSmallTree, tlBush];
   IndustryTiles = [tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
