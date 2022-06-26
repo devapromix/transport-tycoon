@@ -35,15 +35,16 @@ type
     property BagsOfMail: Integer read FBagsOfMail write FBagsOfMail;
     property Houses: Word read FHouses;
     property Airport: Integer read FAirport;
-    property Dock: Integer read FDock;
     property CompanyHeadquarters: Integer read FCompanyHeadquarters;
+    property Dock: Integer read FDock;
     procedure ModifyPopulation(const APopulation: Integer);
     procedure BuildAirport;
-    procedure BuildDock;
     procedure BuildCompanyHeadquarters;
+    procedure BuildDock;
     function AirportCost: Integer;
     procedure Grow;
     class function GenName: string;
+    function CanBuildAirport: Boolean;
   end;
 
 implementation
@@ -67,7 +68,7 @@ end;
 
 procedure TTown.BuildAirport;
 begin
-  if (FAirport < 5) and (Game.Money >= AirportCost) then
+  if CanBuildAirport then
   begin
     Game.ModifyMoney(ttConstruction, -AirportCost);
     Inc(FAirport);
@@ -91,6 +92,11 @@ begin
   end;
 end;
 
+function TTown.CanBuildAirport: Boolean;
+begin
+  Result := (FAirport < 5) and (Game.Money >= AirportCost);
+end;
+
 constructor TTown.Create(const AName: string; const AX, AY: Integer);
 begin
   inherited Create(AName, AX, AY);
@@ -100,6 +106,7 @@ begin
   FBagsOfMail := 0;
   FAirport := 0;
   FCompanyHeadquarters := 0;
+  FDock := 0;
 end;
 
 procedure TTown.Grow;

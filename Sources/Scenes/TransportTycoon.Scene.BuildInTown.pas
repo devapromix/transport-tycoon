@@ -20,9 +20,9 @@ type
 implementation
 
 uses
-  BearLibTerminal,
   Math,
   SysUtils,
+  BearLibTerminal,
   TransportTycoon.Game,
   TransportTycoon.Town;
 
@@ -44,11 +44,10 @@ begin
   DrawTitle('BUILD IN ' + C.Name);
 
   S := '';
-  F := (Game.Money >= C.AirportCost) and (C.Airport < 5);
   N := Math.EnsureRange(C.Airport + 1, 0, 5);
   if C.Airport < 5 then
     S := ' ($' + IntToStr(C.AirportCost) + ')';
-  DrawButton(17, 11, F, 'A', 'Build ' + AirportSizeStr[N] + S);
+  DrawButton(17, 11, C.CanBuildAirport, 'A', 'Build ' + AirportSizeStr[N] + S);
 
   S := '';
   F := (Game.Money >= C.DockCost) and (C.Dock = 0);
@@ -93,7 +92,7 @@ begin
     TK_A:
       begin
         C := Game.Map.Town[Game.Map.CurrentTown];
-        if (Game.Money >= C.AirportCost) and (C.Airport < 5) then
+        if C.CanBuildAirport then
         begin
           C.BuildAirport;
           Scenes.SetScene(scAirport);

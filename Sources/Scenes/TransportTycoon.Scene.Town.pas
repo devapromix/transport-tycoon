@@ -6,7 +6,6 @@ uses
   TransportTycoon.Scenes;
 
 type
-
   TSceneTown = class(TScene)
   private
 
