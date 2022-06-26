@@ -136,6 +136,7 @@
         <DCCReference Include="Scenes\TransportTycoon.Scene.BuildNearIndustry.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Dock.pas"/>
         <DCCReference Include="Game\TransportTycoon.Ship.pas"/>
+        <DCCReference Include="Game\TransportTycoon.Stations.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

@@ -36,7 +36,7 @@ begin
     for TownID := 0 to Length(Game.Map.Town) - 1 do
     begin
       F := not(Aircraft[CurrentVehicle].IsOrder(TownID) or
-        (Game.Map.Town[TownID].Airport = 0));
+        (Game.Map.Town[TownID].Airport.Level = 0));
       DrawButton(22, TownID + 9, F, Chr(Ord('A') + TownID),
         'Go to ' + Game.Map.Town[TownID].Name + ' Airport');
     end;
@@ -73,7 +73,7 @@ begin
       begin
         TownID := Key - TK_A;
         F := not(Aircraft[CurrentVehicle].IsOrder(TownID) or
-          (Game.Map.Town[TownID].Airport = 0));
+          (Game.Map.Town[TownID].Airport.Level = 0));
         if F then
           with Game.Vehicles do
           begin

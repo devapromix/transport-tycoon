@@ -4,7 +4,8 @@ interface
 
 uses
   TransportTycoon.MapObject,
-  TransportTycoon.Industries;
+  TransportTycoon.Industries,
+  TransportTycoon.Stations;
 
 const
   AirportSizeStr: array [0 .. 5] of string = ('None', 'Small Airport',
@@ -20,7 +21,7 @@ type
   private
     FPopulation: Integer;
     FHouses: Word;
-    FAirport: Integer;
+    FAirport: TStation;
     FCompanyHeadquarters: Integer;
     FDock: Integer;
     function GrowModif: Integer;
@@ -29,19 +30,17 @@ type
     DockCost = 9000;
   public
     constructor Create(const AName: string; const AX, AY: Integer);
+    destructor Destroy; override;
     property Population: Integer read FPopulation;
     property Houses: Word read FHouses;
-    property Airport: Integer read FAirport;
+    property Airport: TStation read FAirport;
     property CompanyHeadquarters: Integer read FCompanyHeadquarters;
     property Dock: Integer read FDock;
     procedure ModifyPopulation(const APopulation: Integer);
-    procedure BuildAirport;
     procedure BuildCompanyHeadquarters;
     procedure BuildDock;
-    function AirportCost: Integer;
     procedure Grow;
     class function GenName: string;
-    function CanBuildAirport: Boolean;
   end;
 
 implementation
@@ -54,23 +53,6 @@ uses
   TransportTycoon.Finances;
 
 { TTown }
-
-function TTown.AirportCost: Integer;
-begin
-  if (FAirport < 5) then
-    Result := (FAirport + 1) * 8000
-  else
-    Result := 0;
-end;
-
-procedure TTown.BuildAirport;
-begin
-  if CanBuildAirport then
-  begin
-    Game.ModifyMoney(ttConstruction, -AirportCost);
-    Inc(FAirport);
-  end;
-end;
 
 procedure TTown.BuildCompanyHeadquarters;
 begin
@@ -89,11 +71,6 @@ begin
   end;
 end;
 
-function TTown.CanBuildAirport: Boolean;
-begin
-  Result := (FAirport < 5) and (Game.Money >= AirportCost);
-end;
-
 constructor TTown.Create(const AName: string; const AX, AY: Integer);
 begin
   inherited Create(AName, AX, AY);
@@ -101,9 +78,15 @@ begin
   Produces := [cgPassengers, cgBagsOfMail];
   FPopulation := 0;
   ModifyPopulation(Math.RandomRange(250, 1500));
-  FAirport := 0;
+  FAirport := TStation.Create(8000, 5);
   FCompanyHeadquarters := 0;
   FDock := 0;
+end;
+
+destructor TTown.Destroy;
+begin
+  FAirport.Free;
+  inherited;
 end;
 
 procedure TTown.Grow;
@@ -115,7 +98,7 @@ begin
     ModifyPopulation(Math.RandomRange(GrowModif * 8, GrowModif * 12));
   MonthPassengers := FPopulation div Math.RandomRange(40, 50);
   MonthBagsOfMail := FPopulation div Math.RandomRange(160, 190);
-  if Airport > 0 then
+  if Airport.Level > 0 then
   begin
     SetCargoAmount(cgPassengers, MonthPassengers);
     SetCargoAmount(cgBagsOfMail, MonthBagsOfMail);
@@ -145,7 +128,7 @@ end;
 
 function TTown.GrowModif: Integer;
 begin
-  Result := Airport + Dock { + Trainstation } + 5;
+  Result := Airport.Level + Dock { + Trainstation } + 5;
 end;
 
 procedure TTown.ModifyPopulation(const APopulation: Integer);

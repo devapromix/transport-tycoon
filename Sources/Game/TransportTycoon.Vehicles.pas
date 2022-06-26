@@ -35,7 +35,7 @@ uses
 procedure TVehicles.AddAircraft(const AName: string;
   const ACityIndex, AircraftID: Integer);
 begin
-  if ((Game.Map.Town[ACityIndex].Airport > 0) and
+  if ((Game.Map.Town[ACityIndex].Airport.Level > 0) and
     (Game.Money >= AircraftBase[AircraftID].Cost)) then
     with Game.Vehicles do
     begin

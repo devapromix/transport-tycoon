@@ -35,10 +35,9 @@ begin
   terminal_color('white');
   DrawText(12, 12, 'Population: ' + IntToStr(C.Population));
   DrawText(12, 13, 'Houses: ' + IntToStr(C.Houses));
-  DrawButton(34, 12, C.Airport > 0, 'A', 'Airport: ' + AirportSizeStr
-    [C.Airport]);
-  DrawButton(34, 13, C.Dock > 0, 'D', 'Dock: ' + DockSizeStr
-    [C.Dock]);
+  DrawButton(34, 12, C.Airport.Level > 0, 'A',
+    'Airport: ' + AirportSizeStr[C.Airport.Level]);
+  DrawButton(34, 13, C.Dock > 0, 'D', 'Dock: ' + DockSizeStr[C.Dock]);
   if (Game.Map.CurrentTown = Game.Company.TownID) and
     (Game.Map.Town[Game.Map.CurrentTown].CompanyHeadquarters > 0) then
     DrawButton(34, 16, 'G', 'Company Headquarters');
@@ -81,7 +80,7 @@ begin
     TK_ESCAPE:
       Scenes.SetScene(scWorld);
     TK_A:
-      if (C.Airport > 0) then
+      if (C.Airport.Level > 0) then
         Scenes.SetScene(scAirport);
     TK_B:
       Scenes.SetScene(scBuildInTown);

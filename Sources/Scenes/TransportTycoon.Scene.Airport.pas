@@ -36,7 +36,7 @@ begin
   DrawTitle(C.Name + ' Airport');
 
   terminal_color('white');
-  DrawText(7, 11, 'Size: ' + AirportSizeStr[C.Airport]);
+  DrawText(7, 11, 'Size: ' + AirportSizeStr[C.Airport.Level]);
   DrawText(7, 12, 'Passengers: ' + IntToStr(C.ProducesAmount[cgPassengers]));
   DrawText(7, 13, 'Bags of mail: ' + IntToStr(C.ProducesAmount[cgBagsOfMail]));
 

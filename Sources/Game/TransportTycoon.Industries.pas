@@ -96,8 +96,8 @@ begin
     FProducesAmount[Cargo] := 0;
 end;
 
-procedure TIndustry.SetCargoAmount(const ACargo: TCargo; const AAmount: Integer
-  );
+procedure TIndustry.SetCargoAmount(const ACargo: TCargo;
+  const AAmount: Integer);
 begin
   FProducesAmount[ACargo] := AAmount;
 end;

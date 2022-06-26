@@ -43,10 +43,10 @@ begin
   DrawTitle('BUILD IN ' + Town.Name);
 
   S := '';
-  N := Math.EnsureRange(Town.Airport + 1, 0, 5);
-  if Town.Airport < 5 then
-    S := ' ($' + IntToStr(Town.AirportCost) + ')';
-  DrawButton(17, 11, Town.CanBuildAirport, 'A',
+  N := Math.EnsureRange(Town.Airport.Level + 1, 0, 5);
+  if Town.Airport.Level < 5 then
+    S := ' ($' + IntToStr(Town.Airport.Cost) + ')';
+  DrawButton(17, 11, Town.Airport.CanBuild, 'A',
     'Build ' + AirportSizeStr[N] + S);
 
   S := '';
@@ -92,9 +92,9 @@ begin
     TK_A:
       begin
         Town := Game.Map.Town[Game.Map.CurrentTown];
-        if Town.CanBuildAirport then
+        if Town.Airport.CanBuild then
         begin
-          Town.BuildAirport;
+          Town.Airport.Build;
           Scenes.SetScene(scAirport);
         end;
       end;
