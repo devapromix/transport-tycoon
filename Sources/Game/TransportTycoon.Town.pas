@@ -78,7 +78,7 @@ begin
     ModifyPopulation(Math.RandomRange(GrowModif * 8, GrowModif * 12));
   MonthPassengers := FPopulation div Math.RandomRange(40, 50);
   MonthBagsOfMail := FPopulation div Math.RandomRange(160, 190);
-  if (Airport.Level > 0) or (Dock.Level > 0) then
+  if Airport.HasBuilding or Dock.HasBuilding then
   begin
     SetCargoAmount(cgPassengers, MonthPassengers);
     SetCargoAmount(cgBagsOfMail, MonthBagsOfMail);

@@ -29,7 +29,7 @@ begin
   DrawTitle(10, Game.Company.Name);
   DrawText(22, 12, 'Inavgurated: ' + IntToStr(Game.Company.Inavgurated));
 
-  if (Game.Map.Town[Game.Company.TownID].HQ.Level > 0) then
+  if Game.Map.Town[Game.Company.TownID].HQ.HasBuilding then
     DrawText(22, 16, 'Company headquarters in ' + Game.Map.Town
       [Game.Company.TownID].Name);
 

@@ -43,7 +43,7 @@ begin
 
   S := '';
   N := Math.EnsureRange(Town.Airport.Level + 1, 0, 5);
-  if Town.Airport.Level < 5 then
+  if Town.Airport.Level < Town.Airport.MaxLevel then
     S := ' ($' + IntToStr(Town.Airport.Cost) + ')';
   DrawButton(17, 11, Town.Airport.CanBuild, 'A',
     'Build ' + AirportSizeStr[N] + S);

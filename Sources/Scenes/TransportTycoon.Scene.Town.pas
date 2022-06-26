@@ -35,12 +35,12 @@ begin
   terminal_color('white');
   DrawText(12, 12, 'Population: ' + IntToStr(C.Population));
   DrawText(12, 13, 'Houses: ' + IntToStr(C.Houses));
-  DrawButton(34, 12, C.Airport.Level > 0, 'A',
+  DrawButton(34, 12, C.Airport.HasBuilding, 'A',
     'Airport: ' + AirportSizeStr[C.Airport.Level]);
-  DrawButton(34, 13, C.Dock.Level > 0, 'D',
+  DrawButton(34, 13, C.Dock.HasBuilding, 'D',
     'Dock: ' + DockSizeStr[C.Dock.Level]);
   if (Game.Map.CurrentTown = Game.Company.TownID) then
-    DrawButton(34, 16, Game.Map.Town[Game.Map.CurrentTown].HQ.Level > 0, 'G',
+    DrawButton(34, 16, Game.Map.Town[Game.Map.CurrentTown].HQ.HasBuilding, 'G',
       'Company Headquarters');
   terminal_color('white');
 
@@ -81,16 +81,16 @@ begin
     TK_ESCAPE:
       Scenes.SetScene(scWorld);
     TK_A:
-      if (C.Airport.Level > 0) then
+      if C.Airport.HasBuilding then
         Scenes.SetScene(scAirport);
     TK_B:
       Scenes.SetScene(scBuildInTown);
     TK_D:
-      if (C.Dock.Level > 0) then
+      if C.Dock.HasBuilding then
         Scenes.SetScene(scDock);
     TK_G:
       if (Game.Map.CurrentTown = Game.Company.TownID) and
-        (Game.Map.Town[Game.Map.CurrentTown].HQ.Level > 0) then
+        Game.Map.Town[Game.Map.CurrentTown].HQ.HasBuilding then
         Scenes.SetScene(scCompany);
   end;
 end;

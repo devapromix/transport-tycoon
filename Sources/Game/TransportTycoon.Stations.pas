@@ -18,6 +18,7 @@ type
     function Cost: Integer;
     procedure Build;
     function CanBuild: Boolean;
+    function HasBuilding: Boolean;
   end;
 
 implementation
@@ -54,6 +55,11 @@ begin
   FLevel := 0;
   FCost := ACost;
   FMaxLevel := AMaxLevel;
+end;
+
+function TStation.HasBuilding: Boolean;
+begin
+  Result := FLevel > 0;
 end;
 
 end.
