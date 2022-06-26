@@ -33,7 +33,6 @@ var
   Town: TTown;
   N: Integer;
   S: string;
-  F: Boolean;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
@@ -50,15 +49,13 @@ begin
     'Build ' + AirportSizeStr[N] + S);
 
   S := '';
-  F := (Game.Money >= Town.DockCost) and (Town.Dock = 0);
-  if Town.Dock = 0 then
-    S := ' ($' + IntToStr(Town.DockCost) + ')';
-  DrawButton(17, 12, F, 'B', 'Build Dock' + S);
+  if Town.Dock.Level = 0 then
+    S := ' ($' + IntToStr(Town.Dock.Cost) + ')';
+  DrawButton(17, 12, Town.Dock.CanBuild, 'B', 'Build Dock' + S);
 
-  if (Game.Money >= TTown.HQCost) and (Town.CompanyHeadquarters = 0) and
-    (Game.Map.CurrentTown = Game.Company.TownID) then
-    DrawButton(17, 17, 'G', 'Build Company Headquarters ($' +
-      IntToStr(TTown.HQCost) + ')');
+  if (Game.Map.CurrentTown = Game.Company.TownID) then
+    DrawButton(17, 17, Town.HQ.CanBuild, 'G', 'Build Company Headquarters ($' +
+      IntToStr(Town.HQ.Cost) + ')');
 
   AddButton(19, 'Esc', 'Close');
 
@@ -101,19 +98,19 @@ begin
     TK_B:
       begin
         Town := Game.Map.Town[Game.Map.CurrentTown];
-        if (Game.Money >= Town.DockCost) and (Town.Dock = 0) then
+        if Town.Dock.CanBuild then
         begin
-          Town.BuildDock;
+          Town.Dock.Build;
           Scenes.SetScene(scDock);
         end;
       end;
     TK_G:
       begin
         Town := Game.Map.Town[Game.Map.CurrentTown];
-        if (Game.Map.CurrentTown = Game.Company.TownID) and
-          (Game.Money >= TTown.HQCost) and (Town.CompanyHeadquarters = 0) then
+        if Town.HQ.CanBuild and (Game.Map.CurrentTown = Game.Company.TownID)
+        then
         begin
-          Town.BuildCompanyHeadquarters;
+          Town.HQ.Build;
           Scenes.SetScene(scCompany);
         end;
       end;

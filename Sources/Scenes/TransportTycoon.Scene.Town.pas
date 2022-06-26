@@ -37,10 +37,11 @@ begin
   DrawText(12, 13, 'Houses: ' + IntToStr(C.Houses));
   DrawButton(34, 12, C.Airport.Level > 0, 'A',
     'Airport: ' + AirportSizeStr[C.Airport.Level]);
-  DrawButton(34, 13, C.Dock > 0, 'D', 'Dock: ' + DockSizeStr[C.Dock]);
-  if (Game.Map.CurrentTown = Game.Company.TownID) and
-    (Game.Map.Town[Game.Map.CurrentTown].CompanyHeadquarters > 0) then
-    DrawButton(34, 16, 'G', 'Company Headquarters');
+  DrawButton(34, 13, C.Dock.Level > 0, 'D',
+    'Dock: ' + DockSizeStr[C.Dock.Level]);
+  if (Game.Map.CurrentTown = Game.Company.TownID) then
+    DrawButton(34, 16, Game.Map.Town[Game.Map.CurrentTown].HQ.Level > 0, 'G',
+      'Company Headquarters');
   terminal_color('white');
 
   AddButton(18, 'B', 'Build');
@@ -85,11 +86,11 @@ begin
     TK_B:
       Scenes.SetScene(scBuildInTown);
     TK_D:
-      if (C.Dock > 0) then
+      if (C.Dock.Level > 0) then
         Scenes.SetScene(scDock);
     TK_G:
       if (Game.Map.CurrentTown = Game.Company.TownID) and
-        (Game.Map.Town[Game.Map.CurrentTown].CompanyHeadquarters > 0) then
+        (Game.Map.Town[Game.Map.CurrentTown].HQ.Level > 0) then
         Scenes.SetScene(scCompany);
   end;
 end;
