@@ -3,7 +3,8 @@
 interface
 
 uses
-  TransportTycoon.MapObject;
+  TransportTycoon.MapObject,
+  TransportTycoon.Stations;
 
 type
   TCargo = (cgPassengers, cgBagsOfMail, cgGoods, cgCoal, cgWood);
@@ -27,14 +28,17 @@ type
     FProducesAmount: TCargoAmount;
     FProduces: TCargoSet;
     FAccepts: TCargoSet;
+    FDock: TStation;
   public
     constructor Create(const AName: string; const AX, AY: Integer);
+    destructor Destroy; override;
     property Accepts: TCargoSet read FAccepts write FAccepts;
     property Produces: TCargoSet read FProduces write FProduces;
     property ProducesAmount: TCargoAmount read FProducesAmount;
     property IndustryType: TIndustryType read FIndustryType;
     procedure SetCargoAmount(const ACargo: TCargo; const AAmount: Integer);
     procedure DecCargoAmount(const ACargo: TCargo);
+    property Dock: TStation read FDock;
   end;
 
 type
@@ -94,6 +98,7 @@ begin
   FProduces := [];
   for Cargo := Low(TCargo) to High(TCargo) do
     FProducesAmount[Cargo] := 0;
+  FDock := TStation.Create(9000);
 end;
 
 procedure TIndustry.SetCargoAmount(const ACargo: TCargo;
@@ -106,6 +111,12 @@ procedure TIndustry.DecCargoAmount(const ACargo: TCargo);
 begin
   if FProducesAmount[ACargo] > 0 then
     FProducesAmount[ACargo] := FProducesAmount[ACargo] - 1;
+end;
+
+destructor TIndustry.Destroy;
+begin
+  FDock.Free;
+  inherited;
 end;
 
 { TForestIndustry }

@@ -22,7 +22,6 @@ type
     FPopulation: Integer;
     FHouses: Word;
     FAirport: TStation;
-    FDock: TStation;
     FHQ: TStation;
     function GrowModif: Integer;
   public
@@ -31,7 +30,6 @@ type
     property Population: Integer read FPopulation;
     property Houses: Word read FHouses;
     property Airport: TStation read FAirport;
-    property Dock: TStation read FDock;
     property HQ: TStation read FHQ;
     procedure ModifyPopulation(const APopulation: Integer);
     procedure Grow;
@@ -57,14 +55,12 @@ begin
   FPopulation := 0;
   ModifyPopulation(Math.RandomRange(250, 1500));
   FAirport := TStation.Create(8000, 5);
-  FDock := TStation.Create(9000);
   FHQ := TStation.Create(250);
 end;
 
 destructor TTown.Destroy;
 begin
   FHQ.Free;
-  FDock.Free;
   FAirport.Free;
   inherited;
 end;
@@ -94,10 +90,10 @@ begin
     S[I] := TStringList.Create;
   S[0].DelimitedText :=
     '"Eding","Graning","Vorg","Tra","Nording","Agring","Gran","Funt","Grufing",'
-    + '"Trening","Chend","Drinning","Long","Tor"';
+    + '"Trening","Chend","Drinning","Long","Tor","Mar"';
   S[1].DelimitedText :=
-    '"ville","burg","ley","ly","field","town","well","bridge","ton","stone",' +
-    '"hattan"';
+    '"ville","burg","ley","ly","field","town","well","bell","bridge","ton",' +
+    '"stone","hattan"';
   Result := '';
   for I := 0 to 1 do
   begin

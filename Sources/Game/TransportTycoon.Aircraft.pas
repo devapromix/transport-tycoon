@@ -173,6 +173,7 @@ function TAircraft.Move(const AX, AY: Integer): Boolean;
 var
   NX, NY: Integer;
 begin
+  Result := False;
   FState := 'Fly';
   NX := 0;
   NY := 0;

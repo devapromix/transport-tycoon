@@ -23,7 +23,8 @@ uses
   BearLibTerminal,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Industries;
+  TransportTycoon.Industries,
+  TransportTycoon.Town;
 
 { TSceneIndustry }
 
@@ -36,15 +37,17 @@ begin
 
   Industry := Game.Map.Industry[Game.Map.CurrentIndustry];
 
-  DrawFrame(20, 8, 40, 13);
-  DrawTitle(10, Industry.Name);
-
   with Industry do
   begin
+    DrawFrame(20, 8, 40, 13);
+    DrawTitle(10, Name);
 
+    DrawButton(34, 12, Dock.HasBuilding, 'D',
+      'Dock: ' + DockSizeStr[Dock.Level]);
   end;
 
-  AddButton(18, 'Esc', 'Close');
+  AddButton(18, 'B', 'Build');
+  AddButton(18, 'ESC', 'Close');
 
   DrawBar;
 end;
@@ -55,13 +58,31 @@ begin
   begin
     if (GetButtonsY = MY) then
     begin
-      if (MX >= 35) and (MX <= 45) then
-        Key := TK_ESCAPE;
+      if (MX >= 29) and (MX <= 37) then
+        case MY of
+          18:
+            Key := TK_B;
+        end;
+      if (MX >= 41) and (MX <= 51) then
+        case MY of
+          18:
+            Key := TK_ESCAPE;
+        end;
     end;
+    if (MX >= 34) and (MX <= 56) then
+      case MY of
+        12:
+          Key := TK_D;
+      end;
   end;
   case Key of
     TK_ESCAPE:
       Scenes.SetScene(scWorld);
+    TK_B:
+      Scenes.SetScene(scBuildNearIndustry);
+    TK_D:
+      if Industry.Dock.HasBuilding then
+        Scenes.SetScene(scDock);
   end;
 end;
 
