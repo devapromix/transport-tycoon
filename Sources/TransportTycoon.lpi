@@ -31,7 +31,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="32">
+    <Units Count="33">
       <Unit0>
         <Filename Value="TransportTycoon.dpr"/>
         <IsPartOfProject Value="True"/>
@@ -160,6 +160,10 @@
         <Filename Value="Scenes\TransportTycoon.Scene.BuildNearIndustry.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit31>
+      <Unit32>
+        <Filename Value="Game\TransportTycoon.Ship.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit32>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -188,6 +192,9 @@
       </Options>
     </Linking>
     <Other>
+      <CompilerMessages>
+        <IgnoredMessages idx5024="True"/>
+      </CompilerMessages>
       <CustomOptions Value="-dBorland -dVer150 -dDelphi7 -dCompiler6_Up -dPUREPASCAL"/>
     </Other>
   </CompilerOptions>

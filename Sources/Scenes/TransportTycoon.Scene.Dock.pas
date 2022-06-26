@@ -23,7 +23,8 @@ uses
   BearLibTerminal,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Town;
+  TransportTycoon.Town,
+  TransportTycoon.Industries;
 
 { TSceneDock }
 
@@ -40,8 +41,8 @@ begin
   DrawTitle(Town.Name + ' Dock');
 
   terminal_color('white');
-  DrawText(7, 11, 'Passengers: ' + IntToStr(Town.Passengers));
-  DrawText(7, 12, 'Bags of mail: ' + IntToStr(Town.BagsOfMail));
+  DrawText(7, 11, 'Passengers: ' + IntToStr(Town.ProducesAmount[cgPassengers]));
+  DrawText(7, 12, 'Bags of mail: ' + IntToStr(Town.ProducesAmount[cgBagsOfMail]));
 
   { for I := 0 to Length(Game.Vehicles.Ship) - 1 do
     DrawButton(37, I + 11, Game.Vehicles.Ship[I].InLocation(C.X, C.Y),

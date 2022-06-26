@@ -3,7 +3,8 @@
 interface
 
 uses
-  TransportTycoon.MapObject;
+  TransportTycoon.MapObject,
+  TransportTycoon.Industries;
 
 const
   AirportSizeStr: array [0 .. 5] of string = ('None', 'Small Airport',
@@ -15,11 +16,9 @@ type
 
   { TTown }
 
-  TTown = class(TMapObject)
+  TTown = class(TIndustry)
   private
     FPopulation: Integer;
-    FPassengers: Integer;
-    FBagsOfMail: Integer;
     FHouses: Word;
     FAirport: Integer;
     FCompanyHeadquarters: Integer;
@@ -31,8 +30,6 @@ type
   public
     constructor Create(const AName: string; const AX, AY: Integer);
     property Population: Integer read FPopulation;
-    property Passengers: Integer read FPassengers write FPassengers;
-    property BagsOfMail: Integer read FBagsOfMail write FBagsOfMail;
     property Houses: Word read FHouses;
     property Airport: Integer read FAirport;
     property CompanyHeadquarters: Integer read FCompanyHeadquarters;
@@ -100,29 +97,28 @@ end;
 constructor TTown.Create(const AName: string; const AX, AY: Integer);
 begin
   inherited Create(AName, AX, AY);
+  Accepts := [cgPassengers, cgBagsOfMail, cgGoods];
+  Produces := [cgPassengers, cgBagsOfMail];
   FPopulation := 0;
   ModifyPopulation(Math.RandomRange(250, 1500));
-  FPassengers := 0;
-  FBagsOfMail := 0;
   FAirport := 0;
   FCompanyHeadquarters := 0;
   FDock := 0;
 end;
 
 procedure TTown.Grow;
+var
+  MonthPassengers: Integer;
+  MonthBagsOfMail: Integer;
 begin
   if Math.RandomRange(0, 25) <= GrowModif then
     ModifyPopulation(Math.RandomRange(GrowModif * 8, GrowModif * 12));
+  MonthPassengers := FPopulation div Math.RandomRange(40, 50);
+  MonthBagsOfMail := FPopulation div Math.RandomRange(160, 190);
   if Airport > 0 then
   begin
-    FPassengers := (FPopulation div Math.RandomRange(40, 50) * Airport) +
-      Math.RandomRange(1, 10);
-    FBagsOfMail := (FPopulation div Math.RandomRange(160, 190) * Airport);
-  end
-  else
-  begin
-    FPassengers := 0;
-    FBagsOfMail := 0;
+    SetCargoAmount(cgPassengers, MonthPassengers);
+    SetCargoAmount(cgBagsOfMail, MonthBagsOfMail);
   end;
 end;
 

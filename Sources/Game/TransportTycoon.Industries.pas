@@ -6,7 +6,13 @@ uses
   TransportTycoon.MapObject;
 
 type
-  TCargo = (cgNone, cgGoods, cgCoal, cgWood);
+  TCargo = (cgPassengers, cgBagsOfMail, cgGoods, cgCoal, cgWood);
+
+type
+  TCargoAmount = array [TCargo] of Integer;
+
+type
+  TCargoSet = set of TCargo;
 
 type
   TIndustryType = (inNone, inCoalMine, inPowerPlant, inForest, inSawmill);
@@ -18,15 +24,17 @@ type
   TIndustry = class(TMapObject)
   private
     FIndustryType: TIndustryType;
-    FProducesAmount: Integer;
-    FProduces: TCargo;
-    FAccepts: TCargo;
+    FProducesAmount: TCargoAmount;
+    FProduces: TCargoSet;
+    FAccepts: TCargoSet;
   public
     constructor Create(const AName: string; const AX, AY: Integer);
-    property Accepts: TCargo read FAccepts;
-    property Produces: TCargo read FProduces;
-    property ProducesAmount: Integer read FProducesAmount;
+    property Accepts: TCargoSet read FAccepts write FAccepts;
+    property Produces: TCargoSet read FProduces write FProduces;
+    property ProducesAmount: TCargoAmount read FProducesAmount;
     property IndustryType: TIndustryType read FIndustryType;
+    procedure SetCargoAmount(const ACargo: TCargo; const AAmount: Integer);
+    procedure DecCargoAmount(const ACargo: TCargo);
   end;
 
 type
@@ -77,12 +85,27 @@ uses
 { TIndustry }
 
 constructor TIndustry.Create(const AName: string; const AX, AY: Integer);
+var
+  Cargo: TCargo;
 begin
   inherited Create(AName, AX, AY);
   FIndustryType := inNone;
-  FAccepts := cgNone;
-  FProduces := cgNone;
-  FProducesAmount := 0;
+  FAccepts := [];
+  FProduces := [];
+  for Cargo := Low(TCargo) to High(TCargo) do
+    FProducesAmount[Cargo] := 0;
+end;
+
+procedure TIndustry.SetCargoAmount(const ACargo: TCargo; const AAmount: Integer
+  );
+begin
+  FProducesAmount[ACargo] := AAmount;
+end;
+
+procedure TIndustry.DecCargoAmount(const ACargo: TCargo);
+begin
+  if FProducesAmount[ACargo] > 0 then
+    FProducesAmount[ACargo] := FProducesAmount[ACargo] - 1;
 end;
 
 { TForestIndustry }
@@ -91,7 +114,7 @@ constructor TForestIndustry.Create(const AName: string; const AX, AY: Integer);
 begin
   inherited Create(Trim(AName + ' Forest'), AX, AY);
   FIndustryType := inForest;
-  FProduces := cgWood;
+  FProduces := [cgWood];
 end;
 
 { TSawmillIndustry }
@@ -100,8 +123,8 @@ constructor TSawmillIndustry.Create(const AName: string; const AX, AY: Integer);
 begin
   inherited Create(Trim(AName + ' Sawmill'), AX, AY);
   FIndustryType := inSawmill;
-  FAccepts := cgWood;
-  FProduces := cgGoods;
+  FAccepts := [cgWood];
+  FProduces := [cgGoods];
 end;
 
 { TCoalMineIndustry }
@@ -111,7 +134,7 @@ constructor TCoalMineIndustry.Create(const AName: string;
 begin
   inherited Create(Trim(AName + ' Coal Mine'), AX, AY);
   FIndustryType := inCoalMine;
-  FProduces := cgCoal;
+  FProduces := [cgCoal];
 end;
 
 { TPowerPlantIndustry }
@@ -121,7 +144,7 @@ constructor TPowerPlantIndustry.Create(const AName: string;
 begin
   inherited Create(Trim(AName + ' Power Plant'), AX, AY);
   FIndustryType := inPowerPlant;
-  FAccepts := cgCoal;
+  FAccepts := [cgCoal];
 end;
 
 end.

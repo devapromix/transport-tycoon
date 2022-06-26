@@ -90,11 +90,12 @@ uses
   TransportTycoon.Game,
   TransportTycoon.Finances,
   TransportTycoon.PathFind,
-  TransportTycoon.Map;
+  TransportTycoon.Map,
+  TransportTycoon.Industries;
 
 function IsPath(X, Y: Integer): Boolean; stdcall;
 begin
-  Result := True;
+  Result := True ;
 end;
 
 procedure TAircraft.AddOrder(const TownIndex: Integer; const AName: string;
@@ -154,18 +155,16 @@ end;
 procedure TAircraft.Load;
 begin
   FState := 'Load';
-  while (Game.Map.Town[Order[OrderIndex].ID].Passengers > 0) and
+  while (Game.Map.Town[Order[OrderIndex].ID].ProducesAmount[cgPassengers] > 0) and
     (Passengers < MaxPassengers) do
   begin
-    with Game.Map.Town[Order[OrderIndex].ID] do
-      Passengers := Passengers - 1;
+    Game.Map.Town[Order[OrderIndex].ID].DecCargoAmount(cgPassengers);
     Inc(FPassengers);
   end;
-  while (Game.Map.Town[Order[OrderIndex].ID].BagsOfMail > 0) and
+  while (Game.Map.Town[Order[OrderIndex].ID].ProducesAmount[cgBagsOfMail] > 0) and
     (BagsOfMail < MaxBagsOfMail) do
   begin
-    with Game.Map.Town[Order[OrderIndex].ID] do
-      BagsOfMail := BagsOfMail - 1;
+    Game.Map.Town[Order[OrderIndex].ID].DecCargoAmount(cgBagsOfMail);
     Inc(FBagsOfMail);
   end;
 end;
