@@ -26,12 +26,11 @@ uses
   TransportTycoon.Game,
   TransportTycoon.Town;
 
-
 { TSceneBuildInTown }
 
 procedure TSceneBuildInTown.Render;
 var
-  C: TTown;
+  Town: TTown;
   N: Integer;
   S: string;
   F: Boolean;
@@ -40,22 +39,23 @@ begin
 
   DrawFrame(15, 7, 50, 15);
 
-  C := Game.Map.Town[Game.Map.CurrentTown];
-  DrawTitle('BUILD IN ' + C.Name);
+  Town := Game.Map.Town[Game.Map.CurrentTown];
+  DrawTitle('BUILD IN ' + Town.Name);
 
   S := '';
-  N := Math.EnsureRange(C.Airport + 1, 0, 5);
-  if C.Airport < 5 then
-    S := ' ($' + IntToStr(C.AirportCost) + ')';
-  DrawButton(17, 11, C.CanBuildAirport, 'A', 'Build ' + AirportSizeStr[N] + S);
+  N := Math.EnsureRange(Town.Airport + 1, 0, 5);
+  if Town.Airport < 5 then
+    S := ' ($' + IntToStr(Town.AirportCost) + ')';
+  DrawButton(17, 11, Town.CanBuildAirport, 'A',
+    'Build ' + AirportSizeStr[N] + S);
 
   S := '';
-  F := (Game.Money >= C.DockCost) and (C.Dock = 0);
-  if C.Dock = 0 then
-    S := ' ($' + IntToStr(C.DockCost) + ')';
+  F := (Game.Money >= Town.DockCost) and (Town.Dock = 0);
+  if Town.Dock = 0 then
+    S := ' ($' + IntToStr(Town.DockCost) + ')';
   DrawButton(17, 12, F, 'B', 'Build Dock' + S);
 
-  if (Game.Money >= TTown.HQCost) and (C.CompanyHeadquarters = 0) and
+  if (Game.Money >= TTown.HQCost) and (Town.CompanyHeadquarters = 0) and
     (Game.Map.CurrentTown = Game.Company.TownID) then
     DrawButton(17, 17, 'G', 'Build Company Headquarters ($' +
       IntToStr(TTown.HQCost) + ')');
@@ -67,7 +67,7 @@ end;
 
 procedure TSceneBuildInTown.Update(var Key: Word);
 var
-  C: TTown;
+  Town: TTown;
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
@@ -91,29 +91,29 @@ begin
       Scenes.SetScene(scTown);
     TK_A:
       begin
-        C := Game.Map.Town[Game.Map.CurrentTown];
-        if C.CanBuildAirport then
+        Town := Game.Map.Town[Game.Map.CurrentTown];
+        if Town.CanBuildAirport then
         begin
-          C.BuildAirport;
+          Town.BuildAirport;
           Scenes.SetScene(scAirport);
         end;
       end;
     TK_B:
       begin
-        C := Game.Map.Town[Game.Map.CurrentTown];
-        if (Game.Money >= C.DockCost) and (C.Dock = 0) then
+        Town := Game.Map.Town[Game.Map.CurrentTown];
+        if (Game.Money >= Town.DockCost) and (Town.Dock = 0) then
         begin
-          C.BuildDock;
+          Town.BuildDock;
           Scenes.SetScene(scDock);
         end;
       end;
     TK_G:
       begin
-        C := Game.Map.Town[Game.Map.CurrentTown];
+        Town := Game.Map.Town[Game.Map.CurrentTown];
         if (Game.Map.CurrentTown = Game.Company.TownID) and
-          (Game.Money >= TTown.HQCost) and (C.CompanyHeadquarters = 0) then
+          (Game.Money >= TTown.HQCost) and (Town.CompanyHeadquarters = 0) then
         begin
-          C.BuildCompanyHeadquarters;
+          Town.BuildCompanyHeadquarters;
           Scenes.SetScene(scCompany);
         end;
       end;
