@@ -18,6 +18,7 @@ type
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
+    class procedure GlobalKeys(var Key: Word);
   end;
 
 implementation
@@ -88,6 +89,26 @@ begin
   DrawText(VX + (L div 2), VY + 4,
     'Pop.: ' + IntToStr(Game.Map.Town[TownID].Population), TK_ALIGN_CENTER);
   DrawText(MX, MY, '#', 'yellow', 'gray');
+end;
+
+class procedure TSceneWorld.GlobalKeys(var Key: Word);
+begin
+  case Key of
+    TK_A:
+      if Length(Game.Vehicles.Aircraft) > 0 then
+        Scenes.SetScene(scAircrafts);
+    TK_F:
+      Scenes.SetScene(scFinances);
+    TK_G:
+      Scenes.SetScene(scCompany);
+    TK_N:
+      Scenes.SetScene(scTowns);
+    TK_P:
+      begin
+        Game.IsPause := not Game.IsPause;
+        Scenes.Render
+      end;
+  end;
 end;
 
 procedure TSceneWorld.IndustryInfo(const IndustryID: Word);
@@ -236,18 +257,8 @@ begin
       ScrollUp;
     TK_DOWN:
       ScrollDown;
-    TK_F:
-      Scenes.SetScene(scFinances);
-    TK_G:
-      Scenes.SetScene(scCompany);
-    TK_N:
-      Scenes.SetScene(scTowns);
-    TK_P:
-      begin
-        Game.IsPause := not Game.IsPause;
-        Scenes.Render
-      end;
   end;
+  GlobalKeys(Key);
 end;
 
 end.

@@ -19,7 +19,8 @@ implementation
 uses
   BearLibTerminal,
   SysUtils,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Scene.World;
 
 { TSceneGameMenu }
 
@@ -89,15 +90,6 @@ begin
       begin
         Scenes.SetScene(scWorld);
       end;
-    TK_A:
-      if Length(Game.Vehicles.Aircraft) > 0 then
-        Scenes.SetScene(scAircrafts);
-    TK_F:
-      Scenes.SetScene(scFinances);
-    TK_G:
-      Scenes.SetScene(scCompany);
-    TK_N:
-      Scenes.SetScene(scTowns);
     TK_Q:
       begin
         Game.IsPause := True;
@@ -108,12 +100,8 @@ begin
         Game.IsClearLand := True;
         Scenes.SetScene(scWorld);
       end;
-    TK_P:
-      begin
-        Game.IsPause := not Game.IsPause;
-        Scenes.Render
-      end;
   end;
+  TSceneWorld.GlobalKeys(Key);
 end;
 
 end.
