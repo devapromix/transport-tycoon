@@ -28,8 +28,7 @@ uses
   BearLibTerminal,
   SysUtils,
   TransportTycoon.Map,
-  TransportTycoon.Game,
-  TransportTycoon.Finances;
+  TransportTycoon.Game;
 
 { TSceneWorld }
 

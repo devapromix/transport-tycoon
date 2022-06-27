@@ -10,7 +10,7 @@ type
 
   { TSceneShips }
 
-  TSceneShips = class(TScene)
+  TSceneShips = class(TSceneVehicles)
   private
 
   public

@@ -20,7 +20,6 @@ type
 implementation
 
 uses
-  Math,
   SysUtils,
   BearLibTerminal,
   TransportTycoon.Game,

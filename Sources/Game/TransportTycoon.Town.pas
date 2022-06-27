@@ -3,7 +3,6 @@
 interface
 
 uses
-  TransportTycoon.MapObject,
   TransportTycoon.Industries,
   TransportTycoon.Stations;
 
@@ -42,8 +41,7 @@ uses
   Math,
   Classes,
   SysUtils,
-  TransportTycoon.Game,
-  TransportTycoon.Finances;
+  TransportTycoon.Game;
 
 { TTown }
 

@@ -45,9 +45,9 @@ begin
   DrawText(7, 12, 'Bags of mail: ' + IntToStr(Town.ProducesAmount
     [cgBagsOfMail]));
 
-  { for I := 0 to Length(Game.Vehicles.Ship) - 1 do
-    DrawButton(37, I + 11, Game.Vehicles.Ship[I].InLocation(C.X, C.Y),
-    Chr(Ord('A') + I), Game.Vehicles.Ship[I].Name); }
+  for I := 0 to Length(Game.Vehicles.Ship) - 1 do
+    DrawButton(37, I + 11, Game.Vehicles.Ship[I].InLocation(Town.X, Town.Y),
+    Chr(Ord('A') + I), Game.Vehicles.Ship[I].Name);
 
   AddButton(19, False, 'V', 'Ship Depot');
   AddButton(19, 'Esc', 'Close');
