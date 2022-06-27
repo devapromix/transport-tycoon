@@ -28,9 +28,11 @@ uses
 
 { TSceneDock }
 
-procedure TSceneDock.Render;
 var
   Town: TTown;
+
+procedure TSceneDock.Render;
+var
   I: Integer;
 begin
   DrawMap(Self.Width, Self.Height - 1);
@@ -47,7 +49,7 @@ begin
 
   for I := 0 to Length(Game.Vehicles.Ship) - 1 do
     DrawButton(37, I + 11, Game.Vehicles.Ship[I].InLocation(Town.X, Town.Y),
-    Chr(Ord('A') + I), Game.Vehicles.Ship[I].Name);
+      Chr(Ord('A') + I), Game.Vehicles.Ship[I].Name);
 
   AddButton(19, False, 'V', 'Ship Depot');
   AddButton(19, 'Esc', 'Close');
@@ -57,10 +59,8 @@ end;
 
 procedure TSceneDock.Update(var Key: Word);
 var
-  Town: TTown;
   I: Integer;
 begin
-  Town := Game.Map.Town[Game.Map.CurrentTown];
   if (Key = TK_MOUSE_LEFT) then
   begin
     if (MX >= 37) and (MX <= 71) then

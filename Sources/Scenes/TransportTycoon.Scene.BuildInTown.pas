@@ -28,9 +28,11 @@ uses
 
 { TSceneBuildInTown }
 
-procedure TSceneBuildInTown.Render;
 var
   Town: TTown;
+
+procedure TSceneBuildInTown.Render;
+var
   N: Integer;
   S: string;
 begin
@@ -63,8 +65,6 @@ begin
 end;
 
 procedure TSceneBuildInTown.Update(var Key: Word);
-var
-  Town: TTown;
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
@@ -88,7 +88,6 @@ begin
       Scenes.SetScene(scTown);
     TK_A:
       begin
-        Town := Game.Map.Town[Game.Map.CurrentTown];
         if Town.Airport.CanBuild then
         begin
           Town.Airport.Build;
@@ -97,7 +96,6 @@ begin
       end;
     TK_B:
       begin
-        Town := Game.Map.Town[Game.Map.CurrentTown];
         if Town.Dock.CanBuild then
         begin
           Town.Dock.Build;
@@ -106,7 +104,6 @@ begin
       end;
     TK_G:
       begin
-        Town := Game.Map.Town[Game.Map.CurrentTown];
         if Town.HQ.CanBuild and (Game.Map.CurrentTown = Game.Company.TownID)
         then
         begin

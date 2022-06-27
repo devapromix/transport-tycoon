@@ -23,25 +23,28 @@ uses
   TransportTycoon.Town,
   TransportTycoon.Industries;
 
+var
+  Town: TTown;
+
 procedure TSceneAirport.Render;
 var
-  C: TTown;
   I: Integer;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
   DrawFrame(5, 7, 70, 15);
 
-  C := Game.Map.Town[Game.Map.CurrentTown];
-  DrawTitle(C.Name + ' Airport');
+  Town := Game.Map.Town[Game.Map.CurrentTown];
+  DrawTitle(Town.Name + ' Airport');
 
   terminal_color('white');
-  DrawText(7, 11, 'Size: ' + AirportSizeStr[C.Airport.Level]);
-  DrawText(7, 12, 'Passengers: ' + IntToStr(C.ProducesAmount[cgPassengers]));
-  DrawText(7, 13, 'Bags of mail: ' + IntToStr(C.ProducesAmount[cgBagsOfMail]));
+  DrawText(7, 11, 'Size: ' + AirportSizeStr[Town.Airport.Level]);
+  DrawText(7, 12, 'Passengers: ' + IntToStr(Town.ProducesAmount[cgPassengers]));
+  DrawText(7, 13, 'Bags of mail: ' + IntToStr(Town.ProducesAmount
+    [cgBagsOfMail]));
 
   for I := 0 to Length(Game.Vehicles.Aircraft) - 1 do
-    DrawButton(37, I + 11, Game.Vehicles.Aircraft[I].InLocation(C.X, C.Y),
+    DrawButton(37, I + 11, Game.Vehicles.Aircraft[I].InLocation(Town.X, Town.Y),
       Chr(Ord('A') + I), Game.Vehicles.Aircraft[I].Name);
 
   AddButton(19, 'H', 'Hangar');
@@ -52,10 +55,8 @@ end;
 
 procedure TSceneAirport.Update(var Key: Word);
 var
-  C: TTown;
   I: Integer;
 begin
-  C := Game.Map.Town[Game.Map.CurrentTown];
   if (Key = TK_MOUSE_LEFT) then
   begin
     if (MX >= 37) and (MX <= 71) then
@@ -80,7 +81,7 @@ begin
     TK_A .. TK_G:
       begin
         I := Key - TK_A;
-        if Game.Vehicles.Aircraft[I].InLocation(C.X, C.Y) then
+        if Game.Vehicles.Aircraft[I].InLocation(Town.X, Town.Y) then
         begin
           Game.Vehicles.CurrentVehicle := I;
           Scenes.SetScene(scAircraft, scAirport);

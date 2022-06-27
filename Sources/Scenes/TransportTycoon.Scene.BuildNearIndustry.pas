@@ -27,9 +27,11 @@ uses
 
 { TSceneBuildNearIndustry }
 
-procedure TSceneBuildNearIndustry.Render;
 var
   Industry: TIndustry;
+
+procedure TSceneBuildNearIndustry.Render;
+var
   S: string;
 begin
   DrawMap(Self.Width, Self.Height - 1);
@@ -50,8 +52,6 @@ begin
 end;
 
 procedure TSceneBuildNearIndustry.Update(var Key: Word);
-var
-  Industry: TIndustry;
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
@@ -71,7 +71,6 @@ begin
       Scenes.SetScene(scIndustry);
     TK_D:
       begin
-        Industry := Game.Map.Industry[Game.Map.CurrentIndustry];
         if Industry.Dock.CanBuild then
         begin
           Industry.Dock.Build;
