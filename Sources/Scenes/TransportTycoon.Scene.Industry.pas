@@ -82,7 +82,7 @@ begin
       Scenes.SetScene(scBuildNearIndustry);
     TK_D:
       if Industry.Dock.HasBuilding then
-        Scenes.SetScene(scDock);
+        Scenes.SetScene(scDock, scIndustry);
   end;
 end;
 

@@ -87,7 +87,7 @@ begin
       Scenes.SetScene(scBuildInTown);
     TK_D:
       if C.Dock.HasBuilding then
-        Scenes.SetScene(scDock);
+        Scenes.SetScene(scDock, scTown);
     TK_G:
       if (Game.Map.CurrentTown = Game.Company.TownID) and
         Game.Map.Town[Game.Map.CurrentTown].HQ.HasBuilding then

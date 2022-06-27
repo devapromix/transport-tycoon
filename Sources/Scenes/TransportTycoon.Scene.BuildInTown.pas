@@ -101,7 +101,7 @@ begin
         if Town.Dock.CanBuild then
         begin
           Town.Dock.Build;
-          Scenes.SetScene(scDock);
+          Scenes.SetScene(scDock, scTown);
         end;
       end;
     TK_G:

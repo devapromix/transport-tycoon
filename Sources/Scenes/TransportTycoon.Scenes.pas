@@ -76,14 +76,17 @@ type
   private
     FScene: array [TSceneEnum] of TScene;
     FSceneEnum: TSceneEnum;
+    FBackSceneEnum: TSceneEnum;
   public
     constructor Create;
     destructor Destroy; override;
     procedure Render; override;
     procedure Update(var Key: Word); override;
     property Scene: TSceneEnum read FSceneEnum write FSceneEnum;
+    property BackScene: TSceneEnum read FBackSceneEnum write FBackSceneEnum;
     function GetScene(I: TSceneEnum): TScene;
-    procedure SetScene(SceneEnum: TSceneEnum);
+    procedure SetScene(SceneEnum: TSceneEnum); overload;
+    procedure SetScene(SceneEnum, BackSceneEnum: TSceneEnum); overload;
   end;
 
 var
@@ -421,6 +424,13 @@ begin
       end;
     end;
   terminal_bkcolor(0);
+end;
+
+procedure TScenes.SetScene(SceneEnum, BackSceneEnum: TSceneEnum);
+begin
+  Self.Scene := SceneEnum;
+  Self.BackScene := BackSceneEnum;
+  Self.Render;
 end;
 
 destructor TScenes.Destroy;

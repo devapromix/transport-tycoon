@@ -76,7 +76,7 @@ begin
         if Industry.Dock.CanBuild then
         begin
           Industry.Dock.Build;
-          Scenes.SetScene(scDock);
+          Scenes.SetScene(scDock, scIndustry);
         end;
       end;
   end;
