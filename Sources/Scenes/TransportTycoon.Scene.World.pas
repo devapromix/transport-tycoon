@@ -13,7 +13,7 @@ type
   private
     procedure TownInfo(const TownID: Word);
     procedure IndustryInfo(const IndustryID: Word);
-    procedure AircraftInfo(const AircraftID: Word);
+    procedure VehicleInfo(const VehicleName: string);
     procedure TileInfo(S: string);
   public
     procedure Render; override;
@@ -43,14 +43,12 @@ begin
   DrawText(45, Height - 1, S, TK_ALIGN_CENTER);
 end;
 
-procedure TSceneWorld.AircraftInfo(const AircraftID: Word);
+procedure TSceneWorld.VehicleInfo(const VehicleName: string);
 var
   VX, VY, L: Integer;
-  S: string;
 begin
-  S := Game.Vehicles.Aircraft[AircraftID].Name;
-  L := EnsureRange(Length(S) + 8, 20, 40);
-  TileInfo(S);
+  L := EnsureRange(Length(VehicleName) + 8, 20, 40);
+  TileInfo(VehicleName);
   if (MY < Height - 10) then
     VY := MY + 1
   else
@@ -61,8 +59,8 @@ begin
     VX := MX - L;
   terminal_bkcolor('darkest gray');
   DrawFrame(VX, VY, L, 5);
-  DrawText(VX + (L div 2), VY + 2, '[c=yellow]' + UpperCase(S) + '[/c]',
-    TK_ALIGN_CENTER);
+  DrawText(VX + (L div 2), VY + 2, '[c=yellow]' + UpperCase(VehicleName) +
+    '[/c]', TK_ALIGN_CENTER);
   DrawText(MX, MY, '@', 'yellow', 'gray');
 end;
 
@@ -168,9 +166,15 @@ begin
     begin
       I := Game.Vehicles.GetCurrentAircraft(RX, RY);
       if I >= 0 then
-        AircraftInfo(I)
+        VehicleInfo(Game.Vehicles.Aircraft[I].Name)
       else
-        TileInfo(Tile[Game.Map.Cell[RX][RY]].Name);
+      begin
+        I := Game.Vehicles.GetCurrentShip(RX, RY);
+        if I >= 0 then
+          VehicleInfo(Game.Vehicles.Ship[I].Name)
+        else
+          TileInfo(Tile[Game.Map.Cell[RX][RY]].Name);
+      end
     end;
   end;
   if (MY = Self.Height - 2) then
@@ -219,6 +223,13 @@ begin
         begin
           Game.Vehicles.CurrentVehicle := I;
           Scenes.SetScene(scAircraft, scWorld);
+          Exit;
+        end;
+        I := Game.Vehicles.GetCurrentShip(RX, RY);
+        if I >= 0 then
+        begin
+          Game.Vehicles.CurrentVehicle := I;
+          Scenes.SetScene(scShip, scWorld);
           Exit;
         end;
       end;
