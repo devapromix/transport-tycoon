@@ -83,7 +83,7 @@ begin
         if Game.Vehicles.Aircraft[I].InLocation(C.X, C.Y) then
         begin
           Game.Vehicles.CurrentVehicle := I;
-          Scenes.SetScene(scAircraft);
+          Scenes.SetScene(scAircraft, scAirport);
         end;
       end;
     TK_H:

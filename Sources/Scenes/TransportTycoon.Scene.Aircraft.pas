@@ -103,7 +103,7 @@ begin
         end;
       end;
     TK_ESCAPE:
-      Scenes.SetScene(scWorld);
+      Scenes.SetScene(Scenes.BackScene);
     TK_O:
       Scenes.SetScene(scOrders);
   end;

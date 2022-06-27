@@ -65,7 +65,7 @@ begin
         Game.Vehicles.CurrentVehicle := I;
         with Game.Vehicles.Aircraft[I] do
           ScrollTo(X, Y);
-        Scenes.SetScene(scAircraft);
+        Scenes.SetScene(scAircraft, scAircrafts);
       end;
   end;
 end;

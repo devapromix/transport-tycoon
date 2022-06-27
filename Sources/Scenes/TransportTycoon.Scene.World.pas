@@ -194,7 +194,7 @@ begin
         if I >= 0 then
         begin
           Game.Vehicles.CurrentVehicle := I;
-          Scenes.SetScene(scAircraft);
+          Scenes.SetScene(scAircraft, scWorld);
           Exit;
         end;
       end;
