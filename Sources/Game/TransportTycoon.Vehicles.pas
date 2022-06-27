@@ -15,7 +15,7 @@ type
     MaxShips = 7;
   public
     Aircraft: array of TAircraft;
-    Ship: array of TAircraft;
+    Ship: array of TShip;
     constructor Create;
     destructor Destroy; override;
     property CurrentVehicle: Integer read FCurrentVehicle write FCurrentVehicle;
@@ -23,8 +23,10 @@ type
     procedure Step;
     procedure AddAircraft(const AName: string;
       const ACityIndex, AircraftID: Integer);
+    procedure AddShip(const AName: string; const ACityIndex, ShipID: Integer);
     procedure RunningCosts;
     function GetCurrentAircraft(const AX, AY: Integer): Integer;
+    function GetCurrentShip(const AX, AY: Integer): Integer;
     procedure Clear;
   end;
 
@@ -38,7 +40,7 @@ uses
 procedure TVehicles.AddAircraft(const AName: string;
   const ACityIndex, AircraftID: Integer);
 begin
-  if ((Game.Map.Town[ACityIndex].Airport.Level > 0) and
+  if (Game.Map.Town[ACityIndex].Airport.HasBuilding and
     (Game.Money >= AircraftBase[AircraftID].Cost)) then
     with Game.Vehicles do
     begin
@@ -57,6 +59,28 @@ begin
     end;
 end;
 
+procedure TVehicles.AddShip(const AName: string;
+  const ACityIndex, ShipID: Integer);
+begin
+  if (Game.Map.Town[ACityIndex].Dock.HasBuilding and
+    (Game.Money >= ShipBase[ShipID].Cost)) then
+    with Game.Vehicles do
+    begin
+      SetLength(Ship, Length(Ship) + 1);
+
+      Ship[High(Ship)] := TShip.Create(AName, Game.Map.Town[ACityIndex].X,
+        Game.Map.Town[ACityIndex].Y, ShipID);
+
+      with Ship[High(Ship)] do
+      begin
+        AddOrder(ACityIndex, Game.Map.Town[ACityIndex].Name,
+          Game.Map.Town[ACityIndex].X, Game.Map.Town[ACityIndex].Y);
+        Game.ModifyMoney(ttNewVehicles, -ShipBase[ShipID].Cost);
+        VehicleID := ShipID;
+      end;
+    end;
+end;
+
 procedure TVehicles.RunningCosts;
 var
   I, J, M: Integer;
@@ -66,6 +90,12 @@ begin
     J := Self.Aircraft[I].VehicleID;
     M := AircraftBase[J].RunningCost div 12;
     Game.ModifyMoney(ttAircraftRunningCosts, -M);
+  end;
+  for I := 0 to Length(Ship) - 1 do
+  begin
+    J := Self.Ship[I].VehicleID;
+    M := ShipBase[J].RunningCost div 12;
+    Game.ModifyMoney(ttShipRunningCosts, -M);
   end;
 end;
 
@@ -119,6 +149,16 @@ begin
   Result := -1;
   for I := 0 to Length(Aircraft) - 1 do
     if ((Aircraft[I].X = AX) and (Aircraft[I].Y = AY)) then
+      Exit(I);
+end;
+
+function TVehicles.GetCurrentShip(const AX, AY: Integer): Integer;
+var
+  I: Integer;
+begin
+  Result := -1;
+  for I := 0 to Length(Ship) - 1 do
+    if ((Ship[I].X = AX) and (Ship[I].Y = AY)) then
       Exit(I);
 end;
 
