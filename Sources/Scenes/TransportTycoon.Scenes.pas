@@ -8,7 +8,8 @@ uses
 type
   TSceneEnum = (scMainMenu, scGameMenu, scGenMenu, scWorld, scTown,
     scBuildInTown, scAirport, scHangar, scAircraft, scAircrafts, scOrders,
-    scFinances, scTowns, scCompany, scIndustry, scBuildNearIndustry, scDock);
+    scFinances, scTowns, scCompany, scIndustry, scBuildNearIndustry, scDock,
+    scShip, scShips);
 
 type
   TButtonRec = record
@@ -116,7 +117,9 @@ uses
   TransportTycoon.Scene.Company,
   TransportTycoon.Scene.Industry,
   TransportTycoon.Scene.BuildNearIndustry,
-  TransportTycoon.Scene.Dock;
+  TransportTycoon.Scene.Dock,
+  TransportTycoon.Scene.Ships,
+  TransportTycoon.Scene.Ship;
 
 procedure TScene.DrawText(const X, Y: Integer; Text: string;
   const Align: Integer = TK_ALIGN_LEFT);
@@ -391,6 +394,8 @@ begin
   FScene[scIndustry] := TSceneIndustry.Create;
   FScene[scBuildNearIndustry] := TSceneBuildNearIndustry.Create;
   FScene[scDock] := TSceneDock.Create;
+  FScene[scShip] := TSceneShip.Create;
+  FScene[scShips] := TSceneShips.Create;
 end;
 
 procedure TScenes.Update(var Key: Word);

@@ -97,6 +97,9 @@ begin
     TK_A:
       if Length(Game.Vehicles.Aircraft) > 0 then
         Scenes.SetScene(scAircrafts);
+    TK_S:
+      if Length(Game.Vehicles.Ship) > 0 then
+        Scenes.SetScene(scShips);
     TK_F:
       Scenes.SetScene(scFinances);
     TK_G:

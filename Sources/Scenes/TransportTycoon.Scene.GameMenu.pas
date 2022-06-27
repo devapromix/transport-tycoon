@@ -38,7 +38,7 @@ begin
 
   DrawButton(12, 14, False, 'C', 'LIST OF ROAD VEHICLES');
   DrawButton(12, 15, False, 'T', 'LIST OF TRAINS');
-  DrawButton(12, 16, False, 'S', 'LIST OF SHIPS');
+  DrawButton(12, 16, Length(Game.Vehicles.Ship) > 0, 'S', 'LIST OF SHIPS');
   DrawButton(12, 17, Length(Game.Vehicles.Aircraft) > 0, 'A',
     'LIST OF AIRCRAFTS');
 
@@ -62,6 +62,8 @@ begin
           Key := TK_F;
         12:
           Key := TK_N;
+        16:
+          Key := TK_S;
         17:
           Key := TK_A;
       end;

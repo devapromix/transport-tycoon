@@ -14,8 +14,7 @@ uses
   TransportTycoon.Aircraft in 'Game\TransportTycoon.Aircraft.pas',
   TransportTycoon.Scenes in 'Scenes\TransportTycoon.Scenes.pas',
   TransportTycoon.Scene.Town in 'Scenes\TransportTycoon.Scene.Town.pas',
-  TransportTycoon.Scene.BuildInTown
-    in 'Scenes\TransportTycoon.Scene.BuildInTown.pas',
+  TransportTycoon.Scene.BuildInTown in 'Scenes\TransportTycoon.Scene.BuildInTown.pas',
   TransportTycoon.Scene.World in 'Scenes\TransportTycoon.Scene.World.pas',
   TransportTycoon.Scene.Airport in 'Scenes\TransportTycoon.Scene.Airport.pas',
   TransportTycoon.Scene.MainMenu in 'Scenes\TransportTycoon.Scene.MainMenu.pas',
@@ -24,8 +23,7 @@ uses
   TransportTycoon.Scene.Hangar in 'Scenes\TransportTycoon.Scene.Hangar.pas',
   TransportTycoon.Scene.Aircraft in 'Scenes\TransportTycoon.Scene.Aircraft.pas',
   TransportTycoon.Scene.Orders in 'Scenes\TransportTycoon.Scene.Orders.pas',
-  TransportTycoon.Scene.Aircrafts
-    in 'Scenes\TransportTycoon.Scene.Aircrafts.pas',
+  TransportTycoon.Scene.Aircrafts in 'Scenes\TransportTycoon.Scene.Aircrafts.pas',
   TransportTycoon.Scene.Finances in 'Scenes\TransportTycoon.Scene.Finances.pas',
   TransportTycoon.Scene.Towns in 'Scenes\TransportTycoon.Scene.Towns.pas',
   TransportTycoon.Scene.Company in 'Scenes\TransportTycoon.Scene.Company.pas',
@@ -34,11 +32,13 @@ uses
   TransportTycoon.PathFind in 'Game\TransportTycoon.PathFind.pas',
   TransportTycoon.Industries in 'Game\TransportTycoon.Industries.pas',
   TransportTycoon.Scene.Industry in 'Scenes\TransportTycoon.Scene.Industry.pas',
-  TransportTycoon.Scene.BuildNearIndustry
-    in 'Scenes\TransportTycoon.Scene.BuildNearIndustry.pas',
+  TransportTycoon.Scene.BuildNearIndustry in 'Scenes\TransportTycoon.Scene.BuildNearIndustry.pas',
   TransportTycoon.Scene.Dock in 'Scenes\TransportTycoon.Scene.Dock.pas',
   TransportTycoon.Ship in 'Game\TransportTycoon.Ship.pas',
-  TransportTycoon.Stations in 'Game\TransportTycoon.Stations.pas';
+  TransportTycoon.Stations in 'Game\TransportTycoon.Stations.pas',
+  TransportTycoon.Scene.Ships in 'Scenes\TransportTycoon.Scene.Ships.pas',
+  TransportTycoon.Scene.Ship in 'Scenes\TransportTycoon.Scene.Ship.pas',
+  TransportTycoon.Scene.Vehicles in 'Scenes\TransportTycoon.Scene.Vehicles.pas';
 
 var
   Key: Word = 0;

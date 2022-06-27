@@ -1,4 +1,4 @@
-﻿unit TransportTycoon.Scene.Aircrafts;
+﻿unit TransportTycoon.Scene.Ships;
 
 interface
 
@@ -7,9 +7,9 @@ uses
 
 type
 
-  { TSceneAircrafts }
+  { TSceneShips }
 
-  TSceneAircrafts = class(TScene)
+  TSceneShips = class(TScene)
   private
 
   public
@@ -24,9 +24,9 @@ uses
   SysUtils,
   TransportTycoon.Game;
 
-{ TSceneAircrafts }
+{ TSceneShips }
 
-procedure TSceneAircrafts.Render;
+procedure TSceneShips.Render;
 var
   I: Integer;
 begin
@@ -34,17 +34,17 @@ begin
 
   DrawFrame(10, 7, 60, 15);
 
-  DrawTitle(Game.Company.Name + ' AIRCRAFTS');
+  DrawTitle(Game.Company.Name + ' SHIPS');
 
-  for I := 0 to Length(Game.Vehicles.Aircraft) - 1 do
-    DrawButton(12, I + 11, Chr(Ord('A') + I), Game.Vehicles.Aircraft[I].Name);
+  for I := 0 to Length(Game.Vehicles.Ship) - 1 do
+    DrawButton(12, I + 11, Chr(Ord('A') + I), Game.Vehicles.Ship[I].Name);
 
   AddButton(19, 'Esc', 'Close');
 
   DrawBar;
 end;
 
-procedure TSceneAircrafts.Update(var Key: Word);
+procedure TSceneShips.Update(var Key: Word);
 var
   I: Integer;
 begin
@@ -65,12 +65,12 @@ begin
     TK_A .. TK_G:
       begin
         I := Key - TK_A;
-        if I > Length(Game.Vehicles.Aircraft) - 1 then
+        if I > Length(Game.Vehicles.Ship) - 1 then
           Exit;
         Game.Vehicles.CurrentVehicle := I;
-        with Game.Vehicles.Aircraft[I] do
+        with Game.Vehicles.Ship[I] do
           ScrollTo(X, Y);
-        Scenes.SetScene(scAircraft, scAircrafts);
+        Scenes.SetScene(scShip, scShips);
       end;
   end;
 end;

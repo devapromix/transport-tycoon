@@ -3,7 +3,8 @@
 interface
 
 uses
-  TransportTycoon.Aircraft;
+  TransportTycoon.Aircraft,
+  TransportTycoon.Ship;
 
 type
   TVehicles = class
@@ -11,8 +12,10 @@ type
     FCurrentVehicle: Integer;
   public const
     MaxAircrafts = 7;
+    MaxShips = 7;
   public
     Aircraft: array of TAircraft;
+    Ship: array of TAircraft;
     constructor Create;
     destructor Destroy; override;
     property CurrentVehicle: Integer read FCurrentVehicle write FCurrentVehicle;
@@ -73,6 +76,9 @@ begin
   for I := 0 to Length(Aircraft) - 1 do
     Aircraft[I].Free;
   SetLength(Aircraft, 0);
+  for I := 0 to Length(Ship) - 1 do
+    Ship[I].Free;
+  SetLength(Ship, 0);
 end;
 
 constructor TVehicles.Create;
@@ -86,6 +92,8 @@ var
 begin
   for I := 0 to Length(Aircraft) - 1 do
     Aircraft[I].Free;
+  for I := 0 to Length(Ship) - 1 do
+    Ship[I].Free;
   inherited;
 end;
 
@@ -96,6 +104,10 @@ begin
   terminal_color('lightest blue');
   for I := 0 to Length(Aircraft) - 1 do
     Aircraft[I].Draw;
+
+  terminal_color('white');
+  for I := 0 to Length(Ship) - 1 do
+    Ship[I].Draw;
 
   terminal_color('white');
 end;
@@ -116,6 +128,8 @@ var
 begin
   for I := 0 to Length(Aircraft) - 1 do
     Aircraft[I].Step;
+  for I := 0 to Length(Ship) - 1 do
+    Ship[I].Step;
 end;
 
 end.
