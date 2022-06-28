@@ -101,7 +101,7 @@ end;
 procedure TAircraft.AddOrder(const TownIndex: Integer; const AName: string;
   const AX, AY: Integer);
 begin
-  if Game.Map.Town[TownIndex].Airport.Level > 0 then
+  if Game.Map.Town[TownIndex].Airport.HasBuilding then
   begin
     SetLength(Order, Length(Order) + 1);
     Order[High(Order)].ID := TownIndex;

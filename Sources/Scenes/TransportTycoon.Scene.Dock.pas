@@ -51,7 +51,7 @@ begin
     DrawButton(37, I + 11, Game.Vehicles.Ship[I].InLocation(Town.X, Town.Y),
       Chr(Ord('A') + I), Game.Vehicles.Ship[I].Name);
 
-  AddButton(19, False, 'V', 'Ship Depot');
+  AddButton(19, 'V', 'Ship Depot');
   AddButton(19, 'Esc', 'Close');
 
   DrawBar;
@@ -74,7 +74,7 @@ begin
     if (GetButtonsY = MY) then
     begin
       if (MX >= 26) and (MX <= 39) then
-        Key := TK_H;
+        Key := TK_V;
       if (MX >= 43) and (MX <= 53) then
         Key := TK_ESCAPE;
     end;
@@ -84,15 +84,15 @@ begin
       Scenes.SetScene(Scenes.BackScene);
     TK_A .. TK_G:
       begin
-        { I := Key - TK_A;
-          if Game.Vehicles.Ship[I].InLocation(C.X, C.Y) then
-          begin
+        I := Key - TK_A;
+        if Game.Vehicles.Ship[I].InLocation(Town.X, Town.Y) then
+        begin
           Game.Vehicles.CurrentVehicle := I;
           Scenes.SetScene(scShip);
-          end; }
+        end;
       end;
     TK_V:
-      { Scenes.SetScene(scShipDepot) };
+      Scenes.SetScene(scShipDepot);
   end;
 end;
 

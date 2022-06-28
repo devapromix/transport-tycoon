@@ -38,7 +38,8 @@ uses
   TransportTycoon.Stations in 'Game\TransportTycoon.Stations.pas',
   TransportTycoon.Scene.Ships in 'Scenes\TransportTycoon.Scene.Ships.pas',
   TransportTycoon.Scene.Ship in 'Scenes\TransportTycoon.Scene.Ship.pas',
-  TransportTycoon.Scene.Vehicles in 'Scenes\TransportTycoon.Scene.Vehicles.pas';
+  TransportTycoon.Scene.Vehicles in 'Scenes\TransportTycoon.Scene.Vehicles.pas',
+  TransportTycoon.Scene.ShipDepot in 'Scenes\TransportTycoon.Scene.ShipDepot.pas';
 
 var
   Key: Word = 0;

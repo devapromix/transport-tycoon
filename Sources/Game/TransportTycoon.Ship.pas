@@ -20,7 +20,7 @@ type
 const
   ShipBase: array [0 .. 0] of TShipBase = (
     // #1
-    (Name: ''; Passengers: 120; BagsOfMail: 10; Cost: 25000;
+    (Name: 'TM-22'; Passengers: 120; BagsOfMail: 10; Cost: 25000;
     RunningCost: 90 * 12; Speed: 50; Since: 1950)
     //
     );
@@ -66,7 +66,8 @@ uses
   TransportTycoon.Map,
   TransportTycoon.Game,
   TransportTycoon.Finances,
-  TransportTycoon.PathFind;
+  TransportTycoon.PathFind,
+  TransportTycoon.Industries;
 
 function IsPath(X, Y: Integer): Boolean; stdcall;
 begin
@@ -76,12 +77,20 @@ end;
 procedure TShip.AddOrder(const TownIndex: Integer; const AName: string;
   const AX, AY: Integer);
 begin
-
+  if Game.Map.Town[TownIndex].Dock.HasBuilding then
+  begin
+    SetLength(Order, Length(Order) + 1);
+    Order[High(Order)].ID := TownIndex;
+    Order[High(Order)].Name := AName;
+    Order[High(Order)].X := AX;
+    Order[High(Order)].Y := AY;
+  end;
 end;
 
 procedure TShip.AddOrder(const TownIndex: Integer);
 begin
-
+  with Game.Map.Town[TownIndex] do
+    AddOrder(TownIndex, Name, X, Y);
 end;
 
 constructor TShip.Create(const AName: string; const AX, AY, ID: Integer);
@@ -99,34 +108,114 @@ begin
 end;
 
 procedure TShip.DelOrder(const AOrderIndex: Integer);
+var
+  I: Integer;
 begin
-
+  if (Length(Order) > 1) then
+  begin
+    if AOrderIndex > High(Order) then
+      Exit;
+    if AOrderIndex < Low(Order) then
+      Exit;
+    if AOrderIndex = High(Order) then
+    begin
+      SetLength(Order, Length(Order) - 1);
+      Exit;
+    end;
+    for I := AOrderIndex + 1 to Length(Order) - 1 do
+      Order[I - 1] := Order[I];
+    SetLength(Order, Length(Order) - 1);
+  end;
 end;
 
 function TShip.IsOrder(const TownIndex: Integer): Boolean;
+var
+  I: Integer;
 begin
-
+  Result := False;
+  for I := 0 to Length(Order) - 1 do
+    if Order[I].ID = TownIndex then
+    begin
+      Result := True;
+      Exit;
+    end;
 end;
 
 procedure TShip.Load;
 begin
-
+  FState := 'Load';
+  while (Game.Map.Town[Order[OrderIndex].ID].ProducesAmount[cgPassengers] > 0)
+    and (Passengers < MaxPassengers) do
+  begin
+    Game.Map.Town[Order[OrderIndex].ID].DecCargoAmount(cgPassengers);
+    Inc(FPassengers);
+  end;
+  while (Game.Map.Town[Order[OrderIndex].ID].ProducesAmount[cgBagsOfMail] > 0)
+    and (BagsOfMail < MaxBagsOfMail) do
+  begin
+    Game.Map.Town[Order[OrderIndex].ID].DecCargoAmount(cgBagsOfMail);
+    Inc(FBagsOfMail);
+  end;
 end;
 
 function TShip.Move(const AX, AY: Integer): Boolean;
+var
+  NX, NY: Integer;
 begin
-
+  Result := False;
+  FState := 'Fly';
+  NX := 0;
+  NY := 0;
+  if not IsMove(Game.Map.Width, Game.Map.Height, X, Y, AX, AY, @IsPath, NX, NY)
+  then
+    Exit;
+  SetLocation(NX, NY);
+  Result := (X <> AX) or (Y <> AY);
 end;
 
 procedure TShip.Step;
 begin
-  inherited;
-
+  if Length(Order) > 0 then
+  begin
+    if not Move(Order[OrderIndex].X, Order[OrderIndex].Y) then
+    begin
+      Inc(FT);
+      if Order[OrderIndex].ID <> FLastAirportId then
+        UnLoad;
+      FState := 'Service';
+      if FT > (15 - (Game.Map.Town[Order[OrderIndex].ID].Dock.Level * 2)) then
+      begin
+        FT := 0;
+        Load;
+        FOrderIndex := FOrderIndex + 1;
+        if (OrderIndex > High(Order)) then
+          FOrderIndex := 0;
+      end;
+    end
+    else
+      Inc(FDistance);
+  end;
 end;
 
 procedure TShip.UnLoad;
+var
+  M: Integer;
 begin
-
+  FState := 'Unload';
+  LastDockId := Order[OrderIndex].ID;
+  if Passengers > 0 then
+  begin
+    M := (Passengers * (Distance div 10)) * 7;
+    Game.ModifyMoney(ttShipIncome, M);
+    Passengers := 0;
+  end;
+  if BagsOfMail > 0 then
+  begin
+    M := (BagsOfMail * (Distance div 7)) * 8;
+    Game.ModifyMoney(ttShipIncome, M);
+    BagsOfMail := 0;
+  end;
+  FDistance := 0;
 end;
 
 end.
