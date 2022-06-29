@@ -103,9 +103,9 @@ begin
         end;
       end;
     TK_ESCAPE:
-      Scenes.SetScene(Scenes.BackScene);
+      Scenes.Back;
     TK_O:
-      Scenes.SetScene(scOrders);
+      Scenes.SetScene(scAircraftOrders);
   end;
 end;
 

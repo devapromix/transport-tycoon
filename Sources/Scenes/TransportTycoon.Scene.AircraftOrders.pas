@@ -1,4 +1,4 @@
-﻿unit TransportTycoon.Scene.Orders;
+﻿unit TransportTycoon.Scene.AircraftOrders;
 
 interface
 
@@ -6,7 +6,7 @@ uses
   TransportTycoon.Scenes;
 
 type
-  TSceneOrders = class(TScene)
+  TSceneAircraftOrders = class(TScene)
   private
 
   public
@@ -21,7 +21,7 @@ uses
   SysUtils,
   TransportTycoon.Game;
 
-procedure TSceneOrders.Render;
+procedure TSceneAircraftOrders.Render;
 var
   TownID: Integer;
   F: Boolean;
@@ -47,7 +47,7 @@ begin
   DrawBar;
 end;
 
-procedure TSceneOrders.Update(var Key: Word);
+procedure TSceneAircraftOrders.Update(var Key: Word);
 var
   TownID: Integer;
   F: Boolean;

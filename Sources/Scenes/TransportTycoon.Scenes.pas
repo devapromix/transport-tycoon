@@ -7,9 +7,9 @@ uses
 
 type
   TSceneEnum = (scMainMenu, scGameMenu, scGenMenu, scWorld, scTown,
-    scBuildInTown, scAirport, scHangar, scAircraft, scAircrafts, scOrders,
-    scFinances, scTowns, scCompany, scIndustry, scBuildNearIndustry, scDock,
-    scShip, scShips, scShipDepot);
+    scBuildInTown, scAirport, scHangar, scAircraft, scAircrafts,
+    scAircraftOrders, scShipOrders, scFinances, scTowns, scCompany, scIndustry,
+    scBuildNearIndustry, scDock, scShip, scShips, scShipDepot);
 
 type
   TButtonRec = record
@@ -77,17 +77,17 @@ type
   private
     FScene: array [TSceneEnum] of TScene;
     FSceneEnum: TSceneEnum;
-    FBackSceneEnum: TSceneEnum;
+    FBackSceneEnum: array [0 .. 2] of TSceneEnum;
   public
     constructor Create;
     destructor Destroy; override;
     procedure Render; override;
     procedure Update(var Key: Word); override;
     property Scene: TSceneEnum read FSceneEnum write FSceneEnum;
-    property BackScene: TSceneEnum read FBackSceneEnum write FBackSceneEnum;
     function GetScene(I: TSceneEnum): TScene;
     procedure SetScene(SceneEnum: TSceneEnum); overload;
     procedure SetScene(SceneEnum, BackSceneEnum: TSceneEnum); overload;
+    procedure Back;
   end;
 
 var
@@ -110,7 +110,8 @@ uses
   TransportTycoon.Scene.Airport,
   TransportTycoon.Scene.Hangar,
   TransportTycoon.Scene.Aircraft,
-  TransportTycoon.Scene.Orders,
+  TransportTycoon.Scene.AircraftOrders,
+  TransportTycoon.Scene.ShipOrders,
   TransportTycoon.Scene.Aircrafts,
   TransportTycoon.Scene.Finances,
   TransportTycoon.Scene.Towns,
@@ -376,8 +377,12 @@ begin
 end;
 
 constructor TScenes.Create;
+var
+  I: Integer;
 begin
   inherited;
+  for I := 0 to High(FBackSceneEnum) do
+    FBackSceneEnum[I] := scWorld;
   FScene[scMainMenu] := TSceneMainMenu.Create;
   FScene[scGameMenu] := TSceneGameMenu.Create;
   FScene[scGenMenu] := TSceneGenMenu.Create;
@@ -389,7 +394,7 @@ begin
   FScene[scAircraft] := TSceneAircraft.Create;
   FScene[scAircrafts] := TSceneAircrafts.Create;
   FScene[scTowns] := TSceneTowns.Create;
-  FScene[scOrders] := TSceneOrders.Create;
+  FScene[scAircraftOrders] := TSceneAircraftOrders.Create;
   FScene[scFinances] := TSceneFinances.Create;
   FScene[scCompany] := TSceneCompany.Create;
   FScene[scIndustry] := TSceneIndustry.Create;
@@ -398,6 +403,7 @@ begin
   FScene[scShip] := TSceneShip.Create;
   FScene[scShips] := TSceneShips.Create;
   FScene[scShipDepot] := TSceneShipDepot.Create;
+  FScene[scShipOrders] := TSceneShipOrders.Create;
 end;
 
 procedure TScenes.Update(var Key: Word);
@@ -414,6 +420,8 @@ begin
 end;
 
 procedure TScenes.Render;
+var
+  I: Integer;
 begin
   terminal_clear();
   terminal_bkcolor(0);
@@ -428,16 +436,25 @@ begin
       begin
         terminal_print(0, 0, Format('X:%d, Y:%d', [RX, RY]));
         terminal_print(0, 1, Format('MX:%d, MY:%d', [MX, MY]));
+        for I := High(FBackSceneEnum) downto 0 do
+          if FBackSceneEnum[I] <> scWorld then
+            terminal_print(0, I + 2, '+++');
       end;
     end;
   terminal_bkcolor(0);
 end;
 
 procedure TScenes.SetScene(SceneEnum, BackSceneEnum: TSceneEnum);
+var
+  I: Integer;
 begin
-  Self.Scene := SceneEnum;
-  Self.BackScene := BackSceneEnum;
-  Self.Render;
+  for I := 0 to High(FBackSceneEnum) do
+    if FBackSceneEnum[I] = scWorld then
+    begin
+      FBackSceneEnum[I] := BackSceneEnum;
+      Break;
+    end;
+  SetScene(SceneEnum);
 end;
 
 destructor TScenes.Destroy;
@@ -458,6 +475,22 @@ end;
 function TScenes.GetScene(I: TSceneEnum): TScene;
 begin
   Result := FScene[I];
+end;
+
+procedure TScenes.Back;
+var
+  I: Integer;
+begin
+  for I := High(FBackSceneEnum) downto 0 do
+    if FBackSceneEnum[I] <> scWorld then
+    begin
+      Self.Scene := FBackSceneEnum[I];
+      Self.Render;
+      FBackSceneEnum[I] := scWorld;
+      Exit;
+    end;
+  if FBackSceneEnum[0] = scWorld then
+    SetScene(scWorld);
 end;
 
 end.
