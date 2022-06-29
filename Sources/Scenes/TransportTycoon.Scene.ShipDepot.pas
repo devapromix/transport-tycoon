@@ -82,9 +82,9 @@ begin
     if (GetButtonsY = MY) then
     begin
       case MX of
-        23 .. 42:
+        25 .. 40:
           Key := TK_ENTER;
-        46 .. 56:
+        44 .. 54:
           Key := TK_ESCAPE;
       end;
     end;

@@ -88,7 +88,7 @@ begin
         if Game.Vehicles.Ship[I].InLocation(Town.X, Town.Y) then
         begin
           Game.Vehicles.CurrentVehicle := I;
-          Scenes.SetScene(scShip);
+          Scenes.SetScene(scShip, scDock);
         end;
       end;
     TK_V:
