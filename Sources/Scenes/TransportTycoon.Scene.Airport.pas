@@ -88,7 +88,7 @@ begin
         end;
       end;
     TK_H:
-      Scenes.SetScene(scHangar);
+      Scenes.SetScene(scAircraftHangar);
   end;
 end;
 

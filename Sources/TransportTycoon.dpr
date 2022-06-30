@@ -21,7 +21,7 @@ uses
   TransportTycoon.Scene.MainMenu in 'Scenes\TransportTycoon.Scene.MainMenu.pas',
   TransportTycoon.Scene.GenMenu in 'Scenes\TransportTycoon.Scene.GenMenu.pas',
   TransportTycoon.Scene.GameMenu in 'Scenes\TransportTycoon.Scene.GameMenu.pas',
-  TransportTycoon.Scene.Hangar in 'Scenes\TransportTycoon.Scene.Hangar.pas',
+  TransportTycoon.Scene.AircraftHangar in 'Scenes\TransportTycoon.Scene.AircraftHangar.pas',
   TransportTycoon.Scene.Aircraft in 'Scenes\TransportTycoon.Scene.Aircraft.pas',
   TransportTycoon.Scene.AircraftOrders in 'Scenes\TransportTycoon.Scene.AircraftOrders.pas',
   TransportTycoon.Scene.ShipOrders in 'Scenes\TransportTycoon.Scene.ShipOrders.pas',

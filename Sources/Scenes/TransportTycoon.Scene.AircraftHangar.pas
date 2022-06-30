@@ -1,4 +1,4 @@
-﻿unit TransportTycoon.Scene.Hangar;
+﻿unit TransportTycoon.Scene.AircraftHangar;
 
 interface
 
@@ -6,7 +6,7 @@ uses
   TransportTycoon.Scenes;
 
 type
-  TSceneHangar = class(TScene)
+  TSceneAircraftHangar = class(TScene)
   private
 
   public
@@ -25,7 +25,7 @@ uses
   TransportTycoon.Aircraft,
   TransportTycoon.Vehicles;
 
-procedure TSceneHangar.Render;
+procedure TSceneAircraftHangar.Render;
 var
   C: TTown;
   I, J: Integer;
@@ -68,7 +68,7 @@ begin
   DrawBar;
 end;
 
-procedure TSceneHangar.Update(var Key: Word);
+procedure TSceneAircraftHangar.Update(var Key: Word);
 var
   I: Integer;
 begin

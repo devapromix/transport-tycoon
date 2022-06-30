@@ -7,7 +7,7 @@ uses
 
 type
   TSceneEnum = (scMainMenu, scGameMenu, scGenMenu, scWorld, scTown,
-    scBuildInTown, scAirport, scHangar, scAircraft, scAircrafts,
+    scBuildInTown, scAirport, scAircraftHangar, scAircraft, scAircrafts,
     scAircraftOrders, scShipOrders, scFinances, scTowns, scCompany, scIndustry,
     scBuildNearIndustry, scDock, scShip, scShips, scShipDepot);
 
@@ -108,7 +108,7 @@ uses
   TransportTycoon.Scene.World,
   TransportTycoon.Scene.BuildInTown,
   TransportTycoon.Scene.Airport,
-  TransportTycoon.Scene.Hangar,
+  TransportTycoon.Scene.AircraftHangar,
   TransportTycoon.Scene.Aircraft,
   TransportTycoon.Scene.AircraftOrders,
   TransportTycoon.Scene.ShipOrders,
@@ -390,7 +390,7 @@ begin
   FScene[scTown] := TSceneTown.Create;
   FScene[scBuildInTown] := TSceneBuildInTown.Create;
   FScene[scAirport] := TSceneAirport.Create;
-  FScene[scHangar] := TSceneHangar.Create;
+  FScene[scAircraftHangar] := TSceneAircraftHangar.Create;
   FScene[scAircraft] := TSceneAircraft.Create;
   FScene[scAircrafts] := TSceneAircrafts.Create;
   FScene[scTowns] := TSceneTowns.Create;
