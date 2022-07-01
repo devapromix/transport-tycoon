@@ -7,9 +7,9 @@ uses
 
 type
   TSceneEnum = (scMainMenu, scGameMenu, scGenMenu, scWorld, scTown, scTown2,
-    scBuildInTown, scAirport, scAircraftHangar, scAircraft, scAircrafts,
-    scAircraftOrders, scShipOrders, scFinances, scTowns, scCompany, scIndustry,
-    scBuildNearIndustry, scDock, scShip, scShips, scShipDepot);
+    scBuildInTown, scBuildInTown2, scAirport, scAircraftHangar, scAircraft,
+    scAircrafts, scAircraftOrders, scShipOrders, scFinances, scTowns, scCompany,
+    scIndustry, scBuildNearIndustry, scDock, scShip, scShips, scShipDepot);
 
 type
   TButtonRec = record
@@ -108,6 +108,7 @@ uses
   TransportTycoon.Scene.Town2,
   TransportTycoon.Scene.World,
   TransportTycoon.Scene.BuildInTown,
+  TransportTycoon.Scene.BuildInTown2,
   TransportTycoon.Scene.Airport,
   TransportTycoon.Scene.AircraftHangar,
   TransportTycoon.Scene.Aircraft,
@@ -391,6 +392,7 @@ begin
   FScene[scTown] := TSceneTown.Create;
   FScene[scTown2] := TSceneTown2.Create;
   FScene[scBuildInTown] := TSceneBuildInTown.Create;
+  FScene[scBuildInTown2] := TSceneBuildInTown2.Create;
   FScene[scAirport] := TSceneAirport.Create;
   FScene[scAircraftHangar] := TSceneAircraftHangar.Create;
   FScene[scAircraft] := TSceneAircraft.Create;
