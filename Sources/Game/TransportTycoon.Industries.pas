@@ -16,7 +16,8 @@ type
   TCargoSet = set of TCargo;
 
 type
-  TIndustryType = (inNone, inCoalMine, inPowerPlant, inForest, inSawmill);
+  TIndustryType = (inNone, inTown, inCoalMine, inPowerPlant, inForest,
+    inSawmill);
 
 type
 
@@ -39,6 +40,26 @@ type
     procedure SetCargoAmount(const ACargo: TCargo; const AAmount: Integer);
     procedure DecCargoAmount(const ACargo: TCargo);
     property Dock: TStation read FDock;
+  end;
+
+type
+
+  { TTownIndustry }
+
+  TTownIndustry = class(TIndustry)
+  private
+    FHouses: Word;
+    FPopulation: Integer;
+    FAirport: TStation;
+    FHQ: TStation;
+  public
+    constructor Create(const AName: string; const AX, AY: Integer);
+    destructor Destroy; override;
+    property Population: Integer read FPopulation;
+    property Houses: Word read FHouses;
+    procedure ModifyPopulation(const APopulation: Integer);
+    property Airport: TStation read FAirport;
+    property HQ: TStation read FHQ;
   end;
 
 type
@@ -84,6 +105,7 @@ type
 implementation
 
 uses
+  Math,
   SysUtils;
 
 { TIndustry }
@@ -117,6 +139,33 @@ destructor TIndustry.Destroy;
 begin
   FDock.Free;
   inherited;
+end;
+
+{ TTownIndustry }
+
+constructor TTownIndustry.Create(const AName: string; const AX, AY: Integer);
+begin
+  inherited Create(AName, AX, AY);
+  FIndustryType := inTown;
+  Accepts := [cgPassengers, cgBagsOfMail, cgGoods];
+  Produces := [cgPassengers, cgBagsOfMail];
+  FPopulation := 0;
+  ModifyPopulation(Math.RandomRange(250, 1500));
+  FAirport := TStation.Create(8000, 5);
+  FHQ := TStation.Create(250);
+end;
+
+destructor TTownIndustry.Destroy;
+begin
+  FHQ.Free;
+  FAirport.Free;
+  inherited;
+end;
+
+procedure TTownIndustry.ModifyPopulation(const APopulation: Integer);
+begin
+  FPopulation := FPopulation + APopulation;
+  FHouses := FPopulation div 30;
 end;
 
 { TForestIndustry }

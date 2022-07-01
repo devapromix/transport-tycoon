@@ -6,7 +6,7 @@ uses
   BearLibTerminal;
 
 type
-  TSceneEnum = (scMainMenu, scGameMenu, scGenMenu, scWorld, scTown,
+  TSceneEnum = (scMainMenu, scGameMenu, scGenMenu, scWorld, scTown, scTown2,
     scBuildInTown, scAirport, scAircraftHangar, scAircraft, scAircrafts,
     scAircraftOrders, scShipOrders, scFinances, scTowns, scCompany, scIndustry,
     scBuildNearIndustry, scDock, scShip, scShips, scShipDepot);
@@ -105,6 +105,7 @@ uses
   TransportTycoon.Scene.MainMenu,
   TransportTycoon.Scene.GameMenu,
   TransportTycoon.Scene.Town,
+  TransportTycoon.Scene.Town2,
   TransportTycoon.Scene.World,
   TransportTycoon.Scene.BuildInTown,
   TransportTycoon.Scene.Airport,
@@ -388,6 +389,7 @@ begin
   FScene[scGenMenu] := TSceneGenMenu.Create;
   FScene[scWorld] := TSceneWorld.Create;
   FScene[scTown] := TSceneTown.Create;
+  FScene[scTown2] := TSceneTown2.Create;
   FScene[scBuildInTown] := TSceneBuildInTown.Create;
   FScene[scAirport] := TSceneAirport.Create;
   FScene[scAircraftHangar] := TSceneAircraftHangar.Create;

@@ -8,8 +8,8 @@ uses
 
 type
   Tiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlTown, tlRock, tlSand,
-    tlWater, tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
-    tlPowerPlantIndustry);
+    tlWater, tlTownIndustry, tlForestIndustry, tlSawmillIndustry,
+    tlCoalMineIndustry, tlPowerPlantIndustry);
 
 const
   NormalTiles = [tlGrass, tlDirt, tlSand];
@@ -44,6 +44,8 @@ const
     (Name: 'Sand'; Tile: ':'; Color: 'yellow'),
     //
     (Name: 'Water'; Tile: '='; Color: 'blue'),
+    //
+    (Name: 'Town'; Tile: '&'; Color: 'lighter yellow'),
     //
     (Name: 'Forest'; Tile: 'F'; Color: 'lighter yellow'),
     //
@@ -130,6 +132,7 @@ type
     procedure Gen;
     procedure CityGrows;
     function GetCurrentCity(const AX, AY: Integer): Integer;
+    function GetCurrentTown(const AX, AY: Integer): Integer;
     function GetCurrentIndustry(const AX, AY: Integer): Integer;
     function EnterInCity(const AX, AY: Integer): Boolean;
     function EnterInIndustry(const AX, AY: Integer): Boolean;
@@ -143,6 +146,7 @@ type
     procedure ClearLand(const AX, AY: Integer);
     function GetNearTownName(const AX, AY: Integer): string;
     function IsNearTile(const AX, AY: Integer; const ATile: Tiles): Boolean;
+    function EnterInTown(const AX, AY: Integer): Boolean;
   end;
 
 implementation
@@ -334,6 +338,12 @@ begin
   Result := FCurrentIndustry >= 0;
 end;
 
+function TMap.EnterInTown(const AX, AY: Integer): Boolean;
+begin
+  FCurrentTown := GetCurrentTown(AX, AY);
+  Result := FCurrentTown >= 0;
+end;
+
 procedure TMap.Gen;
 var
   X, Y, I, J, N, D: Integer;
@@ -490,6 +500,14 @@ begin
       if IndustryType = inNone then
         Continue;
       case IndustryType of
+        inTown:
+          begin
+            S := TTown.GenName;;
+            SetLength(Industry, I + 1);
+            Cell[X][Y] := tlTownIndustry;
+            Industry[I] := TTownIndustry.Create(S, X, Y);
+            Inc(I);
+          end;
         inCoalMine:
           begin
             S := GetNearTownName(X, Y);
@@ -597,6 +615,17 @@ begin
   Result := -1;
   for I := 0 to Length(Industry) - 1 do
     if (Industry[I].X = AX) and (Industry[I].Y = AY) then
+      Exit(I);
+end;
+
+function TMap.GetCurrentTown(const AX, AY: Integer): Integer;
+var
+  I: Integer;
+begin
+  Result := -1;
+  for I := 0 to Length(Industry) - 1 do
+    if (Industry[I].X = AX) and (Industry[I].Y = AY) and
+      (Industry[I].IndustryType = inTown) then
       Exit(I);
 end;
 

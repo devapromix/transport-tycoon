@@ -40,7 +40,8 @@ uses
   TransportTycoon.Scene.Ships in 'Scenes\TransportTycoon.Scene.Ships.pas',
   TransportTycoon.Scene.Ship in 'Scenes\TransportTycoon.Scene.Ship.pas',
   TransportTycoon.Scene.Vehicles in 'Scenes\TransportTycoon.Scene.Vehicles.pas',
-  TransportTycoon.Scene.ShipDepot in 'Scenes\TransportTycoon.Scene.ShipDepot.pas';
+  TransportTycoon.Scene.ShipDepot in 'Scenes\TransportTycoon.Scene.ShipDepot.pas',
+  TransportTycoon.Scene.Town2 in 'Scenes\TransportTycoon.Scene.Town2.pas';
 
 var
   Key: Word = 0;

@@ -211,6 +211,12 @@ begin
             Scenes.SetScene(scTown);
           Exit;
         end;
+        if (Game.Map.Cell[RX][RY] = tlTownIndustry) then
+        begin
+          if Game.Map.EnterInTown(RX, RY) then
+            Scenes.SetScene(scTown2);
+          Exit;
+        end;
         if (Game.Map.Cell[RX][RY] in IndustryTiles) then
         begin
           if Game.Map.EnterInIndustry(RX, RY) then
