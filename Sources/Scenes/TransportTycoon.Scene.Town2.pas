@@ -87,7 +87,7 @@ begin
       Scenes.SetScene(scWorld);
     TK_A:
       if Town.Airport.HasBuilding then
-        Scenes.SetScene(scAirport);
+        Scenes.SetScene(scAirport, scTown2);
     TK_B:
       Scenes.SetScene(scBuildInTown2);
     TK_D:
@@ -96,7 +96,7 @@ begin
     TK_G:
       if (Game.Map.CurrentTown = Game.Company.TownID) and
         Game.Map.Town[Game.Map.CurrentTown].HQ.HasBuilding then
-        Scenes.SetScene(scCompany);
+        Scenes.SetScene(scCompany, scTown2);
   end;
 end;
 

@@ -92,7 +92,7 @@ begin
         if Town.Airport.CanBuild then
         begin
           Town.Airport.Build;
-          Scenes.SetScene(scAirport);
+          Scenes.SetScene(scAirport, scTown2);
         end;
       end;
     TK_B:
@@ -109,7 +109,7 @@ begin
         then
         begin
           Town.HQ.Build;
-          Scenes.SetScene(scCompany);
+          Scenes.SetScene(scCompany, scTown2);
         end;
       end;
   end;
