@@ -91,7 +91,7 @@ begin
         if Town.Airport.CanBuild then
         begin
           Town.Airport.Build;
-          Scenes.SetScene(scAirport);
+          Scenes.SetScene(scAirport, scTown);
         end;
       end;
     TK_B:

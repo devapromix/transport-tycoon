@@ -43,8 +43,7 @@ begin
     if ShipBase[I].Since <= Game.Calendar.Year then
       DrawButton(12, I + 10, Chr(Ord('A') + I), ShipBase[I].Name);
 
-  I := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
-    Length(ShipBase) - 1);
+  I := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0, Length(ShipBase) - 1);
   terminal_color('yellow');
   terminal_composition(TK_ON);
   DrawText(42, 10, ShipBase[I].Name);
@@ -58,11 +57,10 @@ begin
   DrawText(42, 12, Format('Bags of mail: %d', [ShipBase[I].BagsOfMail]));
   DrawText(42, 13, Format('Speed: %d km/h', [ShipBase[I].Speed]));
   DrawText(42, 14, Format('Cost: $%d', [ShipBase[I].Cost]));
-  DrawText(42, 15, Format('Running Cost: $%d/y',
-    [ShipBase[I].RunningCost]));
+  DrawText(42, 15, Format('Running Cost: $%d/y', [ShipBase[I].RunningCost]));
 
-  AddButton(20, Length(Game.Vehicles.Ship) < TVehicles.MaxShips,
-    'Enter', 'Buy Ship');
+  AddButton(20, Length(Game.Vehicles.Ship) < TVehicles.MaxShips, 'Enter',
+    'Buy Ship');
   AddButton(20, 'Esc', 'Close');
 
   DrawBar;

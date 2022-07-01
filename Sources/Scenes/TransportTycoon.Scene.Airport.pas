@@ -77,7 +77,7 @@ begin
   end;
   case Key of
     TK_ESCAPE:
-      Scenes.SetScene(scTown);
+      Scenes.Back;
     TK_A .. TK_G:
       begin
         I := Key - TK_A;
