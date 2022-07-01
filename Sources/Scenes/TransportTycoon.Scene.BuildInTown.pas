@@ -108,7 +108,7 @@ begin
         then
         begin
           Town.HQ.Build;
-          Scenes.SetScene(scCompany);
+          Scenes.SetScene(scCompany, scTown);
         end;
       end;
   end;

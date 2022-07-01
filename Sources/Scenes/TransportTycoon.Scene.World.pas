@@ -100,7 +100,7 @@ begin
     TK_F:
       Scenes.SetScene(scFinances);
     TK_G:
-      Scenes.SetScene(scCompany);
+      Scenes.SetScene(scCompany, scWorld);
     TK_N:
       Scenes.SetScene(scTowns);
     TK_P:

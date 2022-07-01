@@ -91,7 +91,7 @@ begin
     TK_G:
       if (Game.Map.CurrentTown = Game.Company.TownID) and
         Game.Map.Town[Game.Map.CurrentTown].HQ.HasBuilding then
-        Scenes.SetScene(scCompany);
+        Scenes.SetScene(scCompany, scTown);
   end;
 end;
 
