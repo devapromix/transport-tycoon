@@ -33,7 +33,7 @@ var
 begin
   inherited Render;
   DrawTitle(Game.Company.Name + ' SHIPS');
-  for I := 0 to Length(Game.Vehicles.Ship) - 1 do
+  for I := 0 to Game.Vehicles.ShipCount - 1 do
     DrawButton(12, I + 11, Chr(Ord('A') + I), Game.Vehicles.Ship[I].Name);
 end;
 
@@ -46,7 +46,7 @@ begin
     TK_A .. TK_G:
       begin
         I := Key - TK_A;
-        if I > Length(Game.Vehicles.Ship) - 1 then
+        if I > Game.Vehicles.ShipCount - 1 then
           Exit;
         Game.Vehicles.CurrentVehicle := I;
         with Game.Vehicles.Ship[I] do

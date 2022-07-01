@@ -59,8 +59,7 @@ begin
   DrawText(42, 14, Format('Cost: $%d', [ShipBase[I].Cost]));
   DrawText(42, 15, Format('Running Cost: $%d/y', [ShipBase[I].RunningCost]));
 
-  AddButton(20, Length(Game.Vehicles.Ship) < TVehicles.MaxShips, 'Enter',
-    'Buy Ship');
+  AddButton(20, Game.Vehicles.IsBuyShipAllowed, 'Enter', 'Buy Ship');
   AddButton(20, 'Esc', 'Close');
 
   DrawBar;
@@ -69,6 +68,7 @@ end;
 procedure TSceneShipDepot.Update(var Key: Word);
 var
   I: Integer;
+  Title: string;
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
@@ -102,14 +102,14 @@ begin
       end;
     TK_ENTER:
       begin
-        if Length(Game.Vehicles.Ship) < TVehicles.MaxShips then
+        if Game.Vehicles.IsBuyShipAllowed then
         begin
           I := Game.Vehicles.CurrentVehicle;
           if (Game.Money >= ShipBase[I].Cost) then
           begin
-            Game.Vehicles.AddShip(Format('Ship #%d (%s)',
-              [Length(Game.Vehicles.Ship) + 1, ShipBase[I].Name]),
-              Game.Map.CurrentTown, I);
+            Title := Format('Ship #%d (%s)',
+              [Game.Vehicles.ShipCount + 1, ShipBase[I].Name]);
+            Game.Vehicles.AddShip(Title, Game.Map.CurrentTown, I);
             Scenes.SetScene(scDock);
           end;
         end;

@@ -38,8 +38,8 @@ begin
 
   DrawButton(12, 14, False, 'C', 'LIST OF ROAD VEHICLES');
   DrawButton(12, 15, False, 'T', 'LIST OF TRAINS');
-  DrawButton(12, 16, Length(Game.Vehicles.Ship) > 0, 'S', 'LIST OF SHIPS');
-  DrawButton(12, 17, Length(Game.Vehicles.Aircraft) > 0, 'A',
+  DrawButton(12, 16, Game.Vehicles.GotShips, 'S', 'LIST OF SHIPS');
+  DrawButton(12, 17, Game.Vehicles.GotAircrafts, 'A',
     'LIST OF AIRCRAFTS');
 
   DrawButton(42, 15, False, 'B', 'Build');

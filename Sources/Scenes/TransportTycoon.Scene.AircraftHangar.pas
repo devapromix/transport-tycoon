@@ -61,8 +61,7 @@ begin
   DrawText(42, 15, Format('Running Cost: $%d/y',
     [AircraftBase[I].RunningCost]));
 
-  AddButton(20, Length(Game.Vehicles.Aircraft) < TVehicles.MaxAircrafts,
-    'Enter', 'Buy Aircraft');
+  AddButton(20, Game.Vehicles.IsBuyAircraftAllowed, 'Enter', 'Buy Aircraft');
   AddButton(20, 'Esc', 'Close');
 
   DrawBar;
@@ -71,6 +70,7 @@ end;
 procedure TSceneAircraftHangar.Update(var Key: Word);
 var
   I: Integer;
+  Title: string;
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
@@ -104,14 +104,14 @@ begin
       end;
     TK_ENTER:
       begin
-        if Length(Game.Vehicles.Aircraft) < TVehicles.MaxAircrafts then
+        if Game.Vehicles.IsBuyAircraftAllowed then
         begin
           I := Game.Vehicles.CurrentVehicle;
           if (Game.Money >= AircraftBase[I].Cost) then
           begin
-            Game.Vehicles.AddAircraft(Format('Aircraft #%d (%s)',
-              [Length(Game.Vehicles.Aircraft) + 1, AircraftBase[I].Name]),
-              Game.Map.CurrentTown, I);
+            Title := Format('Aircraft #%d (%s)',
+              [Game.Vehicles.AircraftCount + 1, AircraftBase[I].Name]);
+            Game.Vehicles.AddAircraft(Title, Game.Map.CurrentTown, I);
             Scenes.SetScene(scAirport);
           end;
         end;
