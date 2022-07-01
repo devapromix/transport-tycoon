@@ -82,7 +82,7 @@ begin
       Scenes.SetScene(scWorld);
     TK_A:
       if C.Airport.HasBuilding then
-        Scenes.SetScene(scAirport);
+        Scenes.SetScene(scAirport, scTown);
     TK_B:
       Scenes.SetScene(scBuildInTown);
     TK_D:
