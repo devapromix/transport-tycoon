@@ -50,7 +50,7 @@ begin
   end;
   case Key of
     TK_ESCAPE:
-      Scenes.SetScene(scWorld);
+      Scenes.Back;
   end;
 end;
 
