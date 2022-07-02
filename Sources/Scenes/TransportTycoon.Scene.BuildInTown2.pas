@@ -41,7 +41,7 @@ begin
 
   DrawFrame(15, 7, 50, 15);
 
-  Town := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
+  Town := TTownIndustry(Game.Map.Industry[Game.Map.CurrentTown]);
   DrawTitle('BUILD IN ' + Town.Name);
 
   S := '';
@@ -54,7 +54,7 @@ begin
   S := '';
   if Town.Dock.Level = 0 then
     S := ' ($' + IntToStr(Town.Dock.Cost) + ')';
-  DrawButton(17, 12, Town.Dock.CanBuild, 'B', 'Build Dock' + S);
+  DrawButton(17, 12, Town.Dock.CanBuild(Town.X, Town.Y), 'B', 'Build Dock' + S);
 
   if (Game.Map.CurrentTown = Game.Company.TownID) then
     DrawButton(17, 17, Town.HQ.CanBuild, 'G', 'Build Company Headquarters ($' +
@@ -97,7 +97,7 @@ begin
       end;
     TK_B:
       begin
-        if Town.Dock.CanBuild then
+        if Town.Dock.CanBuild(Town.X, Town.Y) then
         begin
           Town.Dock.Build;
           Scenes.SetScene(scDock, scTown2);

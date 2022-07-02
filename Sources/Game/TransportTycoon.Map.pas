@@ -480,12 +480,30 @@ begin
 
     until not HasTownName(TownName) and not HasTownLocation(X, Y) and
       HasNormalTile(X, Y);
-    Cell[X][Y] := tlTown;
+//    Cell[X][Y] := tlTown;
     SetLength(Town, I + 1);
     Town[I] := TTown.Create(TownName, X, Y);
+    SetLength(Industry, I + 1);
+    Cell[X][Y] := tlTownIndustry;
+    Industry[I] := TTownIndustry.Create(TownName, X, Y);
   end;
+  // Towns
+  //I := 0;
+  { for J := 0 to MapNoOfTownsInt[NoOfTowns] - 1 do
+    begin
+    repeat
+    X := (Math.RandomRange(1, FWidth div 10) * 10) +
+    (Math.RandomRange(0, 10) - 5);
+    Y := (Math.RandomRange(1, FHeight div 10) * 10) +
+    (Math.RandomRange(0, 10) - 5);
+    until HasNormalTile(X, Y) and not HasTownLocation(X, Y) and
+    not HasIndustryLocation(X, Y);
+    SetLength(Industry, I + 1);
+    Cell[X][Y] := tlTownIndustry;
+    Industry[I] := TTownIndustry.Create(TTown.GenName, X, Y);
+    Inc(I);
+    end; }
   // Industries
-  I := 0;
   for J := 0 to MapIndCount - 1 do
   begin
     for IndustryType := Succ(Low(TIndustryType)) to High(TIndustryType) do
@@ -497,17 +515,7 @@ begin
           (Math.RandomRange(0, 10) - 5);
       until HasNormalTile(X, Y) and not HasTownLocation(X, Y) and
         not HasIndustryLocation(X, Y);
-      if IndustryType = inNone then
-        Continue;
       case IndustryType of
-        inTown:
-          begin
-            S := TTown.GenName;;
-            SetLength(Industry, I + 1);
-            Cell[X][Y] := tlTownIndustry;
-            Industry[I] := TTownIndustry.Create(S, X, Y);
-            Inc(I);
-          end;
         inCoalMine:
           begin
             S := GetNearTownName(X, Y);

@@ -37,7 +37,7 @@ begin
 
   DrawFrame(10, 8, 60, 13);
 
-  Town := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
+  Town := TTownIndustry(Game.Map.Industry[Game.Map.CurrentTown]);
 
   DrawTitle(10, Town.Name + '***');
   terminal_color('white');
