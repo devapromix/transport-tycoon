@@ -44,7 +44,8 @@ begin
   S := '';
   if Industry.Dock.Level = 0 then
     S := ' ($' + IntToStr(Industry.Dock.Cost) + ')';
-  DrawButton(17, 11, Industry.Dock.CanBuild, 'D', 'Build Dock' + S);
+  DrawButton(17, 11, Industry.Dock.CanBuild(Industry.X, Industry.Y), 'D',
+    'Build Dock' + S);
 
   AddButton(19, 'Esc', 'Close');
 
@@ -71,7 +72,7 @@ begin
       Scenes.SetScene(scIndustry);
     TK_D:
       begin
-        if Industry.Dock.CanBuild then
+        if Industry.Dock.CanBuild(Industry.X,Industry.Y) then
         begin
           Industry.Dock.Build;
           Scenes.SetScene(scDock, scIndustry);

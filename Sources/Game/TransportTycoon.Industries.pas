@@ -28,7 +28,7 @@ type
     FProducesAmount: TCargoAmount;
     FProduces: TCargoSet;
     FAccepts: TCargoSet;
-    FDock: TStation;
+    FDock: TDock;
   public
     constructor Create(const AName: string; const AX, AY: Integer);
     destructor Destroy; override;
@@ -38,7 +38,7 @@ type
     property IndustryType: TIndustryType read FIndustryType;
     procedure SetCargoAmount(const ACargo: TCargo; const AAmount: Integer);
     procedure DecCargoAmount(const ACargo: TCargo);
-    property Dock: TStation read FDock;
+    property Dock: TDock read FDock;
   end;
 
 type
@@ -98,7 +98,7 @@ begin
   FProduces := [];
   for Cargo := Low(TCargo) to High(TCargo) do
     FProducesAmount[Cargo] := 0;
-  FDock := TStation.Create(9000);
+  FDock := TDock.Create(9000);
 end;
 
 procedure TIndustry.SetCargoAmount(const ACargo: TCargo;
