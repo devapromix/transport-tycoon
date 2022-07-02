@@ -21,13 +21,22 @@ type
     function HasBuilding: Boolean;
   end;
 
+type
+
+  { TDock }
+
+  TDock = class(TStation)
+    function CanBuild(const X, Y: Integer): Boolean;
+  end;
+
 implementation
 
 { TStation }
 
 uses
   TransportTycoon.Game,
-  TransportTycoon.Finances;
+  TransportTycoon.Finances,
+  TransportTycoon.Map;
 
 procedure TStation.Build;
 begin
@@ -60,6 +69,14 @@ end;
 function TStation.HasBuilding: Boolean;
 begin
   Result := FLevel > 0;
+end;
+
+{ TDock }
+
+function TDock.CanBuild(const X, Y: Integer): Boolean;
+begin
+  Result := (FLevel < FMaxLevel) and (Game.Money >= Cost) and
+    (Game.Map.IsNearTile(X, Y, tlWater))
 end;
 
 end.
