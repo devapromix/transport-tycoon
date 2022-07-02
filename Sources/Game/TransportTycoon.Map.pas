@@ -183,7 +183,7 @@ begin
     begin
       if (X = AX) and (Y = AY) then
         Continue;
-      if (Cell[AX][AY] = ATile) then
+      if (Cell[X][Y] = ATile) then
         Exit(True);
     end;
 end;
