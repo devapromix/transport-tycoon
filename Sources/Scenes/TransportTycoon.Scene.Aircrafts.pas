@@ -33,7 +33,7 @@ var
 begin
   inherited Render;
   DrawTitle(Game.Company.Name + ' AIRCRAFTS');
-  for I := 0 to Length(Game.Vehicles.Aircraft) - 1 do
+  for I := 0 to Game.Vehicles.AircraftCount - 1 do
     DrawButton(12, I + 11, Chr(Ord('A') + I), Game.Vehicles.Aircraft[I].Name);
 end;
 
@@ -46,7 +46,7 @@ begin
     TK_A .. TK_G:
       begin
         I := Key - TK_A;
-        if I > Length(Game.Vehicles.Aircraft) - 1 then
+        if I > Game.Vehicles.AircraftCount - 1 then
           Exit;
         Game.Vehicles.CurrentVehicle := I;
         with Game.Vehicles.Aircraft[I] do

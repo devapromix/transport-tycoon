@@ -43,7 +43,7 @@ begin
   DrawText(7, 13, 'Bags of mail: ' + IntToStr(Town.ProducesAmount
     [cgBagsOfMail]));
 
-  for I := 0 to Length(Game.Vehicles.Aircraft) - 1 do
+  for I := 0 to Game.Vehicles.AircraftCount - 1 do
     DrawButton(37, I + 11, Game.Vehicles.Aircraft[I].InLocation(Town.X, Town.Y),
       Chr(Ord('A') + I), Game.Vehicles.Aircraft[I].Name);
 

@@ -92,10 +92,10 @@ class procedure TSceneWorld.GlobalKeys(var Key: Word);
 begin
   case Key of
     TK_A:
-      if Length(Game.Vehicles.Aircraft) > 0 then
+      if Game.Vehicles.GotAircrafts then
         Scenes.SetScene(scAircrafts);
     TK_S:
-      if Length(Game.Vehicles.Ship) > 0 then
+      if Game.Vehicles.GotShips then
         Scenes.SetScene(scShips);
     TK_F:
       Scenes.SetScene(scFinances);
@@ -136,7 +136,7 @@ end;
 
 procedure TSceneWorld.Render;
 var
-  I: Integer;
+  VehicleName: string;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
@@ -162,19 +162,10 @@ begin
     else if Game.Map.Cell[RX][RY] in IndustryTiles then
       IndustryInfo(Game.Map.GetCurrentIndustry(RX, RY))
     else
-    begin
-      I := Game.Vehicles.GetCurrentAircraft(RX, RY);
-      if I >= 0 then
-        VehicleInfo(Game.Vehicles.Aircraft[I].Name)
+      if Game.Vehicles.IsVehicleOnMap(RX, RY, VehicleName) then
+        VehicleInfo(VehicleName)
       else
-      begin
-        I := Game.Vehicles.GetCurrentShip(RX, RY);
-        if I >= 0 then
-          VehicleInfo(Game.Vehicles.Ship[I].Name)
-        else
-          TileInfo(Tile[Game.Map.Cell[RX][RY]].Name);
-      end
-    end;
+        TileInfo(Tile[Game.Map.Cell[RX][RY]].Name);
   end;
   if (MY = Self.Height - 2) then
     ScrollDown;
