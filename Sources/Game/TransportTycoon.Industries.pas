@@ -50,6 +50,7 @@ type
     procedure SetCargoAmount(const ACargo: TCargo; const AAmount: Integer);
     procedure DecCargoAmount(const ACargo: TCargo);
     property Dock: TDock read FDock;
+    procedure Grows; virtual;
   end;
 
 type
@@ -72,7 +73,7 @@ type
     property Airport: TStation read FAirport;
     property HQ: TStation read FHQ;
     class function GenName: string;
-    procedure Grow;
+    procedure Grows; override;
   end;
 
 type
@@ -155,6 +156,19 @@ begin
   inherited;
 end;
 
+procedure TIndustry.Grows;
+begin
+  if Dock.HasBuilding then
+  begin
+    if (cgWood in Produces) then
+      SetCargoAmount(cgWood, RandomRange(15, 18));
+    if (cgCoal in Produces) then
+      SetCargoAmount(cgCoal, RandomRange(15, 18));
+    if (cgGoods in Produces) then
+      SetCargoAmount(cgGoods, RandomRange(15, 18));
+  end;
+end;
+
 { TTownIndustry }
 
 constructor TTownIndustry.Create(const AName: string; const AX, AY: Integer);
@@ -197,7 +211,7 @@ begin
   end;
 end;
 
-procedure TTownIndustry.Grow;
+procedure TTownIndustry.Grows;
 var
   MonthPassengers: Integer;
   MonthMail: Integer;

@@ -124,7 +124,7 @@ type
     function HasTownName(const ATownName: string): Boolean;
     procedure Draw(const AWidth, AHeight: Integer);
     procedure Gen;
-    procedure TownGrows;
+    procedure Grows;
     function GetCurrentIndustry(const AX, AY: Integer): Integer;
     function EnterInIndustry(const AX, AY: Integer): Boolean;
     function WorldPop: Integer;
@@ -558,13 +558,12 @@ begin
   end;
 end;
 
-procedure TMap.TownGrows;
+procedure TMap.Grows;
 var
   I: Integer;
 begin
   for I := 0 to Length(Industry) - 1 do
-    if (Game.Map.Industry[I].IndustryType = inTown) then
-      TTownIndustry(Industry[I]).Grow;
+    Industry[I].Grows;
 end;
 
 function TMap.GetCurrentIndustry(const AX, AY: Integer): Integer;

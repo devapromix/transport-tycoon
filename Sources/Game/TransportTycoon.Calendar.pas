@@ -72,7 +72,7 @@ end;
 
 procedure TCalendar.OnMonth;
 begin
-  Game.Map.TownGrows;
+  Game.Map.Grows;
   Game.Vehicles.RunningCosts;
   Game.ModifyMoney(ttLoanInterest, -(Game.Loan div 600));
 end;
