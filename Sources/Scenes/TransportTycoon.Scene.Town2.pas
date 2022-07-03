@@ -34,7 +34,7 @@ begin
 
   DrawFrame(10, 8, 60, 13);
 
-  FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentTown]);
+  FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
 
   DrawTitle(10, FTown.Name + '***');
   terminal_color('white');
@@ -44,7 +44,7 @@ begin
     'Airport: ' + AirportSizeStr[FTown.Airport.Level]);
   DrawButton(34, 13, FTown.Dock.HasBuilding, 'D',
     'Dock: ' + DockSizeStr[FTown.Dock.Level]);
-  if (Game.Map.CurrentTown = Game.Company.TownID) then
+  if (Game.Map.CurrentIndustry = Game.Company.TownID) then
     DrawButton(34, 16, FTown.HQ.HasBuilding, 'G', 'Company Headquarters');
   terminal_color('white');
 
@@ -83,16 +83,16 @@ begin
       Scenes.SetScene(scWorld);
     TK_A:
       if FTown.Airport.HasBuilding then
-        Scenes.SetScene(scAirport, scTown2);
+        Scenes.SetScene(scAirport, scTown);
     TK_B:
-      Scenes.SetScene(scBuildInTown2);
+      Scenes.SetScene(scBuildInTown);
     TK_D:
       if FTown.Dock.HasBuilding then
-        Scenes.SetScene(scDock, scTown2);
+        Scenes.SetScene(scDock, scTown);
     TK_G:
-      if (Game.Map.CurrentTown = Game.Company.TownID) and FTown.HQ.HasBuilding
+      if (Game.Map.CurrentIndustry = Game.Company.TownID) and FTown.HQ.HasBuilding
       then
-        Scenes.SetScene(scCompany, scTown2);
+        Scenes.SetScene(scCompany, scTown);
   end;
 end;
 

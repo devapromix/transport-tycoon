@@ -6,10 +6,10 @@ uses
   BearLibTerminal;
 
 type
-  TSceneEnum = (scMainMenu, scGameMenu, scGenMenu, scWorld, scTown2,
-    scBuildInTown2, scAirport, scAircraftHangar, scAircraft, scAircrafts,
+  TSceneEnum = (scMainMenu, scGameMenu, scGenMenu, scWorld, scTown,
+    scBuildInTown, scAirport, scAircraftHangar, scAircraft, scAircrafts,
     scAircraftOrders, scShipOrders, scFinances, scTowns, scCompany, scIndustry,
-    scBuildNearIndustry, scDock, scShip, scShips, scShipDepot);
+    scBuildNearIndustry, scDock, scShip, scShips, scShipDepot, scIndustries);
 
 type
   TButtonRec = record
@@ -107,7 +107,7 @@ uses
   TransportTycoon.Scene.Town,
   TransportTycoon.Scene.Town2,
   TransportTycoon.Scene.World,
-  TransportTycoon.Scene.BuildInTown,
+  TransportTycoon.Scene.Industries,
   TransportTycoon.Scene.BuildInTown2,
   TransportTycoon.Scene.Airport,
   TransportTycoon.Scene.AircraftHangar,
@@ -389,8 +389,8 @@ begin
   FScene[scGameMenu] := TSceneGameMenu.Create;
   FScene[scGenMenu] := TSceneGenMenu.Create;
   FScene[scWorld] := TSceneWorld.Create;
-  FScene[scTown2] := TSceneTown2.Create;
-  FScene[scBuildInTown2] := TSceneBuildInTown2.Create;
+  FScene[scTown] := TSceneTown2.Create;
+  FScene[scBuildInTown] := TSceneBuildInTown2.Create;
   FScene[scAirport] := TSceneAirport.Create;
   FScene[scAircraftHangar] := TSceneAircraftHangar.Create;
   FScene[scAircraft] := TSceneAircraft.Create;
@@ -406,6 +406,7 @@ begin
   FScene[scShips] := TSceneShips.Create;
   FScene[scShipDepot] := TSceneShipDepot.Create;
   FScene[scShipOrders] := TSceneShipOrders.Create;
+  FScene[scIndustries] := TSceneIndustries.Create;
 end;
 
 procedure TScenes.Update(var Key: Word);

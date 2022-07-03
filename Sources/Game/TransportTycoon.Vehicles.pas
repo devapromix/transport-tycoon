@@ -79,20 +79,19 @@ begin
 end;
 
 procedure TVehicles.AddShip(const AName: string; const AIndex, ShipID: Integer);
-var
-  Town: TTownIndustry;
 begin
-  Town := TTownIndustry(Game.Map.Industry[AIndex]);
-
-  if (Town.Dock.HasBuilding and (Game.Money >= ShipBase[ShipID].Cost)) then
+  if (Game.Map.Industry[AIndex].Dock.HasBuilding and
+    (Game.Money >= ShipBase[ShipID].Cost)) then
 
     SetLength(FShip, ShipCount + 1);
 
-  FShip[High(FShip)] := TShip.Create(AName, Town.X, Town.Y, ShipID);
+  FShip[High(FShip)] := TShip.Create(AName, Game.Map.Industry[AIndex].X,
+    Game.Map.Industry[AIndex].Y, ShipID);
 
   with FShip[High(FShip)] do
   begin
-    AddOrder(AIndex, Town.Name, Town.X, Town.Y);
+    AddOrder(AIndex, Game.Map.Industry[AIndex].Name,
+      Game.Map.Industry[AIndex].X, Game.Map.Industry[AIndex].Y);
     Game.ModifyMoney(ttNewVehicles, -ShipBase[ShipID].Cost);
     VehicleID := ShipID;
   end;

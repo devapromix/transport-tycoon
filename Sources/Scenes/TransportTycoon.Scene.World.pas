@@ -105,6 +105,8 @@ begin
       Scenes.SetScene(scCompany, scWorld);
     TK_N:
       Scenes.SetScene(scTowns);
+    TK_I:
+      Scenes.SetScene(scIndustries);
     TK_P:
       begin
         Game.IsPause := not Game.IsPause;
@@ -160,7 +162,7 @@ begin
   if (MY < Self.Height - 1) then
   begin
     if Game.Map.Cell[RX][RY] = tlTownIndustry then
-      TownInfo(Game.Map.GetCurrentTown(RX, RY))
+      TownInfo(Game.Map.GetCurrentIndustry(RX, RY))
     else if Game.Map.Cell[RX][RY] in IndustryTiles then
       IndustryInfo(Game.Map.GetCurrentIndustry(RX, RY))
     else if Game.Vehicles.IsVehicleOnMap(RX, RY, VehicleName) then
@@ -199,8 +201,8 @@ begin
       begin
         if (Game.Map.Cell[RX][RY] = tlTownIndustry) then
         begin
-          if Game.Map.EnterInTown(RX, RY) then
-            Scenes.SetScene(scTown2);
+          if Game.Map.EnterInIndustry(RX, RY) then
+            Scenes.SetScene(scTown);
           Exit;
         end;
         if (Game.Map.Cell[RX][RY] in IndustryTiles) then

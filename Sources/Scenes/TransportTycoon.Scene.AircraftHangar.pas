@@ -34,7 +34,7 @@ begin
 
   DrawFrame(10, 6, 60, 17);
 
-  FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentTown]);
+  FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
 
   DrawTitle(8, FTown.Name + ' Airport Hangar');
 
@@ -110,7 +110,7 @@ begin
           begin
             Title := Format('Aircraft #%d (%s)',
               [Game.Vehicles.AircraftCount + 1, AircraftBase[I].Name]);
-            Game.Vehicles.AddAircraft(Title, Game.Map.CurrentTown, I);
+            Game.Vehicles.AddAircraft(Title, Game.Map.CurrentIndustry, I);
             Scenes.SetScene(scAirport);
           end;
         end;

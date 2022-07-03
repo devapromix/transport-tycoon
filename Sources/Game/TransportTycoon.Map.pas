@@ -92,7 +92,6 @@ type
     FWidth: Word;
     FHeight: Word;
     FLeft: Word;
-    FCurrentTown: Integer;
     FNoOfTowns: Integer;
     FRivers: TMapRivers;
     FSeaLevel: TMapSeaLevel;
@@ -115,7 +114,6 @@ type
     property Left: Word read FLeft write FLeft;
     property Height: Word read FHeight;
     property Width: Word read FWidth;
-    property CurrentTown: Integer read FCurrentTown write FCurrentTown;
     property CurrentIndustry: Integer read FCurrentIndustry
       write FCurrentIndustry;
     property Size: TMapSize read FSize write FSize;
@@ -128,7 +126,6 @@ type
     procedure Draw(const AWidth, AHeight: Integer);
     procedure Gen;
     procedure TownGrows;
-    function GetCurrentTown(const AX, AY: Integer): Integer;
     function GetCurrentIndustry(const AX, AY: Integer): Integer;
     function EnterInIndustry(const AX, AY: Integer): Boolean;
     function WorldPop: Integer;
@@ -141,7 +138,6 @@ type
     procedure ClearLand(const AX, AY: Integer);
     function GetNearTownName(const AX, AY: Integer): string;
     function IsNearTile(const AX, AY: Integer; const ATile: Tiles): Boolean;
-    function EnterInTown(const AX, AY: Integer): Boolean;
     function TownCount: Integer;
   end;
 
@@ -251,7 +247,7 @@ var
 begin
   Result := False;
   for I := 0 to Length(Industry) - 1 do
-    if ((Industry[I].X = AX) and (Industry[I].Y = AY)) or
+    if Industry[I].InLocation(AX, AY) or
       (GetDist(Industry[I].X, Industry[I].Y, AX, AY) < (Self.Width div 10)) then
       Exit(True);
 end;
@@ -263,7 +259,7 @@ begin
   Result := False;
   for I := 0 to Length(Industry) - 1 do
     if (Industry[I].IndustryType = inTown) then
-      if ((Industry[I].X = AX) and (Industry[I].Y = AY)) or
+      if Industry[I].InLocation(AX, AY) or
         (GetDist(Industry[I].X, Industry[I].Y, AX, AY) < 15) then
         Exit(True);
 end;
@@ -325,12 +321,6 @@ function TMap.EnterInIndustry(const AX, AY: Integer): Boolean;
 begin
   FCurrentIndustry := GetCurrentIndustry(AX, AY);
   Result := FCurrentIndustry >= 0;
-end;
-
-function TMap.EnterInTown(const AX, AY: Integer): Boolean;
-begin
-  FCurrentTown := GetCurrentTown(AX, AY);
-  Result := FCurrentTown >= 0;
 end;
 
 procedure TMap.Gen;
@@ -474,6 +464,7 @@ begin
     Industry[I] := TTownIndustry.Create(TownName, X, Y);
   end;
   // Industries
+  I := TownCount;
   for J := 0 to MapIndCount - 1 do
   begin
     for IndustryType := Succ(Low(TIndustryType)) to High(TIndustryType) do
@@ -587,17 +578,6 @@ begin
       Exit(I);
 end;
 
-function TMap.GetCurrentTown(const AX, AY: Integer): Integer;
-var
-  I: Integer;
-begin
-  Result := -1;
-  for I := 0 to Length(Industry) - 1 do
-    if Industry[I].InLocation(AX, AY) and (Industry[I].IndustryType = inTown)
-    then
-      Exit(I);
-end;
-
 function TMap.TownCount: Integer;
 var
   I: Integer;
@@ -633,7 +613,7 @@ begin
     if (Industry[I].IndustryType = inTown) then
     begin
       D := GetDist(Industry[I].X, Industry[I].Y, AX, AY);
-      if D < Mx then
+      if (D < Mx) then
       begin
         Result := Industry[I].Name;
         Mx := D;

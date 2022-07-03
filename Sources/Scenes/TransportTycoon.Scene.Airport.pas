@@ -30,7 +30,7 @@ begin
 
   DrawFrame(5, 7, 70, 15);
 
-  FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentTown]);
+  FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
   DrawTitle(FTown.Name + ' Airport');
 
   terminal_color('white');

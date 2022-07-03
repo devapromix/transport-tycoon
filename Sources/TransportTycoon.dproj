@@ -143,7 +143,7 @@
         <DCCReference Include="Scenes\TransportTycoon.Scene.Vehicles.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.ShipDepot.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Town2.pas"/>
-        <DCCReference Include="Scenes\TransportTycoon.Scene.BuildInTown.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.Industries.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

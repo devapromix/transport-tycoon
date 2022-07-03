@@ -41,7 +41,7 @@ begin
 
   DrawFrame(15, 7, 50, 15);
 
-  Town := TTownIndustry(Game.Map.Industry[Game.Map.CurrentTown]);
+  Town := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
   DrawTitle('BUILD IN ' + Town.Name);
 
   S := '';
@@ -56,7 +56,7 @@ begin
     S := ' ($' + IntToStr(Town.Dock.Cost) + ')';
   DrawButton(17, 12, Town.Dock.CanBuild(Town.X, Town.Y), 'B', 'Build Dock' + S);
 
-  if (Game.Map.CurrentTown = Game.Company.TownID) then
+  if (Game.Map.CurrentIndustry = Game.Company.TownID) then
     DrawButton(17, 17, Town.HQ.CanBuild, 'G', 'Build Company Headquarters ($' +
       IntToStr(Town.HQ.Cost) + ')');
 
@@ -86,13 +86,13 @@ begin
   end;
   case Key of
     TK_ESCAPE:
-      Scenes.SetScene(scTown2);
+      Scenes.SetScene(scTown);
     TK_A:
       begin
         if Town.Airport.CanBuild then
         begin
           Town.Airport.Build;
-          Scenes.SetScene(scAirport, scTown2);
+          Scenes.SetScene(scAirport, scTown);
         end;
       end;
     TK_B:
@@ -100,16 +100,16 @@ begin
         if Town.Dock.CanBuild(Town.X, Town.Y) then
         begin
           Town.Dock.Build;
-          Scenes.SetScene(scDock, scTown2);
+          Scenes.SetScene(scDock, scTown);
         end;
       end;
     TK_G:
       begin
-        if Town.HQ.CanBuild and (Game.Map.CurrentTown = Game.Company.TownID)
+        if Town.HQ.CanBuild and (Game.Map.CurrentIndustry = Game.Company.TownID)
         then
         begin
           Town.HQ.Build;
-          Scenes.SetScene(scCompany, scTown2);
+          Scenes.SetScene(scCompany, scTown);
         end;
       end;
   end;

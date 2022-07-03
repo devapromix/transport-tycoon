@@ -35,12 +35,12 @@ begin
   DrawButton(42, 11, 'G', 'GENERAL COMPANY INFO');
 
   DrawButton(12, 12, 'N', 'TOWN DIRECTORY');
+  DrawButton(42, 12, 'I', 'LIST OF INDUSTRIES');
 
   DrawButton(12, 14, False, 'C', 'LIST OF ROAD VEHICLES');
   DrawButton(12, 15, False, 'T', 'LIST OF TRAINS');
   DrawButton(12, 16, Game.Vehicles.GotShips, 'S', 'LIST OF SHIPS');
-  DrawButton(12, 17, Game.Vehicles.GotAircrafts, 'A',
-    'LIST OF AIRCRAFTS');
+  DrawButton(12, 17, Game.Vehicles.GotAircrafts, 'A', 'LIST OF AIRCRAFTS');
 
   DrawButton(42, 15, False, 'B', 'Build');
   DrawButton(42, 16, 'P', 'Pause game');
@@ -71,6 +71,8 @@ begin
       case MY of
         11:
           Key := TK_G;
+        12:
+          Key := TK_I;
         16:
           Key := TK_P;
         17:

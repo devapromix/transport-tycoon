@@ -35,7 +35,7 @@ begin
 
   DrawFrame(10, 6, 60, 17);
 
-  FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentTown]);
+  FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
 
   DrawTitle(8, FTown.Name + ' Ship Depot');
 
@@ -109,7 +109,7 @@ begin
           begin
             Title := Format('Ship #%d (%s)', [Game.Vehicles.ShipCount + 1,
               ShipBase[I].Name]);
-            Game.Vehicles.AddShip(Title, Game.Map.CurrentTown, I);
+            Game.Vehicles.AddShip(Title, Game.Map.CurrentIndustry, I);
             Scenes.SetScene(scDock);
           end;
         end;

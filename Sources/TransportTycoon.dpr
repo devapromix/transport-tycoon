@@ -42,7 +42,7 @@ uses
   TransportTycoon.Scene.Vehicles in 'Scenes\TransportTycoon.Scene.Vehicles.pas',
   TransportTycoon.Scene.ShipDepot in 'Scenes\TransportTycoon.Scene.ShipDepot.pas',
   TransportTycoon.Scene.Town2 in 'Scenes\TransportTycoon.Scene.Town2.pas',
-  TransportTycoon.Scene.BuildInTown in 'Scenes\TransportTycoon.Scene.BuildInTown.pas';
+  TransportTycoon.Scene.Industries in 'Scenes\TransportTycoon.Scene.Industries.pas';
 
 var
   Key: Word = 0;

@@ -12,7 +12,7 @@ type
 
   TSceneDock = class(TScene)
   private
-    FTown: TTownIndustry;
+    FIndustry: TIndustry;
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -35,18 +35,18 @@ begin
 
   DrawFrame(5, 7, 70, 15);
 
-  FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentTown]);
-  DrawTitle(FTown.Name + ' Dock');
+  FIndustry := Game.Map.Industry[Game.Map.CurrentIndustry];
+  DrawTitle(FIndustry.Name + ' Dock');
 
   terminal_color('white');
-  DrawText(7, 11, 'Passengers: ' + IntToStr(FTown.ProducesAmount
+  DrawText(7, 11, 'Passengers: ' + IntToStr(FIndustry.ProducesAmount
     [cgPassengers]));
-  DrawText(7, 12, 'Bags of mail: ' + IntToStr(FTown.ProducesAmount
+  DrawText(7, 12, 'Bags of mail: ' + IntToStr(FIndustry.ProducesAmount
     [cgBagsOfMail]));
 
   for I := 0 to Game.Vehicles.ShipCount - 1 do
-    DrawButton(37, I + 11, Game.Vehicles.Ship[I].InLocation(FTown.X, FTown.Y),
-      Chr(Ord('A') + I), Game.Vehicles.Ship[I].Name);
+    DrawButton(37, I + 11, Game.Vehicles.Ship[I].InLocation(FIndustry.X,
+      FIndustry.Y), Chr(Ord('A') + I), Game.Vehicles.Ship[I].Name);
 
   AddButton(19, 'V', 'Ship Depot');
   AddButton(19, 'Esc', 'Close');
@@ -82,7 +82,7 @@ begin
     TK_A .. TK_G:
       begin
         I := Key - TK_A;
-        if Game.Vehicles.Ship[I].InLocation(FTown.X, FTown.Y) then
+        if Game.Vehicles.Ship[I].InLocation(FIndustry.X, FIndustry.Y) then
         begin
           Game.Vehicles.CurrentVehicle := I;
           Scenes.SetScene(scShip, scDock);
