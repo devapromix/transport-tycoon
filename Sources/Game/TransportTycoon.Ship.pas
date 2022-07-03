@@ -10,7 +10,7 @@ type
   TShipBase = record
     Name: string;
     Passengers: Word;
-    BagsOfMail: Word;
+    Mail: Word;
     Cost: Word;
     RunningCost: Word;
     Speed: Word;
@@ -20,7 +20,7 @@ type
 const
   ShipBase: array [0 .. 0] of TShipBase = (
     // #1
-    (Name: 'TM-22'; Passengers: 120; BagsOfMail: 10; Cost: 25000;
+    (Name: 'TM-22'; Passengers: 120; Mail: 10; Cost: 25000;
     RunningCost: 90 * 12; Speed: 50; Since: 1950)
     //
     );
@@ -34,8 +34,8 @@ type
     FLastAirportId: Integer;
     FPassengers: Integer;
     FMaxPassengers: Integer;
-    FBagsOfMail: Integer;
-    FMaxBagsOfMail: Integer;
+    FMail: Integer;
+    FMaxMail: Integer;
     FOrderIndex: Integer;
   public
     Order: array of TOrder;
@@ -44,8 +44,8 @@ type
     property Distance: Integer read FDistance;
     property Passengers: Integer read FPassengers write FPassengers;
     property MaxPassengers: Integer read FMaxPassengers;
-    property BagsOfMail: Integer read FBagsOfMail write FBagsOfMail;
-    property MaxBagsOfMail: Integer read FMaxBagsOfMail;
+    property Mail: Integer read FMail write FMail;
+    property MaxMail: Integer read FMaxMail;
     property State: string read FState;
     property LastDockId: Integer write FLastAirportId;
     property OrderIndex: Integer read FOrderIndex;
@@ -100,8 +100,8 @@ begin
   FState := 'Wait';
   FMaxPassengers := ShipBase[ID].Passengers;
   FPassengers := 0;
-  FMaxBagsOfMail := ShipBase[ID].BagsOfMail;
-  FBagsOfMail := 0;
+  FMaxMail := ShipBase[ID].Mail;
+  FMail := 0;
   FOrderIndex := 0;
   LastDockId := 0;
   FDistance := 0;
@@ -150,11 +150,11 @@ begin
     Game.Map.Industry[Order[OrderIndex].ID].DecCargoAmount(cgPassengers);
     Inc(FPassengers);
   end;
-  while (Game.Map.Industry[Order[OrderIndex].ID].ProducesAmount[cgBagsOfMail] >
-    0) and (BagsOfMail < MaxBagsOfMail) do
+  while (Game.Map.Industry[Order[OrderIndex].ID].ProducesAmount[cgMail] >
+    0) and (Mail < MaxMail) do
   begin
-    Game.Map.Industry[Order[OrderIndex].ID].DecCargoAmount(cgBagsOfMail);
-    Inc(FBagsOfMail);
+    Game.Map.Industry[Order[OrderIndex].ID].DecCargoAmount(cgMail);
+    Inc(FMail);
   end;
 end;
 
@@ -210,11 +210,11 @@ begin
     Game.ModifyMoney(ttShipIncome, M);
     Passengers := 0;
   end;
-  if BagsOfMail > 0 then
+  if Mail > 0 then
   begin
-    M := (BagsOfMail * (Distance div 7)) * 8;
+    M := (Mail * (Distance div 7)) * 8;
     Game.ModifyMoney(ttShipIncome, M);
-    BagsOfMail := 0;
+    Mail := 0;
   end;
   FDistance := 0;
 end;

@@ -54,7 +54,7 @@ begin
   terminal_composition(TK_OFF);
   terminal_color('white');
   DrawText(42, 11, Format('Passengers: %d', [AircraftBase[I].Passengers]));
-  DrawText(42, 12, Format('Bags of mail: %d', [AircraftBase[I].BagsOfMail]));
+  DrawText(42, 12, Format('Mail: %d', [AircraftBase[I].Mail]));
   DrawText(42, 13, Format('Speed: %d km/h', [AircraftBase[I].Speed]));
   DrawText(42, 14, Format('Cost: $%d', [AircraftBase[I].Cost]));
   DrawText(42, 15, Format('Running Cost: $%d/y',

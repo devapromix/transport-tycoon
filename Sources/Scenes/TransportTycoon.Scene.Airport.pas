@@ -24,21 +24,29 @@ uses
 
 procedure TSceneAirport.Render;
 var
-  I: Integer;
+  I, J: Integer;
+  Cargo: TCargo;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
   DrawFrame(5, 7, 70, 15);
 
   FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
+
   DrawTitle(FTown.Name + ' Airport');
 
   terminal_color('white');
   DrawText(7, 11, 'Size: ' + AirportSizeStr[FTown.Airport.Level]);
-  DrawText(7, 12, 'Passengers: ' + IntToStr(FTown.ProducesAmount
-    [cgPassengers]));
-  DrawText(7, 13, 'Bags of mail: ' + IntToStr(FTown.ProducesAmount
-    [cgBagsOfMail]));
+  J := 12;
+  for Cargo := Low(TCargo) to High(TCargo) do
+  begin
+    if Cargo in FTown.Produces then
+    begin
+      DrawText(7, J, Format('%s: %d', [CargoStr[Cargo],
+        FTown.ProducesAmount[Cargo]]));
+      Inc(J);
+    end;
+  end;
 
   for I := 0 to Game.Vehicles.AircraftCount - 1 do
     DrawButton(37, I + 11, Game.Vehicles.Aircraft[I].InLocation(FTown.X,

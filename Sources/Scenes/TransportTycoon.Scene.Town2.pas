@@ -23,8 +23,7 @@ implementation
 uses
   SysUtils,
   BearLibTerminal,
-  TransportTycoon.Game,
-  TransportTycoon.Town;
+  TransportTycoon.Game;
 
 { TSceneTown2 }
 

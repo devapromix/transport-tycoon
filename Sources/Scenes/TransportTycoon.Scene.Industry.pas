@@ -3,7 +3,8 @@
 interface
 
 uses
-  TransportTycoon.Scenes;
+  TransportTycoon.Scenes,
+  TransportTycoon.Industries;
 
 type
 
@@ -11,7 +12,7 @@ type
 
   TSceneIndustry = class(TScene)
   private
-
+    FIndustry: TIndustry;
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -22,22 +23,17 @@ implementation
 uses
   BearLibTerminal,
   SysUtils,
-  TransportTycoon.Game,
-  TransportTycoon.Industries,
-  TransportTycoon.Town;
+  TransportTycoon.Game;
 
 { TSceneIndustry }
-
-var
-  Industry: TIndustry;
 
 procedure TSceneIndustry.Render;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
-  Industry := Game.Map.Industry[Game.Map.CurrentIndustry];
+  FIndustry := Game.Map.Industry[Game.Map.CurrentIndustry];
 
-  with Industry do
+  with FIndustry do
   begin
     DrawFrame(20, 8, 40, 13);
     DrawTitle(10, Name);
@@ -81,7 +77,7 @@ begin
     TK_B:
       Scenes.SetScene(scBuildNearIndustry);
     TK_D:
-      if Industry.Dock.HasBuilding then
+      if FIndustry.Dock.HasBuilding then
         Scenes.SetScene(scDock, scIndustry);
   end;
 end;

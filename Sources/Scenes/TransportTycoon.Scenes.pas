@@ -104,7 +104,6 @@ uses
   TransportTycoon.Scene.GenMenu,
   TransportTycoon.Scene.MainMenu,
   TransportTycoon.Scene.GameMenu,
-  TransportTycoon.Scene.Town,
   TransportTycoon.Scene.Town2,
   TransportTycoon.Scene.World,
   TransportTycoon.Scene.Industries,

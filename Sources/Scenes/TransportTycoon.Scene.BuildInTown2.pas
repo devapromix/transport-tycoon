@@ -3,7 +3,8 @@
 interface
 
 uses
-  TransportTycoon.Scenes;
+  TransportTycoon.Scenes,
+  TransportTycoon.Industries;
 
 type
 
@@ -11,7 +12,7 @@ type
 
   TSceneBuildInTown2 = class(TScene)
   private
-
+    FTown: TTownIndustry;
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -23,14 +24,9 @@ uses
   Math,
   SysUtils,
   BearLibTerminal,
-  TransportTycoon.Game,
-  TransportTycoon.Town,
-  TransportTycoon.Industries;
+  TransportTycoon.Game;
 
 { TSceneBuildInTown }
-
-var
-  Town: TTownIndustry;
 
 procedure TSceneBuildInTown2.Render;
 var
@@ -41,24 +37,25 @@ begin
 
   DrawFrame(15, 7, 50, 15);
 
-  Town := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
-  DrawTitle('BUILD IN ' + Town.Name);
+  FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
+  DrawTitle('BUILD IN ' + FTown.Name);
 
   S := '';
-  N := Math.EnsureRange(Town.Airport.Level + 1, 0, 5);
-  if Town.Airport.Level < Town.Airport.MaxLevel then
-    S := ' ($' + IntToStr(Town.Airport.Cost) + ')';
-  DrawButton(17, 11, Town.Airport.CanBuild, 'A',
+  N := Math.EnsureRange(FTown.Airport.Level + 1, 0, 5);
+  if FTown.Airport.Level < FTown.Airport.MaxLevel then
+    S := ' ($' + IntToStr(FTown.Airport.Cost) + ')';
+  DrawButton(17, 11, FTown.Airport.CanBuild, 'A',
     'Build ' + AirportSizeStr[N] + S);
 
   S := '';
-  if Town.Dock.Level = 0 then
-    S := ' ($' + IntToStr(Town.Dock.Cost) + ')';
-  DrawButton(17, 12, Town.Dock.CanBuild(Town.X, Town.Y), 'B', 'Build Dock' + S);
+  if FTown.Dock.Level = 0 then
+    S := ' ($' + IntToStr(FTown.Dock.Cost) + ')';
+  DrawButton(17, 12, FTown.Dock.CanBuild(FTown.X, FTown.Y), 'B',
+    'Build Dock' + S);
 
   if (Game.Map.CurrentIndustry = Game.Company.TownID) then
-    DrawButton(17, 17, Town.HQ.CanBuild, 'G', 'Build Company Headquarters ($' +
-      IntToStr(Town.HQ.Cost) + ')');
+    DrawButton(17, 17, FTown.HQ.CanBuild, 'G', 'Build Company Headquarters ($' +
+      IntToStr(FTown.HQ.Cost) + ')');
 
   AddButton(19, 'Esc', 'Close');
 
@@ -89,26 +86,26 @@ begin
       Scenes.SetScene(scTown);
     TK_A:
       begin
-        if Town.Airport.CanBuild then
+        if FTown.Airport.CanBuild then
         begin
-          Town.Airport.Build;
+          FTown.Airport.Build;
           Scenes.SetScene(scAirport, scTown);
         end;
       end;
     TK_B:
       begin
-        if Town.Dock.CanBuild(Town.X, Town.Y) then
+        if FTown.Dock.CanBuild(FTown.X, FTown.Y) then
         begin
-          Town.Dock.Build;
+          FTown.Dock.Build;
           Scenes.SetScene(scDock, scTown);
         end;
       end;
     TK_G:
       begin
-        if Town.HQ.CanBuild and (Game.Map.CurrentIndustry = Game.Company.TownID)
+        if FTown.HQ.CanBuild and (Game.Map.CurrentIndustry = Game.Company.TownID)
         then
         begin
-          Town.HQ.Build;
+          FTown.HQ.Build;
           Scenes.SetScene(scCompany, scTown);
         end;
       end;

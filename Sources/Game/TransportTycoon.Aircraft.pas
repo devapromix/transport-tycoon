@@ -10,7 +10,7 @@ type
   TAircraftBase = record
     Name: string;
     Passengers: Word;
-    BagsOfMail: Word;
+    Mail: Word;
     Cost: Word;
     RunningCost: Word;
     Speed: Word;
@@ -20,31 +20,31 @@ type
 const
   AircraftBase: array [0 .. 8] of TAircraftBase = (
     // #1
-    (Name: 'Toreador MT-4'; Passengers: 25; BagsOfMail: 3; Cost: 22000;
+    (Name: 'Toreador MT-4'; Passengers: 25; Mail: 3; Cost: 22000;
     RunningCost: 130 * 12; Speed: 400; Since: 1950),
     // #2
-    (Name: 'Rotor JG'; Passengers: 30; BagsOfMail: 4; Cost: 24000;
+    (Name: 'Rotor JG'; Passengers: 30; Mail: 4; Cost: 24000;
     RunningCost: 140 * 12; Speed: 420; Since: 1950),
     // #3
-    (Name: 'Raxton ML'; Passengers: 35; BagsOfMail: 5; Cost: 27000;
+    (Name: 'Raxton ML'; Passengers: 35; Mail: 5; Cost: 27000;
     RunningCost: 150 * 12; Speed: 450; Since: 1955),
     // #4
-    (Name: 'Tornado S9'; Passengers: 45; BagsOfMail: 5; Cost: 30000;
+    (Name: 'Tornado S9'; Passengers: 45; Mail: 5; Cost: 30000;
     RunningCost: 160 * 12; Speed: 500; Since: 1965),
     // #5
-    (Name: 'ExOA-H7'; Passengers: 55; BagsOfMail: 7; Cost: 33000;
+    (Name: 'ExOA-H7'; Passengers: 55; Mail: 7; Cost: 33000;
     RunningCost: 170 * 12; Speed: 700; Since: 1970),
     // #6
-    (Name: 'AIN D88'; Passengers: 75; BagsOfMail: 7; Cost: 35000;
+    (Name: 'AIN D88'; Passengers: 75; Mail: 7; Cost: 35000;
     RunningCost: 180 * 12; Speed: 800; Since: 1980),
     // #7
-    (Name: 'HeWi C4'; Passengers: 100; BagsOfMail: 8; Cost: 38000;
+    (Name: 'HeWi C4'; Passengers: 100; Mail: 8; Cost: 38000;
     RunningCost: 190 * 12; Speed: 850; Since: 1990),
     // #8
-    (Name: 'UtBotS FL'; Passengers: 120; BagsOfMail: 10; Cost: 40000;
+    (Name: 'UtBotS FL'; Passengers: 120; Mail: 10; Cost: 40000;
     RunningCost: 200 * 12; Speed: 900; Since: 2000),
     // #9
-    (Name: 'Venus M2'; Passengers: 150; BagsOfMail: 12; Cost: 50000;
+    (Name: 'Venus M2'; Passengers: 150; Mail: 12; Cost: 50000;
     RunningCost: 210 * 12; Speed: 1000; Since: 2020)
     //
     );
@@ -57,8 +57,8 @@ type
     FState: string;
     FPassengers: Integer;
     FMaxPassengers: Integer;
-    FBagsOfMail: Integer;
-    FMaxBagsOfMail: Integer;
+    FMail: Integer;
+    FMaxMail: Integer;
     FLastAirportId: Integer;
     FOrderIndex: Integer;
   public
@@ -68,8 +68,8 @@ type
     property Distance: Integer read FDistance;
     property Passengers: Integer read FPassengers write FPassengers;
     property MaxPassengers: Integer read FMaxPassengers;
-    property BagsOfMail: Integer read FBagsOfMail write FBagsOfMail;
-    property MaxBagsOfMail: Integer read FMaxBagsOfMail;
+    property Mail: Integer read FMail write FMail;
+    property MaxMail: Integer read FMaxMail;
     property State: string read FState;
     property LastAirportId: Integer write FLastAirportId;
     property OrderIndex: Integer read FOrderIndex;
@@ -145,8 +145,8 @@ begin
   FState := 'Wait';
   FMaxPassengers := AircraftBase[ID].Passengers;
   FPassengers := 0;
-  FMaxBagsOfMail := AircraftBase[ID].BagsOfMail;
-  FBagsOfMail := 0;
+  FMaxMail := AircraftBase[ID].Mail;
+  FMail := 0;
   FOrderIndex := 0;
   LastAirportId := 0;
   FDistance := 0;
@@ -161,11 +161,11 @@ begin
     Game.Map.Industry[Order[OrderIndex].ID].DecCargoAmount(cgPassengers);
     Inc(FPassengers);
   end;
-  while (Game.Map.Industry[Order[OrderIndex].ID].ProducesAmount[cgBagsOfMail] >
-    0) and (BagsOfMail < MaxBagsOfMail) do
+  while (Game.Map.Industry[Order[OrderIndex].ID].ProducesAmount[cgMail] > 0) and
+    (Mail < MaxMail) do
   begin
-    Game.Map.Industry[Order[OrderIndex].ID].DecCargoAmount(cgBagsOfMail);
-    Inc(FBagsOfMail);
+    Game.Map.Industry[Order[OrderIndex].ID].DecCargoAmount(cgMail);
+    Inc(FMail);
   end;
 end;
 
@@ -234,11 +234,11 @@ begin
     Game.ModifyMoney(ttAircraftIncome, M);
     Passengers := 0;
   end;
-  if BagsOfMail > 0 then
+  if Mail > 0 then
   begin
-    M := (BagsOfMail * (Distance div 7)) * 8;
+    M := (Mail * (Distance div 7)) * 8;
     Game.ModifyMoney(ttAircraftIncome, M);
-    BagsOfMail := 0;
+    Mail := 0;
   end;
   FDistance := 0;
 end;

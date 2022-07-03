@@ -9,7 +9,7 @@ uses
 type
   TSceneShipDepot = class(TScene)
   private
-    FTown: TTownIndustry;
+    FIndustry: TIndustry;
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -22,7 +22,6 @@ uses
   Math,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Town,
   TransportTycoon.Ship,
   TransportTycoon.Vehicles;
 
@@ -35,9 +34,9 @@ begin
 
   DrawFrame(10, 6, 60, 17);
 
-  FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
+  FIndustry := Game.Map.Industry[Game.Map.CurrentIndustry];
 
-  DrawTitle(8, FTown.Name + ' Ship Depot');
+  DrawTitle(8, FIndustry.Name + ' Ship Depot');
 
   for I := 0 to Length(ShipBase) - 1 do
     if ShipBase[I].Since <= Game.Calendar.Year then
@@ -54,7 +53,7 @@ begin
   terminal_composition(TK_OFF);
   terminal_color('white');
   DrawText(42, 11, Format('Passengers: %d', [ShipBase[I].Passengers]));
-  DrawText(42, 12, Format('Bags of mail: %d', [ShipBase[I].BagsOfMail]));
+  DrawText(42, 12, Format('Bags of mail: %d', [ShipBase[I].Mail]));
   DrawText(42, 13, Format('Speed: %d km/h', [ShipBase[I].Speed]));
   DrawText(42, 14, Format('Cost: $%d', [ShipBase[I].Cost]));
   DrawText(42, 15, Format('Running Cost: $%d/y', [ShipBase[I].RunningCost]));

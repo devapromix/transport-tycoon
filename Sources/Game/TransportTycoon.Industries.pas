@@ -13,7 +13,11 @@ const
   DockSizeStr: array [0 .. 1] of string = ('None', 'Dock');
 
 type
-  TCargo = (cgPassengers, cgBagsOfMail, cgGoods, cgCoal, cgWood);
+  TCargo = (cgPassengers, cgMail, cgGoods, cgCoal, cgWood);
+
+const
+  CargoStr: array [TCargo] of string = ('Passengers', 'Mail', 'Goods',
+    'Coal', 'Wood');
 
 type
   TCargoAmount = array [TCargo] of Integer;
@@ -157,8 +161,8 @@ constructor TTownIndustry.Create(const AName: string; const AX, AY: Integer);
 begin
   inherited Create(AName, AX, AY);
   FIndustryType := inTown;
-  Accepts := [cgPassengers, cgBagsOfMail, cgGoods];
-  Produces := [cgPassengers, cgBagsOfMail];
+  Accepts := [cgPassengers, cgMail, cgGoods];
+  Produces := [cgPassengers, cgMail];
   FPopulation := 0;
   ModifyPopulation(Math.RandomRange(250, 1500));
   FAirport := TStation.Create(8000, 5);
@@ -196,16 +200,16 @@ end;
 procedure TTownIndustry.Grow;
 var
   MonthPassengers: Integer;
-  MonthBagsOfMail: Integer;
+  MonthMail: Integer;
 begin
   if Math.RandomRange(0, 25) <= GrowModif then
     ModifyPopulation(Math.RandomRange(GrowModif * 8, GrowModif * 12));
   MonthPassengers := FPopulation div Math.RandomRange(40, 50);
-  MonthBagsOfMail := FPopulation div Math.RandomRange(160, 190);
+  MonthMail := FPopulation div Math.RandomRange(160, 190);
   if Airport.HasBuilding or Dock.HasBuilding then
   begin
     SetCargoAmount(cgPassengers, MonthPassengers);
-    SetCargoAmount(cgBagsOfMail, MonthBagsOfMail);
+    SetCargoAmount(cgMail, MonthMail);
   end;
 end;
 

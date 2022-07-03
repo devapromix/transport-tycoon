@@ -29,20 +29,28 @@ uses
 
 procedure TSceneDock.Render;
 var
-  I: Integer;
+  I, J: Integer;
+  Cargo: TCargo;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
   DrawFrame(5, 7, 70, 15);
 
   FIndustry := Game.Map.Industry[Game.Map.CurrentIndustry];
+
   DrawTitle(FIndustry.Name + ' Dock');
 
   terminal_color('white');
-  DrawText(7, 11, 'Passengers: ' + IntToStr(FIndustry.ProducesAmount
-    [cgPassengers]));
-  DrawText(7, 12, 'Bags of mail: ' + IntToStr(FIndustry.ProducesAmount
-    [cgBagsOfMail]));
+  J := 11;
+  for Cargo := Low(TCargo) to High(TCargo) do
+  begin
+    if Cargo in FIndustry.Produces then
+    begin
+      DrawText(7, J, Format('%s: %d', [CargoStr[Cargo],
+        FIndustry.ProducesAmount[Cargo]]));
+      Inc(J);
+    end;
+  end;
 
   for I := 0 to Game.Vehicles.ShipCount - 1 do
     DrawButton(37, I + 11, Game.Vehicles.Ship[I].InLocation(FIndustry.X,

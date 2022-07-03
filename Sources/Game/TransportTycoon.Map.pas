@@ -3,7 +3,6 @@
 interface
 
 uses
-  TransportTycoon.Town,
   TransportTycoon.Industries;
 
 type

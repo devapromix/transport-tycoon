@@ -3,7 +3,8 @@
 interface
 
 uses
-  TransportTycoon.Scenes;
+  TransportTycoon.Scenes,
+  TransportTycoon.Industries;
 
 type
 
@@ -11,7 +12,7 @@ type
 
   TSceneBuildNearIndustry = class(TScene)
   private
-
+    FIndustry: TIndustry;
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -22,13 +23,9 @@ implementation
 uses
   SysUtils,
   BearLibTerminal,
-  TransportTycoon.Game,
-  TransportTycoon.Industries;
+  TransportTycoon.Game;
 
 { TSceneBuildNearIndustry }
-
-var
-  Industry: TIndustry;
 
 procedure TSceneBuildNearIndustry.Render;
 var
@@ -38,13 +35,13 @@ begin
 
   DrawFrame(15, 7, 50, 15);
 
-  Industry := Game.Map.Industry[Game.Map.CurrentIndustry];
-  DrawTitle('BUILD IN ' + Industry.Name);
+  FIndustry := Game.Map.Industry[Game.Map.CurrentIndustry];
+  DrawTitle('BUILD IN ' + FIndustry.Name);
 
   S := '';
-  if Industry.Dock.Level = 0 then
-    S := ' ($' + IntToStr(Industry.Dock.Cost) + ')';
-  DrawButton(17, 11, Industry.Dock.CanBuild(Industry.X, Industry.Y), 'D',
+  if FIndustry.Dock.Level = 0 then
+    S := ' ($' + IntToStr(FIndustry.Dock.Cost) + ')';
+  DrawButton(17, 11, FIndustry.Dock.CanBuild(FIndustry.X, FIndustry.Y), 'D',
     'Build Dock' + S);
 
   AddButton(19, 'Esc', 'Close');
@@ -72,9 +69,9 @@ begin
       Scenes.SetScene(scIndustry);
     TK_D:
       begin
-        if Industry.Dock.CanBuild(Industry.X, Industry.Y) then
+        if FIndustry.Dock.CanBuild(FIndustry.X, FIndustry.Y) then
         begin
-          Industry.Dock.Build;
+          FIndustry.Dock.Build;
           Scenes.SetScene(scDock, scIndustry);
         end;
       end;

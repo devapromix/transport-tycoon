@@ -48,8 +48,8 @@ begin
       terminal_color('white');
       DrawText(12, 12, Format('Passengers: %d/%d',
         [Passengers, MaxPassengers]));
-      DrawText(12, 13, Format('Bags of mail: %d/%d',
-        [BagsOfMail, MaxBagsOfMail]));
+      DrawText(12, 13, Format('Mail: %d/%d',
+        [Mail, MaxMail]));
 
       DrawText(12, 17, Format('State: %s', [State]));
 
