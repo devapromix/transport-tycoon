@@ -28,7 +28,8 @@ uses
   BearLibTerminal,
   SysUtils,
   TransportTycoon.Map,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Industries;
 
 { TSceneWorld }
 
@@ -68,7 +69,7 @@ var
   VX, VY, L: Integer;
   S: string;
 begin
-  S := Game.Map.Town[TownID].Name;
+  S := Game.Map.Industry[TownID].Name;
   L := EnsureRange(Length(S) + 8, 20, 40);
   TileInfo(S);
   if (MY < Height - 10) then
@@ -84,7 +85,8 @@ begin
   DrawText(VX + (L div 2), VY + 2, '[c=yellow]' + UpperCase(S) + '[/c]',
     TK_ALIGN_CENTER);
   DrawText(VX + (L div 2), VY + 4,
-    'Pop.: ' + IntToStr(Game.Map.Town[TownID].Population), TK_ALIGN_CENTER);
+    'Pop.: ' + IntToStr(TTownIndustry(Game.Map.Industry[TownID]).Population),
+    TK_ALIGN_CENTER);
   DrawText(MX, MY, '#', 'yellow', 'gray');
 end;
 
@@ -157,15 +159,14 @@ begin
 
   if (MY < Self.Height - 1) then
   begin
-    if Tile[Game.Map.Cell[RX][RY]].Tile = Tile[tlTown].Tile then
-      TownInfo(Game.Map.GetCurrentCity(RX, RY))
+    if Game.Map.Cell[RX][RY] = tlTownIndustry then
+      TownInfo(Game.Map.GetCurrentTown(RX, RY))
     else if Game.Map.Cell[RX][RY] in IndustryTiles then
       IndustryInfo(Game.Map.GetCurrentIndustry(RX, RY))
+    else if Game.Vehicles.IsVehicleOnMap(RX, RY, VehicleName) then
+      VehicleInfo(VehicleName)
     else
-      if Game.Vehicles.IsVehicleOnMap(RX, RY, VehicleName) then
-        VehicleInfo(VehicleName)
-      else
-        TileInfo(Tile[Game.Map.Cell[RX][RY]].Name);
+      TileInfo(Tile[Game.Map.Cell[RX][RY]].Name);
   end;
   if (MY = Self.Height - 2) then
     ScrollDown;
@@ -196,12 +197,6 @@ begin
     begin
       if not Game.IsClearLand then
       begin
-        if (Game.Map.Cell[RX][RY] = tlTown) then
-        begin
-          if Game.Map.EnterInCity(RX, RY) then
-            Scenes.SetScene(scTown);
-          Exit;
-        end;
         if (Game.Map.Cell[RX][RY] = tlTownIndustry) then
         begin
           if Game.Map.EnterInTown(RX, RY) then

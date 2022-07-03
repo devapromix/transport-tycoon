@@ -19,7 +19,8 @@ implementation
 uses
   BearLibTerminal,
   SysUtils,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Industries;
 
 procedure TSceneCompany.Render;
 begin
@@ -29,8 +30,8 @@ begin
   DrawTitle(10, Game.Company.Name);
   DrawText(22, 12, 'Inavgurated: ' + IntToStr(Game.Company.Inavgurated));
 
-  if Game.Map.Town[Game.Company.TownID].HQ.HasBuilding then
-    DrawText(22, 16, 'Company headquarters in ' + Game.Map.Town
+  if TTownIndustry(Game.Map.Industry[Game.Company.TownID]).HQ.HasBuilding then
+    DrawText(22, 16, 'Company headquarters in ' + Game.Map.Industry
       [Game.Company.TownID].Name);
 
   AddButton(18, 'Esc', 'Close');

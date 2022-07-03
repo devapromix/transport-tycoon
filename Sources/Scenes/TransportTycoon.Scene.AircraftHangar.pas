@@ -3,12 +3,13 @@
 interface
 
 uses
-  TransportTycoon.Scenes;
+  TransportTycoon.Scenes,
+  TransportTycoon.Industries;
 
 type
   TSceneAircraftHangar = class(TScene)
   private
-
+    FTown: TTownIndustry;
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -21,13 +22,11 @@ uses
   Math,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Town,
   TransportTycoon.Aircraft,
   TransportTycoon.Vehicles;
 
 procedure TSceneAircraftHangar.Render;
 var
-  C: TTown;
   I, J: Integer;
   S: string;
 begin
@@ -35,9 +34,9 @@ begin
 
   DrawFrame(10, 6, 60, 17);
 
-  C := Game.Map.Town[Game.Map.CurrentTown];
+  FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentTown]);
 
-  DrawTitle(8, C.Name + ' Airport Hangar');
+  DrawTitle(8, FTown.Name + ' Airport Hangar');
 
   for I := 0 to Length(AircraftBase) - 1 do
     if AircraftBase[I].Since <= Game.Calendar.Year then

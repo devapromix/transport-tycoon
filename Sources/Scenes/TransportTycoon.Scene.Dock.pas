@@ -3,7 +3,8 @@
 interface
 
 uses
-  TransportTycoon.Scenes;
+  TransportTycoon.Scenes,
+  TransportTycoon.Industries;
 
 type
 
@@ -11,7 +12,7 @@ type
 
   TSceneDock = class(TScene)
   private
-
+    FTown: TTownIndustry;
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -22,14 +23,9 @@ implementation
 uses
   BearLibTerminal,
   SysUtils,
-  TransportTycoon.Game,
-  TransportTycoon.Town,
-  TransportTycoon.Industries;
+  TransportTycoon.Game;
 
 { TSceneDock }
-
-var
-  Town: TTown;
 
 procedure TSceneDock.Render;
 var
@@ -39,16 +35,17 @@ begin
 
   DrawFrame(5, 7, 70, 15);
 
-  Town := Game.Map.Town[Game.Map.CurrentTown];
-  DrawTitle(Town.Name + ' Dock');
+  FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentTown]);
+  DrawTitle(FTown.Name + ' Dock');
 
   terminal_color('white');
-  DrawText(7, 11, 'Passengers: ' + IntToStr(Town.ProducesAmount[cgPassengers]));
-  DrawText(7, 12, 'Bags of mail: ' + IntToStr(Town.ProducesAmount
+  DrawText(7, 11, 'Passengers: ' + IntToStr(FTown.ProducesAmount
+    [cgPassengers]));
+  DrawText(7, 12, 'Bags of mail: ' + IntToStr(FTown.ProducesAmount
     [cgBagsOfMail]));
 
   for I := 0 to Game.Vehicles.ShipCount - 1 do
-    DrawButton(37, I + 11, Game.Vehicles.Ship[I].InLocation(Town.X, Town.Y),
+    DrawButton(37, I + 11, Game.Vehicles.Ship[I].InLocation(FTown.X, FTown.Y),
       Chr(Ord('A') + I), Game.Vehicles.Ship[I].Name);
 
   AddButton(19, 'V', 'Ship Depot');
@@ -85,7 +82,7 @@ begin
     TK_A .. TK_G:
       begin
         I := Key - TK_A;
-        if Game.Vehicles.Ship[I].InLocation(Town.X, Town.Y) then
+        if Game.Vehicles.Ship[I].InLocation(FTown.X, FTown.Y) then
         begin
           Game.Vehicles.CurrentVehicle := I;
           Scenes.SetScene(scShip, scDock);

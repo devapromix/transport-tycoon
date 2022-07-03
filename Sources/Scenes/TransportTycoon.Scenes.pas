@@ -6,10 +6,10 @@ uses
   BearLibTerminal;
 
 type
-  TSceneEnum = (scMainMenu, scGameMenu, scGenMenu, scWorld, scTown, scTown2,
-    scBuildInTown, scBuildInTown2, scAirport, scAircraftHangar, scAircraft,
-    scAircrafts, scAircraftOrders, scShipOrders, scFinances, scTowns, scCompany,
-    scIndustry, scBuildNearIndustry, scDock, scShip, scShips, scShipDepot);
+  TSceneEnum = (scMainMenu, scGameMenu, scGenMenu, scWorld, scTown2,
+    scBuildInTown2, scAirport, scAircraftHangar, scAircraft, scAircrafts,
+    scAircraftOrders, scShipOrders, scFinances, scTowns, scCompany, scIndustry,
+    scBuildNearIndustry, scDock, scShip, scShips, scShipDepot);
 
 type
   TButtonRec = record
@@ -389,9 +389,7 @@ begin
   FScene[scGameMenu] := TSceneGameMenu.Create;
   FScene[scGenMenu] := TSceneGenMenu.Create;
   FScene[scWorld] := TSceneWorld.Create;
-  FScene[scTown] := TSceneTown.Create;
   FScene[scTown2] := TSceneTown2.Create;
-  FScene[scBuildInTown] := TSceneBuildInTown.Create;
   FScene[scBuildInTown2] := TSceneBuildInTown2.Create;
   FScene[scAirport] := TSceneAirport.Create;
   FScene[scAircraftHangar] := TSceneAircraftHangar.Create;

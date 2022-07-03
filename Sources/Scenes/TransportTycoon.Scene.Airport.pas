@@ -3,12 +3,13 @@
 interface
 
 uses
-  TransportTycoon.Scenes;
+  TransportTycoon.Scenes,
+  TransportTycoon.Industries;
 
 type
   TSceneAirport = class(TScene)
   private
-
+    FTown: TTownIndustry;
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -19,12 +20,7 @@ implementation
 uses
   BearLibTerminal,
   SysUtils,
-  TransportTycoon.Game,
-  TransportTycoon.Town,
-  TransportTycoon.Industries;
-
-var
-  Town: TTown;
+  TransportTycoon.Game;
 
 procedure TSceneAirport.Render;
 var
@@ -34,18 +30,19 @@ begin
 
   DrawFrame(5, 7, 70, 15);
 
-  Town := Game.Map.Town[Game.Map.CurrentTown];
-  DrawTitle(Town.Name + ' Airport');
+  FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentTown]);
+  DrawTitle(FTown.Name + ' Airport');
 
   terminal_color('white');
-  DrawText(7, 11, 'Size: ' + AirportSizeStr[Town.Airport.Level]);
-  DrawText(7, 12, 'Passengers: ' + IntToStr(Town.ProducesAmount[cgPassengers]));
-  DrawText(7, 13, 'Bags of mail: ' + IntToStr(Town.ProducesAmount
+  DrawText(7, 11, 'Size: ' + AirportSizeStr[FTown.Airport.Level]);
+  DrawText(7, 12, 'Passengers: ' + IntToStr(FTown.ProducesAmount
+    [cgPassengers]));
+  DrawText(7, 13, 'Bags of mail: ' + IntToStr(FTown.ProducesAmount
     [cgBagsOfMail]));
 
   for I := 0 to Game.Vehicles.AircraftCount - 1 do
-    DrawButton(37, I + 11, Game.Vehicles.Aircraft[I].InLocation(Town.X, Town.Y),
-      Chr(Ord('A') + I), Game.Vehicles.Aircraft[I].Name);
+    DrawButton(37, I + 11, Game.Vehicles.Aircraft[I].InLocation(FTown.X,
+      FTown.Y), Chr(Ord('A') + I), Game.Vehicles.Aircraft[I].Name);
 
   AddButton(19, 'H', 'Hangar');
   AddButton(19, 'Esc', 'Close');
@@ -81,7 +78,7 @@ begin
     TK_A .. TK_G:
       begin
         I := Key - TK_A;
-        if Game.Vehicles.Aircraft[I].InLocation(Town.X, Town.Y) then
+        if Game.Vehicles.Aircraft[I].InLocation(FTown.X, FTown.Y) then
         begin
           Game.Vehicles.CurrentVehicle := I;
           Scenes.SetScene(scAircraft, scAirport);

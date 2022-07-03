@@ -19,11 +19,12 @@ implementation
 uses
   SysUtils,
   BearLibTerminal,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Industries;
 
 procedure TSceneShipOrders.Render;
 var
-  TownID: Integer;
+  I: Integer;
   F: Boolean;
 begin
   DrawMap(Self.Width, Self.Height - 1);
@@ -33,12 +34,12 @@ begin
   begin
     DrawTitle(7, Ship[CurrentVehicle].Name + ' Orders');
 
-    for TownID := 0 to Length(Game.Map.Town) - 1 do
+    for I := 0 to Length(Game.Map.Industry) - 1 do
     begin
-      F := not(Ship[CurrentVehicle].IsOrder(TownID) or
-        (Game.Map.Town[TownID].Dock.Level = 0));
-      DrawButton(22, TownID + 9, F, Chr(Ord('A') + TownID),
-        'Go to ' + Game.Map.Town[TownID].Name + ' Dock');
+      F := not(Ship[CurrentVehicle].IsOrder(I) or
+        (Game.Map.Industry[I].Dock.Level = 0));
+      DrawButton(22, I + 9, F, Chr(Ord('A') + I),
+        'Go to ' + Game.Map.Industry[I].Name + ' Dock');
     end;
   end;
 
@@ -49,7 +50,7 @@ end;
 
 procedure TSceneShipOrders.Update(var Key: Word);
 var
-  TownID: Integer;
+  I: Integer;
   F: Boolean;
 begin
   if (Key = TK_MOUSE_LEFT) then
@@ -71,13 +72,13 @@ begin
     TK_A .. TK_K:
       with Game.Vehicles do
       begin
-        TownID := Key - TK_A;
-        F := not(Ship[CurrentVehicle].IsOrder(TownID) or
-          (Game.Map.Town[TownID].Dock.Level = 0));
+        I := Key - TK_A;
+        F := not(Ship[CurrentVehicle].IsOrder(I) or
+          (Game.Map.Industry[I].Dock.Level = 0));
         if F then
           with Game.Vehicles do
           begin
-            Ship[CurrentVehicle].AddOrder(TownID);
+            Ship[CurrentVehicle].AddOrder(I);
             Scenes.SetScene(scShip);
           end;
       end;

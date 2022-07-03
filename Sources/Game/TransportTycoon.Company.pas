@@ -29,7 +29,7 @@ end;
 
 function TCompany.Name: string;
 begin
-  Result := Game.Map.Town[Game.Company.TownID].Name + ' TRANSPORT';
+  Result := Game.Map.Industry[Game.Company.TownID].Name + ' TRANSPORT';
 end;
 
 end.

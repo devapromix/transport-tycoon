@@ -7,7 +7,7 @@ uses
   TransportTycoon.Industries;
 
 type
-  Tiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlTown, tlRock, tlSand,
+  Tiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlRock, tlSand,
     tlWater, tlTownIndustry, tlForestIndustry, tlSawmillIndustry,
     tlCoalMineIndustry, tlPowerPlantIndustry);
 
@@ -37,15 +37,13 @@ const
     //
     (Name: 'Bush'; Tile: 'b'; Color: 'dark green'),
     //
-    (Name: 'Town'; Tile: '#'; Color: 'lighter yellow'),
-    //
     (Name: 'Rock'; Tile: '^'; Color: 'dark gray'),
     //
     (Name: 'Sand'; Tile: ':'; Color: 'yellow'),
     //
     (Name: 'Water'; Tile: '='; Color: 'blue'),
     //
-    (Name: 'Town'; Tile: '&'; Color: 'lighter yellow'),
+    (Name: 'Town'; Tile: '#'; Color: 'lighter yellow'),
     //
     (Name: 'Forest'; Tile: 'F'; Color: 'lighter yellow'),
     //
@@ -110,7 +108,6 @@ type
     function MapIndCount: Integer;
   public
     Cell: array of array of Tiles;
-    Town: array of TTown;
     Industry: array of TIndustry;
     constructor Create;
     destructor Destroy; override;
@@ -130,11 +127,9 @@ type
     function HasTownName(const ATownName: string): Boolean;
     procedure Draw(const AWidth, AHeight: Integer);
     procedure Gen;
-    procedure CityGrows;
-    function GetCurrentCity(const AX, AY: Integer): Integer;
+    procedure TownGrows;
     function GetCurrentTown(const AX, AY: Integer): Integer;
     function GetCurrentIndustry(const AX, AY: Integer): Integer;
-    function EnterInCity(const AX, AY: Integer): Boolean;
     function EnterInIndustry(const AX, AY: Integer): Boolean;
     function WorldPop: Integer;
     function GetDist(const X1, Y1, X2, Y2: Integer): Integer;
@@ -166,12 +161,10 @@ var
   I: Integer;
 begin
   Result := False;
-  for I := 0 to Length(Town) - 1 do
-    if Town[I].Name = ATownName then
-    begin
-      Result := True;
-      Exit;
-    end;
+  for I := 0 to Length(Industry) - 1 do
+    if (Industry[I].IndustryType = inTown) then
+      if Industry[I].Name = ATownName then
+        Exit(True);
 end;
 
 function TMap.IsNearTile(const AX, AY: Integer; const ATile: Tiles): Boolean;
@@ -268,10 +261,11 @@ var
   I: Integer;
 begin
   Result := False;
-  for I := 0 to Length(Town) - 1 do
-    if ((Town[I].X = AX) and (Town[I].Y = AY)) or
-      (GetDist(Town[I].X, Town[I].Y, AX, AY) < 15) then
-      Exit(True);
+  for I := 0 to Length(Industry) - 1 do
+    if (Industry[I].IndustryType = inTown) then
+      if ((Industry[I].X = AX) and (Industry[I].Y = AY)) or
+        (GetDist(Industry[I].X, Industry[I].Y, AX, AY) < 15) then
+        Exit(True);
 end;
 
 constructor TMap.Create;
@@ -288,8 +282,6 @@ destructor TMap.Destroy;
 var
   I: Integer;
 begin
-  for I := 0 to Length(Town) - 1 do
-    Town[I].Free;
   for I := 0 to Length(Industry) - 1 do
     Industry[I].Free;
   inherited;
@@ -327,12 +319,6 @@ begin
       terminal_put(X, Y, Tile[Cell[Left + X][Top + Y]].Tile);
     end;
   terminal_color('white');
-end;
-
-function TMap.EnterInCity(const AX, AY: Integer): Boolean;
-begin
-  FCurrentTown := GetCurrentCity(AX, AY);
-  Result := FCurrentTown >= 0;
 end;
 
 function TMap.EnterInIndustry(const AX, AY: Integer): Boolean;
@@ -445,9 +431,6 @@ begin
     end;
   end;
   // Towns
-  for I := 0 to Length(Town) - 1 do
-    Town[I].Free;
-  SetLength(Town, 0);
   for I := 0 to Length(Industry) - 1 do
     Industry[I].Free;
   SetLength(Industry, 0);
@@ -458,7 +441,7 @@ begin
         (Math.RandomRange(0, 10) - 5);
       Y := (Math.RandomRange(1, FHeight div 10) * 10) +
         (Math.RandomRange(0, 10) - 5);
-      TownName := TTown.GenName;
+      TownName := TTownIndustry.GenName;
 
       for N := 2 to 5 do
       begin
@@ -486,9 +469,6 @@ begin
 
     until not HasTownName(TownName) and not HasTownLocation(X, Y) and
       HasNormalTile(X, Y);
-    // Cell[X][Y] := tlTown;
-    SetLength(Town, I + 1);
-    Town[I] := TTown.Create(TownName, X, Y);
     SetLength(Industry, I + 1);
     Cell[X][Y] := tlTownIndustry;
     Industry[I] := TTownIndustry.Create(TownName, X, Y);
@@ -588,22 +568,13 @@ begin
   end;
 end;
 
-procedure TMap.CityGrows;
+procedure TMap.TownGrows;
 var
   I: Integer;
 begin
-  for I := 0 to Length(Town) - 1 do
-    Town[I].Grow;
-end;
-
-function TMap.GetCurrentCity(const AX, AY: Integer): Integer;
-var
-  I: Integer;
-begin
-  Result := -1;
-  for I := 0 to Length(Town) - 1 do
-    if (Town[I].X = AX) and (Town[I].Y = AY) then
-      Exit(I);
+  for I := 0 to Length(Industry) - 1 do
+    if (Game.Map.Industry[I].IndustryType = inTown) then
+      TTownIndustry(Industry[I]).Grow;
 end;
 
 function TMap.GetCurrentIndustry(const AX, AY: Integer): Integer;
@@ -612,7 +583,7 @@ var
 begin
   Result := -1;
   for I := 0 to Length(Industry) - 1 do
-    if (Industry[I].X = AX) and (Industry[I].Y = AY) then
+    if Industry[I].InLocation(AX, AY) then
       Exit(I);
 end;
 
@@ -622,8 +593,8 @@ var
 begin
   Result := -1;
   for I := 0 to Length(Industry) - 1 do
-    if (Industry[I].X = AX) and (Industry[I].Y = AY) and
-      (Industry[I].IndustryType = inTown) then
+    if Industry[I].InLocation(AX, AY) and (Industry[I].IndustryType = inTown)
+    then
       Exit(I);
 end;
 
@@ -658,15 +629,16 @@ var
 begin
   Mx := Width div 2;
   Result := '';
-  for I := 0 to Length(Town) - 1 do
-  begin
-    D := GetDist(Town[I].X, Town[I].Y, AX, AY);
-    if D < Mx then
+  for I := 0 to Length(Industry) - 1 do
+    if (Industry[I].IndustryType = inTown) then
     begin
-      Result := Town[I].Name;
-      Mx := D;
+      D := GetDist(Industry[I].X, Industry[I].Y, AX, AY);
+      if D < Mx then
+      begin
+        Result := Industry[I].Name;
+        Mx := D;
+      end;
     end;
-  end;
 end;
 
 end.

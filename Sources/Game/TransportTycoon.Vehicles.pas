@@ -30,12 +30,13 @@ type
     procedure Draw;
     procedure Step;
     procedure AddAircraft(const AName: string;
-      const ACityIndex, AircraftID: Integer);
-    procedure AddShip(const AName: string; const ACityIndex, ShipID: Integer);
+      const AIndex, AircraftID: Integer);
+    procedure AddShip(const AName: string; const AIndex, ShipID: Integer);
     procedure RunningCosts;
     function GetCurrentAircraft(const AX, AY: Integer): Integer;
     function GetCurrentShip(const AX, AY: Integer): Integer;
-    function IsVehicleOnMap(const AX, AY: Integer; out AVehicleName: string): Boolean;
+    function IsVehicleOnMap(const AX, AY: Integer;
+      out AVehicleName: string): Boolean;
     function IsBuyShipAllowed(): Boolean;
     function IsBuyAircraftAllowed(): Boolean;
     procedure Clear;
@@ -52,43 +53,46 @@ implementation
 uses
   BearLibTerminal,
   TransportTycoon.Game,
-  TransportTycoon.Finances;
+  TransportTycoon.Finances,
+  TransportTycoon.Industries;
 
 procedure TVehicles.AddAircraft(const AName: string;
-  const ACityIndex, AircraftID: Integer);
+  const AIndex, AircraftID: Integer);
+var
+  Town: TTownIndustry;
 begin
-  if (Game.Map.Town[ACityIndex].Airport.HasBuilding and
-    (Game.Money >= AircraftBase[AircraftID].Cost)) then
+  Town := TTownIndustry(Game.Map.Industry[AIndex]);
 
-  SetLength(FAircraft, AircraftCount + 1);
+  if (Town.Airport.HasBuilding and (Game.Money >= AircraftBase[AircraftID].Cost))
+  then
+    SetLength(FAircraft, AircraftCount + 1);
 
-  FAircraft[High(FAircraft)] := TAircraft.Create(AName,
-    Game.Map.Town[ACityIndex].X, Game.Map.Town[ACityIndex].Y, AircraftID);
+  FAircraft[High(FAircraft)] := TAircraft.Create(AName, Town.X, Town.Y,
+    AircraftID);
 
   with FAircraft[High(FAircraft)] do
   begin
-    AddOrder(ACityIndex, Game.Map.Town[ACityIndex].Name,
-      Game.Map.Town[ACityIndex].X, Game.Map.Town[ACityIndex].Y);
+    AddOrder(AIndex, Town.Name, Town.X, Town.Y);
     Game.ModifyMoney(ttNewVehicles, -AircraftBase[AircraftID].Cost);
     VehicleID := AircraftID;
   end;
 end;
 
-procedure TVehicles.AddShip(const AName: string;
-  const ACityIndex, ShipID: Integer);
+procedure TVehicles.AddShip(const AName: string; const AIndex, ShipID: Integer);
+var
+  Town: TTownIndustry;
 begin
-  if (Game.Map.Town[ACityIndex].Dock.HasBuilding and
-    (Game.Money >= ShipBase[ShipID].Cost)) then
+  Town := TTownIndustry(Game.Map.Industry[AIndex]);
 
-  SetLength(FShip, ShipCount + 1);
+  if (Town.Dock.HasBuilding and (Game.Money >= ShipBase[ShipID].Cost)) then
 
-  FShip[High(FShip)] := TShip.Create(AName, Game.Map.Town[ACityIndex].X,
-    Game.Map.Town[ACityIndex].Y, ShipID);
+    SetLength(FShip, ShipCount + 1);
+
+  FShip[High(FShip)] := TShip.Create(AName, Town.X, Town.Y, ShipID);
 
   with FShip[High(FShip)] do
   begin
-    AddOrder(ACityIndex, Game.Map.Town[ACityIndex].Name,
-      Game.Map.Town[ACityIndex].X, Game.Map.Town[ACityIndex].Y);
+    AddOrder(AIndex, Town.Name, Town.X, Town.Y);
     Game.ModifyMoney(ttNewVehicles, -ShipBase[ShipID].Cost);
     VehicleID := ShipID;
   end;
@@ -170,7 +174,8 @@ begin
   Exit(GetVehicle(AX, AY, TArray<TVehicle>(FShip)));
 end;
 
-function TVehicles.GetVehicle(AX, AY: Integer; AVehicles: TArray<TVehicle>): Integer;
+function TVehicles.GetVehicle(AX, AY: Integer;
+  AVehicles: TArray<TVehicle>): Integer;
 var
   I: Integer;
 begin
@@ -190,11 +195,13 @@ begin
   Exit(ShipCount < MaxShips);
 end;
 
-function TVehicles.IsVehicleOnMap(const AX, AY: Integer; out AVehicleName: string): Boolean;
+function TVehicles.IsVehicleOnMap(const AX, AY: Integer;
+  out AVehicleName: string): Boolean;
 type
   TGetVehicleFunc = reference to function(const AX, AY: Integer): Integer;
 
-  function GetVehicle(AFunc: TGetVehicleFunc; AVehicles: TArray<TVehicle>): Boolean;
+  function GetVehicle(AFunc: TGetVehicleFunc;
+    AVehicles: TArray<TVehicle>): Boolean;
   var
     ID: Integer;
   begin
@@ -203,9 +210,10 @@ type
     if Result then
       AVehicleName := AVehicles[ID].Name;
   end;
+
 begin
   AVehicleName := '';
-// for more Vehicle types add more "if not" expressions in this chain
+  // for more Vehicle types add more "if not" expressions in this chain
   if not GetVehicle(GetCurrentAircraft, TArray<TVehicle>(FAircraft)) then
     GetVehicle(GetCurrentShip, TArray<TVehicle>(FShip));
   Exit(AVehicleName <> '');

@@ -72,7 +72,7 @@ begin
       Scenes.SetScene(scIndustry);
     TK_D:
       begin
-        if Industry.Dock.CanBuild(Industry.X,Industry.Y) then
+        if Industry.Dock.CanBuild(Industry.X, Industry.Y) then
         begin
           Industry.Dock.Build;
           Scenes.SetScene(scDock, scIndustry);

@@ -52,7 +52,7 @@ type
     procedure Step; override;
     procedure Load;
     procedure UnLoad;
-    procedure AddOrder(const TownIndex: Integer); overload;
+    procedure AddOrder(const AIndex: Integer); overload;
     procedure AddOrder(const TownIndex: Integer; const AName: string;
       const AX, AY: Integer); overload;
     procedure DelOrder(const AOrderIndex: Integer);
@@ -71,13 +71,13 @@ uses
 
 function IsPath(X, Y: Integer): Boolean; stdcall;
 begin
-  Result := Game.Map.Cell[X][Y] in [tlTown, tlWater] + IndustryTiles;
+  Result := Game.Map.Cell[X][Y] in [tlTownIndustry, tlWater] + IndustryTiles;
 end;
 
 procedure TShip.AddOrder(const TownIndex: Integer; const AName: string;
   const AX, AY: Integer);
 begin
-  if Game.Map.Town[TownIndex].Dock.HasBuilding then
+  if Game.Map.Industry[TownIndex].Dock.HasBuilding then
   begin
     SetLength(Order, Length(Order) + 1);
     Order[High(Order)].ID := TownIndex;
@@ -87,10 +87,10 @@ begin
   end;
 end;
 
-procedure TShip.AddOrder(const TownIndex: Integer);
+procedure TShip.AddOrder(const AIndex: Integer);
 begin
-  with Game.Map.Town[TownIndex] do
-    AddOrder(TownIndex, Name, X, Y);
+  with Game.Map.Industry[AIndex] do
+    AddOrder(AIndex, Name, X, Y);
 end;
 
 constructor TShip.Create(const AName: string; const AX, AY, ID: Integer);
@@ -144,16 +144,16 @@ end;
 procedure TShip.Load;
 begin
   FState := 'Load';
-  while (Game.Map.Town[Order[OrderIndex].ID].ProducesAmount[cgPassengers] > 0)
-    and (Passengers < MaxPassengers) do
+  while (Game.Map.Industry[Order[OrderIndex].ID].ProducesAmount[cgPassengers] >
+    0) and (Passengers < MaxPassengers) do
   begin
-    Game.Map.Town[Order[OrderIndex].ID].DecCargoAmount(cgPassengers);
+    Game.Map.Industry[Order[OrderIndex].ID].DecCargoAmount(cgPassengers);
     Inc(FPassengers);
   end;
-  while (Game.Map.Town[Order[OrderIndex].ID].ProducesAmount[cgBagsOfMail] > 0)
-    and (BagsOfMail < MaxBagsOfMail) do
+  while (Game.Map.Industry[Order[OrderIndex].ID].ProducesAmount[cgBagsOfMail] >
+    0) and (BagsOfMail < MaxBagsOfMail) do
   begin
-    Game.Map.Town[Order[OrderIndex].ID].DecCargoAmount(cgBagsOfMail);
+    Game.Map.Industry[Order[OrderIndex].ID].DecCargoAmount(cgBagsOfMail);
     Inc(FBagsOfMail);
   end;
 end;
@@ -163,7 +163,7 @@ var
   NX, NY: Integer;
 begin
   Result := False;
-  FState := 'Fly';
+  FState := 'Move';
   NX := 0;
   NY := 0;
   if not IsMove(Game.Map.Width, Game.Map.Height, X, Y, AX, AY, @IsPath, NX, NY)
@@ -183,7 +183,8 @@ begin
       if Order[OrderIndex].ID <> FLastAirportId then
         UnLoad;
       FState := 'Service';
-      if FT > (15 - (Game.Map.Town[Order[OrderIndex].ID].Dock.Level * 2)) then
+      if FT > (15 - (Game.Map.Industry[Order[OrderIndex].ID].Dock.Level * 2))
+      then
       begin
         FT := 0;
         Load;

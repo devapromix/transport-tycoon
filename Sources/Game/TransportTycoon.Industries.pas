@@ -6,6 +6,12 @@ uses
   TransportTycoon.MapObject,
   TransportTycoon.Stations;
 
+const
+  AirportSizeStr: array [0 .. 5] of string = ('None', 'Small Airport',
+    'Commuter Airport', 'City Airport', 'Metropolitan Airport',
+    'International Airport');
+  DockSizeStr: array [0 .. 1] of string = ('None', 'Dock');
+
 type
   TCargo = (cgPassengers, cgBagsOfMail, cgGoods, cgCoal, cgWood);
 
@@ -52,6 +58,7 @@ type
     FPopulation: Integer;
     FAirport: TStation;
     FHQ: TStation;
+    function GrowModif: Integer;
   public
     constructor Create(const AName: string; const AX, AY: Integer);
     destructor Destroy; override;
@@ -60,6 +67,8 @@ type
     procedure ModifyPopulation(const APopulation: Integer);
     property Airport: TStation read FAirport;
     property HQ: TStation read FHQ;
+    class function GenName: string;
+    procedure Grow;
   end;
 
 type
@@ -106,6 +115,7 @@ implementation
 
 uses
   Math,
+  Classes,
   SysUtils;
 
 { TIndustry }
@@ -160,6 +170,48 @@ begin
   FHQ.Free;
   FAirport.Free;
   inherited;
+end;
+
+class function TTownIndustry.GenName: string;
+var
+  S: array [0 .. 1] of TStringList;
+  I: Integer;
+begin
+  for I := 0 to 1 do
+    S[I] := TStringList.Create;
+  S[0].DelimitedText :=
+    '"Eding","Graning","Vorg","Tra","Nording","Agring","Gran","Funt","Grufing",'
+    + '"Trening","Chend","Drinning","Long","Tor","Mar"';
+  S[1].DelimitedText :=
+    '"ville","burg","ley","ly","field","town","well","bell","bridge","ton",' +
+    '"stone","hattan"';
+  Result := '';
+  for I := 0 to 1 do
+  begin
+    Result := Result + S[I][Random(S[I].Count - 1)];
+    S[I].Free;
+  end;
+end;
+
+procedure TTownIndustry.Grow;
+var
+  MonthPassengers: Integer;
+  MonthBagsOfMail: Integer;
+begin
+  if Math.RandomRange(0, 25) <= GrowModif then
+    ModifyPopulation(Math.RandomRange(GrowModif * 8, GrowModif * 12));
+  MonthPassengers := FPopulation div Math.RandomRange(40, 50);
+  MonthBagsOfMail := FPopulation div Math.RandomRange(160, 190);
+  if Airport.HasBuilding or Dock.HasBuilding then
+  begin
+    SetCargoAmount(cgPassengers, MonthPassengers);
+    SetCargoAmount(cgBagsOfMail, MonthBagsOfMail);
+  end;
+end;
+
+function TTownIndustry.GrowModif: Integer;
+begin
+  Result := Airport.Level + Dock.Level { + Trainstation } + 5;
 end;
 
 procedure TTownIndustry.ModifyPopulation(const APopulation: Integer);

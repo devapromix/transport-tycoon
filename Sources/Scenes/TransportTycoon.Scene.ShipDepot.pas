@@ -3,12 +3,13 @@
 interface
 
 uses
-  TransportTycoon.Scenes;
+  TransportTycoon.Scenes,
+  TransportTycoon.Industries;
 
 type
   TSceneShipDepot = class(TScene)
   private
-
+    FTown: TTownIndustry;
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -27,7 +28,6 @@ uses
 
 procedure TSceneShipDepot.Render;
 var
-  C: TTown;
   I, J: Integer;
   S: string;
 begin
@@ -35,9 +35,9 @@ begin
 
   DrawFrame(10, 6, 60, 17);
 
-  C := Game.Map.Town[Game.Map.CurrentTown];
+  FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentTown]);
 
-  DrawTitle(8, C.Name + ' Ship Depot');
+  DrawTitle(8, FTown.Name + ' Ship Depot');
 
   for I := 0 to Length(ShipBase) - 1 do
     if ShipBase[I].Since <= Game.Calendar.Year then
@@ -107,8 +107,8 @@ begin
           I := Game.Vehicles.CurrentVehicle;
           if (Game.Money >= ShipBase[I].Cost) then
           begin
-            Title := Format('Ship #%d (%s)',
-              [Game.Vehicles.ShipCount + 1, ShipBase[I].Name]);
+            Title := Format('Ship #%d (%s)', [Game.Vehicles.ShipCount + 1,
+              ShipBase[I].Name]);
             Game.Vehicles.AddShip(Title, Game.Map.CurrentTown, I);
             Scenes.SetScene(scDock);
           end;

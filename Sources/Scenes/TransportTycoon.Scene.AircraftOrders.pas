@@ -19,11 +19,12 @@ implementation
 uses
   BearLibTerminal,
   SysUtils,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Industries;
 
 procedure TSceneAircraftOrders.Render;
 var
-  TownID: Integer;
+  I: Integer;
   F: Boolean;
 begin
   DrawMap(Self.Width, Self.Height - 1);
@@ -33,13 +34,14 @@ begin
   begin
     DrawTitle(7, Aircraft[CurrentVehicle].Name + ' Orders');
 
-    for TownID := 0 to Length(Game.Map.Town) - 1 do
-    begin
-      F := not(Aircraft[CurrentVehicle].IsOrder(TownID) or
-        (Game.Map.Town[TownID].Airport.Level = 0));
-      DrawButton(22, TownID + 9, F, Chr(Ord('A') + TownID),
-        'Go to ' + Game.Map.Town[TownID].Name + ' Airport');
-    end;
+    for I := 0 to Length(Game.Map.Industry) - 1 do
+      if (Game.Map.Industry[I].IndustryType = inTown) then
+      begin
+        F := not(Aircraft[CurrentVehicle].IsOrder(I) or
+          (TTownIndustry(Game.Map.Industry[I]).Airport.Level = 0));
+        DrawButton(22, I + 9, F, Chr(Ord('A') + I),
+          'Go to ' + Game.Map.Industry[I].Name + ' Airport');
+      end;
   end;
 
   AddButton(21, 'Esc', 'Close');
@@ -49,7 +51,7 @@ end;
 
 procedure TSceneAircraftOrders.Update(var Key: Word);
 var
-  TownID: Integer;
+  I: Integer;
   F: Boolean;
 begin
   if (Key = TK_MOUSE_LEFT) then
@@ -71,13 +73,13 @@ begin
     TK_A .. TK_K:
       with Game.Vehicles do
       begin
-        TownID := Key - TK_A;
-        F := not(Aircraft[CurrentVehicle].IsOrder(TownID) or
-          (Game.Map.Town[TownID].Airport.Level = 0));
+        I := Key - TK_A;
+        F := not(Aircraft[CurrentVehicle].IsOrder(I) or
+          (TTownIndustry(Game.Map.Industry[I]).Airport.Level = 0));
         if F then
           with Game.Vehicles do
           begin
-            Aircraft[CurrentVehicle].AddOrder(TownID);
+            Aircraft[CurrentVehicle].AddOrder(I);
             Scenes.SetScene(scAircraft);
           end;
       end;
