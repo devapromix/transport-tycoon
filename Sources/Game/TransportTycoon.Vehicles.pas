@@ -56,6 +56,9 @@ uses
   TransportTycoon.Finances,
   TransportTycoon.Industries;
 
+type
+  TGetVehicleFunc = function(const AX, AY: Integer): Integer of object;
+
 procedure TVehicles.AddAircraft(const AName: string;
   const AIndex, AircraftID: Integer);
 var
@@ -194,13 +197,8 @@ begin
   Exit(ShipCount < MaxShips);
 end;
 
-function TVehicles.IsVehicleOnMap(const AX, AY: Integer;
-  out AVehicleName: string): Boolean;
-type
-  TGetVehicleFunc = reference to function(const AX, AY: Integer): Integer;
-
-  function GetVehicle(AFunc: TGetVehicleFunc;
-    AVehicles: TArray<TVehicle>): Boolean;
+function TVehicles.IsVehicleOnMap(const AX, AY: Integer; out AVehicleName: string): Boolean;
+  function GetVehicle(AFunc: TGetVehicleFunc; AVehicles: TArray<TVehicle>): Boolean;
   var
     ID: Integer;
   begin

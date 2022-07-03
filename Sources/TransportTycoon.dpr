@@ -49,7 +49,12 @@ var
   Tmp: Word = 0;
 
 begin
-  ReportMemoryLeaksOnShutdown := True;
+  {$IFDEF DEBUG}
+    {$IF CompilerVersion > 16}
+    ReportMemoryLeaksOnShutdown := True;
+    {$IFEND}
+  {$ENDIF}
+
   Randomize();
   terminal_open();
   terminal_set('window: size=80x30, title="Transport Tycoon v.' +
