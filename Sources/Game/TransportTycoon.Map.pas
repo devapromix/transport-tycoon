@@ -147,6 +147,7 @@ type
     function GetNearTownName(const AX, AY: Integer): string;
     function IsNearTile(const AX, AY: Integer; const ATile: Tiles): Boolean;
     function EnterInTown(const AX, AY: Integer): Boolean;
+    function TownCount: Integer;
   end;
 
 implementation
@@ -289,6 +290,8 @@ var
 begin
   for I := 0 to Length(Town) - 1 do
     Town[I].Free;
+  for I := 0 to Length(Industry) - 1 do
+    Industry[I].Free;
   inherited;
 end;
 
@@ -445,6 +448,9 @@ begin
   for I := 0 to Length(Town) - 1 do
     Town[I].Free;
   SetLength(Town, 0);
+  for I := 0 to Length(Industry) - 1 do
+    Industry[I].Free;
+  SetLength(Industry, 0);
   for I := 0 to MapNoOfTownsInt[NoOfTowns] - 1 do
   begin
     repeat
@@ -480,29 +486,13 @@ begin
 
     until not HasTownName(TownName) and not HasTownLocation(X, Y) and
       HasNormalTile(X, Y);
-//    Cell[X][Y] := tlTown;
+    // Cell[X][Y] := tlTown;
     SetLength(Town, I + 1);
     Town[I] := TTown.Create(TownName, X, Y);
     SetLength(Industry, I + 1);
     Cell[X][Y] := tlTownIndustry;
     Industry[I] := TTownIndustry.Create(TownName, X, Y);
   end;
-  // Towns
-  //I := 0;
-  { for J := 0 to MapNoOfTownsInt[NoOfTowns] - 1 do
-    begin
-    repeat
-    X := (Math.RandomRange(1, FWidth div 10) * 10) +
-    (Math.RandomRange(0, 10) - 5);
-    Y := (Math.RandomRange(1, FHeight div 10) * 10) +
-    (Math.RandomRange(0, 10) - 5);
-    until HasNormalTile(X, Y) and not HasTownLocation(X, Y) and
-    not HasIndustryLocation(X, Y);
-    SetLength(Industry, I + 1);
-    Cell[X][Y] := tlTownIndustry;
-    Industry[I] := TTownIndustry.Create(TTown.GenName, X, Y);
-    Inc(I);
-    end; }
   // Industries
   for J := 0 to MapIndCount - 1 do
   begin
@@ -637,13 +627,24 @@ begin
       Exit(I);
 end;
 
+function TMap.TownCount: Integer;
+var
+  I: Integer;
+begin
+  Result := 0;
+  for I := 0 to Length(Industry) - 1 do
+    if (Industry[I].IndustryType = inTown) then
+      Result := Result + 1;
+end;
+
 function TMap.WorldPop: Integer;
 var
   I: Integer;
 begin
   Result := 0;
-  for I := 0 to Length(Town) - 1 do
-    Result := Result + Town[I].Population;
+  for I := 0 to Length(Industry) - 1 do
+    if (Industry[I].IndustryType = inTown) then
+      Result := Result + TTownIndustry(Industry[I]).Population;
 end;
 
 function TMap.GetDist(const X1, Y1, X2, Y2: Integer): Integer;

@@ -20,11 +20,13 @@ uses
   SysUtils,
   BearLibTerminal,
   TransportTycoon.Game,
-  TransportTycoon.Map;
+  TransportTycoon.Map,
+  TransportTycoon.Industries;
 
 procedure TSceneTowns.Render;
 var
   I: Integer;
+  Town: TTownIndustry;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
@@ -32,17 +34,17 @@ begin
 
   DrawTitle(6, 'TOWNS');
 
-  for I := 0 to Length(Game.Map.Town) - 1 do
-  begin
-    if (Game.Company.TownID = I) then
-      DrawButton(27, I + 8, Chr(Ord('A') + I),
-        Format('%s (%d)', [Game.Map.Town[I].Name, Game.Map.Town[I].Population]
-        ), 'yellow')
-    else
-      DrawButton(27, I + 8, Chr(Ord('A') + I),
-        Format('%s (%d)', [Game.Map.Town[I].Name,
-        Game.Map.Town[I].Population]));
-  end;
+  for I := 0 to Length(Game.Map.Industry) - 1 do
+    if (Game.Map.Industry[I].IndustryType = inTown) then
+    begin
+      Town := TTownIndustry(Game.Map.Industry[I]);
+      if (Game.Company.TownID = I) then
+        DrawButton(27, I + 8, Chr(Ord('A') + I),
+          Format('%s (%d)', [Town.Name, Town.Population]), 'yellow')
+      else
+        DrawButton(27, I + 8, Chr(Ord('A') + I),
+          Format('%s (%d)', [Town.Name, Town.Population]));
+    end;
 
   DrawText(20, Format('World population: %d', [Game.Map.WorldPop]));
 
@@ -73,11 +75,11 @@ begin
       with Game.Map do
       begin
         I := Key - TK_A;
-        if (I < Length(Town)) then
+        if (I < TownCount) then
         begin
           CurrentTown := I;
-          ScrollTo(Town[I].X, Town[I].Y);
-          Scenes.SetScene(scTown);
+          ScrollTo(Industry[I].X, Industry[I].Y);
+          Scenes.SetScene(scTown2);
         end;
       end;
   end;
