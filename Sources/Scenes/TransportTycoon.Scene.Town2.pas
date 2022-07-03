@@ -23,32 +23,37 @@ implementation
 uses
   SysUtils,
   BearLibTerminal,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Scene.Industry;
 
 { TSceneTown2 }
 
 procedure TSceneTown2.Render;
+var
+  I: Integer;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
-  DrawFrame(10, 8, 60, 13);
+  DrawFrame(10, 6, 60, 17);
 
   FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
 
-  DrawTitle(10, FTown.Name + '***');
+  DrawTitle(8, FTown.Name);
   terminal_color('white');
-  DrawText(12, 12, 'Population: ' + IntToStr(FTown.Population));
-  DrawText(12, 13, 'Houses: ' + IntToStr(FTown.Houses));
-  DrawButton(34, 12, FTown.Airport.HasBuilding, 'A',
+  DrawText(12, 10, 'Population: ' + IntToStr(FTown.Population));
+  DrawText(12, 11, 'Houses: ' + IntToStr(FTown.Houses));
+  DrawButton(34, 10, FTown.Airport.HasBuilding, 'A',
     'Airport: ' + AirportSizeStr[FTown.Airport.Level]);
-  DrawButton(34, 13, FTown.Dock.HasBuilding, 'D',
+  DrawButton(34, 11, FTown.Dock.HasBuilding, 'D',
     'Dock: ' + DockSizeStr[FTown.Dock.Level]);
   if (Game.Map.CurrentIndustry = Game.Company.TownID) then
-    DrawButton(34, 16, FTown.HQ.HasBuilding, 'G', 'Company Headquarters');
+    DrawButton(34, 15, FTown.HQ.HasBuilding, 'G', 'Company Headquarters');
   terminal_color('white');
 
-  AddButton(18, 'B', 'Build');
-  AddButton(18, 'ESC', 'Close');
+  TSceneIndustry(Scenes.GetScene(scIndustry)).IndustryInfo(FTown, 12, 18);
+
+  AddButton(20, 'B', 'Build');
+  AddButton(20, 'ESC', 'Close');
 
   DrawBar;
 end;
@@ -59,21 +64,21 @@ begin
   begin
     if (MX >= 29) and (MX <= 37) then
       case MY of
-        18:
+        20:
           Key := TK_B;
       end;
     if (MX >= 41) and (MX <= 51) then
       case MY of
-        18:
+        20:
           Key := TK_ESCAPE;
       end;
     if (MX >= 34) and (MX <= 69) then
       case MY of
-        12:
+        10:
           Key := TK_A;
-        13:
+        11:
           Key := TK_D;
-        16:
+        15:
           Key := TK_G;
       end;
   end;

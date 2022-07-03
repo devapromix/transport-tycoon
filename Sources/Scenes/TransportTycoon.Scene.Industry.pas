@@ -16,6 +16,7 @@ type
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
+    procedure IndustryInfo(const AIndustry: TIndustry; const AX, AY: Integer);
   end;
 
 implementation
@@ -26,6 +27,24 @@ uses
   TransportTycoon.Game;
 
 { TSceneIndustry }
+
+procedure TSceneIndustry.IndustryInfo(const AIndustry: TIndustry;
+  const AX, AY: Integer);
+var
+  I: Integer;
+begin
+  I := AY;
+  if AIndustry.Produces <> [] then
+  begin
+    DrawText(AX, I, 'Produces: ' + AIndustry.GetCargoStr(AIndustry.Produces));
+    Dec(I);
+  end;
+  if AIndustry.Accepts <> [] then
+  begin
+    DrawText(AX, I, 'Accepts: ' + AIndustry.GetCargoStr(AIndustry.Accepts));
+    Dec(I);
+  end;
+end;
 
 procedure TSceneIndustry.Render;
 begin
@@ -41,6 +60,8 @@ begin
     DrawButton(34, 12, Dock.HasBuilding, 'D',
       'Dock: ' + DockSizeStr[Dock.Level]);
   end;
+
+  IndustryInfo(FIndustry, 22, 16);
 
   AddButton(18, 'B', 'Build');
   AddButton(18, 'ESC', 'Close');

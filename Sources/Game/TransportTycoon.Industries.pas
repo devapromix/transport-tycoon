@@ -51,6 +51,7 @@ type
     procedure DecCargoAmount(const ACargo: TCargo);
     property Dock: TDock read FDock;
     procedure Grows; virtual;
+    function GetCargoStr(const ACargoSet: TCargoSet): string;
   end;
 
 type
@@ -154,6 +155,18 @@ destructor TIndustry.Destroy;
 begin
   FDock.Free;
   inherited;
+end;
+
+function TIndustry.GetCargoStr(const ACargoSet: TCargoSet): string;
+var
+  Cargo: TCargo;
+begin
+  Result := '';
+  for Cargo := Low(TCargo) to High(TCargo) do
+    if (Cargo in ACargoSet) then
+      Result := Result + CargoStr[Cargo] + ' ';
+  Result := Trim(Result);
+  Result := StringReplace(Result, ' ', ', ', [rfReplaceAll]);
 end;
 
 procedure TIndustry.Grows;
