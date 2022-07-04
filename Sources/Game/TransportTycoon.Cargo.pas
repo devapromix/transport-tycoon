@@ -3,14 +3,14 @@
 interface
 
 type
-  TCargo = (cgPassengers, cgMail, cgGoods, cgCoal, cgWood);
+  TCargo = (cgNone, cgPassengers, cgMail, cgGoods, cgCoal, cgWood);
 
 const
-  CargoStr: array [TCargo] of string = ('Passengers', 'Mail', 'Goods',
+  CargoStr: array [TCargo] of string = ('None', 'Passengers', 'Mail', 'Goods',
     'Coal', 'Wood');
 
 const
-  CargoPrice: array [TCargo] of Byte = (7, 8, 9, 10, 9);
+  CargoPrice: array [TCargo] of Byte = (0, 7, 8, 9, 10, 9);
 
 type
   TCargoAmount = array [TCargo] of Integer;

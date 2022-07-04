@@ -48,8 +48,9 @@ begin
       terminal_composition(TK_OFF);
       terminal_color('white');
 
-      DrawText(12, 12, Format('%s: %d/%d', [CargoStr[CargoType], CargoAmount,
-        CargoMaxAmount]));
+      if (CargoType <> cgNone) then
+        DrawText(12, 12, Format('%s: %d/%d', [CargoStr[CargoType], CargoAmount,
+          CargoMaxAmount]));
 
       DrawText(12, 17, Format('State: %s', [State]));
 

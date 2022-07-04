@@ -29,8 +29,6 @@ uses
 { TSceneTown2 }
 
 procedure TSceneTown2.Render;
-var
-  I: Integer;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 

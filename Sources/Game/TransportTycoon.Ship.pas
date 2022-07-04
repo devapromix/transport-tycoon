@@ -108,7 +108,7 @@ begin
   FCargoAmount := 0;
   FCargoMaxAmount := ShipBase[ID].Amount;
   FCargo := ShipBase[ID].Cargo;
-  FCargoType := cgPassengers;
+  FCargoType := cgNone;
 end;
 
 procedure TShip.DelOrder(const AIndex: Integer);
@@ -151,7 +151,8 @@ var
 begin
   FState := 'Load';
   for Cargo := Low(TCargo) to High(TCargo) do
-    if Cargo in Game.Map.Industry[Order[OrderIndex].ID].Produces then
+    if (Cargo in Game.Map.Industry[Order[OrderIndex].ID]
+      .Produces) and (Cargo in FCargo) then
     begin
       FCargoType := Cargo;
       while (Game.Map.Industry[Order[OrderIndex].ID].ProducesAmount[Cargo] > 0)
@@ -211,14 +212,13 @@ begin
   FState := 'Unload';
   LastDockId := Order[OrderIndex].ID;
 
-  if CargoType in Game.Map.Industry[Order[OrderIndex].ID].Accepts then
+  if (CargoType in Game.Map.Industry[Order[OrderIndex].ID].Accepts)
+    and (CargoType <> cgNone) and (CargoAmount > 0) then
   begin
-    if FCargoAmount > 0 then
-    begin
-      Money := (FCargoAmount * (Distance div 10)) * CargoPrice[CargoType];
-      Game.ModifyMoney(ttShipIncome, Money);
-      FCargoAmount := 0;
-    end;
+    Money := (FCargoAmount * (Distance div 10)) * CargoPrice[CargoType];
+    Game.ModifyMoney(ttShipIncome, Money);
+    FCargoAmount := 0;
+    FCargoType := cgNone;
   end;
 
   FDistance := 0;
