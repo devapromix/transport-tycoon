@@ -26,6 +26,7 @@ type
     FIsPause: Boolean;
     FIsGame: Boolean;
     FIsClearLand: Boolean;
+    FIsBuildCanals: Boolean;
   public const
     MaxLoan = 200000;
     StartMoney = MaxLoan div 2;
@@ -43,6 +44,7 @@ type
     property IsDebug: Boolean read FIsDebug;
     property Turn: Integer read FTurn;
     property IsClearLand: Boolean read FIsClearLand write FIsClearLand;
+    property IsBuildCanals: Boolean read FIsBuildCanals write FIsBuildCanals;
     property IsPause: Boolean read FIsPause write FIsPause;
     property IsGame: Boolean read FIsGame write FIsGame;
     procedure Clear;
@@ -78,6 +80,7 @@ begin
   FCompany := TCompany.Create;
   FFinances := TFinances.Create;
   FIsClearLand := False;
+  FIsBuildCanals := False;
   FIsPause := True;
   FMap := TMap.Create;
   FMap.Gen;
@@ -162,6 +165,7 @@ begin
   FTurn := 0;
   FIsGame := True;
   FIsClearLand := False;
+  FIsBuildCanals := False;
   FMoney := StartMoney;
   FLoan := StartMoney;
   FFinances.Clear;

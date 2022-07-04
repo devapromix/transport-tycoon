@@ -107,6 +107,8 @@ begin
       Scenes.SetScene(scTowns);
     TK_I:
       Scenes.SetScene(scIndustries);
+    TK_B:
+      Scenes.SetScene(scBuildMenu);
     TK_P:
       begin
         Game.IsPause := not Game.IsPause;
@@ -147,6 +149,11 @@ begin
   if Game.IsClearLand then
   begin
     terminal_bkcolor('red');
+    terminal_put(MX, MY, $2588);
+  end else
+  if Game.IsBuildCanals then
+  begin
+    terminal_bkcolor('light blue');
     terminal_put(MX, MY, $2588);
   end
   else
@@ -197,7 +204,7 @@ begin
     end
     else
     begin
-      if not Game.IsClearLand then
+      if not Game.IsClearLand and not Game.IsBuildCanals then
       begin
         if (Game.Map.Cell[RX][RY] = tlTownIndustry) then
         begin
@@ -234,6 +241,14 @@ begin
         Scenes.Render;
         Exit;
       end;
+      if (Game.Map.Cell[RX][RY] in NormalTiles) then
+      begin
+        if not Game.IsBuildCanals then
+          Exit;
+        Game.Map.BuildCanals(RX, RY);
+        Scenes.Render;
+        Exit;
+      end;
     end;
   end;
   if (Key = TK_MOUSE_RIGHT) then
@@ -244,6 +259,12 @@ begin
       Scenes.Render;
       Exit;
     end;
+    if Game.IsBuildCanals then
+    begin
+      Game.IsBuildCanals := False;
+      Scenes.Render;
+      Exit;
+    end;
   end;
   case Key of
     TK_ESCAPE:
@@ -251,6 +272,12 @@ begin
         if Game.IsClearLand then
         begin
           Game.IsClearLand := False;
+          Scenes.Render;
+          Exit;
+        end;
+        if Game.IsBuildCanals then
+        begin
+          Game.IsBuildCanals := False;
           Scenes.Render;
           Exit;
         end;

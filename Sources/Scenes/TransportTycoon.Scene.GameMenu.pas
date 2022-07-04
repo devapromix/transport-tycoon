@@ -42,7 +42,7 @@ begin
   DrawButton(12, 16, Game.Vehicles.GotShips, 'S', 'LIST OF SHIPS');
   DrawButton(12, 17, Game.Vehicles.GotAircrafts, 'A', 'LIST OF AIRCRAFTS');
 
-  DrawButton(42, 15, False, 'B', 'Build');
+  DrawButton(42, 15, 'B', 'Build menu');
   DrawButton(42, 16, 'P', 'Pause game');
   DrawButton(42, 17, 'X', 'Clear land');
 
@@ -73,6 +73,8 @@ begin
           Key := TK_G;
         12:
           Key := TK_I;
+        15:
+          Key := TK_B;
         16:
           Key := TK_P;
         17:
@@ -102,6 +104,7 @@ begin
     TK_X:
       begin
         Game.IsClearLand := True;
+        Game.IsBuildCanals := False;
         Scenes.SetScene(scWorld);
       end;
   end;

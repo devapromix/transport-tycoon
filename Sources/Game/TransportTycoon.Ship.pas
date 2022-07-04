@@ -75,7 +75,8 @@ uses
 
 function IsPath(X, Y: Integer): Boolean; stdcall;
 begin
-  Result := Game.Map.Cell[X][Y] in [tlTownIndustry, tlWater] + IndustryTiles;
+  Result := Game.Map.Cell[X][Y] in [tlTownIndustry, tlWater, tlCanal] +
+    IndustryTiles;
 end;
 
 procedure TShip.AddOrder(const TownIndex: Integer; const AName: string;

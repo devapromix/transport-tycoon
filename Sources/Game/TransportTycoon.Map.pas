@@ -7,7 +7,7 @@ uses
 
 type
   Tiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlRock, tlSand,
-    tlWater, tlTownIndustry, tlForestIndustry, tlSawmillIndustry,
+    tlWater, tlCanal, tlTownIndustry, tlForestIndustry, tlSawmillIndustry,
     tlCoalMineIndustry, tlPowerPlantIndustry);
 
 const
@@ -41,6 +41,8 @@ const
     (Name: 'Sand'; Tile: ':'; Color: 'yellow'),
     //
     (Name: 'Water'; Tile: '='; Color: 'blue'),
+    //
+    (Name: 'Canal'; Tile: '='; Color: 'lighter blue'),
     //
     (Name: 'Town'; Tile: '#'; Color: 'lighter yellow'),
     //
@@ -135,6 +137,7 @@ type
     procedure NextRivers;
     procedure NextSize;
     procedure ClearLand(const AX, AY: Integer);
+    procedure BuildCanals(const AX, AY: Integer);
     function GetNearTownName(const AX, AY: Integer): string;
     function IsNearTile(const AX, AY: Integer; const ATile: Tiles): Boolean;
     function TownCount: Integer;
@@ -299,6 +302,16 @@ begin
     begin
       Cell[AX][AY] := tlDirt;
       Game.ModifyMoney(ttConstruction, -100);
+    end;
+end;
+
+procedure TMap.BuildCanals(const AX, AY: Integer);
+begin
+  if (Cell[AX][AY] in NormalTiles) then
+    if (Game.Money >= 1000) then
+    begin
+      Cell[AX][AY] := tlCanal;
+      Game.ModifyMoney(ttConstruction, -1000);
     end;
 end;
 

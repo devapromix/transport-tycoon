@@ -14,7 +14,7 @@ uses
   TransportTycoon.Aircraft in 'Game\TransportTycoon.Aircraft.pas',
   TransportTycoon.Ship in 'Game\TransportTycoon.Ship.pas',
   TransportTycoon.Scenes in 'Scenes\TransportTycoon.Scenes.pas',
-  TransportTycoon.Scene.Town in 'Scenes\TransportTycoon.Scene.Town.pas',
+  TransportTycoon.Scene.BuildMenu in 'Scenes\TransportTycoon.Scene.BuildMenu.pas',
   TransportTycoon.Scene.BuildInTown2 in 'Scenes\TransportTycoon.Scene.BuildInTown2.pas',
   TransportTycoon.Scene.World in 'Scenes\TransportTycoon.Scene.World.pas',
   TransportTycoon.Scene.Airport in 'Scenes\TransportTycoon.Scene.Airport.pas',
