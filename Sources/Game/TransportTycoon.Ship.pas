@@ -4,13 +4,14 @@ interface
 
 uses
   TransportTycoon.Vehicle,
-  TransportTycoon.Order;
+  TransportTycoon.Order,
+  TransportTycoon.Cargo;
 
 type
   TShipBase = record
     Name: string;
-    Passengers: Word;
-    Mail: Word;
+    Cargo: TCargoSet;
+    Amount: Integer;
     Cost: Word;
     RunningCost: Word;
     Speed: Word;
@@ -18,10 +19,13 @@ type
   end;
 
 const
-  ShipBase: array [0 .. 0] of TShipBase = (
+  ShipBase: array [0 .. 1] of TShipBase = (
     // #1
-    (Name: 'TM-22'; Passengers: 120; Mail: 10; Cost: 25000;
-    RunningCost: 90 * 12; Speed: 50; Since: 1950)
+    (Name: 'TM-22'; Cargo: [cgPassengers]; Amount: 90; Cost: 25000;
+    RunningCost: 90 * 12; Speed: 50; Since: 1950),
+    // #2
+    (Name: 'MF Cargo Ship'; Cargo: [cgCoal, cgWood, cgGoods]; Amount: 120;
+    Cost: 27000; RunningCost: 95 * 12; Speed: 50; Since: 1950)
     //
     );
 
@@ -32,31 +36,31 @@ type
     FDistance: Integer;
     FState: string;
     FLastAirportId: Integer;
-    FPassengers: Integer;
-    FMaxPassengers: Integer;
-    FMail: Integer;
-    FMaxMail: Integer;
     FOrderIndex: Integer;
+    FCargoAmount: Integer;
+    FCargoMaxAmount: Integer;
+    FCargo: TCargoSet;
+    FCargoType: TCargo;
   public
     Order: array of TOrder;
     constructor Create(const AName: string; const AX, AY, ID: Integer);
     function Move(const AX, AY: Integer): Boolean; override;
     property Distance: Integer read FDistance;
-    property Passengers: Integer read FPassengers write FPassengers;
-    property MaxPassengers: Integer read FMaxPassengers;
-    property Mail: Integer read FMail write FMail;
-    property MaxMail: Integer read FMaxMail;
     property State: string read FState;
     property LastDockId: Integer write FLastAirportId;
     property OrderIndex: Integer read FOrderIndex;
+    property Cargo: TCargoSet read FCargo;
+    property CargoAmount: Integer read FCargoAmount;
+    property CargoMaxAmount: Integer read FCargoMaxAmount;
+    property CargoType: TCargo read FCargoType;
     procedure Step; override;
     procedure Load;
     procedure UnLoad;
     procedure AddOrder(const AIndex: Integer); overload;
     procedure AddOrder(const TownIndex: Integer; const AName: string;
       const AX, AY: Integer); overload;
-    procedure DelOrder(const AOrderIndex: Integer);
-    function IsOrder(const TownIndex: Integer): Boolean;
+    procedure DelOrder(const AIndex: Integer);
+    function IsOrder(const AIndex: Integer): Boolean;
   end;
 
 implementation
@@ -67,8 +71,7 @@ uses
   TransportTycoon.Game,
   TransportTycoon.Finances,
   TransportTycoon.PathFind,
-  TransportTycoon.Industries,
-  TransportTycoon.Cargo;
+  TransportTycoon.Industries;
 
 function IsPath(X, Y: Integer): Boolean; stdcall;
 begin
@@ -99,43 +102,43 @@ begin
   inherited Create(AName, AX, AY);
   FT := 0;
   FState := 'Wait';
-  FMaxPassengers := ShipBase[ID].Passengers;
-  FPassengers := 0;
-  FMaxMail := ShipBase[ID].Mail;
-  FMail := 0;
   FOrderIndex := 0;
   LastDockId := 0;
   FDistance := 0;
+  FCargoAmount := 0;
+  FCargoMaxAmount := ShipBase[ID].Amount;
+  FCargo := ShipBase[ID].Cargo;
+  FCargoType := cgPassengers;
 end;
 
-procedure TShip.DelOrder(const AOrderIndex: Integer);
+procedure TShip.DelOrder(const AIndex: Integer);
 var
   I: Integer;
 begin
   if (Length(Order) > 1) then
   begin
-    if AOrderIndex > High(Order) then
+    if AIndex > High(Order) then
       Exit;
-    if AOrderIndex < Low(Order) then
+    if AIndex < Low(Order) then
       Exit;
-    if AOrderIndex = High(Order) then
+    if AIndex = High(Order) then
     begin
       SetLength(Order, Length(Order) - 1);
       Exit;
     end;
-    for I := AOrderIndex + 1 to Length(Order) - 1 do
+    for I := AIndex + 1 to Length(Order) - 1 do
       Order[I - 1] := Order[I];
     SetLength(Order, Length(Order) - 1);
   end;
 end;
 
-function TShip.IsOrder(const TownIndex: Integer): Boolean;
+function TShip.IsOrder(const AIndex: Integer): Boolean;
 var
   I: Integer;
 begin
   Result := False;
   for I := 0 to Length(Order) - 1 do
-    if Order[I].ID = TownIndex then
+    if Order[I].ID = AIndex then
     begin
       Result := True;
       Exit;
@@ -143,20 +146,22 @@ begin
 end;
 
 procedure TShip.Load;
+var
+  Cargo: TCargo;
 begin
   FState := 'Load';
-  while (Game.Map.Industry[Order[OrderIndex].ID].ProducesAmount[cgPassengers] >
-    0) and (Passengers < MaxPassengers) do
-  begin
-    Game.Map.Industry[Order[OrderIndex].ID].DecCargoAmount(cgPassengers);
-    Inc(FPassengers);
-  end;
-  while (Game.Map.Industry[Order[OrderIndex].ID].ProducesAmount[cgMail] >
-    0) and (Mail < MaxMail) do
-  begin
-    Game.Map.Industry[Order[OrderIndex].ID].DecCargoAmount(cgMail);
-    Inc(FMail);
-  end;
+  for Cargo := Low(TCargo) to High(TCargo) do
+    if Cargo in Game.Map.Industry[Order[OrderIndex].ID].Produces then
+    begin
+      FCargoType := Cargo;
+      while (Game.Map.Industry[Order[OrderIndex].ID].ProducesAmount[Cargo] > 0)
+        and (FCargoAmount < FCargoMaxAmount) do
+      begin
+        Game.Map.Industry[Order[OrderIndex].ID].DecCargoAmount(Cargo);
+        Inc(FCargoAmount);
+      end;
+      Exit;
+    end;
 end;
 
 function TShip.Move(const AX, AY: Integer): Boolean;
@@ -201,22 +206,21 @@ end;
 
 procedure TShip.UnLoad;
 var
-  M: Integer;
+  Money: Integer;
 begin
   FState := 'Unload';
   LastDockId := Order[OrderIndex].ID;
-  if Passengers > 0 then
+
+  if CargoType in Game.Map.Industry[Order[OrderIndex].ID].Accepts then
   begin
-    M := (Passengers * (Distance div 10)) * 7;
-    Game.ModifyMoney(ttShipIncome, M);
-    Passengers := 0;
+    if FCargoAmount > 0 then
+    begin
+      Money := (FCargoAmount * (Distance div 10)) * CargoPrice[CargoType];
+      Game.ModifyMoney(ttShipIncome, Money);
+      FCargoAmount := 0;
+    end;
   end;
-  if Mail > 0 then
-  begin
-    M := (Mail * (Distance div 7)) * 8;
-    Game.ModifyMoney(ttShipIncome, M);
-    Mail := 0;
-  end;
+
   FDistance := 0;
 end;
 

@@ -20,7 +20,8 @@ uses
   BearLibTerminal,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Ship;
+  TransportTycoon.Ship,
+  TransportTycoon.Cargo;
 
 procedure TSceneShip.Render;
 var
@@ -46,10 +47,9 @@ begin
       DrawText(12, 11, S);
       terminal_composition(TK_OFF);
       terminal_color('white');
-      DrawText(12, 12, Format('Passengers: %d/%d',
-        [Passengers, MaxPassengers]));
-      DrawText(12, 13, Format('Mail: %d/%d',
-        [Mail, MaxMail]));
+
+      DrawText(12, 12, Format('%s: %d/%d', [CargoStr[CargoType], CargoAmount,
+        CargoMaxAmount]));
 
       DrawText(12, 17, Format('State: %s', [State]));
 

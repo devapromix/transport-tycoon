@@ -23,12 +23,14 @@ uses
   SysUtils,
   TransportTycoon.Game,
   TransportTycoon.Ship,
-  TransportTycoon.Vehicles;
+  TransportTycoon.Vehicles,
+  TransportTycoon.Cargo;
 
 procedure TSceneShipDepot.Render;
 var
   I, J: Integer;
   S: string;
+  Cargo: TCargo;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
@@ -43,6 +45,7 @@ begin
       DrawButton(12, I + 10, Chr(Ord('A') + I), ShipBase[I].Name);
 
   I := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0, Length(ShipBase) - 1);
+
   terminal_color('yellow');
   terminal_composition(TK_ON);
   DrawText(42, 10, ShipBase[I].Name);
@@ -51,12 +54,20 @@ begin
     S := S + '_';
   DrawText(42, 10, S);
   terminal_composition(TK_OFF);
+
   terminal_color('white');
-  DrawText(42, 11, Format('Passengers: %d', [ShipBase[I].Passengers]));
-  DrawText(42, 12, Format('Bags of mail: %d', [ShipBase[I].Mail]));
-  DrawText(42, 13, Format('Speed: %d km/h', [ShipBase[I].Speed]));
-  DrawText(42, 14, Format('Cost: $%d', [ShipBase[I].Cost]));
-  DrawText(42, 15, Format('Running Cost: $%d/y', [ShipBase[I].RunningCost]));
+  J := 11;
+  for Cargo := Low(TCargo) to High(TCargo) do
+    if (Cargo in ShipBase[I].Cargo) then
+    begin
+      DrawText(42, J, Format('%s: %d', [CargoStr[Cargo], ShipBase[I].Amount]));
+      Inc(J);
+    end;
+  DrawText(42, J, Format('Speed: %d km/h', [ShipBase[I].Speed]));
+  Inc(J);
+  DrawText(42, J, Format('Cost: $%d', [ShipBase[I].Cost]));
+  Inc(J);
+  DrawText(42, J, Format('Running Cost: $%d/y', [ShipBase[I].RunningCost]));
 
   AddButton(20, Game.Vehicles.IsBuyShipAllowed, 'Enter', 'Buy Ship');
   AddButton(20, 'Esc', 'Close');

@@ -9,6 +9,9 @@ const
   CargoStr: array [TCargo] of string = ('Passengers', 'Mail', 'Goods',
     'Coal', 'Wood');
 
+const
+  CargoPrice: array [TCargo] of Byte = (7, 8, 9, 10, 9);
+
 type
   TCargoAmount = array [TCargo] of Integer;
 
