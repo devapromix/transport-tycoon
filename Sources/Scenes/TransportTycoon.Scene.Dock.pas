@@ -23,7 +23,8 @@ implementation
 uses
   BearLibTerminal,
   SysUtils,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Cargo;
 
 { TSceneDock }
 

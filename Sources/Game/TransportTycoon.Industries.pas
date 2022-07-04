@@ -4,26 +4,14 @@ interface
 
 uses
   TransportTycoon.MapObject,
-  TransportTycoon.Stations;
+  TransportTycoon.Stations,
+  TransportTycoon.Cargo;
 
 const
   AirportSizeStr: array [0 .. 5] of string = ('None', 'Small Airport',
     'Commuter Airport', 'City Airport', 'Metropolitan Airport',
     'International Airport');
   DockSizeStr: array [0 .. 1] of string = ('None', 'Dock');
-
-type
-  TCargo = (cgPassengers, cgMail, cgGoods, cgCoal, cgWood);
-
-const
-  CargoStr: array [TCargo] of string = ('Passengers', 'Mail', 'Goods',
-    'Coal', 'Wood');
-
-type
-  TCargoAmount = array [TCargo] of Integer;
-
-type
-  TCargoSet = set of TCargo;
 
 type
   TIndustryType = (inNone, inTown, inCoalMine, inPowerPlant, inForest,

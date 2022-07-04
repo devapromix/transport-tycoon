@@ -20,7 +20,8 @@ implementation
 uses
   BearLibTerminal,
   SysUtils,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Cargo;
 
 procedure TSceneAirport.Render;
 var

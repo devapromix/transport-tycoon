@@ -67,7 +67,8 @@ uses
   TransportTycoon.Game,
   TransportTycoon.Finances,
   TransportTycoon.PathFind,
-  TransportTycoon.Industries;
+  TransportTycoon.Industries,
+  TransportTycoon.Cargo;
 
 function IsPath(X, Y: Integer): Boolean; stdcall;
 begin

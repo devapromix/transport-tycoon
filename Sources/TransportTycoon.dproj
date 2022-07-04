@@ -106,7 +106,7 @@
         <DCCReference Include="Third-Party\BearLibTerminal\BearLibTerminal.pas"/>
         <DCCReference Include="Game\TransportTycoon.Map.pas"/>
         <DCCReference Include="Game\TransportTycoon.Game.pas"/>
-        <DCCReference Include="Game\TransportTycoon.Town.pas"/>
+        <DCCReference Include="Game\TransportTycoon.Cargo.pas"/>
         <DCCReference Include="Game\TransportTycoon.Company.pas"/>
         <DCCReference Include="Game\TransportTycoon.Finances.pas"/>
         <DCCReference Include="Game\TransportTycoon.Order.pas"/>

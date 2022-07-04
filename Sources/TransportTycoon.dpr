@@ -5,7 +5,7 @@ uses
   BearLibTerminal in 'Third-Party\BearLibTerminal\BearLibTerminal.pas',
   TransportTycoon.Map in 'Game\TransportTycoon.Map.pas',
   TransportTycoon.Game in 'Game\TransportTycoon.Game.pas',
-  TransportTycoon.Town in 'Game\TransportTycoon.Town.pas',
+  TransportTycoon.Cargo in 'Game\TransportTycoon.Cargo.pas',
   TransportTycoon.Company in 'Game\TransportTycoon.Company.pas',
   TransportTycoon.Finances in 'Game\TransportTycoon.Finances.pas',
   TransportTycoon.Order in 'Game\TransportTycoon.Order.pas',

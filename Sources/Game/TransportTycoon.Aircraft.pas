@@ -91,7 +91,8 @@ uses
   TransportTycoon.Finances,
   TransportTycoon.PathFind,
   TransportTycoon.Map,
-  TransportTycoon.Industries;
+  TransportTycoon.Industries,
+  TransportTycoon.Cargo;
 
 function IsPath(X, Y: Integer): Boolean; stdcall;
 begin
