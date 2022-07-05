@@ -1,4 +1,4 @@
-unit TransportTycoon.Scene.Town2;
+unit TransportTycoon.Scene.Town;
 
 interface
 
@@ -8,9 +8,9 @@ uses
 
 type
 
-  { TSceneTown2 }
+  { TSceneTown }
 
-  TSceneTown2 = class(TScene)
+  TSceneTown = class(TScene)
   private
     FTown: TTownIndustry;
   public
@@ -26,9 +26,9 @@ uses
   TransportTycoon.Game,
   TransportTycoon.Scene.Industry;
 
-{ TSceneTown2 }
+{ TSceneTown }
 
-procedure TSceneTown2.Render;
+procedure TSceneTown.Render;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
@@ -56,7 +56,7 @@ begin
   DrawBar;
 end;
 
-procedure TSceneTown2.Update(var Key: word);
+procedure TSceneTown.Update(var Key: word);
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin

@@ -15,7 +15,7 @@ uses
   TransportTycoon.Ship in 'Game\TransportTycoon.Ship.pas',
   TransportTycoon.Scenes in 'Scenes\TransportTycoon.Scenes.pas',
   TransportTycoon.Scene.BuildMenu in 'Scenes\TransportTycoon.Scene.BuildMenu.pas',
-  TransportTycoon.Scene.BuildInTown2 in 'Scenes\TransportTycoon.Scene.BuildInTown2.pas',
+  TransportTycoon.Scene.BuildInTown in 'Scenes\TransportTycoon.Scene.BuildInTown.pas',
   TransportTycoon.Scene.World in 'Scenes\TransportTycoon.Scene.World.pas',
   TransportTycoon.Scene.Airport in 'Scenes\TransportTycoon.Scene.Airport.pas',
   TransportTycoon.Scene.MainMenu in 'Scenes\TransportTycoon.Scene.MainMenu.pas',
@@ -41,7 +41,7 @@ uses
   TransportTycoon.Scene.Ship in 'Scenes\TransportTycoon.Scene.Ship.pas',
   TransportTycoon.Scene.Vehicles in 'Scenes\TransportTycoon.Scene.Vehicles.pas',
   TransportTycoon.Scene.ShipDepot in 'Scenes\TransportTycoon.Scene.ShipDepot.pas',
-  TransportTycoon.Scene.Town2 in 'Scenes\TransportTycoon.Scene.Town2.pas',
+  TransportTycoon.Scene.Town in 'Scenes\TransportTycoon.Scene.Town.pas',
   TransportTycoon.Scene.Industries in 'Scenes\TransportTycoon.Scene.Industries.pas';
 
 var

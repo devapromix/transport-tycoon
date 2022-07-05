@@ -105,10 +105,10 @@ uses
   TransportTycoon.Scene.GenMenu,
   TransportTycoon.Scene.MainMenu,
   TransportTycoon.Scene.GameMenu,
-  TransportTycoon.Scene.Town2,
+  TransportTycoon.Scene.Town,
   TransportTycoon.Scene.World,
   TransportTycoon.Scene.Industries,
-  TransportTycoon.Scene.BuildInTown2,
+  TransportTycoon.Scene.BuildInTown,
   TransportTycoon.Scene.Airport,
   TransportTycoon.Scene.AircraftHangar,
   TransportTycoon.Scene.Aircraft,
@@ -390,8 +390,8 @@ begin
   FScene[scGameMenu] := TSceneGameMenu.Create;
   FScene[scGenMenu] := TSceneGenMenu.Create;
   FScene[scWorld] := TSceneWorld.Create;
-  FScene[scTown] := TSceneTown2.Create;
-  FScene[scBuildInTown] := TSceneBuildInTown2.Create;
+  FScene[scTown] := TSceneTown.Create;
+  FScene[scBuildInTown] := TSceneBuildInTown.Create;
   FScene[scAirport] := TSceneAirport.Create;
   FScene[scAircraftHangar] := TSceneAircraftHangar.Create;
   FScene[scAircraft] := TSceneAircraft.Create;

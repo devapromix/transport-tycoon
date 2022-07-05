@@ -1,4 +1,4 @@
-﻿unit TransportTycoon.Scene.BuildInTown2;
+﻿unit TransportTycoon.Scene.BuildInTown;
 
 interface
 
@@ -10,7 +10,7 @@ type
 
   { TSceneBuildInTown }
 
-  TSceneBuildInTown2 = class(TScene)
+  TSceneBuildInTown = class(TScene)
   private
     FTown: TTownIndustry;
   public
@@ -28,7 +28,7 @@ uses
 
 { TSceneBuildInTown }
 
-procedure TSceneBuildInTown2.Render;
+procedure TSceneBuildInTown.Render;
 var
   N: Integer;
   S: string;
@@ -62,7 +62,7 @@ begin
   DrawBar;
 end;
 
-procedure TSceneBuildInTown2.Update(var Key: Word);
+procedure TSceneBuildInTown.Update(var Key: Word);
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
