@@ -106,6 +106,7 @@ type
     procedure Resize;
     function SizeCoef: Integer;
     function MapIndCount: Integer;
+    function MapTownCount: Integer;
   public const
     ClearLandCost = 100;
     BuildCanalCost = 1000;
@@ -239,6 +240,15 @@ begin
     Result := MapNoOfInd[niVeryLow];
   if (Size = msSmall) then
     Result := MapNoOfInd[niLow];
+end;
+
+function TMap.MapTownCount: Integer;
+begin
+  Result := MapNoOfTownsInt[NoOfTowns];
+  if (Size = msSmall) then
+    Result := MapNoOfTownsInt[2];
+  if (Size = msMedium) then
+    Result := MapNoOfTownsInt[3];
 end;
 
 function TMap.IsLandTile(const AX, AY: Integer): Boolean;
@@ -443,7 +453,7 @@ begin
   for I := 0 to Length(Industry) - 1 do
     Industry[I].Free;
   SetLength(Industry, 0);
-  for I := 0 to MapNoOfTownsInt[NoOfTowns] - 1 do
+  for I := 0 to MapTownCount - 1 do
   begin
     repeat
       X := (Math.RandomRange(1, FWidth div 10) * 10) +
