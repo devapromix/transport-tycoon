@@ -57,7 +57,7 @@ begin
     DrawFrame(20, 8, 40, 13);
     DrawTitle(10, Name);
 
-    DrawButton(34, 12, Dock.HasBuilding, 'D',
+    DrawButton(34, 12, Dock.IsBuilding, 'D',
       'Dock: ' + DockSizeStr[Dock.Level]);
   end;
 
@@ -98,7 +98,7 @@ begin
     TK_B:
       Scenes.SetScene(scBuildNearIndustry);
     TK_D:
-      if FIndustry.Dock.HasBuilding then
+      if FIndustry.Dock.IsBuilding then
         Scenes.SetScene(scDock, scIndustry);
   end;
 end;

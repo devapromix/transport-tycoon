@@ -11,7 +11,7 @@ type
     tlCoalMineIndustry, tlPowerPlantIndustry);
 
 const
-  NormalTiles = [tlGrass, tlDirt, tlSand];
+  LandTiles = [tlGrass, tlDirt, tlSand];
   TreeTiles = [tlTree, tlSmallTree, tlBush];
   IndustryTiles = [tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
     tlPowerPlantIndustry];
@@ -98,14 +98,17 @@ type
     FSeaLevel: TMapSeaLevel;
     FSize: TMapSize;
     FCurrentIndustry: Integer;
-    function HasIndustryLocation(const AX, AY: Integer): Boolean;
-    function HasTownLocation(const AX, AY: Integer): Boolean;
-    function HasNormalTile(const AX, AY: Integer): Boolean;
+    function IsIndustryLocation(const AX, AY: Integer): Boolean;
+    function IsTownLocation(const AX, AY: Integer): Boolean;
+    function IsLandTile(const AX, AY: Integer): Boolean;
     procedure AddSpot(const AX, AY: Integer; const ATile: Tiles);
     procedure AddTree(const AX, AY: Integer);
     procedure Resize;
     function SizeCoef: Integer;
     function MapIndCount: Integer;
+  public const
+    ClearLandCost = 100;
+    BuildCanalCost = 1000;
   public
     Cell: array of array of Tiles;
     Industry: array of TIndustry;
@@ -123,7 +126,7 @@ type
     property NoOfTowns: Integer read FNoOfTowns write FNoOfTowns;
     property NoOfInd: TMapNoOfInd read FNoOfInd write FNoOfInd;
     procedure Clear;
-    function HasTownName(const ATownName: string): Boolean;
+    function IsTownName(const ATownName: string): Boolean;
     procedure Draw(const AWidth, AHeight: Integer);
     procedure Gen;
     procedure Grows;
@@ -154,7 +157,7 @@ uses
 
 { TMap }
 
-function TMap.HasTownName(const ATownName: string): Boolean;
+function TMap.IsTownName(const ATownName: string): Boolean;
 var
   I: Integer;
 begin
@@ -238,12 +241,12 @@ begin
     Result := MapNoOfInd[niLow];
 end;
 
-function TMap.HasNormalTile(const AX, AY: Integer): Boolean;
+function TMap.IsLandTile(const AX, AY: Integer): Boolean;
 begin
-  Result := Cell[AX][AY] in NormalTiles;
+  Result := Cell[AX][AY] in LandTiles;
 end;
 
-function TMap.HasIndustryLocation(const AX, AY: Integer): Boolean;
+function TMap.IsIndustryLocation(const AX, AY: Integer): Boolean;
 var
   I: Integer;
 begin
@@ -254,7 +257,7 @@ begin
       Exit(True);
 end;
 
-function TMap.HasTownLocation(const AX, AY: Integer): Boolean;
+function TMap.IsTownLocation(const AX, AY: Integer): Boolean;
 var
   I: Integer;
 begin
@@ -298,21 +301,25 @@ end;
 procedure TMap.ClearLand(const AX, AY: Integer);
 begin
   if (Cell[AX][AY] in TreeTiles) then
-    if (Game.Money >= 100) then
+    if (Game.Money >= ClearLandCost) then
     begin
       Cell[AX][AY] := tlDirt;
-      Game.ModifyMoney(ttConstruction, -100);
+      Game.ModifyMoney(ttConstruction, -ClearLandCost);
     end;
 end;
 
 procedure TMap.BuildCanals(const AX, AY: Integer);
+var
+  Money: Word;
 begin
-  if (Cell[AX][AY] in NormalTiles) then
-    if (Game.Money >= 1000) then
-    begin
-      Cell[AX][AY] := tlCanal;
-      Game.ModifyMoney(ttConstruction, -1000);
-    end;
+  Money := BuildCanalCost;
+  if (Cell[AX][AY] in TreeTiles) then
+    Inc(Money, ClearLandCost);
+  if (Game.Money >= Money) then
+  begin
+    Cell[AX][AY] := tlCanal;
+    Game.ModifyMoney(ttConstruction, -Money);
+  end;
 end;
 
 procedure TMap.Draw(const AWidth, AHeight: Integer);
@@ -469,8 +476,8 @@ begin
         end;
       end;
 
-    until not HasTownName(TownName) and not HasTownLocation(X, Y) and
-      HasNormalTile(X, Y);
+    until not IsTownName(TownName) and not IsTownLocation(X, Y) and
+      IsLandTile(X, Y);
     SetLength(Industry, I + 1);
     Cell[X][Y] := tlTownIndustry;
     Industry[I] := TTownIndustry.Create(TownName, X, Y);
@@ -486,8 +493,8 @@ begin
           (Math.RandomRange(0, 10) - 5);
         Y := (Math.RandomRange(1, FHeight div 10) * 10) +
           (Math.RandomRange(0, 10) - 5);
-      until HasNormalTile(X, Y) and not HasTownLocation(X, Y) and
-        not HasIndustryLocation(X, Y);
+      until IsLandTile(X, Y) and not IsTownLocation(X, Y) and
+        not IsIndustryLocation(X, Y);
       case IndustryType of
         inCoalMine:
           begin

@@ -66,7 +66,7 @@ var
 begin
   Town := TTownIndustry(Game.Map.Industry[AIndex]);
 
-  if (Town.Airport.HasBuilding and (Game.Money >= AircraftBase[AircraftID].Cost))
+  if (Town.Airport.IsBuilding and (Game.Money >= AircraftBase[AircraftID].Cost))
   then
     SetLength(FAircraft, AircraftCount + 1);
 
@@ -83,7 +83,7 @@ end;
 
 procedure TVehicles.AddShip(const AName: string; const AIndex, ShipID: Integer);
 begin
-  if (Game.Map.Industry[AIndex].Dock.HasBuilding and
+  if (Game.Map.Industry[AIndex].Dock.IsBuilding and
     (Game.Money >= ShipBase[ShipID].Cost)) then
 
     SetLength(FShip, ShipCount + 1);

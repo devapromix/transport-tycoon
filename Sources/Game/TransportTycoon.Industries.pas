@@ -159,7 +159,7 @@ end;
 
 procedure TIndustry.Grows;
 begin
-  if Dock.HasBuilding then
+  if Dock.IsBuilding then
   begin
     if (cgWood in Produces) then
       SetCargoAmount(cgWood, RandomRange(15, 18));
@@ -221,7 +221,7 @@ begin
     ModifyPopulation(Math.RandomRange(GrowModif * 8, GrowModif * 12));
   MonthPassengers := FPopulation div Math.RandomRange(40, 50);
   MonthMail := FPopulation div Math.RandomRange(160, 190);
-  if Airport.HasBuilding or Dock.HasBuilding then
+  if Airport.IsBuilding or Dock.IsBuilding then
   begin
     SetCargoAmount(cgPassengers, MonthPassengers);
     SetCargoAmount(cgMail, MonthMail);

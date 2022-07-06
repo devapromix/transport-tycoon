@@ -102,7 +102,7 @@ end;
 procedure TAircraft.AddOrder(const AIndex: Integer; const AName: string;
   const AX, AY: Integer);
 begin
-  if TTownIndustry(Game.Map.Industry[AIndex]).Airport.HasBuilding then
+  if TTownIndustry(Game.Map.Industry[AIndex]).Airport.IsBuilding then
   begin
     SetLength(Order, Length(Order) + 1);
     Order[High(Order)].ID := AIndex;

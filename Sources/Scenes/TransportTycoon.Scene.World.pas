@@ -150,8 +150,8 @@ begin
   begin
     terminal_bkcolor('red');
     terminal_put(MX, MY, $2588);
-  end else
-  if Game.IsBuildCanals then
+  end
+  else if Game.IsBuildCanals then
   begin
     terminal_bkcolor('light blue');
     terminal_put(MX, MY, $2588);
@@ -235,19 +235,21 @@ begin
       end;
       if (Game.Map.Cell[RX][RY] in TreeTiles) then
       begin
-        if not Game.IsClearLand then
+        if Game.IsClearLand then
+        begin
+          Game.Map.ClearLand(RX, RY);
+          Scenes.Render;
           Exit;
-        Game.Map.ClearLand(RX, RY);
-        Scenes.Render;
-        Exit;
+        end;
       end;
-      if (Game.Map.Cell[RX][RY] in NormalTiles) then
+      if (Game.Map.Cell[RX][RY] in LandTiles + TreeTiles) then
       begin
-        if not Game.IsBuildCanals then
+        if Game.IsBuildCanals then
+        begin
+          Game.Map.BuildCanals(RX, RY);
+          Scenes.Render;
           Exit;
-        Game.Map.BuildCanals(RX, RY);
-        Scenes.Render;
-        Exit;
+        end;
       end;
     end;
   end;

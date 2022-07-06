@@ -82,7 +82,7 @@ end;
 procedure TShip.AddOrder(const TownIndex: Integer; const AName: string;
   const AX, AY: Integer);
 begin
-  if Game.Map.Industry[TownIndex].Dock.HasBuilding then
+  if Game.Map.Industry[TownIndex].Dock.IsBuilding then
   begin
     SetLength(Order, Length(Order) + 1);
     Order[High(Order)].ID := TownIndex;
