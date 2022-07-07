@@ -39,7 +39,7 @@ begin
   terminal_color('white');
   DrawText(7, 11, 'Size: ' + AirportSizeStr[FTown.Airport.Level]);
   J := 12;
-  for Cargo := Low(TCargo) to High(TCargo) do
+  for Cargo := Succ(Low(TCargo)) to High(TCargo) do
   begin
     if Cargo in FTown.Produces then
     begin

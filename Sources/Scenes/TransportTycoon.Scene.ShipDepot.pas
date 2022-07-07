@@ -57,7 +57,7 @@ begin
 
   terminal_color('white');
   J := 11;
-  for Cargo := Low(TCargo) to High(TCargo) do
+  for Cargo := Succ(Low(TCargo)) to High(TCargo) do
     if (Cargo in ShipBase[I].Cargo) then
     begin
       DrawText(42, J, Format('%s: %d', [CargoStr[Cargo], ShipBase[I].Amount]));

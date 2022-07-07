@@ -43,7 +43,7 @@ begin
 
   terminal_color('white');
   J := 11;
-  for Cargo := Low(TCargo) to High(TCargo) do
+  for Cargo := Succ(Low(TCargo)) to High(TCargo) do
   begin
     if Cargo in FIndustry.Produces then
     begin

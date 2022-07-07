@@ -249,6 +249,8 @@ begin
     Result := MapNoOfTownsInt[2];
   if (Size = msMedium) then
     Result := MapNoOfTownsInt[3];
+  if (Size = msLarge) then
+    Result := MapNoOfTownsInt[4];
 end;
 
 function TMap.IsLandTile(const AX, AY: Integer): Boolean;

@@ -26,6 +26,7 @@ type
     FIndustryType: TIndustryType;
     FProducesAmount: TCargoAmount;
     FProduces: TCargoSet;
+    FAcceptsAmount: TCargoAmount;
     FAccepts: TCargoSet;
     FDock: TDock;
   public
@@ -33,10 +34,12 @@ type
     destructor Destroy; override;
     property Accepts: TCargoSet read FAccepts write FAccepts;
     property Produces: TCargoSet read FProduces write FProduces;
+    property AcceptsAmount: TCargoAmount read FAcceptsAmount;
     property ProducesAmount: TCargoAmount read FProducesAmount;
     property IndustryType: TIndustryType read FIndustryType;
     procedure SetCargoAmount(const ACargo: TCargo; const AAmount: Integer);
     procedure DecCargoAmount(const ACargo: TCargo);
+    procedure IncCargoAmount(const ACargo: TCargo; AValue: Integer = 1);
     property Dock: TDock read FDock;
     procedure Grows; virtual;
     function GetCargoStr(const ACargoSet: TCargoSet): string;
@@ -83,6 +86,7 @@ type
   private
   public
     constructor Create(const AName: string; const AX, AY: Integer);
+    procedure Grows; override;
   end;
 
 type
@@ -122,8 +126,11 @@ begin
   FIndustryType := inNone;
   FAccepts := [];
   FProduces := [];
-  for Cargo := Low(TCargo) to High(TCargo) do
+  for Cargo := Succ(Low(TCargo)) to High(TCargo) do
+  begin
+    FAcceptsAmount[Cargo] := 0;
     FProducesAmount[Cargo] := 0;
+  end;
   FDock := TDock.Create(9000);
 end;
 
@@ -150,7 +157,7 @@ var
   Cargo: TCargo;
 begin
   Result := '';
-  for Cargo := Low(TCargo) to High(TCargo) do
+  for Cargo := Succ(Low(TCargo)) to High(TCargo) do
     if (Cargo in ACargoSet) then
       Result := Result + CargoStr[Cargo] + ' ';
   Result := Trim(Result);
@@ -168,6 +175,11 @@ begin
     if (cgGoods in Produces) then
       SetCargoAmount(cgGoods, RandomRange(15, 18));
   end;
+end;
+
+procedure TIndustry.IncCargoAmount(const ACargo: TCargo; AValue: Integer);
+begin
+  FProducesAmount[ACargo] := FProducesAmount[ACargo] + AValue;
 end;
 
 { TTownIndustry }
@@ -256,6 +268,18 @@ begin
   FIndustryType := inSawmill;
   FAccepts := [cgWood];
   FProduces := [cgGoods];
+end;
+
+procedure TSawmillIndustry.Grows;
+begin
+  if Dock.IsBuilding then
+  begin
+    if (cgWood in Accepts) and (cgGoods in Produces) then
+    begin
+      IncCargoAmount(cgGoods, FAcceptsAmount[cgWood]);
+      FAcceptsAmount[cgWood] := 0;
+    end;
+  end;
 end;
 
 { TCoalMineIndustry }
