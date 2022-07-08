@@ -79,7 +79,8 @@ begin
         if F then
           with Game.Vehicles do
           begin
-            Aircraft[CurrentVehicle].AddOrder(I);
+            if TTownIndustry(Game.Map.Industry[I]).Airport.IsBuilding then
+              Aircraft[CurrentVehicle].AddOrder(I);
             Scenes.SetScene(scAircraft);
           end;
       end;

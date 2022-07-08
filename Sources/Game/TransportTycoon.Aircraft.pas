@@ -60,7 +60,6 @@ type
     FMail: Integer;
     FMaxMail: Integer;
     FLastAirportId: Integer;
-    FOrderIndex: Integer;
   public
     Order: array of TOrder;
     constructor Create(const AName: string; const AX, AY, ID: Integer);
@@ -72,15 +71,10 @@ type
     property MaxMail: Integer read FMaxMail;
     property State: string read FState;
     property LastAirportId: Integer write FLastAirportId;
-    property OrderIndex: Integer read FOrderIndex;
     procedure Step; override;
     procedure Load;
     procedure UnLoad;
     procedure AddOrder(const AIndex: Integer); overload;
-    procedure AddOrder(const AIndex: Integer; const AName: string;
-      const AX, AY: Integer); overload;
-    procedure DelOrder(const AOrderIndex: Integer);
-    function IsOrder(const TownIndex: Integer): Boolean;
   end;
 
 implementation
@@ -99,40 +93,6 @@ begin
   Result := True;
 end;
 
-procedure TAircraft.AddOrder(const AIndex: Integer; const AName: string;
-  const AX, AY: Integer);
-begin
-  if TTownIndustry(Game.Map.Industry[AIndex]).Airport.IsBuilding then
-  begin
-    SetLength(Order, Length(Order) + 1);
-    Order[High(Order)].ID := AIndex;
-    Order[High(Order)].Name := AName;
-    Order[High(Order)].X := AX;
-    Order[High(Order)].Y := AY;
-  end;
-end;
-
-procedure TAircraft.DelOrder(const AOrderIndex: Integer);
-var
-  I: Integer;
-begin
-  if (Length(Order) > 1) then
-  begin
-    if AOrderIndex > High(Order) then
-      Exit;
-    if AOrderIndex < Low(Order) then
-      Exit;
-    if AOrderIndex = High(Order) then
-    begin
-      SetLength(Order, Length(Order) - 1);
-      Exit;
-    end;
-    for I := AOrderIndex + 1 to Length(Order) - 1 do
-      Order[I - 1] := Order[I];
-    SetLength(Order, Length(Order) - 1);
-  end;
-end;
-
 procedure TAircraft.AddOrder(const AIndex: Integer);
 begin
   with TTownIndustry(Game.Map.Industry[AIndex]) do
@@ -148,7 +108,6 @@ begin
   FPassengers := 0;
   FMaxMail := AircraftBase[ID].Mail;
   FMail := 0;
-  FOrderIndex := 0;
   LastAirportId := 0;
   FDistance := 0;
 end;
@@ -185,19 +144,6 @@ begin
   Result := (X <> AX) or (Y <> AY);
 end;
 
-function TAircraft.IsOrder(const TownIndex: Integer): Boolean;
-var
-  I: Integer;
-begin
-  Result := False;
-  for I := 0 to Length(Order) - 1 do
-    if Order[I].ID = TownIndex then
-    begin
-      Result := True;
-      Exit;
-    end;
-end;
-
 procedure TAircraft.Step;
 begin
   if Length(Order) > 0 then
@@ -213,9 +159,9 @@ begin
       begin
         FT := 0;
         Load;
-        FOrderIndex := FOrderIndex + 1;
+        OrderIndex := OrderIndex + 1;
         if (OrderIndex > High(Order)) then
-          FOrderIndex := 0;
+          OrderIndex := 0;
       end;
     end
     else

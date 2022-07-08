@@ -4,7 +4,6 @@ interface
 
 uses
   TransportTycoon.Vehicle,
-  TransportTycoon.Order,
   TransportTycoon.Cargo;
 
 type
@@ -36,19 +35,16 @@ type
     FDistance: Integer;
     FState: string;
     FLastAirportId: Integer;
-    FOrderIndex: Integer;
     FCargoAmount: Integer;
     FCargoMaxAmount: Integer;
     FCargo: TCargoSet;
     FCargoType: TCargo;
   public
-    Order: array of TOrder;
     constructor Create(const AName: string; const AX, AY, ID: Integer);
     function Move(const AX, AY: Integer): Boolean; override;
     property Distance: Integer read FDistance;
     property State: string read FState;
     property LastDockId: Integer write FLastAirportId;
-    property OrderIndex: Integer read FOrderIndex;
     property Cargo: TCargoSet read FCargo;
     property CargoAmount: Integer read FCargoAmount;
     property CargoMaxAmount: Integer read FCargoMaxAmount;
@@ -57,10 +53,6 @@ type
     procedure Load;
     procedure UnLoad;
     procedure AddOrder(const AIndex: Integer); overload;
-    procedure AddOrder(const TownIndex: Integer; const AName: string;
-      const AX, AY: Integer); overload;
-    procedure DelOrder(const AIndex: Integer);
-    function IsOrder(const AIndex: Integer): Boolean;
   end;
 
 implementation
@@ -79,19 +71,6 @@ begin
     IndustryTiles;
 end;
 
-procedure TShip.AddOrder(const TownIndex: Integer; const AName: string;
-  const AX, AY: Integer);
-begin
-  if Game.Map.Industry[TownIndex].Dock.IsBuilding then
-  begin
-    SetLength(Order, Length(Order) + 1);
-    Order[High(Order)].ID := TownIndex;
-    Order[High(Order)].Name := AName;
-    Order[High(Order)].X := AX;
-    Order[High(Order)].Y := AY;
-  end;
-end;
-
 procedure TShip.AddOrder(const AIndex: Integer);
 begin
   with Game.Map.Industry[AIndex] do
@@ -103,7 +82,6 @@ begin
   inherited Create(AName, AX, AY);
   FT := 0;
   FState := 'Wait';
-  FOrderIndex := 0;
   LastDockId := 0;
   FDistance := 0;
   FCargoAmount := 0;
@@ -112,48 +90,14 @@ begin
   FCargoType := cgNone;
 end;
 
-procedure TShip.DelOrder(const AIndex: Integer);
-var
-  I: Integer;
-begin
-  if (Length(Order) > 1) then
-  begin
-    if AIndex > High(Order) then
-      Exit;
-    if AIndex < Low(Order) then
-      Exit;
-    if AIndex = High(Order) then
-    begin
-      SetLength(Order, Length(Order) - 1);
-      Exit;
-    end;
-    for I := AIndex + 1 to Length(Order) - 1 do
-      Order[I - 1] := Order[I];
-    SetLength(Order, Length(Order) - 1);
-  end;
-end;
-
-function TShip.IsOrder(const AIndex: Integer): Boolean;
-var
-  I: Integer;
-begin
-  Result := False;
-  for I := 0 to Length(Order) - 1 do
-    if Order[I].ID = AIndex then
-    begin
-      Result := True;
-      Exit;
-    end;
-end;
-
 procedure TShip.Load;
 var
   Cargo: TCargo;
 begin
   FState := 'Load';
-  for Cargo := Low(TCargo) to High(TCargo) do
-    if (Cargo in Game.Map.Industry[Order[OrderIndex].ID]
-      .Produces) and (Cargo in FCargo) then
+  for Cargo := Succ(Low(TCargo)) to High(TCargo) do
+    if (Cargo in Game.Map.Industry[Order[OrderIndex].ID].Produces) and
+      (Cargo in FCargo) then
     begin
       FCargoType := Cargo;
       while (Game.Map.Industry[Order[OrderIndex].ID].ProducesAmount[Cargo] > 0)
@@ -196,9 +140,9 @@ begin
       begin
         FT := 0;
         Load;
-        FOrderIndex := FOrderIndex + 1;
+        OrderIndex := OrderIndex + 1;
         if (OrderIndex > High(Order)) then
-          FOrderIndex := 0;
+          OrderIndex := 0;
       end;
     end
     else
@@ -212,16 +156,16 @@ var
 begin
   FState := 'Unload';
   LastDockId := Order[OrderIndex].ID;
-
-  if (CargoType in Game.Map.Industry[Order[OrderIndex].ID].Accepts)
-    and (CargoType <> cgNone) and (CargoAmount > 0) then
+  if (CargoType in Game.Map.Industry[Order[OrderIndex].ID].Accepts) and
+    (CargoType <> cgNone) and (CargoAmount > 0) then
   begin
     Money := (FCargoAmount * (Distance div 10)) * CargoPrice[CargoType];
+    Game.Map.Industry[Order[OrderIndex].ID].IncCargoAmount(CargoType,
+      CargoAmount);
     Game.ModifyMoney(ttShipIncome, Money);
     FCargoAmount := 0;
     FCargoType := cgNone;
   end;
-
   FDistance := 0;
 end;
 

@@ -78,7 +78,8 @@ begin
         if F then
           with Game.Vehicles do
           begin
-            Ship[CurrentVehicle].AddOrder(I);
+            if Game.Map.Industry[I].Dock.IsBuilding then
+              Ship[CurrentVehicle].AddOrder(I);
             Scenes.SetScene(scShip);
           end;
       end;
