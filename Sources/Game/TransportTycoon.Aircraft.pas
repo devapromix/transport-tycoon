@@ -53,7 +53,6 @@ type
   TAircraft = class(TVehicle)
   private
     FT: Integer;
-    FDistance: Integer;
     FState: string;
     FPassengers: Integer;
     FMaxPassengers: Integer;
@@ -64,7 +63,6 @@ type
     Order: array of TOrder;
     constructor Create(const AName: string; const AX, AY, ID: Integer);
     function Move(const AX, AY: Integer): Boolean; override;
-    property Distance: Integer read FDistance;
     property Passengers: Integer read FPassengers write FPassengers;
     property MaxPassengers: Integer read FMaxPassengers;
     property Mail: Integer read FMail write FMail;
@@ -109,7 +107,6 @@ begin
   FMaxMail := AircraftBase[ID].Mail;
   FMail := 0;
   LastAirportId := 0;
-  FDistance := 0;
 end;
 
 procedure TAircraft.Load;
@@ -159,13 +156,11 @@ begin
       begin
         FT := 0;
         Load;
-        OrderIndex := OrderIndex + 1;
-        if (OrderIndex > High(Order)) then
-          OrderIndex := 0;
+        IncOrder;
       end;
     end
     else
-      Inc(FDistance);
+      IncDistance;
   end;
 end;
 
@@ -187,7 +182,7 @@ begin
     Game.ModifyMoney(ttAircraftIncome, M);
     Mail := 0;
   end;
-  FDistance := 0;
+  Distance := 0;
 end;
 
 end.

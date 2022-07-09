@@ -32,7 +32,6 @@ type
   TShip = class(TVehicle)
   private
     FT: Integer;
-    FDistance: Integer;
     FState: string;
     FLastAirportId: Integer;
     FCargoAmount: Integer;
@@ -42,7 +41,6 @@ type
   public
     constructor Create(const AName: string; const AX, AY, ID: Integer);
     function Move(const AX, AY: Integer): Boolean; override;
-    property Distance: Integer read FDistance;
     property State: string read FState;
     property LastDockId: Integer write FLastAirportId;
     property Cargo: TCargoSet read FCargo;
@@ -83,7 +81,6 @@ begin
   FT := 0;
   FState := 'Wait';
   LastDockId := 0;
-  FDistance := 0;
   FCargoAmount := 0;
   FCargoMaxAmount := ShipBase[ID].Amount;
   FCargo := ShipBase[ID].Cargo;
@@ -140,13 +137,11 @@ begin
       begin
         FT := 0;
         Load;
-        OrderIndex := OrderIndex + 1;
-        if (OrderIndex > High(Order)) then
-          OrderIndex := 0;
+        IncOrder;
       end;
     end
     else
-      Inc(FDistance);
+      IncDistance;
   end;
 end;
 
@@ -166,7 +161,7 @@ begin
     FCargoAmount := 0;
     FCargoType := cgNone;
   end;
-  FDistance := 0;
+  Distance := 0;
 end;
 
 end.
