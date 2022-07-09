@@ -16,6 +16,7 @@ type
   TVehicle = class(TMapObject)
   private
     FDistance: Integer;
+    FLastStationId: Integer;
     FOrderIndex: Integer;
     FVehicleID: Integer;
   public
@@ -23,16 +24,20 @@ type
     constructor Create(const AName: string; const AX, AY: Integer);
     procedure Draw;
     procedure Step; virtual; abstract;
+    procedure Load; virtual; abstract;
+    procedure UnLoad; virtual; abstract;
     function Move(const AX, AY: Integer): Boolean; virtual; abstract;
     property VehicleID: Integer read FVehicleID write FVehicleID;
     property OrderIndex: Integer read FOrderIndex write FOrderIndex;
     property Distance: Integer read FDistance write FDistance;
+    property LastStationId: Integer read FLastStationId;
     procedure AddOrder(const TownIndex: Integer; const AName: string;
       const AX, AY: Integer); overload;
     procedure DelOrder(const AIndex: Integer);
     function IsOrder(const AIndex: Integer): Boolean;
     procedure IncOrder;
     procedure IncDistance;
+    procedure SetLastStation;
   end;
 
 implementation
@@ -48,6 +53,7 @@ begin
   inherited Create(AName, AX, AY);
   FOrderIndex := 0;
   FDistance := 0;
+  FLastStationId := 0;
 end;
 
 procedure TVehicle.Draw;
@@ -106,6 +112,11 @@ end;
 procedure TVehicle.IncDistance;
 begin
   Inc(FDistance);
+end;
+
+procedure TVehicle.SetLastStation;
+begin
+  FLastStationId := Order[FOrderIndex].ID;
 end;
 
 end.

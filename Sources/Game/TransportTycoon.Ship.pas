@@ -29,11 +29,13 @@ const
     );
 
 type
+
+  { TShip }
+
   TShip = class(TVehicle)
   private
     FT: Integer;
     FState: string;
-    FLastAirportId: Integer;
     FCargoAmount: Integer;
     FCargoMaxAmount: Integer;
     FCargo: TCargoSet;
@@ -42,14 +44,13 @@ type
     constructor Create(const AName: string; const AX, AY, ID: Integer);
     function Move(const AX, AY: Integer): Boolean; override;
     property State: string read FState;
-    property LastDockId: Integer write FLastAirportId;
     property Cargo: TCargoSet read FCargo;
     property CargoAmount: Integer read FCargoAmount;
     property CargoMaxAmount: Integer read FCargoMaxAmount;
     property CargoType: TCargo read FCargoType;
     procedure Step; override;
-    procedure Load;
-    procedure UnLoad;
+    procedure Load; override;
+    procedure UnLoad; override;
     procedure AddOrder(const AIndex: Integer); overload;
   end;
 
@@ -62,6 +63,8 @@ uses
   TransportTycoon.Finances,
   TransportTycoon.PathFind,
   TransportTycoon.Industries;
+
+{ TShip }
 
 function IsPath(X, Y: Integer): Boolean; stdcall;
 begin
@@ -80,7 +83,6 @@ begin
   inherited Create(AName, AX, AY);
   FT := 0;
   FState := 'Wait';
-  LastDockId := 0;
   FCargoAmount := 0;
   FCargoMaxAmount := ShipBase[ID].Amount;
   FCargo := ShipBase[ID].Cargo;
@@ -129,7 +131,7 @@ begin
     if not Move(Order[OrderIndex].X, Order[OrderIndex].Y) then
     begin
       Inc(FT);
-      if Order[OrderIndex].ID <> FLastAirportId then
+      if Order[OrderIndex].ID <> LastStationId then
         UnLoad;
       FState := 'Service';
       if FT > (15 - (Game.Map.Industry[Order[OrderIndex].ID].Dock.Level * 2))
@@ -149,8 +151,8 @@ procedure TShip.UnLoad;
 var
   Money: Integer;
 begin
+  SetLastStation;
   FState := 'Unload';
-  LastDockId := Order[OrderIndex].ID;
   if (CargoType in Game.Map.Industry[Order[OrderIndex].ID].Accepts) and
     (CargoType <> cgNone) and (CargoAmount > 0) then
   begin

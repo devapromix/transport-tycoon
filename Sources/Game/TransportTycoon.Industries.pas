@@ -212,7 +212,7 @@ begin
     S[I] := TStringList.Create;
   S[0].DelimitedText :=
     '"Eding","Graning","Vorg","Tra","Nording","Agring","Gran","Funt","Grufing",'
-    + '"Trening","Chend","Drinning","Long","Tor","Mar"';
+    + '"Trening","Chend","Drinning","Long","Tor","Mar","Fin"';
   S[1].DelimitedText :=
     '"ville","burg","ley","ly","field","town","well","bell","bridge","ton",' +
     '"stone","hattan"';

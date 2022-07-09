@@ -50,6 +50,9 @@ const
     );
 
 type
+
+  { TAircraft }
+
   TAircraft = class(TVehicle)
   private
     FT: Integer;
@@ -58,7 +61,6 @@ type
     FMaxPassengers: Integer;
     FMail: Integer;
     FMaxMail: Integer;
-    FLastAirportId: Integer;
   public
     Order: array of TOrder;
     constructor Create(const AName: string; const AX, AY, ID: Integer);
@@ -68,10 +70,9 @@ type
     property Mail: Integer read FMail write FMail;
     property MaxMail: Integer read FMaxMail;
     property State: string read FState;
-    property LastAirportId: Integer write FLastAirportId;
     procedure Step; override;
-    procedure Load;
-    procedure UnLoad;
+    procedure Load; override;
+    procedure UnLoad; override;
     procedure AddOrder(const AIndex: Integer); overload;
   end;
 
@@ -85,6 +86,8 @@ uses
   TransportTycoon.Map,
   TransportTycoon.Industries,
   TransportTycoon.Cargo;
+
+{ TAircraft }
 
 function IsPath(X, Y: Integer): Boolean; stdcall;
 begin
@@ -106,7 +109,6 @@ begin
   FPassengers := 0;
   FMaxMail := AircraftBase[ID].Mail;
   FMail := 0;
-  LastAirportId := 0;
 end;
 
 procedure TAircraft.Load;
@@ -148,7 +150,7 @@ begin
     if not Move(Order[OrderIndex].X, Order[OrderIndex].Y) then
     begin
       Inc(FT);
-      if Order[OrderIndex].ID <> FLastAirportId then
+      if Order[OrderIndex].ID <> LastStationId then
         UnLoad;
       FState := 'Service';
       if FT > (15 - (TTownIndustry(Game.Map.Industry[Order[OrderIndex].ID])
@@ -168,8 +170,8 @@ procedure TAircraft.UnLoad;
 var
   M: Integer;
 begin
+  SetLastStation;
   FState := 'Unload';
-  LastAirportId := Order[OrderIndex].ID;
   if Passengers > 0 then
   begin
     M := (Passengers * (Distance div 10)) * 7;
