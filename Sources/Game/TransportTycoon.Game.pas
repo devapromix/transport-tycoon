@@ -9,7 +9,8 @@ uses
   TransportTycoon.Calendar,
   TransportTycoon.Company,
   TransportTycoon.Vehicles,
-  TransportTycoon.Finances;
+  TransportTycoon.Finances,
+  TransportTycoon.Construct;
 
 type
   TGame = class(TObject)
@@ -25,8 +26,7 @@ type
     FTurn: Integer;
     FIsPause: Boolean;
     FIsGame: Boolean;
-    FIsClearLand: Boolean;
-    FIsBuildCanals: Boolean;
+    FConstruct: TConstruct;
   public const
     MaxLoan = 200000;
     StartMoney = MaxLoan div 2;
@@ -43,8 +43,7 @@ type
     property Map: TMap read FMap;
     property IsDebug: Boolean read FIsDebug;
     property Turn: Integer read FTurn;
-    property IsClearLand: Boolean read FIsClearLand write FIsClearLand;
-    property IsBuildCanals: Boolean read FIsBuildCanals write FIsBuildCanals;
+    property Construct: TConstruct read FConstruct;
     property IsPause: Boolean read FIsPause write FIsPause;
     property IsGame: Boolean read FIsGame write FIsGame;
     procedure Clear;
@@ -81,17 +80,17 @@ begin
   FCalendar := TCalendar.Create;
   FCompany := TCompany.Create;
   FFinances := TFinances.Create;
-  FIsClearLand := False;
-  FIsBuildCanals := False;
   FIsPause := True;
   FMap := TMap.Create;
   FMap.Gen;
   FVehicles := TVehicles.Create;
+  FConstruct := TConstruct.Create;
 end;
 
 destructor TGame.Destroy;
 begin
   FMap.Free;
+  FConstruct.Free;
   FVehicles.Free;
   FFinances.Free;
   FCompany.Free;
@@ -116,7 +115,7 @@ begin
       'SeaLevel', 0));
     Game.Map.NoOfTowns := IniFile.ReadInteger('Main', 'NoOfTowns', 1);
     Game.Calendar.Year := EnsureRange(IniFile.ReadInteger('Main', 'Year',
-      TCalendar.StartYear), TCalendar.StartYear, TCalendar.FinishYear);
+      StartYear), StartYear, FinishYear);
     Game.Map.Rivers := TMapRivers(IniFile.ReadInteger('Main', 'Rivers', 0));
     Game.Map.NoOfInd := TMapNoOfInd(IniFile.ReadInteger('Main', 'NoOfInd', 0));
   finally
@@ -184,8 +183,7 @@ procedure TGame.Clear;
 begin
   FTurn := 0;
   FIsGame := True;
-  FIsClearLand := False;
-  FIsBuildCanals := False;
+  FConstruct.Clear;
   FMoney := StartMoney;
   FLoan := StartMoney;
   FFinances.Clear;

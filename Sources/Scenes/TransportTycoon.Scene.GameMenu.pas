@@ -20,7 +20,8 @@ uses
   BearLibTerminal,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Scene.World;
+  TransportTycoon.Scene.World,
+  TransportTycoon.Construct;
 
 { TSceneGameMenu }
 
@@ -101,12 +102,6 @@ begin
       begin
         Game.IsPause := True;
         Scenes.SetScene(scMainMenu);
-      end;
-    TK_X:
-      begin
-        Game.IsClearLand := True;
-        Game.IsBuildCanals := False;
-        Scenes.SetScene(scWorld);
       end;
   end;
   TSceneWorld.GlobalKeys(Key);

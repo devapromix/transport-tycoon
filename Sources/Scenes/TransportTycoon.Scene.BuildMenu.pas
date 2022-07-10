@@ -22,7 +22,8 @@ implementation
 uses
   SysUtils,
   BearLibTerminal,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Construct;
 
 { TSceneBuildMenu }
 
@@ -34,6 +35,8 @@ begin
   DrawTitle(10, Game.Company.Name);
 
   DrawButton(22, 12, 'C', 'Build Canals');
+
+  DrawButton(22, 16, 'X', 'Clear land');
 
   AddButton(18, 'Esc', 'Close');
 
@@ -56,6 +59,8 @@ begin
         case MY of
           12:
             Key := TK_C;
+          16:
+            Key := TK_X;
         end;
     end;
   end;
@@ -64,8 +69,12 @@ begin
       Scenes.Back;
     TK_C:
       begin
-        Game.IsBuildCanals := True;
-        Game.IsClearLand := False;
+        Game.Construct.Build(ceBuildCanal);
+        Scenes.SetScene(scWorld);
+      end;
+    TK_X:
+      begin
+        Game.Construct.Build(ceClearLand);
         Scenes.SetScene(scWorld);
       end;
   end;

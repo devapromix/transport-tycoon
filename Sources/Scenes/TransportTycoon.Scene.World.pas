@@ -29,7 +29,8 @@ uses
   SysUtils,
   TransportTycoon.Map,
   TransportTycoon.Game,
-  TransportTycoon.Industries;
+  TransportTycoon.Industries,
+  TransportTycoon.Construct;
 
 { TSceneWorld }
 
@@ -109,10 +110,15 @@ begin
       Scenes.SetScene(scIndustries);
     TK_B:
       Scenes.SetScene(scBuildMenu);
+    TK_X:
+      begin
+        Game.Construct.Build(ceClearLand);
+        Scenes.SetScene(scWorld);
+      end;
     TK_P:
       begin
         Game.IsPause := not Game.IsPause;
-        Scenes.Render
+        Scenes.Render;
       end;
   end;
 end;
@@ -146,12 +152,12 @@ var
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
-  if Game.IsClearLand then
+  if Game.Construct.IsBuild(ceClearLand) then
   begin
     terminal_bkcolor('red');
     terminal_put(MX, MY, $2588);
   end
-  else if Game.IsBuildCanals then
+  else if Game.Construct.IsBuild(ceBuildCanal) then
   begin
     terminal_bkcolor('light blue');
     terminal_put(MX, MY, $2588);
@@ -204,7 +210,7 @@ begin
     end
     else
     begin
-      if not Game.IsClearLand and not Game.IsBuildCanals then
+      if not Game.Construct.IsConstruct then
       begin
         if (Game.Map.Cell[RX][RY] = tlTownIndustry) then
         begin
@@ -235,7 +241,7 @@ begin
       end;
       if (Game.Map.Cell[RX][RY] in TreeTiles) then
       begin
-        if Game.IsClearLand then
+        if Game.Construct.IsBuild(ceClearLand) then
         begin
           Game.Map.ClearLand(RX, RY);
           Scenes.Render;
@@ -244,7 +250,7 @@ begin
       end;
       if (Game.Map.Cell[RX][RY] in LandTiles + TreeTiles) then
       begin
-        if Game.IsBuildCanals then
+        if Game.Construct.IsBuild(ceBuildCanal) then
         begin
           Game.Map.BuildCanals(RX, RY);
           Scenes.Render;
@@ -255,15 +261,9 @@ begin
   end;
   if (Key = TK_MOUSE_RIGHT) then
   begin
-    if Game.IsClearLand then
+    if Game.Construct.IsConstruct then
     begin
-      Game.IsClearLand := False;
-      Scenes.Render;
-      Exit;
-    end;
-    if Game.IsBuildCanals then
-    begin
-      Game.IsBuildCanals := False;
+      Game.Construct.Clear;
       Scenes.Render;
       Exit;
     end;
@@ -271,15 +271,9 @@ begin
   case Key of
     TK_ESCAPE:
       begin
-        if Game.IsClearLand then
+        if Game.Construct.IsConstruct then
         begin
-          Game.IsClearLand := False;
-          Scenes.Render;
-          Exit;
-        end;
-        if Game.IsBuildCanals then
-        begin
-          Game.IsBuildCanals := False;
+          Game.Construct.Clear;
           Scenes.Render;
           Exit;
         end;
