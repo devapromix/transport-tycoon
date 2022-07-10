@@ -4,7 +4,7 @@ interface
 
 uses
   TransportTycoon.Vehicle,
-  TransportTycoon.Order;
+  TransportTycoon.Cargo;
 
 type
   TAircraftBase = record
@@ -62,7 +62,6 @@ type
     FMail: Integer;
     FMaxMail: Integer;
   public
-    Order: array of TOrder;
     constructor Create(const AName: string; const AX, AY, ID: Integer);
     function Move(const AX, AY: Integer): Boolean; override;
     property Passengers: Integer read FPassengers write FPassengers;
@@ -80,12 +79,11 @@ implementation
 
 uses
   SysUtils,
+  TransportTycoon.Map,
   TransportTycoon.Game,
   TransportTycoon.Finances,
   TransportTycoon.PathFind,
-  TransportTycoon.Map,
-  TransportTycoon.Industries,
-  TransportTycoon.Cargo;
+  TransportTycoon.Industries;
 
 { TAircraft }
 
