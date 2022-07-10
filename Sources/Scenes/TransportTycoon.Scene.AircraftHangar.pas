@@ -73,20 +73,20 @@ var
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
-    if (MX >= 12) and (MX <= 38) then
-      case MY of
-        10 .. 18:
-          Key := TK_A + (MY - 10);
-      end;
+    case MX of
+      12 .. 38:
+        case MY of
+          10 .. 18:
+            Key := TK_A + (MY - 10);
+        end;
+    end;
     if (GetButtonsY = MY) then
-    begin
       case MX of
         23 .. 42:
           Key := TK_ENTER;
         46 .. 56:
           Key := TK_ESCAPE;
       end;
-    end;
   end;
   case Key of
     TK_ESCAPE:

@@ -56,40 +56,41 @@ procedure TSceneGameMenu.Update(var Key: word);
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
-    if (MX >= 12) and (MX <= 38) then
-      case MY of
-        11:
-          Key := TK_F;
-        12:
-          Key := TK_N;
-        16:
-          Key := TK_S;
-        17:
-          Key := TK_A;
-      end;
-    if (MX >= 42) and (MX <= 68) then
-      case MY of
-        11:
-          Key := TK_G;
-        12:
-          Key := TK_I;
-        15:
-          Key := TK_B;
-        16:
-          Key := TK_P;
-        17:
-          Key := TK_X;
-      end;
-    if (MX >= 29) and (MX <= 36) then
-      case MY of
-        19:
+    case MX of
+      12 .. 38:
+        case MY of
+          11:
+            Key := TK_F;
+          12:
+            Key := TK_N;
+          16:
+            Key := TK_S;
+          17:
+            Key := TK_A;
+        end;
+      42 .. 68:
+        case MY of
+          11:
+            Key := TK_G;
+          12:
+            Key := TK_I;
+          15:
+            Key := TK_B;
+          16:
+            Key := TK_P;
+          17:
+            Key := TK_X;
+        end;
+    end;
+    if (GetButtonsY = MY) then
+    begin
+      case MX of
+        29 .. 36:
           Key := TK_Q;
-      end;
-    if (MX >= 40) and (MX <= 50) then
-      case MY of
-        19:
+        40 .. 50:
           Key := TK_ESCAPE;
       end;
+    end;
   end;
   case Key of
     TK_ESCAPE:

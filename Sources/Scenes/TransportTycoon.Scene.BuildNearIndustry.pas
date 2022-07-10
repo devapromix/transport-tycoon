@@ -53,16 +53,23 @@ procedure TSceneBuildNearIndustry.Update(var Key: Word);
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
-    if (MX >= 35) and (MX <= 45) then
-      case MY of
-        19:
-          Key := TK_ESCAPE;
+    if (GetButtonsY = MY) then
+    begin
+      case MX of
+        35 .. 45:
+          case MY of
+            19:
+              Key := TK_ESCAPE;
+          end;
       end;
-    if (MX >= 17) and (MX <= 62) then
-      case MY of
-        11:
-          Key := TK_D;
-      end;
+    end;
+    case MX of
+      17 .. 62:
+        case MY of
+          11:
+            Key := TK_D;
+        end;
+    end;
   end;
   case Key of
     TK_ESCAPE:

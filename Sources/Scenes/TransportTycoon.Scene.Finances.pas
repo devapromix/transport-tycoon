@@ -104,12 +104,14 @@ begin
   if (Key = TK_MOUSE_LEFT) then
     if (GetButtonsY = MY) then
     begin
-      if (MX >= 22) and (MX <= 31) then
-        Key := TK_B;
-      if (MX >= 35) and (MX <= 43) then
-        Key := TK_R;
-      if (MX >= 47) and (MX <= 57) then
-        Key := TK_ESCAPE;
+      case MX of
+        22 .. 31:
+          Key := TK_B;
+        35 .. 43:
+          Key := TK_R;
+        47 .. 57:
+          Key := TK_ESCAPE;
+      end;
     end;
   case Key of
     TK_ESCAPE:

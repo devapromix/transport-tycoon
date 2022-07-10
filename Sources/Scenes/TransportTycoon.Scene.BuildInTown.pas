@@ -66,20 +66,22 @@ procedure TSceneBuildInTown.Update(var Key: Word);
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
-    if (MX >= 35) and (MX <= 45) then
-      case MY of
-        19:
+    if (GetButtonsY = MY) then
+      case MX of
+        35 .. 45:
           Key := TK_ESCAPE;
       end;
-    if (MX >= 17) and (MX <= 62) then
-      case MY of
-        11:
-          Key := TK_A;
-        12:
-          Key := TK_B;
-        17:
-          Key := TK_G;
-      end;
+    case MX of
+      17 .. 62:
+        case MY of
+          11:
+            Key := TK_A;
+          12:
+            Key := TK_B;
+          17:
+            Key := TK_G;
+        end;
+    end;
   end;
   case Key of
     TK_ESCAPE:

@@ -75,22 +75,20 @@ begin
   begin
     if (GetButtonsY = MY) then
     begin
-      if (MX >= 29) and (MX <= 37) then
+      case MX of
+        29 .. 37:
+          Key := TK_B;
+        41 .. 51:
+          Key := TK_ESCAPE;
+      end;
+    end;
+    case MX of
+      34 .. 56:
         case MY of
-          18:
-            Key := TK_B;
-        end;
-      if (MX >= 41) and (MX <= 51) then
-        case MY of
-          18:
-            Key := TK_ESCAPE;
+          12:
+            Key := TK_D;
         end;
     end;
-    if (MX >= 34) and (MX <= 56) then
-      case MY of
-        12:
-          Key := TK_D;
-      end;
   end;
   case Key of
     TK_ESCAPE:

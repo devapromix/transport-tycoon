@@ -49,40 +49,46 @@ begin
   begin
     if (GetButtonsY = MY) then
     begin
-      if (MX >= 26) and (MX <= 41) then
-        Key := TK_ENTER;
-      if (MX >= 45) and (MX <= 54) then
-        Key := TK_ESCAPE;
+      case MX of
+        26 .. 41:
+          Key := TK_ENTER;
+        45 .. 54:
+          Key := TK_ESCAPE;
+      end;
     end;
-    if (MX >= 12) and (MX <= 36) then
-      case MY of
-        13:
-          Key := TK_F;
-        14:
-          Key := TK_H;
-        15:
-          Key := TK_J;
-      end;
-    if (MX >= 42) and (MX <= 66) then
-      case MY of
-        13:
-          Key := TK_A;
-        14:
-          Key := TK_B;
-        15:
-          Key := TK_C;
-      end;
+    case MX of
+      12 .. 36:
+        case MY of
+          13:
+            Key := TK_F;
+          14:
+            Key := TK_H;
+          15:
+            Key := TK_J;
+        end;
+      42 .. 66:
+        case MY of
+          13:
+            Key := TK_A;
+          14:
+            Key := TK_B;
+          15:
+            Key := TK_C;
+        end;
+    end;
   end;
   if (Key = TK_MOUSE_RIGHT) then
   begin
-    if (MX >= 42) and (MX <= 66) then
-      case MY of
-        15:
-          begin
-            Game.Calendar.PrevYear;
-            Scenes.Render;
-          end;
-      end;
+    case MX of
+      42 .. 66:
+        case MY of
+          15:
+            begin
+              Game.Calendar.PrevYear;
+              Scenes.Render;
+            end;
+        end;
+    end;
   end;
   case Key of
     TK_ESCAPE:

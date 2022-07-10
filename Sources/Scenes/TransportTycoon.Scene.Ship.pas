@@ -79,16 +79,18 @@ var
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
-    if (MX >= 28) and (MX <= 37) then
-      case MY of
-        19:
-          Key := TK_O;
-      end;
-    if (MX >= 41) and (MX <= 51) then
-      case MY of
-        19:
-          Key := TK_ESCAPE;
-      end;
+    case MX of
+      28 .. 37:
+        case MY of
+          19:
+            Key := TK_O;
+        end;
+      41 .. 51:
+        case MY of
+          19:
+            Key := TK_ESCAPE;
+        end;
+    end;
   end;
   case Key of
     TK_A .. TK_G:

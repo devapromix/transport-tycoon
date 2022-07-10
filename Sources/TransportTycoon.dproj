@@ -114,9 +114,13 @@
         <DCCReference Include="Game\TransportTycoon.Vehicles.pas"/>
         <DCCReference Include="Game\TransportTycoon.Aircraft.pas"/>
         <DCCReference Include="Game\TransportTycoon.Ship.pas"/>
+        <DCCReference Include="Game\TransportTycoon.Calendar.pas"/>
+        <DCCReference Include="Game\TransportTycoon.MapObject.pas"/>
+        <DCCReference Include="Game\TransportTycoon.PathFind.pas"/>
+        <DCCReference Include="Game\TransportTycoon.Industries.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scenes.pas"/>
-        <DCCReference Include="Scenes\TransportTycoon.Scene.Town.pas"/>
-        <DCCReference Include="Scenes\TransportTycoon.Scene.BuildInTown2.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.BuildMenu.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.BuildInTown.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.World.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Airport.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.MainMenu.pas"/>
@@ -130,10 +134,6 @@
         <DCCReference Include="Scenes\TransportTycoon.Scene.Finances.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Towns.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Company.pas"/>
-        <DCCReference Include="Game\TransportTycoon.Calendar.pas"/>
-        <DCCReference Include="Game\TransportTycoon.MapObject.pas"/>
-        <DCCReference Include="Game\TransportTycoon.PathFind.pas"/>
-        <DCCReference Include="Game\TransportTycoon.Industries.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Industry.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.BuildNearIndustry.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Dock.pas"/>
@@ -142,7 +142,7 @@
         <DCCReference Include="Scenes\TransportTycoon.Scene.Ship.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Vehicles.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.ShipDepot.pas"/>
-        <DCCReference Include="Scenes\TransportTycoon.Scene.Town2.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.Town.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Industries.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

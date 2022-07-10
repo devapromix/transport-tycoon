@@ -60,25 +60,26 @@ procedure TSceneTown.Update(var Key: word);
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
-    if (MX >= 29) and (MX <= 37) then
-      case MY of
-        20:
+    if (GetButtonsY = MY) then
+    begin
+      case MX of
+        29 .. 37:
           Key := TK_B;
-      end;
-    if (MX >= 41) and (MX <= 51) then
-      case MY of
-        20:
+        41 .. 51:
           Key := TK_ESCAPE;
       end;
-    if (MX >= 34) and (MX <= 69) then
-      case MY of
-        10:
-          Key := TK_A;
-        11:
-          Key := TK_D;
-        15:
-          Key := TK_G;
-      end;
+    end;
+    case MX of
+      34 .. 69:
+        case MY of
+          10:
+            Key := TK_A;
+          11:
+            Key := TK_D;
+          15:
+            Key := TK_G;
+        end;
+    end;
   end;
   case Key of
     TK_ESCAPE:
