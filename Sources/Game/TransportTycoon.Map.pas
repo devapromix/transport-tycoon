@@ -327,6 +327,7 @@ begin
   Money := BuildCanalCost;
   if (Cell[AX][AY] in TreeTiles) then
     Inc(Money, ClearLandCost);
+  if (Cell[AX][AY] in TreeTiles + LandTiles) then
   if (Game.Money >= Money) then
   begin
     Cell[AX][AY] := tlCanal;
