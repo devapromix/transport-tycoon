@@ -56,6 +56,7 @@ type
     procedure LoadSettings;
     procedure SaveSettings;
     procedure Repay;
+    procedure Borrow;
   end;
 
 var
@@ -131,8 +132,11 @@ end;
 
 procedure TGame.Repay;
 begin
-  if Loan >= 10000 then
+  if (FLoan >= 10000) and (FMoney >= 10000) then
+  begin
     FLoan := FLoan - 10000;
+    FMoney := FMoney - 10000;
+  end
 end;
 
 procedure TGame.ModifyMoney(const AMoney: Integer);
@@ -165,6 +169,15 @@ begin
   Inc(FTurn);
   FCalendar.Step;
   FVehicles.Step;
+end;
+
+procedure TGame.Borrow;
+begin
+  if Loan < MaxLoan then
+  begin
+    FLoan := FLoan + 10000;
+    FMoney := FMoney + 10000;
+  end;
 end;
 
 procedure TGame.Clear;

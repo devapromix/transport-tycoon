@@ -92,6 +92,7 @@ begin
   DrawMoney(38, 24, Game.Money - Game.Loan);
   terminal_composition(TK_OFF);
 
+  AddButton(26, 'B', 'BORROW');
   AddButton(26, 'R', 'REPAY');
   AddButton(26, 'ESC', 'CLOSE');
 
@@ -103,20 +104,18 @@ begin
   if (Key = TK_MOUSE_LEFT) then
     if (GetButtonsY = MY) then
     begin
-      if (MX >= 29) and (MX <= 37) then
+      if (MX >= 22) and (MX <= 31) then
+        Key := TK_B;
+      if (MX >= 35) and (MX <= 43) then
         Key := TK_R;
-      if (MX >= 41) and (MX <= 51) then
+      if (MX >= 47) and (MX <= 57) then
         Key := TK_ESCAPE;
     end;
   case Key of
     TK_ESCAPE:
       Scenes.SetScene(scWorld);
-    TK_I:
-      ;
-    TK_C:
-      ;
     TK_B:
-      ;
+      Game.Borrow;
     TK_R:
       Game.Repay;
   end;
