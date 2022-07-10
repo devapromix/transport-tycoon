@@ -55,6 +55,7 @@ type
       const AMoney: Integer); overload;
     procedure LoadSettings;
     procedure SaveSettings;
+    procedure Repay;
   end;
 
 var
@@ -126,6 +127,12 @@ procedure TGame.ModifyMoney(const ValueEnum: TValueEnum; const AMoney: Integer);
 begin
   Finances.ModifyValue(ValueEnum, Abs(AMoney));
   FMoney := FMoney + AMoney;
+end;
+
+procedure TGame.Repay;
+begin
+  if Loan >= 10000 then
+    FLoan := FLoan - 10000;
 end;
 
 procedure TGame.ModifyMoney(const AMoney: Integer);

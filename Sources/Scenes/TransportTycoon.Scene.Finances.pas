@@ -92,6 +92,7 @@ begin
   DrawMoney(38, 24, Game.Money - Game.Loan);
   terminal_composition(TK_OFF);
 
+  AddButton(26, 'R', 'REPAY');
   AddButton(26, 'ESC', 'CLOSE');
 
   DrawBar;
@@ -102,7 +103,9 @@ begin
   if (Key = TK_MOUSE_LEFT) then
     if (GetButtonsY = MY) then
     begin
-      if (MX >= 35) and (MX <= 45) then
+      if (MX >= 29) and (MX <= 37) then
+        Key := TK_R;
+      if (MX >= 41) and (MX <= 51) then
         Key := TK_ESCAPE;
     end;
   case Key of
@@ -115,7 +118,7 @@ begin
     TK_B:
       ;
     TK_R:
-      ;
+      Game.Repay;
   end;
 
 end;

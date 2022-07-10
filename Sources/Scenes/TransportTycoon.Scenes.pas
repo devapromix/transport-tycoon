@@ -124,7 +124,7 @@ uses
   TransportTycoon.Scene.Ships,
   TransportTycoon.Scene.Ship,
   TransportTycoon.Scene.ShipDepot,
-TransportTycoon.Scene.BuildMenu;
+  TransportTycoon.Scene.BuildMenu;
 
 procedure TScene.DrawText(const X, Y: Integer; Text: string;
   const Align: Integer = TK_ALIGN_LEFT);
