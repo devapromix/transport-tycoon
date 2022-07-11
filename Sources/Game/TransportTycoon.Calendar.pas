@@ -6,6 +6,10 @@ const
   MonStr: array [1 .. 12] of string = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
 
+const
+  StartYear = 1950;
+  FinishYear = 2050;
+
 type
   TCalendar = class(TObject)
   private
@@ -13,9 +17,6 @@ type
     FYear: Word;
     FMonth: Word;
     function DaysPerMonth(const AMonth: Byte): Byte;
-  public const
-    StartYear = 1950;
-    FinishYear = 2050;
   public
     constructor Create;
     procedure Clear;
@@ -79,6 +80,7 @@ end;
 
 procedure TCalendar.OnYear;
 begin
+  Game.Finances.SetYear(Year);
   Scenes.SetScene(scFinances);
 end;
 
@@ -99,6 +101,13 @@ begin
   end;
   if (FMonth > 12) then
   begin
+    if (FYear = FinishYear) then
+    begin
+      Game.IsPause := True;
+      { TODO: FINISH SCENE AND THE END }
+      // Scenes.SetScene(scFinish);
+      Exit;
+    end;
     FMonth := 1;
     Inc(FYear);
     OnYear;

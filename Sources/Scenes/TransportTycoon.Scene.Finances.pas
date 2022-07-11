@@ -6,9 +6,14 @@ uses
   TransportTycoon.Scenes;
 
 type
+
+  { TSceneFinances }
+
   TSceneFinances = class(TScene)
   private
-
+    procedure DrawIncome(const X, Year: Word);
+    procedure DrawRunningCosts(const X, Year: Word);
+    procedure DrawLoanInterest(const X, Year: Word);
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -17,12 +22,69 @@ type
 implementation
 
 uses
-  BearLibTerminal,
+  Math,
   SysUtils,
+  BearLibTerminal,
   TransportTycoon.Game,
   TransportTycoon.Finances;
 
+const
+  PX: array [0 .. 2] of Word = (40, 50, 60);
+
+  { TSceneFinances }
+
+procedure TSceneFinances.DrawIncome(const X, Year: Word);
+begin
+  DrawText(10, 5, 'Road Vehicle Income:');
+  DrawMoney(X + 8, 5, Game.Finances.Value(ttRoadVehicleIncome, Year));
+  DrawText(10, 6, 'Train Income:');
+  DrawMoney(X + 8, 6, Game.Finances.Value(ttTrainIncome, Year));
+  DrawText(10, 7, 'Ship Income:');
+  DrawMoney(X + 8, 7, Game.Finances.Value(ttShipIncome, Year));
+  DrawText(10, 8, 'Aircraft Income:');
+  DrawMoney(X + 8, 8, Game.Finances.Value(ttAircraftIncome, Year));
+  DrawText(X, 8, '_________');
+  DrawText(30, 9, 'Total:');
+  DrawMoney(X + 8, 9, Game.Finances.Values([ttRoadVehicleIncome, ttTrainIncome,
+    ttShipIncome, ttAircraftIncome], Year));
+end;
+
+procedure TSceneFinances.DrawLoanInterest(const X, Year: Word);
+begin
+  DrawText(10, 17, 'Loan Interest:');
+  DrawMoney(X + 8, 17, -Game.Finances.Value(ttLoanInterest, Year));
+  DrawText(10, 18, 'Construction:');
+  DrawMoney(X + 8, 18, -Game.Finances.Value(ttConstruction, Year));
+  DrawText(10, 19, 'New Vehicles:');
+  DrawMoney(X + 8, 19, -Game.Finances.Value(ttNewVehicles, Year));
+  DrawText(X, 19, '_________');
+  DrawText(30, 20, 'Total:');
+  DrawMoney(X + 8, 20, Game.Finances.Values([ttRoadVehicleIncome, ttTrainIncome,
+    ttShipIncome, ttAircraftIncome], Year) - Game.Finances.Values
+    ([ttRoadVehicleRunningCosts, ttTrainRunningCosts, ttShipRunningCosts,
+    ttAircraftRunningCosts, ttConstruction, ttNewVehicles,
+    ttLoanInterest], Year));
+end;
+
+procedure TSceneFinances.DrawRunningCosts(const X, Year: Word);
+begin
+  DrawText(10, 11, 'Road Vehicle Running Costs:');
+  DrawMoney(X + 8, 11, -Game.Finances.Value(ttRoadVehicleRunningCosts, Year));
+  DrawText(10, 12, 'Train Running Costs:');
+  DrawMoney(X + 8, 12, -Game.Finances.Value(ttTrainRunningCosts, Year));
+  DrawText(10, 13, 'Ship Running Costs:');
+  DrawMoney(X + 8, 13, -Game.Finances.Value(ttShipRunningCosts, Year));
+  DrawText(10, 14, 'Aircraft Running Costs:');
+  DrawMoney(X + 8, 14, -Game.Finances.Value(ttAircraftRunningCosts, Year));
+  DrawText(X, 14, '_________');
+  DrawText(30, 15, 'Total:');
+  DrawMoney(X + 8, 15, -Game.Finances.Values([ttRoadVehicleRunningCosts,
+    ttTrainRunningCosts, ttShipRunningCosts, ttAircraftRunningCosts], Year));
+end;
+
 procedure TSceneFinances.Render;
+var
+  I, J, Year: Word;
 begin
   DrawMap(Self.Width, Self.Height - 1);
 
@@ -30,57 +92,18 @@ begin
   DrawTitle(2, Game.Company.Name + ' Finances');
 
   terminal_composition(TK_ON);
-  DrawText(45, 4, IntToStr(Game.Calendar.Year));
-  DrawText(55, 4, IntToStr(Game.Calendar.Year + 1));
-  DrawText(65, 4, IntToStr(Game.Calendar.Year + 2));
-  DrawText(45, 4, '____');
-  DrawText(55, 4, '____');
-  DrawText(65, 4, '____');
 
-  DrawText(10, 5, 'Road Vehicle Income:');
-  DrawMoney(48, 5, Game.Finances.Value[ttRoadVehicleIncome]);
-  DrawText(10, 6, 'Train Income:');
-  DrawMoney(48, 6, Game.Finances.Value[ttTrainIncome]);
-  DrawText(10, 7, 'Ship Income:');
-  DrawMoney(48, 7, Game.Finances.Value[ttShipIncome]);
-  DrawText(10, 8, 'Aircraft Income:');
-  DrawMoney(48, 8, Game.Finances.Value[ttAircraftIncome]);
-  DrawText(40, 8, '_________');
-  DrawText(50, 8, '_________');
-  DrawText(60, 8, '_________');
-  DrawText(30, 9, 'Total:');
-  DrawMoney(48, 9, Game.Finances.Values([ttRoadVehicleIncome, ttTrainIncome,
-    ttShipIncome, ttAircraftIncome]));
-
-  DrawText(10, 11, 'Road Vehicle Running Costs:');
-  DrawMoney(48, 11, -Game.Finances.Value[ttRoadVehicleRunningCosts]);
-  DrawText(10, 12, 'Train Running Costs:');
-  DrawMoney(48, 12, -Game.Finances.Value[ttTrainRunningCosts]);
-  DrawText(10, 13, 'Ship Running Costs:');
-  DrawMoney(48, 13, -Game.Finances.Value[ttShipRunningCosts]);
-  DrawText(10, 14, 'Aircraft Running Costs:');
-  DrawMoney(48, 14, -Game.Finances.Value[ttAircraftRunningCosts]);
-  DrawText(40, 14, '_________');
-  DrawText(50, 14, '_________');
-  DrawText(60, 14, '_________');
-  DrawText(30, 15, 'Total:');
-  DrawMoney(48, 15, -Game.Finances.Values([ttRoadVehicleRunningCosts,
-    ttTrainRunningCosts, ttShipRunningCosts, ttAircraftRunningCosts]));
-
-  DrawText(10, 17, 'Loan Interest:');
-  DrawMoney(48, 17, -Game.Finances.Value[ttLoanInterest]);
-  DrawText(10, 18, 'Construction:');
-  DrawMoney(48, 18, -Game.Finances.Value[ttConstruction]);
-  DrawText(10, 19, 'New Vehicles:');
-  DrawMoney(48, 19, -Game.Finances.Value[ttNewVehicles]);
-  DrawText(40, 19, '_________');
-  DrawText(50, 19, '_________');
-  DrawText(60, 19, '_________');
-  DrawText(30, 20, 'Total:');
-  DrawMoney(48, 20, Game.Finances.Values([ttRoadVehicleIncome, ttTrainIncome,
-    ttShipIncome, ttAircraftIncome]) - Game.Finances.Values
-    ([ttRoadVehicleRunningCosts, ttTrainRunningCosts, ttShipRunningCosts,
-    ttAircraftRunningCosts, ttConstruction, ttNewVehicles, ttLoanInterest]));
+  J := 0;
+  for I := EnsureRange(Game.Finances.Count - 1, 0, 2) downto 0 do
+  begin
+    Year := Game.Calendar.Year - I;
+    DrawText(PX[J] + 5, 4, IntToStr(Year));
+    DrawText(PX[J] + 5, 4, '____');
+    DrawIncome(PX[J], Year);
+    DrawRunningCosts(PX[J], Year);
+    DrawLoanInterest(PX[J], Year);
+    Inc(J);
+  end;
 
   DrawText(10, 22, 'Bank Balance:');
   DrawMoney(38, 22, Game.Money);
@@ -103,7 +126,6 @@ procedure TSceneFinances.Update(var Key: Word);
 begin
   if (Key = TK_MOUSE_LEFT) then
     if (GetButtonsY = MY) then
-    begin
       case MX of
         22 .. 31:
           Key := TK_B;
@@ -112,7 +134,6 @@ begin
         47 .. 57:
           Key := TK_ESCAPE;
       end;
-    end;
   case Key of
     TK_ESCAPE:
       Scenes.SetScene(scWorld);

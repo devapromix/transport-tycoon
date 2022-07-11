@@ -187,6 +187,7 @@ begin
   FMoney := StartMoney;
   FLoan := StartMoney;
   FFinances.Clear;
+  FFinances.SetYear(Calendar.Year);
   FMap.Gen;
   FCompany.Clear;
   FVehicles.Clear;
