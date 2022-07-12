@@ -10,7 +10,7 @@ type
     scBuildInTown, scAirport, scAircraftHangar, scAircraft, scAircrafts,
     scAircraftOrders, scShipOrders, scFinances, scTowns, scCompany, scIndustry,
     scBuildNearIndustry, scDock, scShip, scShips, scShipDepot, scIndustries,
-    scBuildMenu);
+    scBuildMenu, scSettingsMenu);
 
 type
   TButtonRec = record
@@ -124,7 +124,8 @@ uses
   TransportTycoon.Scene.Ships,
   TransportTycoon.Scene.Ship,
   TransportTycoon.Scene.ShipDepot,
-  TransportTycoon.Scene.BuildMenu;
+  TransportTycoon.Scene.BuildMenu,
+  TransportTycoon.Scene.SettingsMenu;
 
 procedure TScene.DrawText(const X, Y: Integer; Text: string;
   const Align: Integer = TK_ALIGN_LEFT);
@@ -409,6 +410,7 @@ begin
   FScene[scShipOrders] := TSceneShipOrders.Create;
   FScene[scIndustries] := TSceneIndustries.Create;
   FScene[scBuildMenu] := TSceneBuildMenu.Create;
+  FScene[scSettingsMenu] := TSceneSettingsMenu.Create;
 end;
 
 procedure TScenes.Update(var Key: Word);

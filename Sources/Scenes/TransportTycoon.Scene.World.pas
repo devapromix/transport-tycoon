@@ -110,6 +110,8 @@ begin
       Scenes.SetScene(scIndustries);
     TK_B:
       Scenes.SetScene(scBuildMenu);
+    TK_D:
+      Scenes.SetScene(scSettingsMenu, scWorld);
     TK_X:
       begin
         Game.Construct.Build(ceClearLand);

@@ -25,15 +25,15 @@ procedure TSceneMainMenu.Render;
 begin
   Game.Map.Draw(Self.Width, Self.Height);
 
-  DrawFrame(20, 8, 40, 13);
+  DrawFrame(20, 8, 40, 14);
   DrawTitle(10, 'TRANSPORT TYCOON');
 
   DrawButton(13, 'ENTER', 'NEW GAME');
   DrawButton(14, Game.IsGame, 'ESC', 'CONTINUE');
-  terminal_color('white');
-  DrawButton(15, 'Q', 'QUIT');
+  DrawButton(15, 'D', 'SETTINGS');
+  DrawButton(16, 'Q', 'QUIT');
 
-  DrawText(18, 'Apromix (C) 2022');
+  DrawText(19, 'Apromix (C) 2022');
 end;
 
 procedure TSceneMainMenu.Update(var Key: word);
@@ -45,6 +45,8 @@ begin
       14:
         Key := TK_ESCAPE;
       15:
+        Key := TK_D;
+      16:
         Key := TK_Q;
     end;
   case Key of
@@ -61,6 +63,8 @@ begin
         Game.LoadSettings;
         Scenes.SetScene(scGenMenu);
       end;
+    TK_D:
+      Scenes.SetScene(scSettingsMenu, scMainMenu);
     TK_Q:
       terminal_close();
   end;

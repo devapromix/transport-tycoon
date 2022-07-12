@@ -16,10 +16,11 @@ type
   TGameSpeedEnum = (spSlow, spNormal, spFast, spDebug);
 
 const
-  GameSpeedStr: array [TGameSpeedEnum] of string = ('Slow', 'Normal', 'Fast', 'Debug');
+  GameSpeedStr: array [TGameSpeedEnum] of string = ('Slow', 'Normal',
+    'Fast', 'Debug');
 
 const
-  GameSpeedValue: array [TGameSpeedEnum] of Byte = (50, 25, 5, 1);
+  GameSpeedValue: array [TGameSpeedEnum] of Byte = (50, 25, 10, 0);
 
 type
   TGame = class(TObject)
@@ -67,6 +68,8 @@ type
     procedure SaveSettings;
     procedure Repay;
     procedure Borrow;
+    procedure NextSpeed;
+    procedure PrevSpeed;
   end;
 
 var
@@ -88,6 +91,7 @@ begin
     if (LowerCase(ParamStr(I)) = '-debug') then
       FIsDebug := True;
   end;
+  FSpeed := spNormal;
   FCalendar := TCalendar.Create;
   FCompany := TCompany.Create;
   FFinances := TFinances.Create;
@@ -138,6 +142,38 @@ procedure TGame.ModifyMoney(const ValueEnum: TValueEnum; const AMoney: Integer);
 begin
   Finances.ModifyValue(ValueEnum, Abs(AMoney));
   FMoney := FMoney + AMoney;
+end;
+
+procedure TGame.NextSpeed;
+var
+  HighSpeed: TGameSpeedEnum;
+begin
+  if FIsDebug then
+    HighSpeed := High(TGameSpeedEnum)
+  else
+    HighSpeed := Pred(High(TGameSpeedEnum));
+  if (FSpeed = HighSpeed) then
+  begin
+    FSpeed := Low(TGameSpeedEnum);
+    Exit;
+  end;
+  Inc(FSpeed);
+end;
+
+procedure TGame.PrevSpeed;
+var
+  HighSpeed: TGameSpeedEnum;
+begin
+  if FIsDebug then
+    HighSpeed := High(TGameSpeedEnum)
+  else
+    HighSpeed := Pred(High(TGameSpeedEnum));
+  if (FSpeed = Low(TGameSpeedEnum)) then
+  begin
+    FSpeed := HighSpeed;
+    Exit;
+  end;
+  Dec(FSpeed);
 end;
 
 procedure TGame.Repay;
@@ -193,7 +229,6 @@ end;
 procedure TGame.Clear;
 begin
   FTurn := 0;
-  FSpeed := spDebug;
   FIsGame := True;
   FConstruct.Clear;
   FMoney := StartMoney;

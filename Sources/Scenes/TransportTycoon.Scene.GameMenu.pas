@@ -43,6 +43,7 @@ begin
   DrawButton(12, 16, Game.Vehicles.GotShips, 'S', 'LIST OF SHIPS');
   DrawButton(12, 17, Game.Vehicles.GotAircrafts, 'A', 'LIST OF AIRCRAFTS');
 
+  DrawButton(42, 14, 'D', 'Settings menu');
   DrawButton(42, 15, 'B', 'Build menu');
   DrawButton(42, 16, 'P', 'Pause game');
   DrawButton(42, 17, 'X', 'Clear land');
@@ -75,6 +76,8 @@ begin
             Key := TK_G;
           12:
             Key := TK_I;
+          14:
+            Key := TK_D;
           15:
             Key := TK_B;
           16:
