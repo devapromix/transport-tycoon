@@ -25,8 +25,8 @@ implementation
 
 uses
   Math,
-  BearLibTerminal,
   SysUtils,
+  BearLibTerminal,
   TransportTycoon.Map,
   TransportTycoon.Game,
   TransportTycoon.Industries,
@@ -201,12 +201,14 @@ begin
   begin
     if (MY = Self.Height - 1) then
     begin
-      if (MX >= 70) then
-        Key := TK_ESCAPE;
-      if (MX <= 10) then
-        Key := TK_F;
-      if (MX >= 25) and (MX <= 34) then
-        Key := TK_P;
+      case MX of
+        70 .. 79:
+          Key := TK_ESCAPE;
+        0 .. 10:
+          Key := TK_F;
+        25 .. 34:
+          Key := TK_P;
+      end;
     end
     else
     begin
