@@ -215,11 +215,24 @@ begin
   DrawMoney(0, Y, Game.Money, TK_ALIGN_LEFT, True);
   DrawText(12, Y, Format('Turn:%d', [Game.Turn]));
   DrawText(56, Y, Game.Calendar.GetDate);
-  DrawButton(70, Y, 'ESC', 'MENU');
-  if Game.IsPause then
-    DrawText(25, Height - 1, '[c=yellow][[P]][/c] [c=red]PAUSED[/c]')
+  if (Scenes.FSceneEnum <> scWorld) then
+    DrawButton(70, Y, False, 'ESC', 'MENU')
   else
-    DrawButton(25, Y, 'P', 'Pause');
+    DrawButton(70, Y, 'ESC', 'MENU');
+  if (Scenes.FSceneEnum <> scWorld) and (Scenes.FSceneEnum <> scGameMenu) then
+  begin
+    if Game.IsPause then
+      DrawButton(25, Y, False, 'P', 'Paused')
+    else
+      DrawButton(25, Y, False, 'P', 'Pause');
+  end
+  else
+  begin
+    if Game.IsPause then
+      DrawText(25, Height - 1, '[c=yellow][[P]][/c] [c=red]PAUSED[/c]')
+    else
+      DrawButton(25, Y, 'P', 'Pause');
+  end;
 end;
 
 procedure TScene.DrawButton(const Y: Integer; Button, Text: string);
