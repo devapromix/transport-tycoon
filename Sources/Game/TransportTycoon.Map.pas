@@ -328,11 +328,11 @@ begin
   if (Cell[AX][AY] in TreeTiles) then
     Inc(Money, ClearLandCost);
   if (Cell[AX][AY] in TreeTiles + LandTiles) then
-  if (Game.Money >= Money) then
-  begin
-    Cell[AX][AY] := tlCanal;
-    Game.ModifyMoney(ttConstruction, -Money);
-  end;
+    if (Game.Money >= Money) then
+    begin
+      Cell[AX][AY] := tlCanal;
+      Game.ModifyMoney(ttConstruction, -Money);
+    end;
 end;
 
 procedure TMap.Draw(const AWidth, AHeight: Integer);

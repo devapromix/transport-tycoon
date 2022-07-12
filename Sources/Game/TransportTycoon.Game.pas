@@ -13,6 +13,15 @@ uses
   TransportTycoon.Construct;
 
 type
+  TGameSpeedEnum = (spSlow, spNormal, spFast, spDebug);
+
+const
+  GameSpeedStr: array [TGameSpeedEnum] of string = ('Slow', 'Normal', 'Fast', 'Debug');
+
+const
+  GameSpeedValue: array [TGameSpeedEnum] of Byte = (50, 25, 5, 1);
+
+type
   TGame = class(TObject)
   private
     FMoney: Integer;
@@ -27,6 +36,7 @@ type
     FIsPause: Boolean;
     FIsGame: Boolean;
     FConstruct: TConstruct;
+    FSpeed: TGameSpeedEnum;
   public const
     MaxLoan = 200000;
     StartMoney = MaxLoan div 2;
@@ -46,6 +56,7 @@ type
     property Construct: TConstruct read FConstruct;
     property IsPause: Boolean read FIsPause write FIsPause;
     property IsGame: Boolean read FIsGame write FIsGame;
+    property Speed: TGameSpeedEnum read FSpeed;
     procedure Clear;
     procedure Step;
     function GetPath(SubDir: string): string;
@@ -182,6 +193,7 @@ end;
 procedure TGame.Clear;
 begin
   FTurn := 0;
+  FSpeed := spDebug;
   FIsGame := True;
   FConstruct.Clear;
   FMoney := StartMoney;

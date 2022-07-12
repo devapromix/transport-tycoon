@@ -78,7 +78,7 @@ begin
       terminal_refresh();
       terminal_delay(25);
       Inc(Tmp);
-      if (Tmp > 25) then
+      if (Tmp > GameSpeedValue[Game.Speed]) then
       begin
         Tmp := 0;
         Game.Step;
