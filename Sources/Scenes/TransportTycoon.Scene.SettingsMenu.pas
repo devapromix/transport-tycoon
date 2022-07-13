@@ -8,8 +8,9 @@ uses
 type
   TSceneSettingsMenu = class(TScene)
   private
-
+    FIsGame: Boolean;
   public
+    property IsGame: Boolean read FIsGame write FIsGame;
     procedure Render; override;
     procedure Update(var Key: Word); override;
   end;
@@ -23,7 +24,7 @@ uses
 
 procedure TSceneSettingsMenu.Render;
 begin
-  if Game.IsGame then
+  if IsGame then
     Game.Map.Draw(Self.Width, Self.Height - 1)
   else
     Game.Map.Draw(Self.Width, Self.Height);
@@ -35,7 +36,7 @@ begin
 
   AddButton(17, 'Esc', 'Close');
 
-  if Game.IsGame then
+  if IsGame then
     DrawBar;
 end;
 

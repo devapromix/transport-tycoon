@@ -6,7 +6,7 @@ uses
   TransportTycoon.Industries;
 
 type
-  Tiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlRock, tlSand,
+  TTiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlRock, tlSand,
     tlWater, tlCanal, tlTownIndustry, tlForestIndustry, tlSawmillIndustry,
     tlCoalMineIndustry, tlPowerPlantIndustry);
 
@@ -24,7 +24,7 @@ type
   end;
 
 const
-  Tile: array [Tiles] of TTile = (
+  Tile: array [TTiles] of TTile = (
     //
     (Name: 'Grass'; Tile: '"'; Color: 'green'),
     //
@@ -101,7 +101,7 @@ type
     function IsIndustryLocation(const AX, AY: Integer): Boolean;
     function IsTownLocation(const AX, AY: Integer): Boolean;
     function IsLandTile(const AX, AY: Integer): Boolean;
-    procedure AddSpot(const AX, AY: Integer; const ATile: Tiles);
+    procedure AddSpot(const AX, AY: Integer; const ATile: TTiles);
     procedure AddTree(const AX, AY: Integer);
     procedure Resize;
     function SizeCoef: Integer;
@@ -111,7 +111,7 @@ type
     ClearLandCost = 100;
     BuildCanalCost = 1000;
   public
-    Cell: array of array of Tiles;
+    Cell: array of array of TTiles;
     Industry: array of TIndustry;
     constructor Create;
     destructor Destroy; override;
@@ -143,7 +143,7 @@ type
     procedure ClearLand(const AX, AY: Integer);
     procedure BuildCanals(const AX, AY: Integer);
     function GetNearTownName(const AX, AY: Integer): string;
-    function IsNearTile(const AX, AY: Integer; const ATile: Tiles): Boolean;
+    function IsNearTile(const AX, AY: Integer; const ATile: TTiles): Boolean;
     function TownCount: Integer;
   end;
 
@@ -169,7 +169,7 @@ begin
         Exit(True);
 end;
 
-function TMap.IsNearTile(const AX, AY: Integer; const ATile: Tiles): Boolean;
+function TMap.IsNearTile(const AX, AY: Integer; const ATile: TTiles): Boolean;
 var
   X, Y: Integer;
 begin
@@ -546,7 +546,7 @@ begin
   end;
 end;
 
-procedure TMap.AddSpot(const AX, AY: Integer; const ATile: Tiles);
+procedure TMap.AddSpot(const AX, AY: Integer; const ATile: TTiles);
 var
   VSize, I, VX, VY: Integer;
 begin

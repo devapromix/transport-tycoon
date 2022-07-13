@@ -19,10 +19,10 @@ type
 
 implementation
 
-{ TSceneVehicles }
-
 uses
   BearLibTerminal;
+
+{ TSceneVehicles }
 
 procedure TSceneVehicles.Render;
 begin

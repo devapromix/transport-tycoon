@@ -114,6 +114,7 @@
         <DCCReference Include="Game\TransportTycoon.Vehicles.pas"/>
         <DCCReference Include="Game\TransportTycoon.Aircraft.pas"/>
         <DCCReference Include="Game\TransportTycoon.Ship.pas"/>
+        <DCCReference Include="Game\TransportTycoon.Construct.pas"/>
         <DCCReference Include="Game\TransportTycoon.Calendar.pas"/>
         <DCCReference Include="Game\TransportTycoon.MapObject.pas"/>
         <DCCReference Include="Game\TransportTycoon.PathFind.pas"/>
@@ -144,7 +145,6 @@
         <DCCReference Include="Scenes\TransportTycoon.Scene.ShipDepot.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Town.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Industries.pas"/>
-        <DCCReference Include="Game\TransportTycoon.Construct.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.SettingsMenu.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

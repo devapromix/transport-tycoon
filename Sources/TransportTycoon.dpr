@@ -13,6 +13,7 @@ uses
   TransportTycoon.Vehicles in 'Game\TransportTycoon.Vehicles.pas',
   TransportTycoon.Aircraft in 'Game\TransportTycoon.Aircraft.pas',
   TransportTycoon.Ship in 'Game\TransportTycoon.Ship.pas',
+  TransportTycoon.Construct in 'Game\TransportTycoon.Construct.pas',
   TransportTycoon.Calendar in 'Game\TransportTycoon.Calendar.pas',
   TransportTycoon.MapObject in 'Game\TransportTycoon.MapObject.pas',
   TransportTycoon.PathFind in 'Game\TransportTycoon.PathFind.pas',
@@ -43,7 +44,6 @@ uses
   TransportTycoon.Scene.ShipDepot in 'Scenes\TransportTycoon.Scene.ShipDepot.pas',
   TransportTycoon.Scene.Town in 'Scenes\TransportTycoon.Scene.Town.pas',
   TransportTycoon.Scene.Industries in 'Scenes\TransportTycoon.Scene.Industries.pas',
-  TransportTycoon.Construct in 'Game\TransportTycoon.Construct.pas',
   TransportTycoon.Scene.SettingsMenu in 'Scenes\TransportTycoon.Scene.SettingsMenu.pas';
 
 var
