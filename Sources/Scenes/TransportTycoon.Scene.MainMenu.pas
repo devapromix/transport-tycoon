@@ -19,7 +19,8 @@ implementation
 uses
   BearLibTerminal,
   SysUtils,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Scene.SettingsMenu;
 
 procedure TSceneMainMenu.Render;
 begin
@@ -64,7 +65,10 @@ begin
         Scenes.SetScene(scGenMenu);
       end;
     TK_D:
-      Scenes.SetScene(scSettingsMenu, scMainMenu);
+      begin
+        TSceneSettingsMenu(Scenes.GetScene(scSettingsMenu)).IsShowBar := False;
+        Scenes.SetScene(scSettingsMenu, scMainMenu);
+      end;
     TK_Q:
       terminal_close();
   end;

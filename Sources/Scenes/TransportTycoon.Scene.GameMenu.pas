@@ -20,8 +20,7 @@ uses
   BearLibTerminal,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Scene.World,
-  TransportTycoon.Construct;
+  TransportTycoon.Scene.World;
 
 { TSceneGameMenu }
 

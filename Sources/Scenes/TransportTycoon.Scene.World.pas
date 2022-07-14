@@ -30,7 +30,8 @@ uses
   TransportTycoon.Map,
   TransportTycoon.Game,
   TransportTycoon.Industries,
-  TransportTycoon.Construct;
+  TransportTycoon.Construct,
+  TransportTycoon.Scene.SettingsMenu;
 
 { TSceneWorld }
 
@@ -111,7 +112,10 @@ begin
     TK_B:
       Scenes.SetScene(scBuildMenu);
     TK_D:
-      Scenes.SetScene(scSettingsMenu, scWorld);
+      begin
+        TSceneSettingsMenu(Scenes.GetScene(scSettingsMenu)).IsShowBar := True;
+        Scenes.SetScene(scSettingsMenu, scWorld);
+      end;
     TK_X:
       begin
         Game.Construct.Build(ceClearLand);

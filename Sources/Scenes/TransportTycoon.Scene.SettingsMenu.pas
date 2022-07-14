@@ -6,13 +6,18 @@ uses
   TransportTycoon.Scenes;
 
 type
+
+  { TSceneSettingsMenu }
+
   TSceneSettingsMenu = class(TScene)
   private
     FIsGame: Boolean;
+    FIsShowBar: Boolean;
   public
     property IsGame: Boolean read FIsGame write FIsGame;
     procedure Render; override;
     procedure Update(var Key: Word); override;
+    property IsShowBar: Boolean read FIsShowBar write FIsShowBar;
   end;
 
 implementation
@@ -22,9 +27,11 @@ uses
   BearLibTerminal,
   TransportTycoon.Game;
 
+{ TSceneSettingsMenu }
+
 procedure TSceneSettingsMenu.Render;
 begin
-  if IsGame then
+  if IsShowBar then
     Game.Map.Draw(Self.Width, Self.Height - 1)
   else
     Game.Map.Draw(Self.Width, Self.Height);
@@ -36,7 +43,7 @@ begin
 
   AddButton(17, 'Esc', 'Close');
 
-  if IsGame then
+  if IsShowBar then
     DrawBar;
 end;
 
