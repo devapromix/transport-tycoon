@@ -70,6 +70,8 @@ type
     procedure Borrow;
     procedure NextSpeed;
     procedure PrevSpeed;
+    procedure Save;
+    procedure Load;
   end;
 
 var
@@ -188,6 +190,16 @@ end;
 procedure TGame.ModifyMoney(const AMoney: Integer);
 begin
   FMoney := FMoney + AMoney;
+end;
+
+procedure TGame.Load;
+begin
+
+end;
+
+procedure TGame.Save;
+begin
+
 end;
 
 procedure TGame.SaveSettings;

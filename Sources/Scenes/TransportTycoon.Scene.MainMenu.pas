@@ -31,10 +31,11 @@ begin
 
   DrawButton(13, 'ENTER', 'NEW GAME');
   DrawButton(14, Game.IsGame, 'ESC', 'CONTINUE');
-  DrawButton(15, 'D', 'SETTINGS');
-  DrawButton(16, 'Q', 'QUIT');
+  DrawButton(15, 'L', 'OPEN GAME');
+  DrawButton(16, 'D', 'SETTINGS');
+  DrawButton(17, 'Q', 'QUIT');
 
-  DrawText(19, 'Apromix (C) 2022');
+  DrawText(20, 'Apromix (C) 2022');
 end;
 
 procedure TSceneMainMenu.Update(var Key: word);
@@ -46,8 +47,10 @@ begin
       14:
         Key := TK_ESCAPE;
       15:
-        Key := TK_D;
+        Key := TK_L;
       16:
+        Key := TK_D;
+      17:
         Key := TK_Q;
     end;
   case Key of
@@ -63,6 +66,10 @@ begin
         Game.IsGame := False;
         Game.LoadSettings;
         Scenes.SetScene(scGenMenu);
+      end;
+    TK_L:
+      begin
+        Scenes.SetScene(scOpenGameMenu);
       end;
     TK_D:
       begin
