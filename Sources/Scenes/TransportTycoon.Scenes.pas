@@ -97,8 +97,8 @@ var
 implementation
 
 uses
-  System.Math,
-  System.SysUtils,
+  Math,
+  SysUtils,
   TransportTycoon.Map,
   TransportTycoon.Game,
   TransportTycoon.Scene.GenMenu,

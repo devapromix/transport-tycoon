@@ -78,6 +78,13 @@ begin
   if (Key = TK_MOUSE_LEFT) then
   begin
     case MX of
+      32 .. 51:
+        case MY of
+          11 .. 17:
+            Key := TK_A + (MY - 11);
+        end;
+    end;
+    case MX of
       28 .. 37:
         case MY of
           19:
