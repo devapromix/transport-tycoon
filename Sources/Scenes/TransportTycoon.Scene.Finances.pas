@@ -115,8 +115,8 @@ begin
   DrawMoney(38, 24, Game.Money - Game.Loan);
   terminal_composition(TK_OFF);
 
-  AddButton(26, 'B', 'BORROW');
-  AddButton(26, 'R', 'REPAY');
+  AddButton(26, Game.Loan < TGame.MaxLoan, 'B', 'BORROW');
+  AddButton(26, Game.Loan > 0, 'R', 'REPAY');
   AddButton(26, 'ESC', 'CLOSE');
 
   DrawBar;
