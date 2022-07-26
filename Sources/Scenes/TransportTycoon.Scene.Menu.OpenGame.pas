@@ -30,7 +30,7 @@ procedure TSceneOpenGameMenu.Render;
 var
   I: Integer;
 begin
-  Game.Map.Draw(Self.Width, Self.Height);
+  Game.Map.Draw(Self.ScreenWidth, Self.ScreenHeight);
 
   DrawFrame(10, 6, 60, 18);
   DrawTitle(8, 'OPEN SAVED GAME');

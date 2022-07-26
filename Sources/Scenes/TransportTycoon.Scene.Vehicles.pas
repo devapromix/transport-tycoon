@@ -26,7 +26,7 @@ uses
 
 procedure TSceneVehicles.Render;
 begin
-  DrawMap(Self.Width, Self.Height - 1);
+  DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
   DrawFrame(10, 7, 60, 15);
   AddButton(19, 'Esc', 'Close');
   DrawBar;

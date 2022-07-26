@@ -48,7 +48,7 @@ end;
 
 procedure TSceneIndustry.Render;
 begin
-  DrawMap(Self.Width, Self.Height - 1);
+  DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
   FIndustry := Game.Map.Industry[Game.Map.CurrentIndustry];
 

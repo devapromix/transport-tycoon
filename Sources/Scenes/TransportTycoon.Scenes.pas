@@ -60,8 +60,8 @@ type
     function GetButtonsY: Integer;
     procedure RenderButtons;
     procedure DrawBar;
-    function Width: Integer;
-    function Height: Integer;
+    function ScreenWidth: Integer;
+    function ScreenHeight: Integer;
     property MX: Integer read FMX write FMX;
     property MY: Integer read FMY write FMY;
     property RX: Integer read FRX write FRX;
@@ -135,13 +135,13 @@ end;
 
 procedure TScene.DrawTitle(const Y: Integer; const Title: string);
 begin
-  terminal_print(Width div 2, Y, TK_ALIGN_CENTER,
+  terminal_print(ScreenWidth div 2, Y, TK_ALIGN_CENTER,
     '[c=yellow]' + UpperCase(Title) + '[/c]');
 end;
 
 procedure TScene.DrawText(const Y: Integer; Text: string);
 begin
-  terminal_print(Width div 2, Y, TK_ALIGN_CENTER, Text);
+  terminal_print(ScreenWidth div 2, Y, TK_ALIGN_CENTER, Text);
 end;
 
 procedure TScene.DrawText(const X, Y: Integer; Text, Color, BkColor: string);
@@ -208,7 +208,7 @@ procedure TScene.DrawBar;
 var
   Y: Integer;
 begin
-  Y := Self.Height - 1;
+  Y := Self.ScreenHeight - 1;
   terminal_color('white');
   terminal_bkcolor('darkest gray');
   terminal_clear_area(0, Y, 80, 1);
@@ -229,7 +229,7 @@ begin
   else
   begin
     if Game.IsPause then
-      DrawText(25, Height - 1, '[c=yellow][[P]][/c] [c=red]PAUSED[/c]')
+      DrawText(25, ScreenHeight - 1, '[c=yellow][[P]][/c] [c=red]PAUSED[/c]')
     else
       DrawButton(25, Y, 'P', 'Pause');
   end;
@@ -237,7 +237,7 @@ end;
 
 procedure TScene.DrawButton(const Y: Integer; Button, Text: string);
 begin
-  terminal_print(Width div 2, Y, TK_ALIGN_CENTER,
+  terminal_print(ScreenWidth div 2, Y, TK_ALIGN_CENTER,
     Format('[c=light yellow][[%s]][/c] [c=white]%s[/c]', [UpperCase(Button),
     UpperCase(Text)]));
 end;
@@ -271,7 +271,7 @@ end;
 procedure TScene.DrawButton(const Y: Integer; IsActive: Boolean;
   Button, Text: string);
 begin
-  terminal_print(Width div 2, Y, TK_ALIGN_CENTER,
+  terminal_print(ScreenWidth div 2, Y, TK_ALIGN_CENTER,
     MakeButton(IsActive, Button, Text));
 end;
 
@@ -316,20 +316,20 @@ begin
     terminal_print(X, Y, Align, Format('[c=red]-$%d[/c]', [Abs(Money)]));
 end;
 
-function TScene.Width: Integer;
+function TScene.ScreenWidth: Integer;
 begin
   Result := terminal_state(TK_WIDTH);
 end;
 
-function TScene.Height: Integer;
+function TScene.ScreenHeight: Integer;
 begin
   Result := terminal_state(TK_HEIGHT);
 end;
 
 procedure TScene.ScrollTo(const X, Y: Integer);
 begin
-  Game.Map.Left := EnsureRange(X - (Width div 2), 0, Game.Map.Width - Width);
-  Game.Map.Top := EnsureRange(Y - (Height div 2), 0, Game.Map.Height - Height);
+  Game.Map.Left := EnsureRange(X - (ScreenWidth div 2), 0, Game.Map.Width - ScreenWidth);
+  Game.Map.Top := EnsureRange(Y - (ScreenHeight div 2), 0, Game.Map.Height - ScreenHeight);
 end;
 
 procedure TScene.ScrollUp;
@@ -340,7 +340,7 @@ end;
 
 procedure TScene.ScrollDown;
 begin
-  if (Game.Map.Top <= Game.Map.Height - Self.Height) then
+  if (Game.Map.Top <= Game.Map.Height - Self.ScreenHeight) then
     Game.Map.Top := Game.Map.Top + 1;
 end;
 
@@ -352,7 +352,7 @@ end;
 
 procedure TScene.ScrollRight;
 begin
-  if (Game.Map.Left < Game.Map.Width - Self.Width) then
+  if (Game.Map.Left < Game.Map.Width - Self.ScreenWidth) then
     Game.Map.Left := Game.Map.Left + 1;
 end;
 
@@ -390,7 +390,7 @@ begin
         S := S + ' | ';
     end;
   terminal_bkcolor(0);
-  terminal_print(Width div 2, FButtonsY, TK_ALIGN_CENTER, S);
+  terminal_print(ScreenWidth div 2, FButtonsY, TK_ALIGN_CENTER, S);
 end;
 
 constructor TScenes.Create;

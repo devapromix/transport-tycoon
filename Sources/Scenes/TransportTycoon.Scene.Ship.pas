@@ -29,7 +29,7 @@ var
   S: string;
   C: Char;
 begin
-  DrawMap(Self.Width, Self.Height - 1);
+  DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
   DrawFrame(10, 7, 60, 15);
   with Game.Vehicles do

@@ -24,7 +24,7 @@ uses
 
 procedure TSceneMainMenu.Render;
 begin
-  Game.Map.Draw(Self.Width, Self.Height);
+  Game.Map.Draw(Self.ScreenWidth, Self.ScreenHeight);
 
   DrawFrame(20, 8, 40, 14);
   DrawTitle(10, 'TRANSPORT TYCOON');

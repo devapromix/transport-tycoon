@@ -31,7 +31,7 @@ procedure TSceneBuildNearIndustry.Render;
 var
   S: string;
 begin
-  DrawMap(Self.Width, Self.Height - 1);
+  DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
   DrawFrame(15, 7, 50, 15);
 

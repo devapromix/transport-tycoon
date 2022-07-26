@@ -86,7 +86,7 @@ procedure TSceneFinances.Render;
 var
   I, J, Year: Word;
 begin
-  DrawMap(Self.Width, Self.Height - 1);
+  DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
   DrawFrame(8, 0, 64, 29);
   DrawTitle(2, Game.Company.Name + ' Finances');

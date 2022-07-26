@@ -32,7 +32,7 @@ var
   S: string;
   Cargo: TCargo;
 begin
-  DrawMap(Self.Width, Self.Height - 1);
+  DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
   DrawFrame(10, 6, 60, 17);
 

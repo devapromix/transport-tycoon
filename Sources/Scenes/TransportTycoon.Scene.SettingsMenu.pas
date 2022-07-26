@@ -32,9 +32,9 @@ uses
 procedure TSceneSettingsMenu.Render;
 begin
   if IsShowBar then
-    Game.Map.Draw(Self.Width, Self.Height - 1)
+    Game.Map.Draw(Self.ScreenWidth, Self.ScreenHeight - 1)
   else
-    Game.Map.Draw(Self.Width, Self.Height);
+    Game.Map.Draw(Self.ScreenWidth, Self.ScreenHeight);
 
   DrawFrame(25, 9, 30, 11);
   DrawTitle(11, 'GAME SETTINGS');

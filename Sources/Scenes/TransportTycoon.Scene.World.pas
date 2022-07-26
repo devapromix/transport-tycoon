@@ -15,6 +15,7 @@ type
     procedure IndustryInfo(const IndustryID: Word);
     procedure VehicleInfo(const VehicleName: string);
     procedure TileInfo(S: string);
+    procedure DrawTileBkColor(const BkColor: string = 'gray');
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -42,7 +43,7 @@ begin
   L := Length(S);
   if L > 18 then
     S := Trim(Copy(S, 1, 14)) + '...';
-  DrawText(45, Height - 1, S, TK_ALIGN_CENTER);
+  DrawText(45, ScreenHeight - 1, S, TK_ALIGN_CENTER);
 end;
 
 procedure TSceneWorld.VehicleInfo(const VehicleName: string);
@@ -51,11 +52,11 @@ var
 begin
   L := EnsureRange(Length(VehicleName) + 8, 20, 40);
   TileInfo(VehicleName);
-  if (MY < Height - 10) then
+  if (MY < ScreenHeight - 10) then
     VY := MY + 1
   else
     VY := MY - 5;
-  if (MX < Width - (Width div 2)) then
+  if (MX < ScreenWidth - (ScreenWidth div 2)) then
     VX := MX + 1
   else
     VX := MX - L;
@@ -74,11 +75,11 @@ begin
   S := Game.Map.Industry[TownID].Name;
   L := EnsureRange(Length(S) + 8, 20, 40);
   TileInfo(S);
-  if (MY < Height - 10) then
+  if (MY < ScreenHeight - 10) then
     VY := MY + 1
   else
     VY := MY - 7;
-  if (MX < Width - (Width div 2)) then
+  if (MX < ScreenWidth - (ScreenWidth div 2)) then
     VX := MX + 1
   else
     VX := MX - L;
@@ -90,6 +91,12 @@ begin
     'Pop.: ' + IntToStr(TTownIndustry(Game.Map.Industry[TownID]).Population),
     TK_ALIGN_CENTER);
   DrawText(MX, MY, '#', 'yellow', 'gray');
+end;
+
+procedure TSceneWorld.DrawTileBkColor(const BkColor: string = 'gray');
+begin
+  terminal_bkcolor(BkColor);
+  terminal_put(MX, MY, $2588);
 end;
 
 class procedure TSceneWorld.GlobalKeys(var Key: Word);
@@ -137,11 +144,11 @@ begin
   S := Game.Map.Industry[IndustryID].Name;
   L := Length(S) + 8;
   TileInfo(S);
-  if (MY < Height - 10) then
+  if (MY < ScreenHeight - 10) then
     VY := MY + 1
   else
     VY := MY - 5;
-  if (MX < Width - (Width div 2)) then
+  if (MX < ScreenWidth - (ScreenWidth div 2)) then
     VX := MX + 1
   else
     VX := MX - L;
@@ -156,29 +163,30 @@ procedure TSceneWorld.Render;
 var
   VehicleName: string;
 begin
-  DrawMap(Self.Width, Self.Height - 1);
+  DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
   if Game.Construct.IsBuild(ceClearLand) then
   begin
-    terminal_bkcolor('red');
-    terminal_put(MX, MY, $2588);
+    if (Game.Map.Cell[RX][RY] in TreeTiles) then
+      DrawTileBkColor('light red')
+    else
+      DrawTileBkColor;
   end
   else if Game.Construct.IsBuild(ceBuildCanal) then
   begin
-    terminal_bkcolor('light blue');
-    terminal_put(MX, MY, $2588);
+    if (Game.Map.Cell[RX][RY] in TreeTiles + LandTiles) then
+      DrawTileBkColor('light blue')
+    else
+      DrawTileBkColor;
   end
   else
-  begin
-    terminal_bkcolor('gray');
-    terminal_put(MX, MY, $2588);
-  end;
+    DrawTileBkColor;
   terminal_color('black');
   terminal_put(MX, MY, Tile[Game.Map.Cell[RX][RY]].Tile);
 
   DrawBar;
 
-  if (MY < Self.Height - 1) then
+  if (MY < Self.ScreenHeight - 1) then
   begin
     if Game.Map.Cell[RX][RY] = tlTownIndustry then
       TownInfo(Game.Map.GetCurrentIndustry(RX, RY))
@@ -189,11 +197,11 @@ begin
     else
       TileInfo(Tile[Game.Map.Cell[RX][RY]].Name);
   end;
-  if (MY = Self.Height - 2) then
+  if (MY = Self.ScreenHeight - 2) then
     ScrollDown;
   if (MY = 0) then
     ScrollUp;
-  if (MX = Self.Width - 1) then
+  if (MX = Self.ScreenWidth - 1) then
     ScrollRight;
   if (MX = 0) then
     ScrollLeft;
@@ -205,7 +213,7 @@ var
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
-    if (MY = Self.Height - 1) then
+    if (MY = Self.ScreenHeight - 1) then
     begin
       case MX of
         70 .. 79:

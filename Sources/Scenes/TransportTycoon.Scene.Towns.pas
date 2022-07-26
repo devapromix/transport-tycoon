@@ -28,7 +28,7 @@ var
   I: Integer;
   Town: TTownIndustry;
 begin
-  DrawMap(Self.Width, Self.Height - 1);
+  DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
   DrawFrame(25, 4, 30, 21);
 
