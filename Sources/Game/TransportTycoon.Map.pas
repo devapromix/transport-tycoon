@@ -28,7 +28,7 @@ const
     //
     (Name: 'Grass'; Tile: '"'; Color: 'green'),
     //
-    (Name: 'Dirt'; Tile: ':'; Color: 'darker yellow'),
+    (Name: 'Dirt'; Tile: ':'; Color: 'dark yellow'),
     //
     (Name: 'Oak'; Tile: 'f'; Color: 'green'),
     //
@@ -42,17 +42,17 @@ const
     //
     (Name: 'Water'; Tile: '='; Color: 'blue'),
     //
-    (Name: 'Canal'; Tile: '='; Color: 'lighter blue'),
+    (Name: 'Canal'; Tile: '='; Color: 'light blue'),
     //
-    (Name: 'Town'; Tile: '#'; Color: 'lighter yellow'),
+    (Name: 'Town'; Tile: '#'; Color: 'light yellow'),
     //
-    (Name: 'Forest'; Tile: 'F'; Color: 'lighter yellow'),
+    (Name: 'Forest'; Tile: 'F'; Color: 'light yellow'),
     //
-    (Name: 'Sawmill'; Tile: 'S'; Color: 'lighter yellow'),
+    (Name: 'Sawmill'; Tile: 'S'; Color: 'light yellow'),
     //
-    (Name: 'Coal Mine'; Tile: 'C'; Color: 'lighter yellow'),
+    (Name: 'Coal Mine'; Tile: 'C'; Color: 'light yellow'),
     //
-    (Name: 'Power Plant'; Tile: 'P'; Color: 'lighter yellow')
+    (Name: 'Power Plant'; Tile: 'P'; Color: 'light yellow')
     //
     );
 
@@ -107,6 +107,7 @@ type
     function SizeCoef: Integer;
     function MapIndCount: Integer;
     function MapTownCount: Integer;
+    function Darkest(const Color: string): string;
   public const
     ClearLandCost = 100;
     BuildCanalCost = 1000;
@@ -291,6 +292,17 @@ begin
   Resize;
 end;
 
+function TMap.Darkest(const Color: string): string;
+begin
+  Result := Color;
+  Result := Result.Replace('lighter', '').Trim;
+  Result := Result.Replace('darker', '').Trim;
+  Result := Result.Replace('light', '').Trim;
+  Result := Result.Replace('dark', '').Trim;
+  if not Result.Contains(#32) then
+    Result := 'darkest ' + Result;
+end;
+
 destructor TMap.Destroy;
 var
   I: Integer;
@@ -339,13 +351,14 @@ procedure TMap.Draw(const AWidth, AHeight: Integer);
 var
   X, Y: Integer;
 begin
-  terminal_bkcolor('darkest gray');
   for Y := 0 to AHeight - 1 do
     for X := 0 to AWidth - 1 do
     begin
+      terminal_bkcolor(Darkest(Tile[Cell[Left + X][Top + Y]].Color));
       terminal_color(Tile[Cell[Left + X][Top + Y]].Color);
       terminal_put(X, Y, Tile[Cell[Left + X][Top + Y]].Tile);
     end;
+  terminal_bkcolor('darkest gray');
   terminal_color('white');
 end;
 
