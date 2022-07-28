@@ -172,10 +172,11 @@ begin
     else
       DrawTileBkColor;
   end
-  else if Game.Construct.IsBuild(ceBuildCanal) then
+  else if Game.Construct.IsBuild(ceBuildCanal) or
+    Game.Construct.IsBuild(ceBuildRoad) then
   begin
     if (Game.Map.Cell[RX][RY] in TreeTiles + LandTiles) then
-      DrawTileBkColor('light blue')
+      DrawTileBkColor('light yellow')
     else
       DrawTileBkColor;
   end
@@ -269,6 +270,12 @@ begin
         if Game.Construct.IsBuild(ceBuildCanal) then
         begin
           Game.Map.BuildCanals(RX, RY);
+          Scenes.Render;
+          Exit;
+        end;
+        if Game.Construct.IsBuild(ceBuildRoad) then
+        begin
+          Game.Map.BuildRoad(RX, RY);
           Scenes.Render;
           Exit;
         end;

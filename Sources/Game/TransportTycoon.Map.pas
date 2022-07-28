@@ -7,8 +7,8 @@ uses
 
 type
   TTiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlRock, tlSand,
-    tlWater, tlCanal, tlTownIndustry, tlForestIndustry, tlSawmillIndustry,
-    tlCoalMineIndustry, tlPowerPlantIndustry);
+    tlWater, tlCanal, tlRoad, tlTownIndustry, tlForestIndustry,
+    tlSawmillIndustry, tlCoalMineIndustry, tlPowerPlantIndustry);
 
 const
   LandTiles = [tlGrass, tlDirt, tlSand];
@@ -44,6 +44,8 @@ const
     (Name: 'Water'; Tile: '='; Color: 'blue'; BkColor: 'darkest blue'),
     //
     (Name: 'Canal'; Tile: '='; Color: 'light blue'; BkColor: 'darkest blue'),
+    //
+    (Name: 'Road'; Tile: '*'; Color: 'light gray'; BkColor: 'darkest gray'),
     //
     (Name: 'Town'; Tile: '#'; Color: 'light yellow'; BkColor: 'darkest yellow'),
     //
@@ -112,10 +114,10 @@ type
     function SizeCoef: Integer;
     function MapIndCount: Integer;
     function MapTownCount: Integer;
-    function Darkest(const Color: string): string;
   public const
     ClearLandCost = 100;
     BuildCanalCost = 1000;
+    BuildRoadCost = 250;
   public
     Cell: array of array of TTiles;
     Industry: array of TIndustry;
@@ -148,6 +150,7 @@ type
     procedure NextSize;
     procedure ClearLand(const AX, AY: Integer);
     procedure BuildCanals(const AX, AY: Integer);
+    procedure BuildRoad(const AX, AY: Integer);
     function GetNearTownName(const AX, AY: Integer): string;
     function IsNearTile(const AX, AY: Integer; const ATile: TTiles): Boolean;
     function TownCount: Integer;
@@ -297,17 +300,6 @@ begin
   Resize;
 end;
 
-function TMap.Darkest(const Color: string): string;
-begin
-  Result := Color;
-  Result := Result.Replace('lighter', '').Trim;
-  Result := Result.Replace('darker', '').Trim;
-  Result := Result.Replace('light', '').Trim;
-  Result := Result.Replace('dark', '').Trim;
-  if not Result.Contains(#32) then
-    Result := 'darkest ' + Result;
-end;
-
 destructor TMap.Destroy;
 var
   I: Integer;
@@ -352,6 +344,21 @@ begin
     end;
 end;
 
+procedure TMap.BuildRoad(const AX, AY: Integer);
+var
+  Money: Word;
+begin
+  Money := BuildRoadCost;
+  if (Cell[AX][AY] in TreeTiles) then
+    Inc(Money, ClearLandCost);
+  if (Cell[AX][AY] in TreeTiles + LandTiles) then
+    if (Game.Money >= Money) then
+    begin
+      Cell[AX][AY] := tlRoad;
+      Game.ModifyMoney(ttConstruction, -Money);
+    end;
+end;
+
 procedure TMap.Draw(const AWidth, AHeight: Integer);
 var
   X, Y: Integer;
@@ -359,7 +366,7 @@ begin
   for Y := 0 to AHeight - 1 do
     for X := 0 to AWidth - 1 do
     begin
-      terminal_bkcolor(Darkest(Tile[Cell[Left + X][Top + Y]].Color));
+      terminal_bkcolor(Tile[Cell[Left + X][Top + Y]].BkColor);
       terminal_color(Tile[Cell[Left + X][Top + Y]].Color);
       terminal_put(X, Y, Tile[Cell[Left + X][Top + Y]].Tile);
     end;

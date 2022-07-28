@@ -34,7 +34,8 @@ begin
   DrawFrame(20, 8, 40, 13);
   DrawTitle(10, Game.Company.Name);
 
-  DrawButton(22, 12, 'C', 'Build Canals');
+  DrawButton(22, 12, 'C', 'Build Canal');
+  DrawButton(22, 13, 'R', 'Build Road');
 
   DrawButton(22, 16, 'X', 'Clear land');
 
@@ -59,6 +60,8 @@ begin
         case MY of
           12:
             Key := TK_C;
+          13:
+            Key := TK_R;
           16:
             Key := TK_X;
         end;
@@ -70,6 +73,11 @@ begin
     TK_C:
       begin
         Game.Construct.Build(ceBuildCanal);
+        Scenes.SetScene(scWorld);
+      end;
+    TK_R:
+      begin
+        Game.Construct.Build(ceBuildRoad);
         Scenes.SetScene(scWorld);
       end;
     TK_X:
