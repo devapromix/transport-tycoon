@@ -21,38 +21,43 @@ type
     Name: string;
     Tile: Char;
     Color: string;
+    BkColor: string;
   end;
 
 const
   Tile: array [TTiles] of TTile = (
     //
-    (Name: 'Grass'; Tile: '"'; Color: 'green'),
+    (Name: 'Grass'; Tile: '"'; Color: 'green'; BkColor: 'darkest green'),
     //
-    (Name: 'Dirt'; Tile: ':'; Color: 'dark yellow'),
+    (Name: 'Dirt'; Tile: ':'; Color: 'dark yellow'; BkColor: 'darkest yellow'),
     //
-    (Name: 'Oak'; Tile: 'f'; Color: 'green'),
+    (Name: 'Oak'; Tile: 'f'; Color: 'green'; BkColor: 'darkest green'),
     //
-    (Name: 'Pine'; Tile: 't'; Color: 'dark green'),
+    (Name: 'Pine'; Tile: 't'; Color: 'dark green'; BkColor: 'darkest green'),
     //
-    (Name: 'Bush'; Tile: 'b'; Color: 'dark green'),
+    (Name: 'Bush'; Tile: 'b'; Color: 'dark green'; BkColor: 'darkest green'),
     //
-    (Name: 'Rock'; Tile: '^'; Color: 'dark gray'),
+    (Name: 'Rock'; Tile: '^'; Color: 'dark gray'; BkColor: 'darkest grey'),
     //
-    (Name: 'Sand'; Tile: ':'; Color: 'yellow'),
+    (Name: 'Sand'; Tile: ':'; Color: 'yellow'; BkColor: 'darkest yellow'),
     //
-    (Name: 'Water'; Tile: '='; Color: 'blue'),
+    (Name: 'Water'; Tile: '='; Color: 'blue'; BkColor: 'darkest blue'),
     //
-    (Name: 'Canal'; Tile: '='; Color: 'light blue'),
+    (Name: 'Canal'; Tile: '='; Color: 'light blue'; BkColor: 'darkest blue'),
     //
-    (Name: 'Town'; Tile: '#'; Color: 'light yellow'),
+    (Name: 'Town'; Tile: '#'; Color: 'light yellow'; BkColor: 'darkest yellow'),
     //
-    (Name: 'Forest'; Tile: 'F'; Color: 'light yellow'),
+    (Name: 'Forest'; Tile: 'F'; Color: 'light yellow';
+    BkColor: 'darkest yellow'),
     //
-    (Name: 'Sawmill'; Tile: 'S'; Color: 'light yellow'),
+    (Name: 'Sawmill'; Tile: 'S'; Color: 'light yellow';
+    BkColor: 'darkest yellow'),
     //
-    (Name: 'Coal Mine'; Tile: 'C'; Color: 'light yellow'),
+    (Name: 'Coal Mine'; Tile: 'C'; Color: 'light yellow';
+    BkColor: 'darkest yellow'),
     //
-    (Name: 'Power Plant'; Tile: 'P'; Color: 'light yellow')
+    (Name: 'Power Plant'; Tile: 'P'; Color: 'light yellow';
+    BkColor: 'darkest yellow')
     //
     );
 
