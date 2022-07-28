@@ -125,6 +125,8 @@ begin
 end;
 
 procedure TShip.Step;
+var
+  Cargo: TCargo;
 begin
   if Length(Order) > 0 then
   begin
@@ -139,11 +141,20 @@ begin
       begin
         FT := 0;
         Load;
-        IncOrder;
-      end;
-    end
-    else
-      IncDistance;
+        if FullLoad then
+          for Cargo := Succ(Low(TCargo)) to High(TCargo) do
+            if (Cargo in Game.Map.Industry[Order[OrderIndex].ID].Produces) and
+              (Cargo in FCargo) then
+            begin
+              FCargoType := Cargo;
+              if (FCargoAmount < FCargoMaxAmount) then
+                Exit;
+              IncOrder;
+            end;
+      end
+      else
+        IncDistance;
+    end;
   end;
 end;
 

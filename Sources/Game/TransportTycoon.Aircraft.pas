@@ -156,6 +156,8 @@ begin
       begin
         FT := 0;
         Load;
+        if (FullLoad and (Passengers < MaxPassengers)) then
+          Exit;
         IncOrder;
       end;
     end

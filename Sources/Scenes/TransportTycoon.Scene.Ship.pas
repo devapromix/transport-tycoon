@@ -52,7 +52,9 @@ begin
         DrawText(12, 12, Format('%s: %d/%d', [CargoStr[CargoType], CargoAmount,
           CargoMaxAmount]));
 
-      DrawText(12, 17, Format('State: %s', [State]));
+      DrawText(12, 15, Format('State: %s', [State]));
+      DrawText(12, 17, Format('[color=yellow][[L]][/c] Full Load: [[%s]]',
+        [Check(FullLoad)]));
 
       for I := 0 to Length(Order) - 1 do
       begin
@@ -109,6 +111,13 @@ begin
       Scenes.Back;
     TK_O:
       Scenes.SetScene(scShipOrders);
+    TK_L:
+      with Game.Vehicles do
+        with Ship[CurrentVehicle] do
+        begin
+          FullLoad := not FullLoad;
+          Scenes.Render;
+        end;
   end;
 end;
 

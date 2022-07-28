@@ -19,6 +19,7 @@ type
     FLastStationId: Integer;
     FOrderIndex: Integer;
     FVehicleID: Integer;
+    FFullLoad: Boolean;
   public
     Order: array of TOrder;
     constructor Create(const AName: string; const AX, AY: Integer);
@@ -38,6 +39,7 @@ type
     procedure IncOrder;
     procedure IncDistance;
     procedure SetLastStation;
+    property FullLoad: Boolean read FFullLoad write FFullLoad;
   end;
 
 implementation
@@ -54,6 +56,7 @@ begin
   FOrderIndex := 0;
   FDistance := 0;
   FLastStationId := 0;
+  FFullLoad := False;
 end;
 
 procedure TVehicle.Draw;

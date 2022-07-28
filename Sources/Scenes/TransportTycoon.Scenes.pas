@@ -71,6 +71,7 @@ type
     procedure ScrollDown;
     procedure ScrollLeft;
     procedure ScrollRight;
+    function Check(const F: Boolean): string;
   end;
 
 type
@@ -328,14 +329,24 @@ end;
 
 procedure TScene.ScrollTo(const X, Y: Integer);
 begin
-  Game.Map.Left := EnsureRange(X - (ScreenWidth div 2), 0, Game.Map.Width - ScreenWidth);
-  Game.Map.Top := EnsureRange(Y - (ScreenHeight div 2), 0, Game.Map.Height - ScreenHeight);
+  Game.Map.Left := EnsureRange(X - (ScreenWidth div 2), 0,
+    Game.Map.Width - ScreenWidth);
+  Game.Map.Top := EnsureRange(Y - (ScreenHeight div 2), 0,
+    Game.Map.Height - ScreenHeight);
 end;
 
 procedure TScene.ScrollUp;
 begin
   if (Game.Map.Top > 0) then
     Game.Map.Top := Game.Map.Top - 1;
+end;
+
+function TScene.Check(const F: Boolean): string;
+begin
+  if F then
+    Result := 'X'
+  else
+    Result := #32;
 end;
 
 procedure TScene.ScrollDown;

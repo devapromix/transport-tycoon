@@ -50,7 +50,9 @@ begin
         [Passengers, MaxPassengers]));
       DrawText(12, 13, Format('Mail: %d/%d', [Mail, MaxMail]));
 
-      DrawText(12, 17, Format('State: %s', [State]));
+      DrawText(12, 15, Format('State: %s', [State]));
+      DrawText(12, 17, Format('[color=yellow][[L]][/c] Full Load: [[%s]]',
+        [Check(FullLoad)]));
 
       for I := 0 to Length(Order) - 1 do
       begin
@@ -114,6 +116,13 @@ begin
       Scenes.Back;
     TK_O:
       Scenes.SetScene(scAircraftOrders);
+    TK_L:
+      with Game.Vehicles do
+        with Aircraft[CurrentVehicle] do
+        begin
+          FullLoad := not FullLoad;
+          Scenes.Render;
+        end;
   end;
 end;
 
