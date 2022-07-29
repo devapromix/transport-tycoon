@@ -252,12 +252,4 @@ begin
   FVehicles.Clear;
 end;
 
-initialization
-
-Game := TGame.Create;
-
-finalization
-
-Game.Free;
-
 end.

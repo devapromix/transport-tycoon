@@ -63,6 +63,7 @@ begin
   terminal_set('window: size=80x30, title="Transport Tycoon v.' +
     Game.Version + '";');
   terminal_set('input: filter={keyboard, mouse+}');
+  Game := TGame.Create;
   Scenes := TScenes.Create;
   Scenes.SetScene(scMainMenu);
   try
@@ -89,6 +90,7 @@ begin
     terminal_close();
   finally
     Scenes.Free;
+    Game.Free;
   end;
 
 end.
