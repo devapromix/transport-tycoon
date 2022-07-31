@@ -14,6 +14,7 @@ type
   TCalendar = class(TObject)
   private
     FDay: Word;
+    FWeekDay: Word;
     FYear: Word;
     FMonth: Word;
     function DaysPerMonth(const AMonth: Byte): Byte;
@@ -27,8 +28,9 @@ type
     function GetDate: string;
     procedure PrevYear;
     procedure NextYear;
-    procedure OnMonth();
-    procedure OnYear();
+    procedure OnWeek;
+    procedure OnMonth;
+    procedure OnYear;
   end;
 
 implementation
@@ -42,6 +44,7 @@ uses
 procedure TCalendar.Clear;
 begin
   FDay := 1;
+  FWeekDay := 1;
   FMonth := 1;
   FYear := StartYear;
 end;
@@ -73,9 +76,13 @@ end;
 
 procedure TCalendar.OnMonth;
 begin
-  Game.Map.Grows;
   Game.Vehicles.RunningCosts;
   Game.ModifyMoney(ttLoanInterest, -(Game.Loan div 600));
+end;
+
+procedure TCalendar.OnWeek;
+begin
+  Game.Map.Grows;
 end;
 
 procedure TCalendar.OnYear;
@@ -93,6 +100,12 @@ end;
 procedure TCalendar.Step;
 begin
   Inc(FDay);
+  Inc(FWeekDay);
+  if (FWeekDay > 7) then
+  begin
+    FWeekDay := 1;
+    OnWeek;
+  end;
   if (FDay > DaysPerMonth(FMonth)) then
   begin
     FDay := 1;

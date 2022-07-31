@@ -169,11 +169,11 @@ begin
   if Dock.IsBuilding then
   begin
     if (cgWood in Produces) then
-      SetCargoAmount(cgWood, RandomRange(15, 18));
+      IncCargoAmount(cgWood, RandomRange(4, 6));
     if (cgCoal in Produces) then
-      SetCargoAmount(cgCoal, RandomRange(15, 18));
+      IncCargoAmount(cgCoal, RandomRange(4, 6));
     if (cgGoods in Produces) then
-      SetCargoAmount(cgGoods, RandomRange(15, 18));
+      IncCargoAmount(cgGoods, RandomRange(4, 6));
   end;
 end;
 
@@ -226,17 +226,17 @@ end;
 
 procedure TTownIndustry.Grows;
 var
-  MonthPassengers: Integer;
-  MonthMail: Integer;
+  WeekPassengers: Integer;
+  WeekMail: Integer;
 begin
   if Math.RandomRange(0, 25) <= GrowModif then
     ModifyPopulation(Math.RandomRange(GrowModif * 8, GrowModif * 12));
-  MonthPassengers := FPopulation div Math.RandomRange(40, 50);
-  MonthMail := FPopulation div Math.RandomRange(160, 190);
+  WeekPassengers := FPopulation div Math.RandomRange(10, 12);
+  WeekMail := FPopulation div Math.RandomRange(40, 50);
   if Airport.IsBuilding or Dock.IsBuilding then
   begin
-    SetCargoAmount(cgPassengers, MonthPassengers);
-    SetCargoAmount(cgMail, MonthMail);
+    SetCargoAmount(cgPassengers, WeekPassengers);
+    SetCargoAmount(cgMail, WeekMail);
   end;
 end;
 
