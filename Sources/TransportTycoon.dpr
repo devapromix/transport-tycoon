@@ -44,7 +44,7 @@ uses
   TransportTycoon.Scene.ShipDepot in 'Scenes\TransportTycoon.Scene.ShipDepot.pas',
   TransportTycoon.Scene.Town in 'Scenes\TransportTycoon.Scene.Town.pas',
   TransportTycoon.Scene.Industries in 'Scenes\TransportTycoon.Scene.Industries.pas',
-  TransportTycoon.Scene.SettingsMenu in 'Scenes\TransportTycoon.Scene.SettingsMenu.pas',
+  TransportTycoon.Scene.Menu.Settings in 'Scenes\TransportTycoon.Scene.Menu.Settings.pas',
   TransportTycoon.Scene.Menu.OpenGame in 'Scenes\TransportTycoon.Scene.Menu.OpenGame.pas';
 
 var

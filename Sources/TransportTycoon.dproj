@@ -145,7 +145,7 @@
         <DCCReference Include="Scenes\TransportTycoon.Scene.ShipDepot.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Town.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Industries.pas"/>
-        <DCCReference Include="Scenes\TransportTycoon.Scene.SettingsMenu.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.Settings.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.OpenGame.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
