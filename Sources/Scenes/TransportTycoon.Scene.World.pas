@@ -32,7 +32,7 @@ uses
   TransportTycoon.Game,
   TransportTycoon.Industries,
   TransportTycoon.Construct,
-  TransportTycoon.Scene.SettingsMenu;
+  TransportTycoon.Scene.Menu.Settings;
 
 { TSceneWorld }
 

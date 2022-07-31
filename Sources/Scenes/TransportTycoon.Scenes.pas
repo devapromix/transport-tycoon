@@ -125,7 +125,7 @@ uses
   TransportTycoon.Scene.Ship,
   TransportTycoon.Scene.ShipDepot,
   TransportTycoon.Scene.BuildMenu,
-  TransportTycoon.Scene.SettingsMenu,
+  TransportTycoon.Scene.Menu.Settings,
   TransportTycoon.Scene.Menu.OpenGame;
 
 procedure TScene.DrawText(const X, Y: Integer; Text: string;
@@ -468,9 +468,6 @@ begin
       begin
         terminal_print(0, 0, Format('X:%d, Y:%d', [RX, RY]));
         terminal_print(0, 1, Format('MX:%d, MY:%d', [MX, MY]));
-        for I := High(FBackSceneEnum) downto 0 do
-          if FBackSceneEnum[I] <> scWorld then
-            terminal_print(0, I + 2, '+++');
       end;
     end;
   terminal_bkcolor(0);

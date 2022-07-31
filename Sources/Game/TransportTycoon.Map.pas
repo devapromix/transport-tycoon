@@ -421,7 +421,7 @@ begin
   for I := 0 to 14 do
   begin
     X := Math.RandomRange((SizeCoef + 10), FWidth - (SizeCoef + 10));
-    Y := Math.RandomRange((SizeCoef + 10), FWidth - (SizeCoef + 10));
+    Y := Math.RandomRange((SizeCoef + 10), FHeight - (SizeCoef + 10));
     case RandomRange(0, 4) of
       0:
         AddSpot(X, Y, tlDirt);
@@ -601,7 +601,6 @@ begin
       Cell[VX][VY] := ATile;
     end;
   end;
-
 end;
 
 procedure TMap.AddTree(const AX, AY: Integer);

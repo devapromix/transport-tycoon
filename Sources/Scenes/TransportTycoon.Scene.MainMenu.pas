@@ -20,7 +20,7 @@ uses
   BearLibTerminal,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Scene.SettingsMenu;
+  TransportTycoon.Scene.Menu.Settings;
 
 procedure TSceneMainMenu.Render;
 begin
