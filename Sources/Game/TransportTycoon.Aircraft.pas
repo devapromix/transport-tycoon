@@ -158,8 +158,8 @@ begin
         Load;
         if (FullLoad and (Passengers < MaxPassengers)) then
           Exit;
-        IncOrder;
       end;
+      IncOrder;
     end
     else
       IncDistance;
