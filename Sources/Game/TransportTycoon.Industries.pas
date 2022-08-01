@@ -48,9 +48,25 @@ type
 
 type
 
+  { TPrimaryIndustry }
+
+  TPrimaryIndustry = class(TIndustry)
+    procedure Grows; override;
+  end;
+
+type
+
+  { TSecondaryIndustry }
+
+  TSecondaryIndustry = class(TIndustry)
+    procedure Grows; override;
+  end;
+
+type
+
   { TTownIndustry }
 
-  TTownIndustry = class(TIndustry)
+  TTownIndustry = class(TPrimaryIndustry)
   private
     FHouses: Word;
     FPopulation: Integer;
@@ -73,7 +89,7 @@ type
 
   { TForestIndustry }
 
-  TForestIndustry = class(TIndustry)
+  TForestIndustry = class(TPrimaryIndustry)
   private
   public
     constructor Create(const AName: string; const AX, AY: Integer);
@@ -83,7 +99,7 @@ type
 
   { TSawmillIndustry }
 
-  TSawmillIndustry = class(TIndustry)
+  TSawmillIndustry = class(TSecondaryIndustry)
   private
   public
     constructor Create(const AName: string; const AX, AY: Integer);
@@ -94,7 +110,7 @@ type
 
   { TCoalMineIndustry }
 
-  TCoalMineIndustry = class(TIndustry)
+  TCoalMineIndustry = class(TPrimaryIndustry)
   private
   public
     constructor Create(const AName: string; const AX, AY: Integer);
@@ -104,7 +120,7 @@ type
 
   { TPowerPlantIndustry }
 
-  TPowerPlantIndustry = class(TIndustry)
+  TPowerPlantIndustry = class(TPrimaryIndustry)
   private
   public
     constructor Create(const AName: string; const AX, AY: Integer);
@@ -167,15 +183,6 @@ end;
 
 procedure TIndustry.Grows;
 begin
-  if Dock.IsBuilding then
-  begin
-    if (cgWood in Produces) then
-      IncProducesCargoAmount(cgWood, RandomRange(4, 6));
-    if (cgCoal in Produces) then
-      IncProducesCargoAmount(cgCoal, RandomRange(4, 6));
-    // if (cgGoods in Produces) then
-    // IncProducesCargoAmount(cgGoods, RandomRange(4, 6));
-  end;
 end;
 
 procedure TIndustry.IncAcceptsCargoAmount(const ACargo: TCargo;
@@ -184,9 +191,31 @@ begin
   FAcceptsAmount[ACargo] := FAcceptsAmount[ACargo] + AValue;
 end;
 
-procedure TIndustry.IncProducesCargoAmount(const ACargo: TCargo; AValue: Integer);
+procedure TIndustry.IncProducesCargoAmount(const ACargo: TCargo;
+  AValue: Integer);
 begin
   FProducesAmount[ACargo] := FProducesAmount[ACargo] + AValue;
+end;
+
+{ TPrimaryIndustry }
+
+procedure TPrimaryIndustry.Grows;
+var
+  Cargo: TCargo;
+begin
+  if Dock.IsBuilding then
+  begin
+    for Cargo := Succ(Low(TCargo)) to High(TCargo) do
+      if (Cargo in Produces) then
+        IncProducesCargoAmount(Cargo, RandomRange(4, 6));
+  end;
+end;
+
+{ TSecondaryIndustry }
+
+procedure TSecondaryIndustry.Grows;
+begin
+
 end;
 
 { TTownIndustry }
@@ -281,7 +310,8 @@ procedure TSawmillIndustry.Grows;
 begin
   if Dock.IsBuilding then
   begin
-    if (cgWood in Accepts) and (cgGoods in Produces) and (FAcceptsAmount[cgWood] > 0) then
+    if (cgWood in Accepts) and (cgGoods in Produces) and
+      (FAcceptsAmount[cgWood] > 0) then
     begin
       IncProducesCargoAmount(cgGoods, FAcceptsAmount[cgWood]);
       FAcceptsAmount[cgWood] := 0;
