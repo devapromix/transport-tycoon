@@ -43,8 +43,8 @@ begin
   begin
     if Cargo in FTown.Produces then
     begin
-      DrawText(7, J, Format('%s: %d', [CargoStr[Cargo],
-        FTown.ProducesAmount[Cargo]]));
+      DrawText(7, J, Format('%s: %d/%d', [CargoStr[Cargo],
+        FTown.ProducesAmount[Cargo], FTown.MaxCargo]));
       Inc(J);
     end;
   end;
