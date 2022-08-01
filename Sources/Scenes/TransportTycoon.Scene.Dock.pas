@@ -47,8 +47,8 @@ begin
   begin
     if Cargo in FIndustry.Produces then
     begin
-      DrawText(7, J, Format('%s: %d', [CargoStr[Cargo],
-        FIndustry.ProducesAmount[Cargo]]));
+      DrawText(7, J, Format('%s: %d/%d', [CargoStr[Cargo],
+        FIndustry.ProducesAmount[Cargo], FIndustry.MaxCargo]));
       Inc(J);
     end;
   end;

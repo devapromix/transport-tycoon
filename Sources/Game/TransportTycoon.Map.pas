@@ -662,7 +662,7 @@ function TMap.GetNearTownName(const AX, AY: Integer): string;
 var
   I, D, Mx: Integer;
 begin
-  Mx := Width div 2;
+  Mx := Width;
   Result := '';
   for I := 0 to Length(Industry) - 1 do
     if (Industry[I].IndustryType = inTown) then
