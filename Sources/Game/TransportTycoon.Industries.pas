@@ -39,7 +39,8 @@ type
     property IndustryType: TIndustryType read FIndustryType;
     procedure SetCargoAmount(const ACargo: TCargo; const AAmount: Integer);
     procedure DecCargoAmount(const ACargo: TCargo);
-    procedure IncCargoAmount(const ACargo: TCargo; AValue: Integer = 1);
+    procedure IncProducesCargoAmount(const ACargo: TCargo; AValue: Integer = 1);
+    procedure IncAcceptsCargoAmount(const ACargo: TCargo; AValue: Integer = 1);
     property Dock: TDock read FDock;
     procedure Grows; virtual;
     function GetCargoStr(const ACargoSet: TCargoSet): string;
@@ -169,15 +170,21 @@ begin
   if Dock.IsBuilding then
   begin
     if (cgWood in Produces) then
-      IncCargoAmount(cgWood, RandomRange(4, 6));
+      IncProducesCargoAmount(cgWood, RandomRange(4, 6));
     if (cgCoal in Produces) then
-      IncCargoAmount(cgCoal, RandomRange(4, 6));
-    if (cgGoods in Produces) then
-      IncCargoAmount(cgGoods, RandomRange(4, 6));
+      IncProducesCargoAmount(cgCoal, RandomRange(4, 6));
+    // if (cgGoods in Produces) then
+    // IncProducesCargoAmount(cgGoods, RandomRange(4, 6));
   end;
 end;
 
-procedure TIndustry.IncCargoAmount(const ACargo: TCargo; AValue: Integer);
+procedure TIndustry.IncAcceptsCargoAmount(const ACargo: TCargo;
+  AValue: Integer);
+begin
+  FAcceptsAmount[ACargo] := FAcceptsAmount[ACargo] + AValue;
+end;
+
+procedure TIndustry.IncProducesCargoAmount(const ACargo: TCargo; AValue: Integer);
 begin
   FProducesAmount[ACargo] := FProducesAmount[ACargo] + AValue;
 end;
@@ -274,9 +281,9 @@ procedure TSawmillIndustry.Grows;
 begin
   if Dock.IsBuilding then
   begin
-    if (cgWood in Accepts) and (cgGoods in Produces) then
+    if (cgWood in Accepts) and (cgGoods in Produces) and (FAcceptsAmount[cgWood] > 0) then
     begin
-      IncCargoAmount(cgGoods, FAcceptsAmount[cgWood]);
+      IncProducesCargoAmount(cgGoods, FAcceptsAmount[cgWood]);
       FAcceptsAmount[cgWood] := 0;
     end;
   end;

@@ -171,7 +171,7 @@ begin
     (CargoType <> cgNone) and (CargoAmount > 0) then
   begin
     Money := (FCargoAmount * (Distance div 10)) * CargoPrice[CargoType];
-    Game.Map.Industry[Order[OrderIndex].ID].IncCargoAmount(CargoType,
+    Game.Map.Industry[Order[OrderIndex].ID].IncAcceptsCargoAmount(CargoType,
       CargoAmount);
     Game.ModifyMoney(ttShipIncome, Money);
     FCargoAmount := 0;
