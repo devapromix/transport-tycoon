@@ -66,7 +66,9 @@ type
       const AMoney: Integer); overload;
     procedure LoadSettings;
     procedure SaveSettings;
+    function CanRepay: Boolean;
     procedure Repay;
+    function CanBorrow: Boolean;
     procedure Borrow;
     procedure NextSpeed;
     procedure PrevSpeed;
@@ -178,9 +180,14 @@ begin
   Dec(FSpeed);
 end;
 
+function TGame.CanRepay: Boolean;
+begin
+  Result := (FLoan >= 10000) and (FMoney >= 10000);
+end;
+
 procedure TGame.Repay;
 begin
-  if (FLoan >= 10000) and (FMoney >= 10000) then
+  if CanRepay then
   begin
     FLoan := FLoan - 10000;
     FMoney := FMoney - 10000;
@@ -229,9 +236,14 @@ begin
   FVehicles.Step;
 end;
 
+function TGame.CanBorrow: Boolean;
+begin
+  Result := Loan < MaxLoan;
+end;
+
 procedure TGame.Borrow;
 begin
-  if Loan < MaxLoan then
+  if CanBorrow then
   begin
     FLoan := FLoan + 10000;
     FMoney := FMoney + 10000;

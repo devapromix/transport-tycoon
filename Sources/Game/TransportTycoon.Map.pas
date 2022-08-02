@@ -39,7 +39,7 @@ const
     //
     (Name: 'Rock'; Tile: '^'; Color: 'dark gray'; BkColor: 'darkest grey'),
     //
-    (Name: 'Sand'; Tile: ':'; Color: 'yellow'; BkColor: 'darkest yellow'),
+    (Name: 'Sand'; Tile: ':'; Color: 'white'; BkColor: 'darkest yellow'),
     //
     (Name: 'Water'; Tile: '='; Color: 'blue'; BkColor: 'darkest blue'),
     //
