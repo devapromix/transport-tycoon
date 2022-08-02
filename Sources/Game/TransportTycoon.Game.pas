@@ -103,7 +103,7 @@ begin
   FFinances := TFinances.Create;
   FIsPause := True;
   FMap := TMap.Create;
-  FMap.Gen;
+  FMap.Gen(mtRandom);
   FVehicles := TVehicles.Create;
   FConstruct := TConstruct.Create;
 end;

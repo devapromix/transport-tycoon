@@ -17,10 +17,12 @@ type
 implementation
 
 uses
-  BearLibTerminal,
+  Math,
   SysUtils,
+  BearLibTerminal,
   TransportTycoon.Game,
-  TransportTycoon.Map;
+  TransportTycoon.Map,
+  TransportTycoon.Scene.World;
 
 procedure TSceneGenMenu.Render;
 begin
@@ -129,7 +131,6 @@ begin
         Game.Map.Gen;
         Game.IsPause := False;
         Game.SaveSettings;
-        Scenes.SetScene(scWorld);
       end;
   end;
 end;

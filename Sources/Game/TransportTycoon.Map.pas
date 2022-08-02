@@ -24,6 +24,9 @@ type
     BkColor: string;
   end;
 
+type
+  TMapType = (mtRandom, mtNormal);
+
 const
   Tile: array [TTiles] of TTile = (
     //
@@ -135,7 +138,7 @@ type
     procedure Clear;
     function IsTownName(const ATownName: string): Boolean;
     procedure Draw(const AWidth, AHeight: Integer);
-    procedure Gen;
+    procedure Gen(const AMapType: TMapType = mtNormal);
     procedure Grows;
     function GetCurrentIndustry(const AX, AY: Integer): Integer;
     function EnterInIndustry(const AX, AY: Integer): Boolean;
@@ -410,13 +413,18 @@ begin
   Result := FCurrentIndustry >= 0;
 end;
 
-procedure TMap.Gen;
+procedure TMap.Gen(const AMapType: TMapType = mtNormal);
 var
   X, Y, I, J, N, D: Integer;
   TownName, S: string;
   IndustryType: TIndustryType;
 begin
   // Terrain
+  if AMapType = mtRandom then
+  begin
+    SeaLevel := TMapSeaLevel(RandomRange(Ord(msVeryLow),
+      Ord(High(TMapSeaLevel)) + 1));
+  end;
   Self.Clear;
   D := 0;
   if (SeaLevel >= msNormal) then
