@@ -100,6 +100,8 @@ type
     FWidth: Word;
     FHeight: Word;
     FLeft: Word;
+    FLastColor: string;
+    FLastBkColor: string;
     FNoOfTowns: Integer;
     FRivers: TMapRivers;
     FSeaLevel: TMapSeaLevel;
@@ -114,6 +116,7 @@ type
     function SizeCoef: Integer;
     function MapIndCount: Integer;
     function MapTownCount: Integer;
+    procedure DrawTile(const X, Y: Integer);
   public const
     ClearLandCost = 100;
     BuildCanalCost = 1000;
@@ -235,6 +238,8 @@ begin
   FWidth := MapSizeInt[Size];
   FHeight := MapSizeInt[Size];
   SetLength(Cell, FWidth, FHeight);
+  FLastColor := '';
+  FLastBkColor := '';
 end;
 
 function TMap.SizeCoef: Integer;
@@ -365,13 +370,30 @@ var
 begin
   for Y := 0 to AHeight - 1 do
     for X := 0 to AWidth - 1 do
-    begin
-      terminal_bkcolor(Tile[Cell[Left + X][Top + Y]].BkColor);
-      terminal_color(Tile[Cell[Left + X][Top + Y]].Color);
-      terminal_put(X, Y, Tile[Cell[Left + X][Top + Y]].Tile);
-    end;
+      DrawTile(X, Y);
   terminal_bkcolor('darkest gray');
   terminal_color('white');
+end;
+
+procedure TMap.DrawTile(const X, Y: Integer);
+var
+  DX, DY: Integer;
+  F: Boolean;
+begin
+  DX := Left + X;
+  DY := Top + Y;
+  F := (X = 0) and (Y = 0);
+  if not F or (Tile[Cell[DX][DY]].BkColor <> FLastBkColor) then
+  begin
+    terminal_bkcolor(Tile[Cell[DX][DY]].BkColor);
+    FLastBkColor := Tile[Cell[DX][DY]].BkColor;
+  end;
+  if not F or (Tile[Cell[DX][DY]].Color <> FLastColor) then
+  begin
+    terminal_color(Tile[Cell[DX][DY]].Color);
+    FLastColor := Tile[Cell[DX][DY]].Color;
+  end;
+  terminal_put(X, Y, Tile[Cell[DX][DY]].Tile);
 end;
 
 function TMap.EnterInIndustry(const AX, AY: Integer): Boolean;

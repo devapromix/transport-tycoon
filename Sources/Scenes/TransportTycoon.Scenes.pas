@@ -464,13 +464,13 @@ begin
       Render;
       RenderButtons;
       terminal_color('white');
+      terminal_bkcolor('darkest gray');
       if Game.IsDebug then
       begin
         terminal_print(0, 0, Format('X:%d, Y:%d', [RX, RY]));
         terminal_print(0, 1, Format('MX:%d, MY:%d', [MX, MY]));
       end;
     end;
-  terminal_bkcolor(0);
 end;
 
 procedure TScenes.SetScene(SceneEnum, BackSceneEnum: TSceneEnum);
