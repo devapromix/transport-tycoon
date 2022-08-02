@@ -38,6 +38,7 @@ type
     FIsGame: Boolean;
     FConstruct: TConstruct;
     FSpeed: TGameSpeedEnum;
+    FLockScreen: Boolean;
   public const
     MaxLoan = 200000;
     StartMoney = MaxLoan div 2;
@@ -95,6 +96,7 @@ begin
     if (LowerCase(ParamStr(I)) = '-debug') then
       FIsDebug := True;
   end;
+  FLockScreen := False;
   FSpeed := spNormal;
   FCalendar := TCalendar.Create;
   FCompany := TCompany.Create;

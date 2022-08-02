@@ -64,11 +64,6 @@ const
     );
 
 type
-  TCell = record
-    Tile: TTile;
-  end;
-
-type
   TMapSize = (msTiny, msSmall, msMedium, msLarge);
   TMapSeaLevel = (msVeryLow, msLow, msNormal, msHigh);
   TMapNoOfTowns = (ntVeryLow, ntLow, ntNormal, ntHigh);
@@ -107,6 +102,7 @@ type
     FSeaLevel: TMapSeaLevel;
     FSize: TMapSize;
     FCurrentIndustry: Integer;
+    FTile: array of array of TTiles;
     function IsIndustryLocation(const AX, AY: Integer): Boolean;
     function IsTownLocation(const AX, AY: Integer): Boolean;
     function IsLandTile(const AX, AY: Integer): Boolean;
@@ -122,7 +118,6 @@ type
     BuildCanalCost = 1000;
     BuildRoadCost = 250;
   public
-    Cell: array of array of TTiles;
     Industry: array of TIndustry;
     constructor Create;
     destructor Destroy; override;
@@ -157,6 +152,9 @@ type
     function GetNearTownName(const AX, AY: Integer): string;
     function IsNearTile(const AX, AY: Integer; const ATile: TTiles): Boolean;
     function TownCount: Integer;
+    function IsAircraftPath(const AX, AY: Integer): Boolean;
+    function IsShipPath(const AX, AY: Integer): Boolean;
+    function GetTile(const AX, AY: Integer): TTiles;
   end;
 
 implementation
@@ -191,9 +189,14 @@ begin
     begin
       if (X = AX) and (Y = AY) then
         Continue;
-      if (Cell[X][Y] = ATile) then
+      if (FTile[X][Y] = ATile) then
         Exit(True);
     end;
+end;
+
+function TMap.IsShipPath(const AX, AY: Integer): Boolean;
+begin
+  Result := FTile[AX][AY] in [tlTownIndustry, tlWater, tlCanal] + IndustryTiles;
 end;
 
 procedure TMap.NextNoOfInd;
@@ -237,7 +240,7 @@ begin
   FLeft := 0;
   FWidth := MapSizeInt[Size];
   FHeight := MapSizeInt[Size];
-  SetLength(Cell, FWidth, FHeight);
+  SetLength(FTile, FWidth, FHeight);
   FLastColor := '';
   FLastBkColor := '';
 end;
@@ -269,7 +272,12 @@ end;
 
 function TMap.IsLandTile(const AX, AY: Integer): Boolean;
 begin
-  Result := Cell[AX][AY] in LandTiles;
+  Result := FTile[AX][AY] in LandTiles;
+end;
+
+function TMap.IsAircraftPath(const AX, AY: Integer): Boolean;
+begin
+  Result := True;
 end;
 
 function TMap.IsIndustryLocation(const AX, AY: Integer): Boolean;
@@ -321,15 +329,15 @@ begin
   Resize;
   for Y := 0 to FHeight - 1 do
     for X := 0 to FWidth - 1 do
-      Cell[X][Y] := tlGrass;
+      FTile[X][Y] := tlGrass;
 end;
 
 procedure TMap.ClearLand(const AX, AY: Integer);
 begin
-  if (Cell[AX][AY] in TreeTiles) then
+  if (FTile[AX][AY] in TreeTiles) then
     if (Game.Money >= ClearLandCost) then
     begin
-      Cell[AX][AY] := tlDirt;
+      FTile[AX][AY] := tlDirt;
       Game.ModifyMoney(ttConstruction, -ClearLandCost);
     end;
 end;
@@ -339,12 +347,12 @@ var
   Money: Word;
 begin
   Money := BuildCanalCost;
-  if (Cell[AX][AY] in TreeTiles) then
+  if (FTile[AX][AY] in TreeTiles) then
     Inc(Money, ClearLandCost);
-  if (Cell[AX][AY] in TreeTiles + LandTiles) then
+  if (FTile[AX][AY] in TreeTiles + LandTiles) then
     if (Game.Money >= Money) then
     begin
-      Cell[AX][AY] := tlCanal;
+      FTile[AX][AY] := tlCanal;
       Game.ModifyMoney(ttConstruction, -Money);
     end;
 end;
@@ -354,12 +362,12 @@ var
   Money: Word;
 begin
   Money := BuildRoadCost;
-  if (Cell[AX][AY] in TreeTiles) then
+  if (FTile[AX][AY] in TreeTiles) then
     Inc(Money, ClearLandCost);
-  if (Cell[AX][AY] in TreeTiles + LandTiles) then
+  if (FTile[AX][AY] in TreeTiles + LandTiles) then
     if (Game.Money >= Money) then
     begin
-      Cell[AX][AY] := tlRoad;
+      FTile[AX][AY] := tlRoad;
       Game.ModifyMoney(ttConstruction, -Money);
     end;
 end;
@@ -383,17 +391,17 @@ begin
   DX := Left + X;
   DY := Top + Y;
   F := (X = 0) and (Y = 0);
-  if not F or (Tile[Cell[DX][DY]].BkColor <> FLastBkColor) then
+  if not F or (Tile[FTile[DX][DY]].BkColor <> FLastBkColor) then
   begin
-    terminal_bkcolor(Tile[Cell[DX][DY]].BkColor);
-    FLastBkColor := Tile[Cell[DX][DY]].BkColor;
+    terminal_bkcolor(Tile[FTile[DX][DY]].BkColor);
+    FLastBkColor := Tile[FTile[DX][DY]].BkColor;
   end;
-  if not F or (Tile[Cell[DX][DY]].Color <> FLastColor) then
+  if not F or (Tile[FTile[DX][DY]].Color <> FLastColor) then
   begin
-    terminal_color(Tile[Cell[DX][DY]].Color);
-    FLastColor := Tile[Cell[DX][DY]].Color;
+    terminal_color(Tile[FTile[DX][DY]].Color);
+    FLastColor := Tile[FTile[DX][DY]].Color;
   end;
-  terminal_put(X, Y, Tile[Cell[DX][DY]].Tile);
+  terminal_put(X, Y, Tile[FTile[DX][DY]].Tile);
 end;
 
 function TMap.EnterInIndustry(const AX, AY: Integer): Boolean;
@@ -419,25 +427,25 @@ begin
     begin
       case Math.RandomRange(0, 15) of
         0:
-          Cell[X][Y] := tlDirt;
+          FTile[X][Y] := tlDirt;
         1:
-          Cell[X][Y] := tlSand;
+          FTile[X][Y] := tlSand;
         2:
-          Cell[X][Y] := tlRock;
+          FTile[X][Y] := tlRock;
         3 .. 6:
           AddTree(X, Y);
       else
-        Cell[X][Y] := tlGrass;
+        FTile[X][Y] := tlGrass;
       end;
     end;
     if (SeaLevel > msVeryLow) then
     begin
       J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + D;
       for X := 0 to J do
-        Cell[X][Y] := tlWater;
+        FTile[X][Y] := tlWater;
       J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + D;
       for X := FWidth - 1 downto FWidth - J - 1 do
-        Cell[X][Y] := tlWater;
+        FTile[X][Y] := tlWater;
     end;
   end;
   for I := 0 to 14 do
@@ -461,10 +469,10 @@ begin
     begin
       J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + D;
       for Y := 0 to J do
-        Cell[X][Y] := tlWater;
+        FTile[X][Y] := tlWater;
       J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + D;
       for Y := FHeight - 1 downto FHeight - J - 1 do
-        Cell[X][Y] := tlWater;
+        FTile[X][Y] := tlWater;
     end;
     D := SizeCoef * 9;
     if (SeaLevel = msHigh) then
@@ -482,20 +490,20 @@ begin
     begin
       for X := 1 to FWidth - 2 do
       begin
-        if (Cell[X][Y] <> tlWater) and
-          (((Cell[X + 1][Y] = tlWater) and (Cell[X - 1][Y] = tlWater)) or
-          ((Cell[X][Y + 1] = tlWater) and (Cell[X][Y - 1] = tlWater))) then
-          Cell[X][Y] := tlWater;
+        if (FTile[X][Y] <> tlWater) and
+          (((FTile[X + 1][Y] = tlWater) and (FTile[X - 1][Y] = tlWater)) or
+          ((FTile[X][Y + 1] = tlWater) and (FTile[X][Y - 1] = tlWater))) then
+          FTile[X][Y] := tlWater;
       end;
     end;
     for Y := 1 to FHeight - 2 do
     begin
       for X := 1 to FWidth - 2 do
       begin
-        if (Cell[X][Y] <> tlWater) and
-          (((Cell[X + 1][Y] = tlWater) and (Cell[X - 1][Y] = tlWater) and
-          (Cell[X][Y + 1] = tlWater) and (Cell[X][Y - 1] = tlWater))) then
-          Cell[X][Y] := tlWater;
+        if (FTile[X][Y] <> tlWater) and
+          (((FTile[X + 1][Y] = tlWater) and (FTile[X - 1][Y] = tlWater) and
+          (FTile[X][Y + 1] = tlWater) and (FTile[X][Y - 1] = tlWater))) then
+          FTile[X][Y] := tlWater;
       end;
     end;
   end;
@@ -514,22 +522,22 @@ begin
 
       for N := 2 to 5 do
       begin
-        if (Cell[X - N][Y] = tlWater) then
+        if (FTile[X - N][Y] = tlWater) then
         begin
           X := X - (N - 1);
           Break;
         end;
-        if (Cell[X + N][Y] = tlWater) then
+        if (FTile[X + N][Y] = tlWater) then
         begin
           X := X + (N - 1);
           Break;
         end;
-        if (Cell[X][Y - N] = tlWater) then
+        if (FTile[X][Y - N] = tlWater) then
         begin
           Y := Y - (N - 1);
           Break;
         end;
-        if (Cell[X][Y + N] = tlWater) then
+        if (FTile[X][Y + N] = tlWater) then
         begin
           Y := Y + (N - 1);
           Break;
@@ -539,7 +547,7 @@ begin
     until not IsTownName(TownName) and not IsTownLocation(X, Y) and
       IsLandTile(X, Y);
     SetLength(Industry, I + 1);
-    Cell[X][Y] := tlTownIndustry;
+    FTile[X][Y] := tlTownIndustry;
     Industry[I] := TTownIndustry.Create(TownName, X, Y);
   end;
   // Industries
@@ -560,7 +568,7 @@ begin
           begin
             S := GetNearTownName(X, Y);
             SetLength(Industry, I + 1);
-            Cell[X][Y] := tlCoalMineIndustry;
+            FTile[X][Y] := tlCoalMineIndustry;
             Industry[I] := TCoalMineIndustry.Create(S, X, Y);
             Inc(I);
           end;
@@ -568,7 +576,7 @@ begin
           begin
             S := GetNearTownName(X, Y);
             SetLength(Industry, I + 1);
-            Cell[X][Y] := tlPowerPlantIndustry;
+            FTile[X][Y] := tlPowerPlantIndustry;
             Industry[I] := TPowerPlantIndustry.Create(S, X, Y);
             Inc(I);
           end;
@@ -576,7 +584,7 @@ begin
           begin
             S := GetNearTownName(X, Y);
             SetLength(Industry, I + 1);
-            Cell[X][Y] := tlForestIndustry;
+            FTile[X][Y] := tlForestIndustry;
             Industry[I] := TForestIndustry.Create(S, X, Y);
             Inc(I);
           end;
@@ -584,7 +592,7 @@ begin
           begin
             S := GetNearTownName(X, Y);
             SetLength(Industry, I + 1);
-            Cell[X][Y] := tlSawmillIndustry;
+            FTile[X][Y] := tlSawmillIndustry;
             Industry[I] := TSawmillIndustry.Create(S, X, Y);
             Inc(I);
           end;
@@ -605,22 +613,22 @@ begin
     if (RandomRange(0, 6) = 0) and (VX > (SizeCoef + 10)) then
     begin
       VX := VX - 1;
-      Cell[VX][VY] := ATile;
+      FTile[VX][VY] := ATile;
     end;
     if (RandomRange(0, 6) = 0) and (VX < FWidth - (SizeCoef + 10)) then
     begin
       VX := VX + 1;
-      Cell[VX][VY] := ATile;
+      FTile[VX][VY] := ATile;
     end;
     if (RandomRange(0, 6) = 0) and (VY > (SizeCoef + 10)) then
     begin
       VY := VY - 1;
-      Cell[VX][VY] := ATile;
+      FTile[VX][VY] := ATile;
     end;
     if (RandomRange(0, 6) = 0) and (VY < FHeight - (SizeCoef + 10)) then
     begin
       VY := VY + 1;
-      Cell[VX][VY] := ATile;
+      FTile[VX][VY] := ATile;
     end;
   end;
 end;
@@ -629,11 +637,11 @@ procedure TMap.AddTree(const AX, AY: Integer);
 begin
   case RandomRange(0, 4) of
     0:
-      Cell[AX][AY] := tlTree;
+      FTile[AX][AY] := tlTree;
     1:
-      Cell[AX][AY] := tlSmallTree;
+      FTile[AX][AY] := tlSmallTree;
   else
-    Cell[AX][AY] := tlBush;
+    FTile[AX][AY] := tlBush;
   end;
 end;
 
@@ -696,6 +704,11 @@ begin
         Mx := D;
       end;
     end;
+end;
+
+function TMap.GetTile(const AX, AY: Integer): TTiles;
+begin
+  Result := FTile[AX][AY];
 end;
 
 end.

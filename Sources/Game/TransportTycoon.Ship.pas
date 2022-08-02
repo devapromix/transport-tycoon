@@ -71,8 +71,7 @@ uses
 
 function IsPath(X, Y: Integer): Boolean; stdcall;
 begin
-  Result := Game.Map.Cell[X][Y] in [tlTownIndustry, tlWater, tlCanal] +
-    IndustryTiles;
+  Result := Game.Map.IsShipPath(X, Y);
 end;
 
 procedure TShip.AddOrder(const AIndex: Integer);

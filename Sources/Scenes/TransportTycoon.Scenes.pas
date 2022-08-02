@@ -454,8 +454,6 @@ procedure TScenes.Render;
 var
   I: Integer;
 begin
-  terminal_clear();
-  terminal_bkcolor(0);
   if (FScene[Scene] <> nil) then
     with FScene[Scene] do
     begin

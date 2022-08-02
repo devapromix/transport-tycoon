@@ -89,7 +89,7 @@ uses
 
 function IsPath(X, Y: Integer): Boolean; stdcall;
 begin
-  Result := True;
+  Result := Game.Map.IsAircraftPath(X, Y);
 end;
 
 procedure TAircraft.AddOrder(const AIndex: Integer);
