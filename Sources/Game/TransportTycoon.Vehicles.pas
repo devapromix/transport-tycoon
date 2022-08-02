@@ -197,8 +197,10 @@ begin
   Exit(ShipCount < MaxShips);
 end;
 
-function TVehicles.IsVehicleOnMap(const AX, AY: Integer; out AVehicleName: string): Boolean;
-  function GetVehicle(AFunc: TGetVehicleFunc; AVehicles: TArray<TVehicle>): Boolean;
+function TVehicles.IsVehicleOnMap(const AX, AY: Integer;
+  out AVehicleName: string): Boolean;
+  function GetVehicle(AFunc: TGetVehicleFunc;
+    AVehicles: TArray<TVehicle>): Boolean;
   var
     ID: Integer;
   begin

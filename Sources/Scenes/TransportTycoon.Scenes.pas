@@ -400,7 +400,6 @@ begin
       if (I < High(FButtons)) and (FButtons[I + 1].ButtonKey <> '') then
         S := S + ' | ';
     end;
-  terminal_bkcolor(0);
   terminal_print(ScreenWidth div 2, FButtonsY, TK_ALIGN_CENTER, S);
 end;
 
