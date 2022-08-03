@@ -157,6 +157,7 @@ type
     function TownCount: Integer;
     function IsAircraftPath(const AX, AY: Integer): Boolean;
     function IsShipPath(const AX, AY: Integer): Boolean;
+    function IsRoadVehiclePath(const AX, AY: Integer): Boolean;
     function GetTile(const AX, AY: Integer): TTiles;
   end;
 
@@ -195,6 +196,11 @@ begin
       if (FTile[X][Y] = ATile) then
         Exit(True);
     end;
+end;
+
+function TMap.IsRoadVehiclePath(const AX, AY: Integer): Boolean;
+begin
+  Result := FTile[AX][AY] in [tlTownIndustry, tlRoad] + IndustryTiles;
 end;
 
 function TMap.IsShipPath(const AX, AY: Integer): Boolean;
