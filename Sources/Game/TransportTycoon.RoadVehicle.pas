@@ -17,8 +17,6 @@ type
     Since: Word;
   end;
 
-  // RoadVehicleDepot
-  //
 const
   RoadVehicleBase: array [0 .. 0] of TRoadVehicleBase = (
     // #1
@@ -126,7 +124,7 @@ end;
 procedure TRoadVehicle.Step;
 var
   Cargo: TCargo;
-  RoadVehicleStation: TStation;
+  Station: TStation;
 begin
   if Length(Order) > 0 then
   begin
@@ -137,14 +135,14 @@ begin
         UnLoad;
       case FCargoType of
         cgPassengers, cgMail:
-          RoadVehicleStation :=
+          Station :=
             TTownIndustry(Game.Map.Industry[Order[OrderIndex].ID]).BusStation;
       else
-        RoadVehicleStation := Game.Map.Industry[Order[OrderIndex].ID]
+        Station := Game.Map.Industry[Order[OrderIndex].ID]
           .TruckLoadingBay;
       end;
       FState := 'Service';
-      if FT > (15 - (RoadVehicleStation.Level * 2)) then
+      if FT > (15 - (Station.Level * 2)) then
       begin
         FT := 0;
         Load;

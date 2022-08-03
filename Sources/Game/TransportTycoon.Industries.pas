@@ -8,10 +8,9 @@ uses
   TransportTycoon.Cargo;
 
 const
-  AirportSizeStr: array [0 .. 5] of string = ('None', 'Small Airport',
+  AirportSizeStr: array [1 .. 5] of string = ('Small Airport',
     'Commuter Airport', 'City Airport', 'Metropolitan Airport',
     'International Airport');
-  DockSizeStr: array [0 .. 1] of string = ('None', 'Dock');
 
 type
   TIndustryType = (inNone, inTown, inCoalMine, inPowerPlant, inForest,

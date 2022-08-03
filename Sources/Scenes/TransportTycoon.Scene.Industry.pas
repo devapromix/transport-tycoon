@@ -57,8 +57,9 @@ begin
     DrawFrame(20, 8, 40, 13);
     DrawTitle(10, Name);
 
-    DrawButton(34, 12, Dock.IsBuilding, 'D',
-      'Dock: ' + DockSizeStr[Dock.Level]);
+    DrawButton(34, 12, 35, Dock.IsBuilding, Dock.IsBuilding, 'D', 'Dock');
+    DrawButton(34, 13, 35,TruckLoadingBay.IsBuilding, TruckLoadingBay.IsBuilding,
+      'L', 'Truck Loading Bay');
   end;
 
   IndustryInfo(FIndustry, 22, 16);
@@ -87,6 +88,8 @@ begin
         case MY of
           12:
             Key := TK_D;
+          13:
+            Key := TK_L;
         end;
     end;
   end;
@@ -98,6 +101,9 @@ begin
     TK_D:
       if FIndustry.Dock.IsBuilding then
         Scenes.SetScene(scDock, scIndustry);
+    TK_L:
+      if FIndustry.TruckLoadingBay.IsBuilding then
+        Scenes.SetScene(scTruckLoadingBay, scIndustry);
   end;
 end;
 
