@@ -10,7 +10,8 @@ type
     scBuildInTown, scAirport, scAircraftHangar, scAircraft, scAircrafts,
     scAircraftOrders, scShipOrders, scFinances, scTowns, scCompany, scIndustry,
     scBuildNearIndustry, scDock, scShip, scShips, scShipDepot, scIndustries,
-    scBuildMenu, scSettingsMenu, scOpenGameMenu);
+    scBuildMenu, scSettingsMenu, scOpenGameMenu, scRoadVehicle,
+    scTruckLoadingBay, scBusStation, scRoadVehicleDepot, scRoadVehicleOrders);
 
 type
   TButtonRec = record
@@ -24,10 +25,10 @@ type
   private
     FMX: Integer;
     FMY: Integer;
-    FButtonsY: Integer;
-    FButtons: array [0 .. 4] of TButtonRec;
     FRX: Integer;
     FRY: Integer;
+    FButtonsY: Integer;
+    FButtons: array [0 .. 4] of TButtonRec;
   public
     procedure Render; virtual; abstract;
     procedure Update(var Key: Word); virtual; abstract;
@@ -39,6 +40,8 @@ type
     procedure DrawMoney(const X, Y, Money: Integer;
       const Align: Integer = TK_ALIGN_RIGHT; F: Boolean = False);
     procedure DrawButton(const X, Y: Integer; IsActive: Boolean;
+      Button, Text: string); overload;
+    procedure DrawButton(const X, Y, W: Integer; IsActive, IsFlag: Boolean;
       Button, Text: string); overload;
     procedure DrawButton(const Y: Integer; IsActive: Boolean;
       Button, Text: string); overload;
@@ -114,6 +117,7 @@ uses
   TransportTycoon.Scene.Aircraft,
   TransportTycoon.Scene.AircraftOrders,
   TransportTycoon.Scene.ShipOrders,
+  TransportTycoon.Scene.RoadVehicleOrders,
   TransportTycoon.Scene.Aircrafts,
   TransportTycoon.Scene.Finances,
   TransportTycoon.Scene.Towns,
@@ -126,7 +130,11 @@ uses
   TransportTycoon.Scene.ShipDepot,
   TransportTycoon.Scene.BuildMenu,
   TransportTycoon.Scene.Menu.Settings,
-  TransportTycoon.Scene.Menu.OpenGame;
+  TransportTycoon.Scene.Menu.OpenGame,
+  TransportTycoon.Scene.RoadVehicle,
+  TransportTycoon.Scene.BusStation,
+  TransportTycoon.Scene.TruckLoadingBay,
+  TransportTycoon.Scene.RoadVehicleDepot;
 
 procedure TScene.DrawText(const X, Y: Integer; Text: string;
   const Align: Integer = TK_ALIGN_LEFT);
@@ -241,6 +249,13 @@ begin
   terminal_print(ScreenWidth div 2, Y, TK_ALIGN_CENTER,
     Format('[c=light yellow][[%s]][/c] [c=white]%s[/c]', [UpperCase(Button),
     UpperCase(Text)]));
+end;
+
+procedure TScene.DrawButton(const X, Y, W: Integer; IsActive, IsFlag: Boolean;
+  Button, Text: string);
+begin
+  DrawButton(X, Y, IsActive, Button, Text);
+  DrawText(X + W - 4, Y, '[c=white][[' + Check(IsFlag) + ']][/c]');
 end;
 
 procedure TScene.DrawButton(const X, Y: Integer; Button, Text, Color: string);
@@ -435,6 +450,11 @@ begin
   FScene[scBuildMenu] := TSceneBuildMenu.Create;
   FScene[scSettingsMenu] := TSceneSettingsMenu.Create;
   FScene[scOpenGameMenu] := TSceneOpenGameMenu.Create;
+  FScene[scRoadVehicle] := TSceneRoadVehicle.Create;
+  FScene[scBusStation] := TSceneBusStation.Create;
+  FScene[scTruckLoadingBay] := TSceneTruckLoadingBay.Create;
+  FScene[scRoadVehicleDepot] := TSceneRoadVehicleDepot.Create;
+  FScene[scRoadVehicleOrders] := TSceneRoadVehicleOrders.Create;
 end;
 
 procedure TScenes.Update(var Key: Word);

@@ -46,7 +46,12 @@ uses
   TransportTycoon.Scene.Industries in 'Scenes\TransportTycoon.Scene.Industries.pas',
   TransportTycoon.Scene.Menu.Settings in 'Scenes\TransportTycoon.Scene.Menu.Settings.pas',
   TransportTycoon.Scene.Menu.OpenGame in 'Scenes\TransportTycoon.Scene.Menu.OpenGame.pas',
-  TransportTycoon.RoadVehicle in 'Game\TransportTycoon.RoadVehicle.pas';
+  TransportTycoon.RoadVehicle in 'Game\TransportTycoon.RoadVehicle.pas',
+  TransportTycoon.Scene.RoadVehicleOrders in 'Scenes\TransportTycoon.Scene.RoadVehicleOrders.pas',
+  TransportTycoon.Scene.BusStation in 'Scenes\TransportTycoon.Scene.BusStation.pas',
+  TransportTycoon.Scene.RoadVehicle in 'Scenes\TransportTycoon.Scene.RoadVehicle.pas',
+  TransportTycoon.Scene.RoadVehicleDepot in 'Scenes\TransportTycoon.Scene.RoadVehicleDepot.pas',
+  TransportTycoon.Scene.TruckLoadingBay in 'Scenes\TransportTycoon.Scene.TruckLoadingBay.pas';
 
 var
   Key: Word = 0;
