@@ -5,6 +5,7 @@ interface
 uses
   TransportTycoon.Aircraft,
   TransportTycoon.Ship,
+  TransportTycoon.RoadVehicle,
   TransportTycoon.Vehicle;
 
 type
@@ -12,16 +13,21 @@ type
   private const
     MaxAircrafts = 7;
     MaxShips = 7;
+    MaxRoadVehicles = 7;
   private
     FCurrentVehicle: Integer;
     FAircraft: TArray<TAircraft>;
     FShip: TArray<TShip>;
+    FRoadVehicle: TArray<TRoadVehicle>;
     function GetAircraftCount: Integer;
     function GetShipCount: Integer;
+    function GetRoadVehicleCount: Integer;
     function GetGotAircrafts: Boolean;
     function GetGotShips: Boolean;
+    function GetGotRoadVehicles: Boolean;
     function GetAircraft(AID: Integer): TAircraft;
     function GetShip(AID: Integer): TShip;
+    function GetRoadVehicle(AID: Integer): TRoadVehicle;
     function GetVehicle(AX, AY: Integer; AVehicles: TArray<TVehicle>): Integer;
   public
     constructor Create;
@@ -32,20 +38,27 @@ type
     procedure AddAircraft(const AName: string;
       const AIndex, AircraftID: Integer);
     procedure AddShip(const AName: string; const AIndex, ShipID: Integer);
+    procedure AddRoadVehicle(const AName: string;
+      const AIndex, RoadVehicleID: Integer);
     procedure RunningCosts;
     function GetCurrentAircraft(const AX, AY: Integer): Integer;
     function GetCurrentShip(const AX, AY: Integer): Integer;
+    function GetCurrentRoadVehicle(const AX, AY: Integer): Integer;
     function IsVehicleOnMap(const AX, AY: Integer;
       out AVehicleName: string): Boolean;
     function IsBuyShipAllowed(): Boolean;
     function IsBuyAircraftAllowed(): Boolean;
+    function IsBuyRoadVehicleAllowed(): Boolean;
     procedure Clear;
     property ShipCount: Integer read GetShipCount;
     property AircraftCount: Integer read GetAircraftCount;
+    property RoadVehicleCount: Integer read GetRoadVehicleCount;
     property GotShips: Boolean read GetGotShips;
     property GotAircrafts: Boolean read GetGotAircrafts;
+    property GotRoadVehicle: Boolean read GetGotRoadVehicles;
     property Aircraft[AID: Integer]: TAircraft read GetAircraft;
     property Ship[AID: Integer]: TShip read GetShip;
+    property RoadVehicle[AID: Integer]: TRoadVehicle read GetRoadVehicle;
   end;
 
 implementation
@@ -78,6 +91,27 @@ begin
     AddOrder(AIndex, Town.Name, Town.X, Town.Y);
     Game.ModifyMoney(ttNewVehicles, -AircraftBase[AircraftID].Cost);
     VehicleID := AircraftID;
+  end;
+end;
+
+procedure TVehicles.AddRoadVehicle(const AName: string;
+  const AIndex, RoadVehicleID: Integer);
+var
+  F: Boolean;
+begin
+  F := (Game.Map.Industry[AIndex].TruckLoadingBay.IsBuilding);
+  if (F and (Game.Money >= RoadVehicleBase[RoadVehicleID].Cost)) then
+    SetLength(FRoadVehicle, RoadVehicleCount + 1);
+
+  FRoadVehicle[High(FRoadVehicle)] := TRoadVehicle.Create(AName,
+    Game.Map.Industry[AIndex].X, Game.Map.Industry[AIndex].Y, RoadVehicleID);
+
+  with FRoadVehicle[High(FRoadVehicle)] do
+  begin
+    AddOrder(AIndex, Game.Map.Industry[AIndex].Name,
+      Game.Map.Industry[AIndex].X, Game.Map.Industry[AIndex].Y);
+    Game.ModifyMoney(ttNewVehicles, -RoadVehicleBase[RoadVehicleID].Cost);
+    VehicleID := RoadVehicleID;
   end;
 end;
 
@@ -116,6 +150,12 @@ begin
     M := ShipBase[J].RunningCost div 12;
     Game.ModifyMoney(ttShipRunningCosts, -M);
   end;
+  for I := 0 to RoadVehicleCount - 1 do
+  begin
+    J := RoadVehicle[I].VehicleID;
+    M := RoadVehicleBase[J].RunningCost div 12;
+    Game.ModifyMoney(ttRoadVehicleRunningCosts, -M);
+  end;
 end;
 
 procedure TVehicles.Clear;
@@ -128,6 +168,9 @@ begin
   for I := 0 to ShipCount - 1 do
     Ship[I].Free;
   SetLength(FShip, 0);
+  for I := 0 to RoadVehicleCount - 1 do
+    RoadVehicle[I].Free;
+  SetLength(FRoadVehicle, 0);
 end;
 
 constructor TVehicles.Create;
@@ -145,14 +188,19 @@ procedure TVehicles.Draw;
 var
   I: Integer;
 begin
+  // Aircrafts
   terminal_color('lightest blue');
   for I := 0 to AircraftCount - 1 do
     Aircraft[I].Draw;
-
+  // Ships
   terminal_color('white');
   for I := 0 to ShipCount - 1 do
     Ship[I].Draw;
-
+  // Road Vehicles
+  terminal_color('light red');
+  for I := 0 to RoadVehicleCount - 1 do
+    RoadVehicle[I].Draw;
+  //
   terminal_color('white');
 end;
 
@@ -169,6 +217,11 @@ end;
 function TVehicles.GetCurrentAircraft(const AX, AY: Integer): Integer;
 begin
   Exit(GetVehicle(AX, AY, TArray<TVehicle>(FAircraft)));
+end;
+
+function TVehicles.GetCurrentRoadVehicle(const AX, AY: Integer): Integer;
+begin
+  Exit(GetVehicle(AX, AY, TArray<TVehicle>(FRoadVehicle)));
 end;
 
 function TVehicles.GetCurrentShip(const AX, AY: Integer): Integer;
@@ -192,6 +245,11 @@ begin
   Exit(AircraftCount < MaxAircrafts);
 end;
 
+function TVehicles.IsBuyRoadVehicleAllowed: Boolean;
+begin
+  Exit(RoadVehicleCount < MaxRoadVehicles);
+end;
+
 function TVehicles.IsBuyShipAllowed: Boolean;
 begin
   Exit(ShipCount < MaxShips);
@@ -207,6 +265,7 @@ function TVehicles.IsVehicleOnMap(const AX, AY: Integer;
     ID := AFunc(AX, AY);
     Result := ID >= 0;
     if Result then
+
       AVehicleName := AVehicles[ID].Name;
   end;
 
@@ -214,7 +273,8 @@ begin
   AVehicleName := '';
   // for more Vehicle types add more "if not" expressions in this chain
   if not GetVehicle(GetCurrentAircraft, TArray<TVehicle>(FAircraft)) then
-    GetVehicle(GetCurrentShip, TArray<TVehicle>(FShip));
+    if not GetVehicle(GetCurrentShip, TArray<TVehicle>(FShip)) then
+      GetVehicle(GetCurrentRoadVehicle, TArray<TVehicle>(FRoadVehicle));
   Exit(AVehicleName <> '');
 end;
 
@@ -223,9 +283,24 @@ begin
   Exit(AircraftCount > 0);
 end;
 
+function TVehicles.GetGotRoadVehicles: Boolean;
+begin
+  Exit(RoadVehicleCount > 0);
+end;
+
 function TVehicles.GetGotShips: Boolean;
 begin
   Exit(ShipCount > 0);
+end;
+
+function TVehicles.GetRoadVehicle(AID: Integer): TRoadVehicle;
+begin
+  Exit(FRoadVehicle[AID]);
+end;
+
+function TVehicles.GetRoadVehicleCount: Integer;
+begin
+  Exit(Length(FRoadVehicle));
 end;
 
 function TVehicles.GetShip(AID: Integer): TShip;
@@ -246,6 +321,8 @@ begin
     Aircraft[I].Step;
   for I := 0 to ShipCount - 1 do
     Ship[I].Step;
+  for I := 0 to RoadVehicleCount - 1 do
+    RoadVehicle[I].Step;
 end;
 
 end.
