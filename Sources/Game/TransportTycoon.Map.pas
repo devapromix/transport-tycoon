@@ -400,12 +400,12 @@ begin
   DX := Left + X;
   DY := Top + Y;
   F := (X = 0) and (Y = 0);
-  if not F or (Tile[FTile[DX][DY]].BkColor <> FLastBkColor) then
+  if F or (Tile[FTile[DX][DY]].BkColor <> FLastBkColor) then
   begin
     terminal_bkcolor(Tile[FTile[DX][DY]].BkColor);
     FLastBkColor := Tile[FTile[DX][DY]].BkColor;
   end;
-  if not F or (Tile[FTile[DX][DY]].Color <> FLastColor) then
+  if F or (Tile[FTile[DX][DY]].Color <> FLastColor) then
   begin
     terminal_color(Tile[FTile[DX][DY]].Color);
     FLastColor := Tile[FTile[DX][DY]].Color;
