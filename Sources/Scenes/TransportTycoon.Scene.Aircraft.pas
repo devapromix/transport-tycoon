@@ -51,8 +51,7 @@ begin
       DrawText(12, 13, Format('Mail: %d/%d', [Mail, MaxMail]));
 
       DrawText(12, 15, Format('State: %s', [State]));
-      DrawText(12, 17, Format('[color=yellow][[L]][/c] Full Load: [[%s]]',
-        [Check(FullLoad)]));
+      DrawButton(12, 17, 20, True, FullLoad, 'L', 'Full Load');
 
       for I := 0 to Length(Order) - 1 do
       begin
@@ -96,6 +95,13 @@ begin
         case MY of
           19:
             Key := TK_ESCAPE;
+        end;
+    end;
+    case MX of
+      12 .. 30:
+        case MY of
+          17:
+            Key := TK_L;
         end;
     end;
   end;
