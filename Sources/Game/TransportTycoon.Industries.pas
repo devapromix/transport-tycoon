@@ -29,6 +29,7 @@ type
     FAcceptsAmount: TCargoAmount;
     FAccepts: TCargoSet;
     FDock: TDock;
+    FTruckLoadingBay: TStation;
   public
     constructor Create(const AName: string; const AX, AY: Integer);
     destructor Destroy; override;
@@ -42,6 +43,7 @@ type
     procedure IncProducesCargoAmount(const ACargo: TCargo; AValue: Integer = 1);
     procedure IncAcceptsCargoAmount(const ACargo: TCargo; AValue: Integer = 1);
     property Dock: TDock read FDock;
+    property TruckLoadingBay: TStation read FTruckLoadingBay;
     procedure Grows; virtual;
     function MaxCargo: Integer; virtual;
     function GetCargoStr(const ACargoSet: TCargoSet): string;
@@ -73,6 +75,7 @@ type
     FPopulation: Integer;
     FAirport: TStation;
     FHQ: TStation;
+    FBusStation: TStation;
     function GrowModif: Integer;
   public
     constructor Create(const AName: string; const AX, AY: Integer);
@@ -81,6 +84,7 @@ type
     property Houses: Word read FHouses;
     procedure ModifyPopulation(const APopulation: Integer);
     property Airport: TStation read FAirport;
+    property BusStation: TStation read FBusStation;
     property HQ: TStation read FHQ;
     class function GenName: string;
     procedure Grows; override;
@@ -150,6 +154,7 @@ begin
     FProducesAmount[Cargo] := 0;
   end;
   FDock := TDock.Create(9000);
+  FTruckLoadingBay := TStation.Create(300);
 end;
 
 procedure TIndustry.SetCargoAmount(const ACargo: TCargo;
@@ -166,6 +171,7 @@ end;
 
 destructor TIndustry.Destroy;
 begin
+  FTruckLoadingBay.Free;
   FDock.Free;
   inherited;
 end;
@@ -252,12 +258,14 @@ begin
   FPopulation := 0;
   ModifyPopulation(Math.RandomRange(250, 1500));
   FAirport := TStation.Create(8000, 5);
+  FBusStation := TStation.Create(250);
   FHQ := TStation.Create(250);
 end;
 
 destructor TTownIndustry.Destroy;
 begin
   FHQ.Free;
+  FBusStation.Free;
   FAirport.Free;
   inherited;
 end;

@@ -17,11 +17,13 @@ type
     Since: Word;
   end;
 
+  // RoadVehicleDepot
+  //
 const
   RoadVehicleBase: array [0 .. 0] of TRoadVehicleBase = (
     // #1
-    (Name: 'Perry Bus'; Cargo: [cgPassengers]; Amount: 25; Cost: 7000;
-    RunningCost: 10 * 12; Speed: 60; Since: 1950)
+    (Name: 'Perry Bus'; Cargo: [cgPassengers]; Amount: 27; Cost: 4000;
+    RunningCost: 18 * 12; Speed: 60; Since: 1950)
     //
     );
 
@@ -59,9 +61,10 @@ uses
   TransportTycoon.Game,
   TransportTycoon.Finances,
   TransportTycoon.PathFind,
-  TransportTycoon.Industries;
+  TransportTycoon.Industries,
+  TransportTycoon.Stations;
 
-{ TShip }
+{ TRoadVehicle }
 
 function IsPath(X, Y: Integer): Boolean; stdcall;
 begin
@@ -80,8 +83,8 @@ begin
   FT := 0;
   FState := 'Wait';
   FCargoAmount := 0;
-  FCargoMaxAmount := ShipBase[ID].Amount;
-  FCargo := ShipBase[ID].Cargo;
+  FCargoMaxAmount := RoadVehicleBase[ID].Amount;
+  FCargo := RoadVehicleBase[ID].Cargo;
   FCargoType := cgNone;
 end;
 
@@ -123,6 +126,7 @@ end;
 procedure TRoadVehicle.Step;
 var
   Cargo: TCargo;
+  RoadVehicleStation: TStation;
 begin
   if Length(Order) > 0 then
   begin
@@ -131,9 +135,16 @@ begin
       Inc(FT);
       if Order[OrderIndex].ID <> LastStationId then
         UnLoad;
+      case FCargoType of
+        cgPassengers, cgMail:
+          RoadVehicleStation :=
+            TTownIndustry(Game.Map.Industry[Order[OrderIndex].ID]).BusStation;
+      else
+        RoadVehicleStation := Game.Map.Industry[Order[OrderIndex].ID]
+          .TruckLoadingBay;
+      end;
       FState := 'Service';
-      if FT > (15 - (Game.Map.Industry[Order[OrderIndex].ID].Dock.Level * 2))
-      then
+      if FT > (15 - (RoadVehicleStation.Level * 2)) then
       begin
         FT := 0;
         Load;
@@ -166,7 +177,7 @@ begin
     Money := (FCargoAmount * (Distance div 10)) * CargoPrice[CargoType];
     Game.Map.Industry[Order[OrderIndex].ID].IncAcceptsCargoAmount(CargoType,
       CargoAmount);
-    Game.ModifyMoney(ttShipIncome, Money);
+    Game.ModifyMoney(ttRoadVehicleIncome, Money);
     FCargoAmount := 0;
     FCargoType := cgNone;
   end;
