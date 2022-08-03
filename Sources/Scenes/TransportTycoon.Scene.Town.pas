@@ -21,6 +21,7 @@ type
 implementation
 
 uses
+  Math,
   SysUtils,
   BearLibTerminal,
   TransportTycoon.Game,
@@ -29,6 +30,8 @@ uses
 { TSceneTown }
 
 procedure TSceneTown.Render;
+var
+  N: Integer;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
@@ -40,12 +43,23 @@ begin
   terminal_color('white');
   DrawText(12, 10, 'Population: ' + IntToStr(FTown.Population));
   DrawText(12, 11, 'Houses: ' + IntToStr(FTown.Houses));
-  DrawButton(34, 10, FTown.Airport.IsBuilding, 'A',
-    'Airport: ' + AirportSizeStr[FTown.Airport.Level]);
-  DrawButton(34, 11, FTown.Dock.IsBuilding, 'D',
-    'Dock: ' + DockSizeStr[FTown.Dock.Level]);
+  // Airport
+  N := Math.EnsureRange(FTown.Airport.Level, 1, 5);
+  DrawButton(34, 10, 35, FTown.Airport.IsBuilding, FTown.Airport.IsBuilding,
+    'A', AirportSizeStr[N]);
+  // Dock
+  DrawButton(34, 11, 35, FTown.Dock.IsBuilding, FTown.Dock.IsBuilding,
+    'D', 'Dock');
+  // Bus Station
+  DrawButton(34, 12, 35, FTown.BusStation.IsBuilding,
+    FTown.BusStation.IsBuilding, 'S', 'Bus Station');
+  // Truck Loading Bay
+  DrawButton(34, 13, 35, FTown.TruckLoadingBay.IsBuilding,
+    FTown.TruckLoadingBay.IsBuilding, 'L', 'Truck Loading Bay');
+  // Company Headquarters
   if (Game.Map.CurrentIndustry = Game.Company.TownID) then
-    DrawButton(34, 15, FTown.HQ.IsBuilding, 'G', 'Company Headquarters');
+    DrawButton(34, 15, 35, FTown.HQ.IsBuilding, FTown.HQ.IsBuilding, 'G',
+      'Company Headquarters');
   terminal_color('white');
 
   TSceneIndustry(Scenes.GetScene(scIndustry)).IndustryInfo(FTown, 12, 18);
@@ -76,6 +90,10 @@ begin
             Key := TK_A;
           11:
             Key := TK_D;
+          12:
+            Key := TK_S;
+          13:
+            Key := TK_L;
           15:
             Key := TK_G;
         end;
@@ -92,6 +110,12 @@ begin
     TK_D:
       if FTown.Dock.IsBuilding then
         Scenes.SetScene(scDock, scTown);
+    TK_S:
+      if FTown.BusStation.IsBuilding then
+        Scenes.SetScene(scBusStation, scTown);
+    TK_L:
+      if FTown.TruckLoadingBay.IsBuilding then
+        Scenes.SetScene(scTruckLoadingBay, scTown);
     TK_G:
       if (Game.Map.CurrentIndustry = Game.Company.TownID) and FTown.HQ.IsBuilding
       then

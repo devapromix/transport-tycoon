@@ -39,20 +39,31 @@ begin
 
   FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
   DrawTitle('BUILD IN ' + FTown.Name);
-
+  // Airport
   S := '';
   N := Math.EnsureRange(FTown.Airport.Level + 1, 0, 5);
   if FTown.Airport.Level < FTown.Airport.MaxLevel then
     S := ' ($' + IntToStr(FTown.Airport.Cost) + ')';
   DrawButton(17, 11, FTown.Airport.CanBuild, 'A',
     'Build ' + AirportSizeStr[N] + S);
-
+  // Dock
   S := '';
   if FTown.Dock.Level = 0 then
     S := ' ($' + IntToStr(FTown.Dock.Cost) + ')';
   DrawButton(17, 12, FTown.Dock.CanBuild(FTown.X, FTown.Y), 'B',
     'Build Dock' + S);
-
+  // Bus Station
+  S := '';
+  if not FTown.BusStation.IsBuilding then
+    S := ' ($' + IntToStr(FTown.BusStation.Cost) + ')';
+  DrawButton(17, 13, FTown.BusStation.CanBuild, 'C', 'Build Bus Station' + S);
+  // Truck Loading Bay
+  S := '';
+  if not FTown.TruckLoadingBay.IsBuilding then
+    S := ' ($' + IntToStr(FTown.TruckLoadingBay.Cost) + ')';
+  DrawButton(17, 14, FTown.TruckLoadingBay.CanBuild, 'D',
+    'Build Truck Loading Bay' + S);
+  // Company Headquarters
   if (Game.Map.CurrentIndustry = Game.Company.TownID) then
     DrawButton(17, 17, FTown.HQ.CanBuild, 'G', 'Build Company Headquarters ($' +
       IntToStr(FTown.HQ.Cost) + ')');
@@ -78,6 +89,10 @@ begin
             Key := TK_A;
           12:
             Key := TK_B;
+          13:
+            Key := TK_C;
+          14:
+            Key := TK_D;
           17:
             Key := TK_G;
         end;
@@ -100,6 +115,22 @@ begin
         begin
           FTown.Dock.Build;
           Scenes.SetScene(scDock, scTown);
+        end;
+      end;
+    TK_C:
+      begin
+        if FTown.BusStation.CanBuild then
+        begin
+          FTown.BusStation.Build;
+          Scenes.SetScene(scBusStation, scTown);
+        end;
+      end;
+    TK_D:
+      begin
+        if FTown.TruckLoadingBay.CanBuild then
+        begin
+          FTown.TruckLoadingBay.Build;
+          Scenes.SetScene(scTruckLoadingBay, scTown);
         end;
       end;
     TK_G:
