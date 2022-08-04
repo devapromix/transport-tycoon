@@ -96,11 +96,8 @@ end;
 
 procedure TVehicles.AddRoadVehicle(const AName: string;
   const AIndex, RoadVehicleID: Integer);
-var
-  F: Boolean;
 begin
-  F := (Game.Map.Industry[AIndex].TruckLoadingBay.IsBuilding);
-  if (F and (Game.Money >= RoadVehicleBase[RoadVehicleID].Cost)) then
+  if ((Game.Money >= RoadVehicleBase[RoadVehicleID].Cost)) then
     SetLength(FRoadVehicle, RoadVehicleCount + 1);
 
   FRoadVehicle[High(FRoadVehicle)] := TRoadVehicle.Create(AName,
