@@ -156,7 +156,7 @@ begin
   DrawFrame(VX, VY, L, 5);
   DrawText(VX + (L div 2), VY + 2, '[c=yellow]' + UpperCase(S) + '[/c]',
     TK_ALIGN_CENTER);
-  DrawText(MX, MY, Tile[Game.Map.GetTile(RX, RY)].Tile, 'yellow', 'gray');
+  DrawText(MX, MY, Tile[Game.Map.GetTile].Tile, 'yellow', 'gray');
 end;
 
 procedure TSceneWorld.Render;
@@ -167,7 +167,7 @@ begin
 
   if Game.Construct.IsBuild(ceClearLand) then
   begin
-    if (Game.Map.GetTile(RX, RY) in TreeTiles) then
+    if (Game.Map.GetTile in TreeTiles) then
       DrawTileBkColor('light red')
     else
       DrawTileBkColor;
@@ -175,28 +175,29 @@ begin
   else if Game.Construct.IsBuild(ceBuildCanal) or
     Game.Construct.IsBuild(ceBuildRoad) then
   begin
-    if (Game.Map.GetTile(RX, RY) in TreeTiles + LandTiles) then
+    if (Game.Map.GetTile in TreeTiles + LandTiles) then
       DrawTileBkColor('light yellow')
     else
       DrawTileBkColor;
   end
   else
     DrawTileBkColor;
+
   terminal_color('black');
-  terminal_put(MX, MY, Tile[Game.Map.GetTile(RX, RY)].Tile);
+  terminal_put(MX, MY, Tile[Game.Map.GetTile].Tile);
 
   DrawBar;
 
   if (MY < Self.ScreenHeight - 1) then
   begin
-    if Game.Map.GetTile(RX, RY) = tlTownIndustry then
+    if Game.Map.GetTile = tlTownIndustry then
       TownInfo(Game.Map.GetCurrentIndustry(RX, RY))
-    else if Game.Map.GetTile(RX, RY) in IndustryTiles then
+    else if Game.Map.GetTile in IndustryTiles then
       IndustryInfo(Game.Map.GetCurrentIndustry(RX, RY))
     else if Game.Vehicles.IsVehicleOnMap(RX, RY, VehicleName) then
       VehicleInfo(VehicleName)
     else
-      TileInfo(Tile[Game.Map.GetTile(RX, RY)].Name);
+      TileInfo(Tile[Game.Map.GetTile].Name);
   end;
   if (MY = Self.ScreenHeight - 2) then
     ScrollDown;
@@ -229,13 +230,13 @@ begin
     begin
       if not Game.Construct.IsConstruct then
       begin
-        if (Game.Map.GetTile(RX, RY) = tlTownIndustry) then
+        if (Game.Map.GetTile = tlTownIndustry) then
         begin
           if Game.Map.EnterInIndustry(RX, RY) then
             Scenes.SetScene(scTown);
           Exit;
         end;
-        if (Game.Map.GetTile(RX, RY) in IndustryTiles) then
+        if (Game.Map.GetTile in IndustryTiles) then
         begin
           if Game.Map.EnterInIndustry(RX, RY) then
             Scenes.SetScene(scIndustry);
@@ -256,7 +257,7 @@ begin
           Exit;
         end;
       end;
-      if (Game.Map.GetTile(RX, RY) in TreeTiles) then
+      if (Game.Map.GetTile in TreeTiles) then
       begin
         if Game.Construct.IsBuild(ceClearLand) then
         begin
@@ -265,7 +266,7 @@ begin
           Exit;
         end;
       end;
-      if (Game.Map.GetTile(RX, RY) in LandTiles + TreeTiles) then
+      if (Game.Map.GetTile in LandTiles + TreeTiles) then
       begin
         if Game.Construct.IsBuild(ceBuildCanal) then
         begin

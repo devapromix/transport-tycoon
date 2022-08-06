@@ -158,7 +158,7 @@ type
     function IsAircraftPath(const AX, AY: Integer): Boolean;
     function IsShipPath(const AX, AY: Integer): Boolean;
     function IsRoadVehiclePath(const AX, AY: Integer): Boolean;
-    function GetTile(const AX, AY: Integer): TTiles;
+    function GetTile: TTiles;
   end;
 
 implementation
@@ -196,6 +196,11 @@ begin
       if (FTile[X][Y] = ATile) then
         Exit(True);
     end;
+end;
+
+function TMap.IsAircraftPath(const AX, AY: Integer): Boolean;
+begin
+  Result := True;
 end;
 
 function TMap.IsRoadVehiclePath(const AX, AY: Integer): Boolean;
@@ -282,11 +287,6 @@ end;
 function TMap.IsLandTile(const AX, AY: Integer): Boolean;
 begin
   Result := FTile[AX][AY] in LandTiles;
-end;
-
-function TMap.IsAircraftPath(const AX, AY: Integer): Boolean;
-begin
-  Result := True;
 end;
 
 function TMap.IsIndustryLocation(const AX, AY: Integer): Boolean;
@@ -440,13 +440,11 @@ begin
     for X := 0 to FWidth - 1 do
     begin
       case Math.RandomRange(0, 15) of
-        0:
+        0 .. 1:
           FTile[X][Y] := tlDirt;
-        1:
+        2 .. 3:
           FTile[X][Y] := tlSand;
-        2:
-          FTile[X][Y] := tlRock;
-        3 .. 6:
+        4 .. 6:
           AddTree(X, Y);
       else
         FTile[X][Y] := tlGrass;
@@ -720,9 +718,10 @@ begin
     end;
 end;
 
-function TMap.GetTile(const AX, AY: Integer): TTiles;
+function TMap.GetTile: TTiles;
 begin
-  Result := FTile[AX][AY];
+  Result := FTile[Game.Map.Left + terminal_state(TK_MOUSE_X)
+    ][Game.Map.Top + terminal_state(TK_MOUSE_Y)];
 end;
 
 end.

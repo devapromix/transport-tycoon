@@ -51,7 +51,6 @@ end;
 procedure TSceneRoadVehicleOrders.Update(var Key: Word);
 var
   I: Integer;
-  F: Boolean;
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
@@ -75,9 +74,8 @@ begin
       with Game.Vehicles do
       begin
         I := Key - TK_A;
-        F := not(RoadVehicle[CurrentVehicle].IsOrder(I) or
-          (Game.Map.Industry[I].TruckLoadingBay.Level = 0));
-        if F then
+        if not(RoadVehicle[CurrentVehicle].IsOrder(I) or not Game.Map.Industry
+          [I].TruckLoadingBay.IsBuilding) then
           with Game.Vehicles do
           begin
             if Game.Map.Industry[I].TruckLoadingBay.IsBuilding then

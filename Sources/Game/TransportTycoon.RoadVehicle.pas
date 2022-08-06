@@ -135,11 +135,10 @@ begin
         UnLoad;
       case FCargoType of
         cgPassengers, cgMail:
-          Station :=
-            TTownIndustry(Game.Map.Industry[Order[OrderIndex].ID]).BusStation;
+          Station := TTownIndustry(Game.Map.Industry[Order[OrderIndex].ID])
+            .BusStation;
       else
-        Station := Game.Map.Industry[Order[OrderIndex].ID]
-          .TruckLoadingBay;
+        Station := Game.Map.Industry[Order[OrderIndex].ID].TruckLoadingBay;
       end;
       FState := 'Service';
       if FT > (15 - (Station.Level * 2)) then
