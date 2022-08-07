@@ -471,8 +471,6 @@ begin
 end;
 
 procedure TScenes.Render;
-var
-  I: Integer;
 begin
   if (FScene[Scene] <> nil) then
     with FScene[Scene] do
