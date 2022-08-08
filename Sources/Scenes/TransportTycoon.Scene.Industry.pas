@@ -52,9 +52,10 @@ begin
 
   FIndustry := Game.Map.Industry[Game.Map.CurrentIndustry];
 
+  DrawFrame(10, 6, 60, 17);
+
   with FIndustry do
   begin
-    DrawFrame(20, 8, 40, 13);
     DrawTitle(10, Name);
 
     DrawButton(34, 12, 35, Dock.IsBuilding, Dock.IsBuilding, 'D', 'Dock');
