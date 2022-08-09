@@ -57,7 +57,7 @@ begin
   DrawButton(34, 13, 35, FTown.TruckLoadingBay.IsBuilding,
     FTown.TruckLoadingBay.IsBuilding, 'L', 'Truck Loading Bay');
   // Company Headquarters
-  if (Game.Map.CurrentIndustry = Game.Company.TownID) then
+  if Game.Company.IsTownHQ then
     DrawButton(34, 15, 35, FTown.HQ.IsBuilding, FTown.HQ.IsBuilding, 'G',
       'Company Headquarters');
   terminal_color('white');
@@ -117,8 +117,7 @@ begin
       if FTown.TruckLoadingBay.IsBuilding then
         Scenes.SetScene(scTruckLoadingBay, scTown);
     TK_G:
-      if (Game.Map.CurrentIndustry = Game.Company.TownID) and FTown.HQ.IsBuilding
-      then
+      if Game.Company.IsTownHQ and FTown.HQ.IsBuilding then
         Scenes.SetScene(scCompany, scTown);
   end;
 end;
