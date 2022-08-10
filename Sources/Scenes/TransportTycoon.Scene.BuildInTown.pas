@@ -50,18 +50,18 @@ begin
   S := '';
   if FTown.Dock.Level = 0 then
     S := ' ($' + IntToStr(FTown.Dock.Cost) + ')';
-  DrawButton(17, 12, FTown.Dock.CanBuild(FTown.X, FTown.Y), 'B',
+  DrawButton(17, 12, FTown.Dock.CanBuild(FTown.X, FTown.Y), 'D',
     'Build Dock' + S);
   // Bus Station
   S := '';
   if not FTown.BusStation.IsBuilding then
     S := ' ($' + IntToStr(FTown.BusStation.Cost) + ')';
-  DrawButton(17, 13, FTown.BusStation.CanBuild, 'C', 'Build Bus Station' + S);
+  DrawButton(17, 13, FTown.BusStation.CanBuild, 'S', 'Build Bus Station' + S);
   // Truck Loading Bay
   S := '';
   if not FTown.TruckLoadingBay.IsBuilding then
     S := ' ($' + IntToStr(FTown.TruckLoadingBay.Cost) + ')';
-  DrawButton(17, 14, FTown.TruckLoadingBay.CanBuild, 'D',
+  DrawButton(17, 14, FTown.TruckLoadingBay.CanBuild, 'L',
     'Build Truck Loading Bay' + S);
   // Company Headquarters
   if (Game.Map.CurrentIndustry = Game.Company.TownID) then
@@ -88,11 +88,11 @@ begin
           11:
             Key := TK_A;
           12:
-            Key := TK_B;
-          13:
-            Key := TK_C;
-          14:
             Key := TK_D;
+          13:
+            Key := TK_S;
+          14:
+            Key := TK_L;
           17:
             Key := TK_G;
         end;
@@ -109,7 +109,7 @@ begin
           Scenes.SetScene(scAirport, scTown);
         end;
       end;
-    TK_B:
+    TK_D:
       begin
         if FTown.Dock.CanBuild(FTown.X, FTown.Y) then
         begin
@@ -117,7 +117,7 @@ begin
           Scenes.SetScene(scDock, scTown);
         end;
       end;
-    TK_C:
+    TK_S:
       begin
         if FTown.BusStation.CanBuild then
         begin
@@ -125,7 +125,7 @@ begin
           Scenes.SetScene(scBusStation, scTown);
         end;
       end;
-    TK_D:
+    TK_L:
       begin
         if FTown.TruckLoadingBay.CanBuild then
         begin
