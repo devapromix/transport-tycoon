@@ -37,7 +37,8 @@ begin
   DrawButton(12, 12, 'N', 'TOWN DIRECTORY');
   DrawButton(42, 12, 'I', 'LIST OF INDUSTRIES');
 
-  DrawButton(12, 14, False, 'C', 'LIST OF ROAD VEHICLES');
+  DrawButton(12, 14, Game.Vehicles.GotRoadVehicles, 'R',
+    'LIST OF ROAD VEHICLES');
   DrawButton(12, 15, False, 'T', 'LIST OF TRAINS');
   DrawButton(12, 16, Game.Vehicles.GotShips, 'S', 'LIST OF SHIPS');
   DrawButton(12, 17, Game.Vehicles.GotAircrafts, 'A', 'LIST OF AIRCRAFTS');

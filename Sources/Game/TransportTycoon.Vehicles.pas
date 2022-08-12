@@ -55,7 +55,7 @@ type
     property RoadVehicleCount: Integer read GetRoadVehicleCount;
     property GotShips: Boolean read GetGotShips;
     property GotAircrafts: Boolean read GetGotAircrafts;
-    property GotRoadVehicle: Boolean read GetGotRoadVehicles;
+    property GotRoadVehicles: Boolean read GetGotRoadVehicles;
     property Aircraft[AID: Integer]: TAircraft read GetAircraft;
     property Ship[AID: Integer]: TShip read GetShip;
     property RoadVehicle[AID: Integer]: TRoadVehicle read GetRoadVehicle;

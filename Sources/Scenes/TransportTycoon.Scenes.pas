@@ -10,7 +10,7 @@ type
     scBuildInTown, scAirport, scAircraftHangar, scAircraft, scAircrafts,
     scAircraftOrders, scShipOrders, scFinances, scTowns, scCompany, scIndustry,
     scBuildNearIndustry, scDock, scShip, scShips, scShipDepot, scIndustries,
-    scBuildMenu, scSettingsMenu, scOpenGameMenu, scRoadVehicle,
+    scBuildMenu, scSettingsMenu, scOpenGameMenu, scRoadVehicle, scRoadVehicles,
     scTruckLoadingBay, scBusStation, scRoadVehicleDepot, scRoadVehicleOrders);
 
 type
@@ -134,7 +134,8 @@ uses
   TransportTycoon.Scene.RoadVehicle,
   TransportTycoon.Scene.BusStation,
   TransportTycoon.Scene.TruckLoadingBay,
-  TransportTycoon.Scene.RoadVehicleDepot;
+  TransportTycoon.Scene.RoadVehicleDepot,
+  TransportTycoon.Scene.RoadVehicles;
 
 procedure TScene.DrawText(const X, Y: Integer; Text: string;
   const Align: Integer = TK_ALIGN_LEFT);
@@ -451,6 +452,7 @@ begin
   FScene[scSettingsMenu] := TSceneSettingsMenu.Create;
   FScene[scOpenGameMenu] := TSceneOpenGameMenu.Create;
   FScene[scRoadVehicle] := TSceneRoadVehicle.Create;
+  FScene[scRoadVehicles] := TSceneRoadVehicles.Create;
   FScene[scBusStation] := TSceneBusStation.Create;
   FScene[scTruckLoadingBay] := TSceneTruckLoadingBay.Create;
   FScene[scRoadVehicleDepot] := TSceneRoadVehicleDepot.Create;

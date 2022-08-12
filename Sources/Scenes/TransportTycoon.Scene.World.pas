@@ -105,17 +105,6 @@ begin
     TK_A:
       if Game.Vehicles.GotAircrafts then
         Scenes.SetScene(scAircrafts);
-    TK_S:
-      if Game.Vehicles.GotShips then
-        Scenes.SetScene(scShips);
-    TK_F:
-      Scenes.SetScene(scFinances);
-    TK_G:
-      Scenes.SetScene(scCompany, scWorld);
-    TK_N:
-      Scenes.SetScene(scTowns);
-    TK_I:
-      Scenes.SetScene(scIndustries);
     TK_B:
       Scenes.SetScene(scBuildMenu);
     TK_D:
@@ -123,15 +112,29 @@ begin
         TSceneSettingsMenu(Scenes.GetScene(scSettingsMenu)).IsShowBar := True;
         Scenes.SetScene(scSettingsMenu, scWorld);
       end;
-    TK_X:
-      begin
-        Game.Construct.Build(ceClearLand);
-        Scenes.SetScene(scWorld);
-      end;
+    TK_F:
+      Scenes.SetScene(scFinances);
+    TK_G:
+      Scenes.SetScene(scCompany, scWorld);
+    TK_I:
+      Scenes.SetScene(scIndustries);
+    TK_N:
+      Scenes.SetScene(scTowns);
     TK_P:
       begin
         Game.IsPause := not Game.IsPause;
         Scenes.Render;
+      end;
+    TK_R:
+      if Game.Vehicles.GotRoadVehicles then
+        Scenes.SetScene(scRoadVehicles);
+    TK_S:
+      if Game.Vehicles.GotShips then
+        Scenes.SetScene(scShips);
+    TK_X:
+      begin
+        Game.Construct.Build(ceClearLand);
+        Scenes.SetScene(scWorld);
       end;
   end;
 end;
