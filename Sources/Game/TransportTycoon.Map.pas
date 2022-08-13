@@ -7,11 +7,14 @@ uses
 
 type
   TTiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlRock, tlSand,
-    tlWater, tlCanal, tlRoad, tlTownIndustry, tlForestIndustry,
+    tlWater, tlCanal, tlRoad, tlRoadTunnel, tlRoadBridge, tlTownIndustry,
+    tlForestIndustry,
     tlSawmillIndustry, tlCoalMineIndustry, tlPowerPlantIndustry);
 
 const
   LandTiles = [tlGrass, tlDirt, tlSand];
+  MountainTiles = [tlRock];
+  WaterTiles = [tlWater, tlCanal];
   TreeTiles = [tlTree, tlSmallTree, tlBush];
   IndustryTiles = [tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
     tlPowerPlantIndustry];
@@ -49,6 +52,10 @@ const
     (Name: 'Canal'; Tile: '='; Color: 'light blue'; BkColor: 'darkest blue'),
     //
     (Name: 'Road'; Tile: '*'; Color: 'light gray'; BkColor: 'darkest gray'),
+    //
+    (Name: 'Road Tunnel'; Tile: '~'; Color: 'dark gray'; BkColor: 'darkest gray'),
+    //
+    (Name: 'Road Bridge'; Tile: '='; Color: 'light gray'; BkColor: 'darkest blue'),
     //
     (Name: 'Town'; Tile: '#'; Color: 'light yellow'; BkColor: 'darkest yellow'),
     //
@@ -118,8 +125,10 @@ type
     procedure DrawTile(const X, Y: Integer);
   public const
     ClearLandCost = 100;
-    BuildCanalCost = 1000;
+    BuildCanalCost = 2000;
     BuildRoadCost = 250;
+    BuildRoadTunnelCost = 5000;
+    BuildRoadBridgeCost = 2000;
   public
     Industry: array of TIndustry;
     constructor Create;
@@ -152,6 +161,8 @@ type
     procedure ClearLand(const AX, AY: Integer);
     procedure BuildCanals(const AX, AY: Integer);
     procedure BuildRoad(const AX, AY: Integer);
+    procedure BuildRoadTunnel(const AX, AY: Integer);
+    procedure BuildRoadBridge(const AX, AY: Integer);
     function GetNearTownName(const AX, AY: Integer): string;
     function IsNearTile(const AX, AY: Integer; const ATile: TTiles): Boolean;
     function TownCount: Integer;
@@ -205,7 +216,8 @@ end;
 
 function TMap.IsRoadVehiclePath(const AX, AY: Integer): Boolean;
 begin
-  Result := FTile[AX][AY] in [tlTownIndustry, tlRoad] + IndustryTiles;
+  Result := FTile[AX][AY] in [tlTownIndustry, tlRoad, tlRoadTunnel,
+    tlRoadBridge] + IndustryTiles;
 end;
 
 function TMap.IsShipPath(const AX, AY: Integer): Boolean;
@@ -377,6 +389,32 @@ begin
     if (Game.Money >= Money) then
     begin
       FTile[AX][AY] := tlRoad;
+      Game.ModifyMoney(ttConstruction, -Money);
+    end;
+end;
+
+procedure TMap.BuildRoadTunnel(const AX, AY: Integer);
+var
+  Money: Word;
+begin
+  Money := BuildRoadTunnelCost;
+  if (FTile[AX][AY] in MountainTiles) then
+    if (Game.Money >= Money) then
+    begin
+      FTile[AX][AY] := tlRoadTunnel;
+      Game.ModifyMoney(ttConstruction, -Money);
+    end;
+end;
+
+procedure TMap.BuildRoadBridge(const AX, AY: Integer);
+var
+  Money: Word;
+begin
+  Money := BuildRoadBridgeCost;
+  if (FTile[AX][AY] in WaterTiles) then
+    if (Game.Money >= Money) then
+    begin
+      FTile[AX][AY] := tlRoadBridge;
       Game.ModifyMoney(ttConstruction, -Money);
     end;
 end;

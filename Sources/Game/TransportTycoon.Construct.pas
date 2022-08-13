@@ -3,7 +3,8 @@
 interface
 
 type
-  TConstructEnum = (ceClearLand, ceBuildCanal, ceBuildRoad);
+  TConstructEnum = (ceClearLand, ceBuildCanal, ceBuildRoad, ceBuildRoadTunnel,
+    ceBuildRoadBridge);
 
 type
 

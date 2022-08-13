@@ -36,6 +36,8 @@ begin
 
   DrawButton(22, 12, 'C', 'Build Canal');
   DrawButton(22, 13, 'R', 'Build Road');
+  DrawButton(22, 14, 'B', 'Build Road Bridge');
+  DrawButton(22, 15, 'T', 'Build Road Tunnel');
 
   DrawButton(22, 16, 'X', 'Clear land');
 
@@ -62,6 +64,10 @@ begin
             Key := TK_C;
           13:
             Key := TK_R;
+          14:
+            Key := TK_B;
+          15:
+            Key := TK_T;
           16:
             Key := TK_X;
         end;
@@ -78,6 +84,16 @@ begin
     TK_R:
       begin
         Game.Construct.Build(ceBuildRoad);
+        Scenes.SetScene(scWorld);
+      end;
+    TK_B:
+      begin
+        Game.Construct.Build(ceBuildRoadBridge);
+        Scenes.SetScene(scWorld);
+      end;
+    TK_T:
+      begin
+        Game.Construct.Build(ceBuildRoadTunnel);
         Scenes.SetScene(scWorld);
       end;
     TK_X:

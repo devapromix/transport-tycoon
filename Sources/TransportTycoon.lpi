@@ -31,7 +31,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="52">
+    <Units Count="53">
       <Unit0>
         <Filename Value="TransportTycoon.dpr"/>
         <IsPartOfProject Value="True"/>
@@ -242,6 +242,10 @@
         <Filename Value="Game\TransportTycoon.RoadVehicle.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit51>
+      <Unit52>
+        <Filename Value="Scenes\TransportTycoon.Scene.RoadVehicles.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit52>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

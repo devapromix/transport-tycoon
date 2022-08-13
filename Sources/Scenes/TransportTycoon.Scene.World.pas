@@ -176,7 +176,9 @@ begin
       DrawTileBkColor;
   end
   else if Game.Construct.IsBuild(ceBuildCanal) or
-    Game.Construct.IsBuild(ceBuildRoad) then
+    Game.Construct.IsBuild(ceBuildRoad)  or
+    Game.Construct.IsBuild(ceBuildRoadBridge)  or
+    Game.Construct.IsBuild(ceBuildRoadTunnel) then
   begin
     if (Game.Map.GetTile in TreeTiles + LandTiles) then
       DrawTileBkColor('light yellow')
@@ -260,29 +262,35 @@ begin
           Exit;
         end;
       end;
-      if (Game.Map.GetTile in TreeTiles) then
+      if Game.Construct.IsBuild(ceClearLand) then
       begin
-        if Game.Construct.IsBuild(ceClearLand) then
-        begin
-          Game.Map.ClearLand(RX, RY);
-          Scenes.Render;
-          Exit;
-        end;
+        Game.Map.ClearLand(RX, RY);
+        Scenes.Render;
+        Exit;
       end;
-      if (Game.Map.GetTile in LandTiles + TreeTiles) then
+      if Game.Construct.IsBuild(ceBuildCanal) then
       begin
-        if Game.Construct.IsBuild(ceBuildCanal) then
-        begin
-          Game.Map.BuildCanals(RX, RY);
-          Scenes.Render;
-          Exit;
-        end;
-        if Game.Construct.IsBuild(ceBuildRoad) then
-        begin
-          Game.Map.BuildRoad(RX, RY);
-          Scenes.Render;
-          Exit;
-        end;
+        Game.Map.BuildCanals(RX, RY);
+        Scenes.Render;
+        Exit;
+      end;
+      if Game.Construct.IsBuild(ceBuildRoad) then
+      begin
+        Game.Map.BuildRoad(RX, RY);
+        Scenes.Render;
+        Exit;
+      end;
+      if Game.Construct.IsBuild(ceBuildRoadTunnel) then
+      begin
+        Game.Map.BuildRoadTunnel(RX, RY);
+        Scenes.Render;
+        Exit;
+      end;
+      if Game.Construct.IsBuild(ceBuildRoadBridge) then
+      begin
+        Game.Map.BuildRoadBridge(RX, RY);
+        Scenes.Render;
+        Exit;
       end;
     end;
   end;
