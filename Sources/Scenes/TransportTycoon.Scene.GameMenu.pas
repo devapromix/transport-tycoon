@@ -65,6 +65,10 @@ begin
             Key := TK_F;
           12:
             Key := TK_N;
+          14:
+            Key := TK_R;
+          15:
+            Key := TK_T;
           16:
             Key := TK_S;
           17:
