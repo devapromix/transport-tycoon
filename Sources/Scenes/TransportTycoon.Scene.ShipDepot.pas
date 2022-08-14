@@ -40,11 +40,12 @@ begin
 
   DrawTitle(8, FIndustry.Name + ' Ship Depot');
 
-  for I := 0 to Length(ShipBase) - 1 do
-    if ShipBase[I].Since <= Game.Calendar.Year then
-      DrawButton(12, I + 10, Chr(Ord('A') + I), ShipBase[I].Name);
+  J := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0, Length(ShipBase) - 1);
 
-  I := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0, Length(ShipBase) - 1);
+  for I := 0 to Length(ShipBase) - 1 do
+    if ShipBase[I].Since <= Game.Calendar.Year then   if I = J then
+    DrawButton(12, I + 10, Chr(Ord('A') + I), ShipBase[I].Name) else
+  DrawButton(12, I + 10, Chr(Ord('A') + I), ShipBase[I].Name);
 
   terminal_color('yellow');
   terminal_composition(TK_ON);

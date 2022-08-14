@@ -38,12 +38,13 @@ begin
 
   DrawTitle(8, FTown.Name + ' Airport Hangar');
 
-  for I := 0 to Length(AircraftBase) - 1 do
-    if AircraftBase[I].Since <= Game.Calendar.Year then
-      DrawButton(12, I + 10, Chr(Ord('A') + I), AircraftBase[I].Name);
-
-  I := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
+  J := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
     Length(AircraftBase) - 1);
+  for I := 0 to Length(AircraftBase) - 1 do
+    if AircraftBase[I].Since <= Game.Calendar.Year then  if I=J then
+    DrawButton(12, I + 10, Chr(Ord('A') + I), AircraftBase[I].Name, 'yellow')
+  else DrawButton(12, I + 10, Chr(Ord('A') + I), AircraftBase[I].Name);
+
   terminal_color('yellow');
   terminal_composition(TK_ON);
   DrawText(42, 10, AircraftBase[I].Name);
