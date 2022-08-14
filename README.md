@@ -9,5 +9,5 @@ When an item is checkmarked, it means the basic foundation is in place but not n
 - [Vehicles]
   - [x] Aircrafts
   - [x] Ships
-  - [ ] Road Vehicles
+  - [x] Road Vehicles
   - [ ] Trains

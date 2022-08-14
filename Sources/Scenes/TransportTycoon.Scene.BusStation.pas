@@ -103,7 +103,7 @@ begin
         end;
       end;
     TK_V:
-      Scenes.SetScene(scRoadVehicleDepot);
+      Scenes.SetScene(scRoadVehicleDepot, scBusStation);
   end;
 end;
 

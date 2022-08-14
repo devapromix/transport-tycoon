@@ -104,7 +104,7 @@ begin
         end;
       end;
     TK_V:
-      Scenes.SetScene(scRoadVehicleDepot);
+      Scenes.SetScene(scRoadVehicleDepot, scTruckLoadingBay);
   end;
 end;
 
