@@ -8,8 +8,8 @@ uses
 type
   TTiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlRock, tlSand,
     tlWater, tlCanal, tlRoad, tlRoadTunnel, tlRoadBridge, tlTownIndustry,
-    tlForestIndustry,
-    tlSawmillIndustry, tlCoalMineIndustry, tlPowerPlantIndustry);
+    tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
+    tlPowerPlantIndustry);
 
 const
   LandTiles = [tlGrass, tlDirt, tlSand];
@@ -53,9 +53,11 @@ const
     //
     (Name: 'Road'; Tile: '*'; Color: 'light gray'; BkColor: 'darkest gray'),
     //
-    (Name: 'Road Tunnel'; Tile: '~'; Color: 'dark gray'; BkColor: 'darkest gray'),
+    (Name: 'Road Tunnel'; Tile: '~'; Color: 'dark gray';
+    BkColor: 'darkest gray'),
     //
-    (Name: 'Road Bridge'; Tile: '='; Color: 'light gray'; BkColor: 'darkest blue'),
+    (Name: 'Road Bridge'; Tile: '='; Color: 'light gray';
+    BkColor: 'darkest blue'),
     //
     (Name: 'Town'; Tile: '#'; Color: 'light yellow'; BkColor: 'darkest yellow'),
     //
@@ -757,9 +759,12 @@ begin
 end;
 
 function TMap.GetTile: TTiles;
+var
+  X, Y: Integer;
 begin
-  Result := FTile[Game.Map.Left + terminal_state(TK_MOUSE_X)
-    ][Game.Map.Top + terminal_state(TK_MOUSE_Y)];
+  X := EnsureRange(Game.Map.Left + terminal_state(TK_MOUSE_X), 0, FWidth);
+  Y := EnsureRange(Game.Map.Top + terminal_state(TK_MOUSE_Y), 0, FHeight);
+  Result := FTile[X][Y];
 end;
 
 end.
