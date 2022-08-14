@@ -16,7 +16,6 @@ type
     procedure VehicleInfo(const VehicleName: string);
     procedure TileInfo(S: string);
     procedure DrawTileBkColor(const BkColor: string = 'gray');
-    procedure TryBuild;
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -163,19 +162,6 @@ begin
   DrawText(MX, MY, Tile[Game.Map.GetTile].Tile, 'yellow', 'gray');
 end;
 
-procedure TSceneWorld.TryBuild;
-var
-  I: TConstructEnum;
-begin
-  for I := Low(TConstructEnum) to High(TConstructEnum) do
-    if Game.Construct.IsBuild(I) then
-    begin
-      Game.Map.Construct[I](RX, RY);
-      Scenes.Render;
-      Exit;
-    end;
-end;
-
 procedure TSceneWorld.Render;
 var
   VehicleName: string;
@@ -276,7 +262,36 @@ begin
           Exit;
         end;
       end;
-      TryBuild;
+      if Game.Construct.IsBuild(ceClearLand) then
+      begin
+        Game.Map.ClearLand(RX, RY);
+        Scenes.Render;
+        Exit;
+      end;
+      if Game.Construct.IsBuild(ceBuildCanal) then
+      begin
+        Game.Map.BuildCanals(RX, RY);
+        Scenes.Render;
+        Exit;
+      end;
+      if Game.Construct.IsBuild(ceBuildRoad) then
+      begin
+        Game.Map.BuildRoad(RX, RY);
+        Scenes.Render;
+        Exit;
+      end;
+      if Game.Construct.IsBuild(ceBuildRoadTunnel) then
+      begin
+        Game.Map.BuildRoadTunnel(RX, RY);
+        Scenes.Render;
+        Exit;
+      end;
+      if Game.Construct.IsBuild(ceBuildRoadBridge) then
+      begin
+        Game.Map.BuildRoadBridge(RX, RY);
+        Scenes.Render;
+        Exit;
+      end;
     end;
   end;
   if (Key = TK_MOUSE_RIGHT) then
