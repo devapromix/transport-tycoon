@@ -28,7 +28,7 @@ uses
 
 procedure TSceneRoadVehicleDepot.Render;
 var
-  I, J: Integer;
+  I, J, K: Integer;
   S: string;
   Cargo: TCargo;
 begin
@@ -40,20 +40,22 @@ begin
 
   DrawTitle(8, FIndustry.Name + ' Road Vehicle Depot');
 
-  J := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
+  K := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
     Length(RoadVehicleBase) - 1);
+
   for I := 0 to Length(RoadVehicleBase) - 1 do
     if RoadVehicleBase[I].Since <= Game.Calendar.Year then
-      if I = J then
-        DrawButton(12, I + 10, Chr(Ord('A') + I), RoadVehicleBase[I].Name,
-          'yellow')
-      else DrawButton(12, I + 10, Chr(Ord('A') + I), RoadVehicleBase[I].Name);
+      if I = K then
+        DrawButton(12, I + 10, Chr(Ord('A') + I),
+          RoadVehicleBase[I].Name, 'yellow')
+      else
+        DrawButton(12, I + 10, Chr(Ord('A') + I), RoadVehicleBase[I].Name);
 
   terminal_color('yellow');
   terminal_composition(TK_ON);
-  DrawText(42, 10, RoadVehicleBase[I].Name);
+  DrawText(42, 10, RoadVehicleBase[K].Name);
   S := '';
-  for J := 1 to Length(RoadVehicleBase[I].Name) do
+  for J := 1 to Length(RoadVehicleBase[K].Name) do
     S := S + '_';
   DrawText(42, 10, S);
   terminal_composition(TK_OFF);
@@ -61,18 +63,18 @@ begin
   terminal_color('white');
   J := 11;
   for Cargo := Succ(Low(TCargo)) to High(TCargo) do
-    if (Cargo in RoadVehicleBase[I].Cargo) then
+    if (Cargo in RoadVehicleBase[K].Cargo) then
     begin
       DrawText(42, J, Format('%s: %d', [CargoStr[Cargo],
-        RoadVehicleBase[I].Amount]));
+        RoadVehicleBase[K].Amount]));
       Inc(J);
     end;
-  DrawText(42, J, Format('Speed: %d km/h', [RoadVehicleBase[I].Speed]));
+  DrawText(42, J, Format('Speed: %d km/h', [RoadVehicleBase[K].Speed]));
   Inc(J);
-  DrawText(42, J, Format('Cost: $%d', [RoadVehicleBase[I].Cost]));
+  DrawText(42, J, Format('Cost: $%d', [RoadVehicleBase[K].Cost]));
   Inc(J);
   DrawText(42, J, Format('Running Cost: $%d/y',
-    [RoadVehicleBase[I].RunningCost]));
+    [RoadVehicleBase[K].RunningCost]));
 
   AddButton(20, Game.Vehicles.IsBuyRoadVehicleAllowed, 'Enter',
     'Buy Road Vehicle');

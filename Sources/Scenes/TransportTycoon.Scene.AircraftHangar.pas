@@ -27,7 +27,7 @@ uses
 
 procedure TSceneAircraftHangar.Render;
 var
-  I, J: Integer;
+  I, J, K: Integer;
   S: string;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
@@ -38,28 +38,33 @@ begin
 
   DrawTitle(8, FTown.Name + ' Airport Hangar');
 
-  J := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
+  K := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
     Length(AircraftBase) - 1);
+
   for I := 0 to Length(AircraftBase) - 1 do
-    if AircraftBase[I].Since <= Game.Calendar.Year then  if I=J then
-    DrawButton(12, I + 10, Chr(Ord('A') + I), AircraftBase[I].Name, 'yellow')
-  else DrawButton(12, I + 10, Chr(Ord('A') + I), AircraftBase[I].Name);
+    if AircraftBase[I].Since <= Game.Calendar.Year then
+      if I = K then
+        DrawButton(12, I + 10, Chr(Ord('A') + I),
+          AircraftBase[I].Name, 'yellow')
+      else
+        DrawButton(12, I + 10, Chr(Ord('A') + I), AircraftBase[I].Name);
 
   terminal_color('yellow');
   terminal_composition(TK_ON);
-  DrawText(42, 10, AircraftBase[I].Name);
+  DrawText(42, 10, AircraftBase[K].Name);
   S := '';
-  for J := 1 to Length(AircraftBase[I].Name) do
+  for J := 1 to Length(AircraftBase[K].Name) do
     S := S + '_';
   DrawText(42, 10, S);
   terminal_composition(TK_OFF);
   terminal_color('white');
-  DrawText(42, 11, Format('Passengers: %d', [AircraftBase[I].Passengers]));
-  DrawText(42, 12, Format('Mail: %d', [AircraftBase[I].Mail]));
-  DrawText(42, 13, Format('Speed: %d km/h', [AircraftBase[I].Speed]));
-  DrawText(42, 14, Format('Cost: $%d', [AircraftBase[I].Cost]));
+
+  DrawText(42, 11, Format('Passengers: %d', [AircraftBase[K].Passengers]));
+  DrawText(42, 12, Format('Mail: %d', [AircraftBase[K].Mail]));
+  DrawText(42, 13, Format('Speed: %d km/h', [AircraftBase[K].Speed]));
+  DrawText(42, 14, Format('Cost: $%d', [AircraftBase[K].Cost]));
   DrawText(42, 15, Format('Running Cost: $%d/y',
-    [AircraftBase[I].RunningCost]));
+    [AircraftBase[K].RunningCost]));
 
   AddButton(20, Game.Vehicles.IsBuyAircraftAllowed, 'Enter', 'Buy Aircraft');
   AddButton(20, 'Esc', 'Close');
