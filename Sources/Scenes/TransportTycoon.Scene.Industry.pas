@@ -52,18 +52,18 @@ begin
 
   FIndustry := Game.Map.Industry[Game.Map.CurrentIndustry];
 
-  DrawFrame(10, 6, 60, 17);
+  DrawFrame(10, 8, 60, 13);
 
   with FIndustry do
   begin
     DrawTitle(10, Name);
 
     DrawButton(34, 12, 35, Dock.IsBuilding, Dock.IsBuilding, 'D', 'Dock');
-    DrawButton(34, 13, 35,TruckLoadingBay.IsBuilding, TruckLoadingBay.IsBuilding,
-      'L', 'Truck Loading Bay');
+    DrawButton(34, 13, 35, TruckLoadingBay.IsBuilding,
+      TruckLoadingBay.IsBuilding, 'L', 'Truck Loading Bay');
   end;
 
-  IndustryInfo(FIndustry, 22, 16);
+  IndustryInfo(FIndustry, 12, 16);
 
   AddButton(18, 'B', 'Build');
   AddButton(18, 'ESC', 'Close');

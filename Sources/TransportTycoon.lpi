@@ -79,7 +79,6 @@
       <Unit11>
         <Filename Value="Scenes\TransportTycoon.Scene.Town.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="TransportTycoon.Scene.Town2"/>
       </Unit11>
       <Unit12>
         <Filename Value="Scenes\TransportTycoon.Scene.BuildInTown.pas"/>
