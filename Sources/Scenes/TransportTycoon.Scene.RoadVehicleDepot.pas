@@ -40,12 +40,14 @@ begin
 
   DrawTitle(8, FIndustry.Name + ' Road Vehicle Depot');
 
+  J := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
+    Length(RoadVehicleBase) - 1);
   for I := 0 to Length(RoadVehicleBase) - 1 do
     if RoadVehicleBase[I].Since <= Game.Calendar.Year then
-      DrawButton(12, I + 10, Chr(Ord('A') + I), RoadVehicleBase[I].Name);
-
-  I := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
-    Length(RoadVehicleBase) - 1);
+      if I = J then
+        DrawButton(12, I + 10, Chr(Ord('A') + I), RoadVehicleBase[I].Name,
+          'yellow')
+      else DrawButton(12, I + 10, Chr(Ord('A') + I), RoadVehicleBase[I].Name);
 
   terminal_color('yellow');
   terminal_composition(TK_ON);
