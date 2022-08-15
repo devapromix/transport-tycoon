@@ -11,6 +11,9 @@ type
   TGetXYVal = function(X, Y: Integer): Boolean; stdcall;
 
 type
+  TVehicleType = (vtAircraft, vtShip, vtBus, vtTruck);
+
+type
 
   { TVehicleBase }
 
@@ -22,6 +25,7 @@ type
     RunningCost: Word;
     Speed: Word;
     Since: Word;
+    VehicleType: TVehicleType;
   end;
 
 type
