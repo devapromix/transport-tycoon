@@ -11,9 +11,7 @@ uses
 type
   TVehicles = class(TObject)
   private const
-    MaxAircrafts = 7;
-    MaxShips = 7;
-    MaxRoadVehicles = 7;
+    MaxVehicles = 7;
   private
     FCurrentVehicle: Integer;
     FAircraft: TArray<TAircraft>;
@@ -239,17 +237,17 @@ end;
 
 function TVehicles.IsBuyAircraftAllowed: Boolean;
 begin
-  Exit(AircraftCount < MaxAircrafts);
+  Exit(AircraftCount < MaxVehicles);
 end;
 
 function TVehicles.IsBuyRoadVehicleAllowed: Boolean;
 begin
-  Exit(RoadVehicleCount < MaxRoadVehicles);
+  Exit(RoadVehicleCount < MaxVehicles);
 end;
 
 function TVehicles.IsBuyShipAllowed: Boolean;
 begin
-  Exit(ShipCount < MaxShips);
+  Exit(ShipCount < MaxVehicles);
 end;
 
 function TVehicles.IsVehicleOnMap(const AX, AY: Integer;

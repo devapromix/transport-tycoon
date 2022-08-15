@@ -6,45 +6,34 @@ uses
   TransportTycoon.Vehicle,
   TransportTycoon.Cargo;
 
-type
-  TAircraftBase = record
-    Name: string;
-    Passengers: Word;
-    Mail: Word;
-    Cost: Word;
-    RunningCost: Word;
-    Speed: Word;
-    Since: Word;
-  end;
-
 const
-  AircraftBase: array [0 .. 8] of TAircraftBase = (
+  AircraftBase: array [0 .. 8] of TVehicleBase = (
     // #1
-    (Name: 'Toreador MT-4'; Passengers: 25; Mail: 3; Cost: 22000;
+    (Name: 'Toreador MT-4'; Cargo: [cgPassengers]; Amount: 25; Cost: 22000;
     RunningCost: 130 * 12; Speed: 400; Since: 1950),
     // #2
-    (Name: 'Rotor JG'; Passengers: 30; Mail: 4; Cost: 24000;
+    (Name: 'Rotor JG'; Cargo: [cgPassengers]; Amount: 30; Cost: 24000;
     RunningCost: 140 * 12; Speed: 420; Since: 1950),
     // #3
-    (Name: 'Raxton ML'; Passengers: 35; Mail: 5; Cost: 27000;
+    (Name: 'Raxton ML'; Cargo: [cgPassengers]; Amount: 35; Cost: 27000;
     RunningCost: 150 * 12; Speed: 450; Since: 1955),
     // #4
-    (Name: 'Tornado S9'; Passengers: 45; Mail: 5; Cost: 30000;
+    (Name: 'Tornado S9'; Cargo: [cgPassengers]; Amount: 45; Cost: 30000;
     RunningCost: 160 * 12; Speed: 500; Since: 1965),
     // #5
-    (Name: 'ExOA-H7'; Passengers: 55; Mail: 7; Cost: 33000;
+    (Name: 'ExOA-H7'; Cargo: [cgPassengers]; Amount: 55; Cost: 33000;
     RunningCost: 170 * 12; Speed: 700; Since: 1970),
     // #6
-    (Name: 'AIN D88'; Passengers: 75; Mail: 7; Cost: 35000;
+    (Name: 'AIN D88'; Cargo: [cgPassengers]; Amount: 75; Cost: 35000;
     RunningCost: 180 * 12; Speed: 800; Since: 1980),
     // #7
-    (Name: 'HeWi C4'; Passengers: 100; Mail: 8; Cost: 38000;
+    (Name: 'HeWi C4'; Cargo: [cgPassengers]; Amount: 100; Cost: 38000;
     RunningCost: 190 * 12; Speed: 850; Since: 1990),
     // #8
-    (Name: 'UtBotS FL'; Passengers: 120; Mail: 10; Cost: 40000;
+    (Name: 'UtBotS FL'; Cargo: [cgPassengers]; Amount: 125; Cost: 40000;
     RunningCost: 200 * 12; Speed: 900; Since: 2000),
     // #9
-    (Name: 'Venus M2'; Passengers: 150; Mail: 12; Cost: 50000;
+    (Name: 'Venus M2'; Cargo: [cgPassengers]; Amount: 160; Cost: 50000;
     RunningCost: 210 * 12; Speed: 1000; Since: 2020)
     //
     );
@@ -57,17 +46,9 @@ type
   private
     FT: Integer;
     FState: string;
-    FPassengers: Integer;
-    FMaxPassengers: Integer;
-    FMail: Integer;
-    FMaxMail: Integer;
   public
     constructor Create(const AName: string; const AX, AY, ID: Integer);
     function Move(const AX, AY: Integer): Boolean; override;
-    property Passengers: Integer read FPassengers write FPassengers;
-    property MaxPassengers: Integer read FMaxPassengers;
-    property Mail: Integer read FMail write FMail;
-    property MaxMail: Integer read FMaxMail;
     property State: string read FState;
     procedure Step; override;
     procedure Load; override;
@@ -100,30 +81,29 @@ end;
 
 constructor TAircraft.Create(const AName: string; const AX, AY, ID: Integer);
 begin
-  inherited Create(AName, AX, AY);
+  inherited Create(AName, AX, AY, AircraftBase, ID);
   FT := 0;
   FState := 'Wait';
-  FMaxPassengers := AircraftBase[ID].Passengers;
-  FPassengers := 0;
-  FMaxMail := AircraftBase[ID].Mail;
-  FMail := 0;
 end;
 
 procedure TAircraft.Load;
+var
+  C: TCargo;
 begin
   FState := 'Load';
-  while (Game.Map.Industry[Order[OrderIndex].ID].ProducesAmount[cgPassengers] >
-    0) and (Passengers < MaxPassengers) do
-  begin
-    Game.Map.Industry[Order[OrderIndex].ID].DecCargoAmount(cgPassengers);
-    Inc(FPassengers);
-  end;
-  while (Game.Map.Industry[Order[OrderIndex].ID].ProducesAmount[cgMail] > 0) and
-    (Mail < MaxMail) do
-  begin
-    Game.Map.Industry[Order[OrderIndex].ID].DecCargoAmount(cgMail);
-    Inc(FMail);
-  end;
+  for C := Succ(Low(TCargo)) to High(TCargo) do
+    if (C in Game.Map.Industry[Order[OrderIndex].ID].Produces) and (C in Cargo)
+    then
+    begin
+      SetCargoType(C);
+      while (Game.Map.Industry[Order[OrderIndex].ID].ProducesAmount[C] > 0) and
+        (CargoAmount < CargoMaxAmount) do
+      begin
+        Game.Map.Industry[Order[OrderIndex].ID].DecCargoAmount(C);
+        IncCargoAmount;
+      end;
+      Exit;
+    end;
 end;
 
 function TAircraft.Move(const AX, AY: Integer): Boolean;
@@ -142,6 +122,8 @@ begin
 end;
 
 procedure TAircraft.Step;
+var
+  C: TCargo;
 begin
   if Length(Order) > 0 then
   begin
@@ -156,33 +138,37 @@ begin
       begin
         FT := 0;
         Load;
-        if (FullLoad and (Passengers < MaxPassengers)) then
-          Exit;
-      end;
-      IncOrder;
-    end
-    else
-      IncDistance;
+        if FullLoad then
+          for C := Succ(Low(TCargo)) to High(TCargo) do
+            if (C in Game.Map.Industry[Order[OrderIndex].ID].Produces) and
+              (C in Cargo) then
+            begin
+              SetCargoType(C);
+              if (CargoAmount < CargoMaxAmount) then
+                Exit;
+            end;
+        IncOrder;
+      end
+      else
+        IncDistance;
+    end;
   end;
 end;
 
 procedure TAircraft.UnLoad;
 var
-  M: Integer;
+  Money: Integer;
 begin
   SetLastStation;
   FState := 'Unload';
-  if Passengers > 0 then
+  if (CargoType in Game.Map.Industry[Order[OrderIndex].ID].Accepts) and
+    (CargoType <> cgNone) and (CargoAmount > 0) then
   begin
-    M := (Passengers * (Distance div 10)) * 7;
-    Game.ModifyMoney(ttAircraftIncome, M);
-    Passengers := 0;
-  end;
-  if Mail > 0 then
-  begin
-    M := (Mail * (Distance div 7)) * 8;
-    Game.ModifyMoney(ttAircraftIncome, M);
-    Mail := 0;
+    Money := (CargoAmount * (Distance div 10)) * CargoPrice[CargoType];
+    Game.Map.Industry[Order[OrderIndex].ID].IncAcceptsCargoAmount(CargoType,
+      CargoAmount);
+    Game.ModifyMoney(ttAircraftIncome, Money);
+    ClearCargo;
   end;
   Distance := 0;
 end;

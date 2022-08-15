@@ -35,9 +35,14 @@ type
     FOrderIndex: Integer;
     FVehicleID: Integer;
     FFullLoad: Boolean;
+    FCargo: TCargoSet;
+    FCargoType: TCargo;
+    FCargoAmount: Integer;
+    FCargoMaxAmount: Integer;
   public
     Order: array of TOrder;
-    constructor Create(const AName: string; const AX, AY: Integer);
+    constructor Create(const AName: string; const AX, AY: Integer;
+      const VehicleBase: array of TVehicleBase; const ID: Integer);
     procedure Draw;
     procedure Step; virtual; abstract;
     procedure Load; virtual; abstract;
@@ -47,6 +52,10 @@ type
     property OrderIndex: Integer read FOrderIndex write FOrderIndex;
     property Distance: Integer read FDistance write FDistance;
     property LastStationId: Integer read FLastStationId;
+    property Cargo: TCargoSet read FCargo;
+    property CargoType: TCargo read FCargoType;
+    property CargoAmount: Integer read FCargoAmount;
+    property CargoMaxAmount: Integer read FCargoMaxAmount;
     procedure AddOrder(const TownIndex: Integer; const AName: string;
       const AX, AY: Integer); overload;
     procedure DelOrder(const AIndex: Integer);
@@ -55,6 +64,9 @@ type
     procedure IncDistance;
     procedure SetLastStation;
     property FullLoad: Boolean read FFullLoad write FFullLoad;
+    procedure ClearCargo;
+    procedure SetCargoType(const ACargo: TCargo);
+    procedure IncCargoAmount(const AValue: Integer = 1);
   end;
 
 implementation
@@ -65,13 +77,23 @@ uses
 
 { TVehicle }
 
-constructor TVehicle.Create(const AName: string; const AX, AY: Integer);
+constructor TVehicle.Create(const AName: string; const AX, AY: Integer;
+  const VehicleBase: array of TVehicleBase; const ID: Integer);
 begin
   inherited Create(AName, AX, AY);
   FOrderIndex := 0;
   FDistance := 0;
   FLastStationId := 0;
   FFullLoad := False;
+  ClearCargo;
+  FCargoMaxAmount := VehicleBase[ID].Amount;
+  FCargo := VehicleBase[ID].Cargo;
+end;
+
+procedure TVehicle.ClearCargo;
+begin
+  FCargoAmount := 0;
+  FCargoType := cgNone;
 end;
 
 procedure TVehicle.Draw;
@@ -127,9 +149,19 @@ begin
     FOrderIndex := 0;
 end;
 
+procedure TVehicle.IncCargoAmount(const AValue: Integer);
+begin
+  Inc(FCargoAmount, AValue);
+end;
+
 procedure TVehicle.IncDistance;
 begin
   Inc(FDistance);
+end;
+
+procedure TVehicle.SetCargoType(const ACargo: TCargo);
+begin
+  FCargoType := ACargo;
 end;
 
 procedure TVehicle.SetLastStation;

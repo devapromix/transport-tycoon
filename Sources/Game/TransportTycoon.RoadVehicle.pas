@@ -22,18 +22,10 @@ type
   private
     FT: Integer;
     FState: string;
-    FCargoAmount: Integer;
-    FCargoMaxAmount: Integer;
-    FCargo: TCargoSet;
-    FCargoType: TCargo;
   public
     constructor Create(const AName: string; const AX, AY, ID: Integer);
     function Move(const AX, AY: Integer): Boolean; override;
     property State: string read FState;
-    property Cargo: TCargoSet read FCargo;
-    property CargoAmount: Integer read FCargoAmount;
-    property CargoMaxAmount: Integer read FCargoMaxAmount;
-    property CargoType: TCargo read FCargoType;
     procedure Step; override;
     procedure Load; override;
     procedure UnLoad; override;
@@ -66,30 +58,26 @@ end;
 
 constructor TRoadVehicle.Create(const AName: string; const AX, AY, ID: Integer);
 begin
-  inherited Create(AName, AX, AY);
+  inherited Create(AName, AX, AY, RoadVehicleBase, ID);
   FT := 0;
   FState := 'Wait';
-  FCargoAmount := 0;
-  FCargoMaxAmount := RoadVehicleBase[ID].Amount;
-  FCargo := RoadVehicleBase[ID].Cargo;
-  FCargoType := cgNone;
 end;
 
 procedure TRoadVehicle.Load;
 var
-  Cargo: TCargo;
+  C: TCargo;
 begin
   FState := 'Load';
-  for Cargo := Succ(Low(TCargo)) to High(TCargo) do
-    if (Cargo in Game.Map.Industry[Order[OrderIndex].ID].Produces) and
-      (Cargo in FCargo) then
+  for C := Succ(Low(TCargo)) to High(TCargo) do
+    if (C in Game.Map.Industry[Order[OrderIndex].ID].Produces) and (C in Cargo)
+    then
     begin
-      FCargoType := Cargo;
-      while (Game.Map.Industry[Order[OrderIndex].ID].ProducesAmount[Cargo] > 0)
-        and (FCargoAmount < FCargoMaxAmount) do
+      SetCargoType(C);
+      while (Game.Map.Industry[Order[OrderIndex].ID].ProducesAmount[C] > 0) and
+        (CargoAmount < CargoMaxAmount) do
       begin
-        Game.Map.Industry[Order[OrderIndex].ID].DecCargoAmount(Cargo);
-        Inc(FCargoAmount);
+        Game.Map.Industry[Order[OrderIndex].ID].DecCargoAmount(C);
+        IncCargoAmount;
       end;
       Exit;
     end;
@@ -112,7 +100,7 @@ end;
 
 procedure TRoadVehicle.Step;
 var
-  Cargo: TCargo;
+  C: TCargo;
   Station: TStation;
 begin
   if Length(Order) > 0 then
@@ -122,7 +110,7 @@ begin
       Inc(FT);
       if Order[OrderIndex].ID <> LastStationId then
         UnLoad;
-      case FCargoType of
+      case CargoType of
         cgPassengers, cgMail:
           Station := TTownIndustry(Game.Map.Industry[Order[OrderIndex].ID])
             .BusStation;
@@ -135,12 +123,12 @@ begin
         FT := 0;
         Load;
         if FullLoad then
-          for Cargo := Succ(Low(TCargo)) to High(TCargo) do
-            if (Cargo in Game.Map.Industry[Order[OrderIndex].ID].Produces) and
-              (Cargo in FCargo) then
+          for C := Succ(Low(TCargo)) to High(TCargo) do
+            if (C in Game.Map.Industry[Order[OrderIndex].ID].Produces) and
+              (C in Cargo) then
             begin
-              FCargoType := Cargo;
-              if (FCargoAmount < FCargoMaxAmount) then
+              SetCargoType(C);
+              if (CargoAmount < CargoMaxAmount) then
                 Exit;
             end;
         IncOrder;
@@ -160,12 +148,11 @@ begin
   if (CargoType in Game.Map.Industry[Order[OrderIndex].ID].Accepts) and
     (CargoType <> cgNone) and (CargoAmount > 0) then
   begin
-    Money := (FCargoAmount * (Distance div 10)) * CargoPrice[CargoType];
+    Money := (CargoAmount * (Distance div 10)) * CargoPrice[CargoType];
     Game.Map.Industry[Order[OrderIndex].ID].IncAcceptsCargoAmount(CargoType,
       CargoAmount);
     Game.ModifyMoney(ttRoadVehicleIncome, Money);
-    FCargoAmount := 0;
-    FCargoType := cgNone;
+    ClearCargo;
   end;
   Distance := 0;
 end;
