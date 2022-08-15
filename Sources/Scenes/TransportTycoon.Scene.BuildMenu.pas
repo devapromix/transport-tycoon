@@ -11,7 +11,8 @@ type
 
   TSceneBuildMenu = class(TScene)
   private
-
+    FYline: Integer;
+    procedure DrawLine(const Button, Text: string; const AMoney: Integer);
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -27,6 +28,15 @@ uses
 
 { TSceneBuildMenu }
 
+procedure TSceneBuildMenu.DrawLine(const Button, Text: string;
+  const AMoney: Integer);
+begin
+  DrawButton(22, FYline, Button, Text);
+  terminal_print(57, FYline, TK_ALIGN_RIGHT, Format('[c=light gray]$%d[/c]',
+    [AMoney]));
+  Inc(FYline);
+end;
+
 procedure TSceneBuildMenu.Render;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
@@ -34,12 +44,13 @@ begin
   DrawFrame(20, 8, 40, 13);
   DrawTitle(10, Game.Company.Name);
 
-  DrawButton(22, 12, 'C', 'Build Canal');
-  DrawButton(22, 13, 'R', 'Build Road');
-  DrawButton(22, 14, 'B', 'Build Road Bridge');
-  DrawButton(22, 15, 'T', 'Build Road Tunnel');
+  FYline := 12;
 
-  DrawButton(22, 16, 'X', 'Clear land');
+  DrawLine('C', 'Build Canal', Game.Map.BuildCanalCost);
+  DrawLine('R', 'Build Road', Game.Map.BuildRoadCost);
+  DrawLine('B', 'Build Road Bridge', Game.Map.BuildRoadBridgeCost);
+  DrawLine('T', 'Build Road Tunnel', Game.Map.BuildRoadTunnelCost);
+  DrawLine('X', 'Clear land', Game.Map.ClearLandCost);
 
   AddButton(18, 'Esc', 'Close');
 
