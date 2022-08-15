@@ -4,10 +4,25 @@ interface
 
 uses
   TransportTycoon.Order,
+  TransportTycoon.Cargo,
   TransportTycoon.MapObject;
 
 type
   TGetXYVal = function(X, Y: Integer): Boolean; stdcall;
+
+type
+
+  { TVehicleBase }
+
+  TVehicleBase = record
+    Name: string;
+    Cargo: TCargoSet;
+    Amount: Integer;
+    Cost: Word;
+    RunningCost: Word;
+    Speed: Word;
+    Since: Word;
+  end;
 
 type
 

@@ -6,19 +6,8 @@ uses
   TransportTycoon.Vehicle,
   TransportTycoon.Cargo;
 
-type
-  TRoadVehicleBase = record
-    Name: string;
-    Cargo: TCargoSet;
-    Amount: Integer;
-    Cost: Word;
-    RunningCost: Word;
-    Speed: Word;
-    Since: Word;
-  end;
-
 const
-  RoadVehicleBase: array [0 .. 0] of TRoadVehicleBase = (
+  RoadVehicleBase: array [0 .. 0] of TVehicleBase = (
     // #1
     (Name: 'Perry Bus'; Cargo: [cgPassengers]; Amount: 27; Cost: 4000;
     RunningCost: 18 * 12; Speed: 60; Since: 1950)

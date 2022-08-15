@@ -6,19 +6,8 @@ uses
   TransportTycoon.Vehicle,
   TransportTycoon.Cargo;
 
-type
-  TShipBase = record
-    Name: string;
-    Cargo: TCargoSet;
-    Amount: Integer;
-    Cost: Word;
-    RunningCost: Word;
-    Speed: Word;
-    Since: Word;
-  end;
-
 const
-  ShipBase: array [0 .. 2] of TShipBase = (
+  ShipBase: array [0 .. 2] of TVehicleBase = (
     // #1
     (Name: 'TM-22'; Cargo: [cgPassengers]; Amount: 90; Cost: 25000;
     RunningCost: 90 * 12; Speed: 50; Since: 1950),

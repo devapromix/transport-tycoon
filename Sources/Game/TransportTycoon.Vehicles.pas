@@ -9,7 +9,7 @@ uses
   TransportTycoon.Vehicle;
 
 type
-  TVehicles = class
+  TVehicles = class(TObject)
   private const
     MaxAircrafts = 7;
     MaxShips = 7;
