@@ -83,6 +83,7 @@ type
     FScene: array [TSceneEnum] of TScene;
     FSceneEnum: TSceneEnum;
     FBackSceneEnum: array [0 .. 2] of TSceneEnum;
+    FCurrentVehicleScene: TSceneEnum;
   public
     constructor Create;
     destructor Destroy; override;
@@ -92,7 +93,9 @@ type
     function GetScene(I: TSceneEnum): TScene;
     procedure SetScene(SceneEnum: TSceneEnum); overload;
     procedure SetScene(SceneEnum, BackSceneEnum: TSceneEnum); overload;
+    property CurrentVehicleScene: TSceneEnum read FCurrentVehicleScene write FCurrentVehicleScene;
     procedure Back;
+    procedure ClearQScenes;
   end;
 
 var
@@ -420,12 +423,9 @@ begin
 end;
 
 constructor TScenes.Create;
-var
-  I: Integer;
 begin
   inherited;
-  for I := 0 to High(FBackSceneEnum) do
-    FBackSceneEnum[I] := scWorld;
+  ClearQScenes;
   FScene[scMainMenu] := TSceneMainMenu.Create;
   FScene[scGameMenu] := TSceneGameMenu.Create;
   FScene[scGenMenu] := TSceneGenMenu.Create;
@@ -537,6 +537,14 @@ begin
     end;
   if FBackSceneEnum[0] = scWorld then
     SetScene(scWorld);
+end;
+
+procedure TScenes.ClearQScenes;
+var
+  I: Integer;
+begin
+  for I := 0 to High(FBackSceneEnum) do
+    FBackSceneEnum[I] := scWorld;
 end;
 
 end.
