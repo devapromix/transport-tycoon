@@ -11,7 +11,7 @@ type
 
   TSceneBuildMenu = class(TScene)
   private
-    FYline: Integer;
+    StartYLine: Integer;
     procedure DrawLine(const Button, Text: string; const AMoney: Integer);
   public
     procedure Render; override;
@@ -31,10 +31,10 @@ uses
 procedure TSceneBuildMenu.DrawLine(const Button, Text: string;
   const AMoney: Integer);
 begin
-  DrawButton(22, FYline, Button, Text);
-  terminal_print(57, FYline, TK_ALIGN_RIGHT, Format('[c=light gray]$%d[/c]',
+  DrawButton(22, StartYLine, Button, Text);
+  terminal_print(57, StartYLine, TK_ALIGN_RIGHT, Format('[c=light gray]$%d[/c]',
     [AMoney]));
-  Inc(FYline);
+  Inc(StartYLine);
 end;
 
 procedure TSceneBuildMenu.Render;
@@ -44,7 +44,7 @@ begin
   DrawFrame(20, 8, 40, 13);
   DrawTitle(10, Game.Company.Name);
 
-  FYline := 12;
+  StartYLine := 12;
 
   DrawLine('C', 'Build Canal', Game.Map.BuildCanalCost);
   DrawLine('R', 'Build Road', Game.Map.BuildRoadCost);
