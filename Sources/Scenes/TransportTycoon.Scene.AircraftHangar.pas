@@ -23,12 +23,13 @@ uses
   SysUtils,
   TransportTycoon.Game,
   TransportTycoon.Aircraft,
-  TransportTycoon.Vehicles;
+  TransportTycoon.Vehicles, TransportTycoon.Cargo;
 
 procedure TSceneAircraftHangar.Render;
 var
   I, J, K: Integer;
   S: string;
+  Cargo: TCargo;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
@@ -59,11 +60,17 @@ begin
   terminal_composition(TK_OFF);
   terminal_color('white');
 
-  // DrawText(42, 11, Format('Passengers: %d', [AircraftBase[K].Passengers]));
-  // DrawText(42, 12, Format('Mail: %d', [AircraftBase[K].Mail]));
-  DrawText(42, 13, Format('Speed: %d km/h', [AircraftBase[K].Speed]));
-  DrawText(42, 14, Format('Cost: $%d', [AircraftBase[K].Cost]));
-  DrawText(42, 15, Format('Running Cost: $%d/y',
+  J := 11;
+  for Cargo := Succ(Low(TCargo)) to High(TCargo) do
+    if (Cargo in AircraftBase[K].Cargo) then
+    begin
+      DrawText(42, J, Format('%s: %d', [CargoStr[Cargo],
+        AircraftBase[K].Amount]));
+      Inc(J);
+    end;
+  DrawText(42, 12, Format('Speed: %d km/h', [AircraftBase[K].Speed]));
+  DrawText(42, 13, Format('Cost: $%d', [AircraftBase[K].Cost]));
+  DrawText(42, 14, Format('Running Cost: $%d/y',
     [AircraftBase[K].RunningCost]));
 
   AddButton(20, Game.Vehicles.IsBuyAircraftAllowed, 'Enter', 'Buy Aircraft');
