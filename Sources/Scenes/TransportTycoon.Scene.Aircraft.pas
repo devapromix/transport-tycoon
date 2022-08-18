@@ -68,7 +68,7 @@ begin
     end;
   end;
 
-  AddButton(19, 'O', 'Orders');
+  AddButton(19, 'O', 'Add Order');
   AddButton(19, 'Esc', 'Close');
 
   DrawBar;
@@ -88,12 +88,12 @@ begin
         end;
     end;
     case MX of
-      28 .. 37:
+      27 .. 39:
         case MY of
           19:
             Key := TK_O;
         end;
-      41 .. 51:
+      43 .. 53:
         case MY of
           19:
             Key := TK_ESCAPE;
@@ -122,8 +122,6 @@ begin
       end;
     TK_ESCAPE:
       Scenes.Back;
-    TK_O:
-      Scenes.SetScene(scAircraftOrders);
     TK_L:
       with Game.Vehicles do
         with Aircraft[CurrentVehicle] do
@@ -131,6 +129,13 @@ begin
           FullLoad := not FullLoad;
           Scenes.Render;
         end;
+    TK_O:
+      begin
+        Game.IsOrder := True;
+        Scenes.CurrentVehicleScene := scAircraft;
+        Scenes.ClearQScenes;
+        Scenes.SetScene(scWorld);
+      end;
   end;
 end;
 

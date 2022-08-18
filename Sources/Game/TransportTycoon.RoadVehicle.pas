@@ -10,7 +10,7 @@ const
   RoadVehicleBase: array [0 .. 0] of TVehicleBase = (
     // #1
     (Name: 'Perry Bus'; Cargo: [cgPassengers]; Amount: 27; Cost: 4000;
-    RunningCost: 18 * 12; Speed: 60; Since: 1950)
+    RunningCost: 18 * 12; Speed: 60; Since: 1950; VehicleType: vtBus;)
     //
     );
 
@@ -111,7 +111,7 @@ begin
       if Order[OrderIndex].ID <> LastStationId then
         UnLoad;
       case CargoType of
-        cgPassengers, cgMail:
+        cgPassengers:
           Station := TTownIndustry(Game.Map.Industry[Order[OrderIndex].ID])
             .BusStation;
       else

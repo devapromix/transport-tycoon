@@ -10,13 +10,13 @@ const
   ShipBase: array [0 .. 2] of TVehicleBase = (
     // #1
     (Name: 'TM-22'; Cargo: [cgPassengers]; Amount: 90; Cost: 25000;
-    RunningCost: 90 * 12; Speed: 50; Since: 1950),
+    RunningCost: 90 * 12; Speed: 50; Since: 1950; VehicleType: vtShip;),
     // #2
     (Name: 'MF Cargo Ship'; Cargo: [cgCoal, cgWood]; Amount: 120; Cost: 27000;
-    RunningCost: 95 * 12; Speed: 50; Since: 1950),
+    RunningCost: 95 * 12; Speed: 50; Since: 1950; VehicleType: vtShip;),
     // #3
     (Name: 'TD-4 Ship'; Cargo: [cgGoods]; Amount: 110; Cost: 28000;
-    RunningCost: 97 * 12; Speed: 60; Since: 1955)
+    RunningCost: 97 * 12; Speed: 60; Since: 1955; VehicleType: vtShip;)
     //
     );
 

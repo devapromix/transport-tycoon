@@ -10,31 +10,31 @@ const
   AircraftBase: array [0 .. 8] of TVehicleBase = (
     // #1
     (Name: 'Toreador MT-4'; Cargo: [cgPassengers]; Amount: 25; Cost: 22000;
-    RunningCost: 130 * 12; Speed: 400; Since: 1950),
+    RunningCost: 130 * 12; Speed: 400; Since: 1950; VehicleType: vtAircraft;),
     // #2
     (Name: 'Rotor JG'; Cargo: [cgPassengers]; Amount: 30; Cost: 24000;
-    RunningCost: 140 * 12; Speed: 420; Since: 1950),
+    RunningCost: 140 * 12; Speed: 420; Since: 1950; VehicleType: vtAircraft;),
     // #3
     (Name: 'Raxton ML'; Cargo: [cgPassengers]; Amount: 35; Cost: 27000;
-    RunningCost: 150 * 12; Speed: 450; Since: 1955),
+    RunningCost: 150 * 12; Speed: 450; Since: 1955; VehicleType: vtAircraft;),
     // #4
     (Name: 'Tornado S9'; Cargo: [cgPassengers]; Amount: 45; Cost: 30000;
-    RunningCost: 160 * 12; Speed: 500; Since: 1965),
+    RunningCost: 160 * 12; Speed: 500; Since: 1965; VehicleType: vtAircraft;),
     // #5
     (Name: 'ExOA-H7'; Cargo: [cgPassengers]; Amount: 55; Cost: 33000;
-    RunningCost: 170 * 12; Speed: 700; Since: 1970),
+    RunningCost: 170 * 12; Speed: 700; Since: 1970; VehicleType: vtAircraft;),
     // #6
     (Name: 'AIN D88'; Cargo: [cgPassengers]; Amount: 75; Cost: 35000;
-    RunningCost: 180 * 12; Speed: 800; Since: 1980),
+    RunningCost: 180 * 12; Speed: 800; Since: 1980; VehicleType: vtAircraft;),
     // #7
     (Name: 'HeWi C4'; Cargo: [cgPassengers]; Amount: 100; Cost: 38000;
-    RunningCost: 190 * 12; Speed: 850; Since: 1990),
+    RunningCost: 190 * 12; Speed: 850; Since: 1990; VehicleType: vtAircraft;),
     // #8
     (Name: 'UtBotS FL'; Cargo: [cgPassengers]; Amount: 125; Cost: 40000;
-    RunningCost: 200 * 12; Speed: 900; Since: 2000),
+    RunningCost: 200 * 12; Speed: 900; Since: 2000; VehicleType: vtAircraft;),
     // #9
     (Name: 'Venus M2'; Cargo: [cgPassengers]; Amount: 160; Cost: 50000;
-    RunningCost: 210 * 12; Speed: 1000; Since: 2020)
+    RunningCost: 210 * 12; Speed: 1000; Since: 2020; VehicleType: vtAircraft;)
     //
     );
 

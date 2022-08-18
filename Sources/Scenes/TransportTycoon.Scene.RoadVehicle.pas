@@ -21,7 +21,8 @@ uses
   SysUtils,
   TransportTycoon.Game,
   TransportTycoon.RoadVehicle,
-  TransportTycoon.Cargo;
+  TransportTycoon.Cargo,
+  TransportTycoon.Vehicle;
 
 procedure TSceneRoadVehicle.Render;
 var
@@ -63,13 +64,17 @@ begin
         else
           C := #32;
         DrawText(32, I + 11, C);
-        DrawButton(34, I + 11, Length(Order) > 1, Chr(Ord('A') + I),
-          'Go to ' + Order[I].Name + ' Dock');
+        if RoadVehicleBase[VehicleID].VehicleType = vtBus then
+          DrawButton(34, I + 11, Length(Order) > 1, Chr(Ord('A') + I),
+            'Go to ' + Order[I].Name + ' Bus Station')
+        else
+          DrawButton(34, I + 11, Length(Order) > 1, Chr(Ord('A') + I),
+            'Go to ' + Order[I].Name + ' Truck Loading Bay');
       end;
     end;
   end;
 
-  AddButton(19, 'O', 'Orders');
+  AddButton(19, 'O', 'Add Order');
   AddButton(19, 'Esc', 'Close');
 
   DrawBar;
@@ -82,15 +87,29 @@ begin
   if (Key = TK_MOUSE_LEFT) then
   begin
     case MX of
-      28 .. 37:
+      32 .. 51:
+        case MY of
+          11 .. 17:
+            Key := TK_A + (MY - 11);
+        end;
+    end;
+    case MX of
+      27 .. 39:
         case MY of
           19:
             Key := TK_O;
         end;
-      41 .. 51:
+      43 .. 53:
         case MY of
           19:
             Key := TK_ESCAPE;
+        end;
+    end;
+    case MX of
+      12 .. 30:
+        case MY of
+          17:
+            Key := TK_L;
         end;
     end;
   end;
@@ -109,8 +128,6 @@ begin
       end;
     TK_ESCAPE:
       Scenes.Back;
-    TK_O:
-      Scenes.SetScene(scRoadVehicleOrders);
     TK_L:
       with Game.Vehicles do
         with RoadVehicle[CurrentVehicle] do
@@ -118,6 +135,13 @@ begin
           FullLoad := not FullLoad;
           Scenes.Render;
         end;
+    TK_O:
+      begin
+        Game.IsOrder := True;
+        Scenes.CurrentVehicleScene := scRoadVehicle;
+        Scenes.ClearQScenes;
+        Scenes.SetScene(scWorld);
+      end;
   end;
 end;
 

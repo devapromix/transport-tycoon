@@ -39,6 +39,7 @@ type
     FConstruct: TConstruct;
     FSpeed: TGameSpeedEnum;
     FLockScreen: Boolean;
+    FIsOrder: Boolean;
   public const
     MaxLoan = 200000;
     StartMoney = MaxLoan div 2;
@@ -58,6 +59,7 @@ type
     property Construct: TConstruct read FConstruct;
     property IsPause: Boolean read FIsPause write FIsPause;
     property IsGame: Boolean read FIsGame write FIsGame;
+    property IsOrder: Boolean read FIsOrder write FIsOrder;
     property Speed: TGameSpeedEnum read FSpeed;
     procedure Clear;
     procedure Step;
@@ -90,6 +92,7 @@ constructor TGame.Create;
 var
   I: Integer;
 begin
+  FIsOrder := False;
   FIsDebug := False;
   for I := 1 to ParamCount do
   begin
@@ -256,6 +259,7 @@ procedure TGame.Clear;
 begin
   FTurn := 0;
   FIsGame := True;
+  FIsOrder := False;
   FConstruct.Clear;
   FMoney := StartMoney;
   FLoan := StartMoney;

@@ -32,7 +32,8 @@ uses
   TransportTycoon.Game,
   TransportTycoon.Industries,
   TransportTycoon.Construct,
-  TransportTycoon.Scene.Menu.Settings;
+  TransportTycoon.Scene.Menu.Settings,
+  TransportTycoon.Stations;
 
 { TSceneWorld }
 
@@ -185,6 +186,8 @@ begin
     else
       DrawTileBkColor;
   end
+  else if Game.IsOrder then
+    terminal_bkcolor('light yellow')
   else
     DrawTileBkColor;
 
@@ -217,6 +220,8 @@ end;
 procedure TSceneWorld.Update(var Key: Word);
 var
   I: Integer;
+  F: Boolean;
+  S: TStation;
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
@@ -238,13 +243,65 @@ begin
         if (Game.Map.GetTile = tlTownIndustry) then
         begin
           if Game.Map.EnterInIndustry(RX, RY) then
-            Scenes.SetScene(scTown);
+            if Game.IsOrder then
+            begin
+              with Game.Vehicles do
+              begin
+                I := Game.Map.GetCurrentIndustry(RX, RY);
+                case Scenes.CurrentVehicleScene of
+                  scAircraft:
+                    begin
+                      S := TTownIndustry(Game.Map.Industry[I]).Airport;
+                      F := not(Aircraft[CurrentVehicle].IsOrder(I) or
+                        not S.IsBuilding);
+                      if F then
+                        with Game.Vehicles do
+                        begin
+                          if S.IsBuilding then
+                          begin
+                            Aircraft[CurrentVehicle].AddOrder(I);
+                            Game.IsOrder := False;
+                          end;
+                        end;
+                      Scenes.SetScene(scAircraft, scWorld);
+                    end;
+                  scShip:
+                    begin
+                      S := TTownIndustry(Game.Map.Industry[I]).Dock;
+                      F := not(Ship[CurrentVehicle].IsOrder(I) or
+                        not S.IsBuilding);
+                      if F then
+                        with Game.Vehicles do
+                        begin
+                          if S.IsBuilding then
+                          begin
+                            Ship[CurrentVehicle].AddOrder(I);
+                            Game.IsOrder := False;
+                          end;
+                        end;
+                      Scenes.SetScene(scShip, scWorld);
+                    end;
+                  scRoadVehicle:
+                    begin
+
+                      Scenes.SetScene(scRoadVehicle, scWorld);
+                    end;
+                end;
+              end;
+            end
+            else
+              Scenes.SetScene(scTown);
           Exit;
         end;
         if (Game.Map.GetTile in IndustryTiles) then
         begin
           if Game.Map.EnterInIndustry(RX, RY) then
-            Scenes.SetScene(scIndustry);
+            if Game.IsOrder then
+            begin
+              Scenes.SetScene(scAircraft, scWorld);
+            end
+            else
+              Scenes.SetScene(scIndustry);
           Exit;
         end;
         I := Game.Vehicles.GetCurrentAircraft(RX, RY);
@@ -301,7 +358,9 @@ begin
       Game.Construct.Clear;
       Scenes.Render;
       Exit;
-    end;
+    end
+    else if Game.IsOrder then
+      Game.IsOrder := False;
   end;
   case Key of
     TK_ESCAPE:
@@ -310,6 +369,11 @@ begin
         begin
           Game.Construct.Clear;
           Scenes.Render;
+          Exit;
+        end
+        else if Game.IsOrder then
+        begin
+          Game.IsOrder := False;
           Exit;
         end;
         Scenes.SetScene(scGameMenu);

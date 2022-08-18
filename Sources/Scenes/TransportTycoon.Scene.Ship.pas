@@ -69,7 +69,7 @@ begin
     end;
   end;
 
-  AddButton(19, 'O', 'Orders');
+  AddButton(19, 'O', 'Add Order');
   AddButton(19, 'Esc', 'Close');
 
   DrawBar;
@@ -82,15 +82,29 @@ begin
   if (Key = TK_MOUSE_LEFT) then
   begin
     case MX of
-      28 .. 37:
+      32 .. 51:
+        case MY of
+          11 .. 17:
+            Key := TK_A + (MY - 11);
+        end;
+    end;
+    case MX of
+      27 .. 39:
         case MY of
           19:
             Key := TK_O;
         end;
-      41 .. 51:
+      43 .. 53:
         case MY of
           19:
             Key := TK_ESCAPE;
+        end;
+    end;
+    case MX of
+      12 .. 30:
+        case MY of
+          17:
+            Key := TK_L;
         end;
     end;
   end;
@@ -109,8 +123,6 @@ begin
       end;
     TK_ESCAPE:
       Scenes.Back;
-    TK_O:
-      Scenes.SetScene(scShipOrders);
     TK_L:
       with Game.Vehicles do
         with Ship[CurrentVehicle] do
@@ -118,6 +130,13 @@ begin
           FullLoad := not FullLoad;
           Scenes.Render;
         end;
+    TK_O:
+      begin
+        Game.IsOrder := True;
+        Scenes.CurrentVehicleScene := scShip;
+        Scenes.ClearQScenes;
+        Scenes.SetScene(scWorld);
+      end;
   end;
 end;
 
