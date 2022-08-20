@@ -45,7 +45,10 @@ begin
 
   DrawButton(42, 14, 'D', 'Settings menu');
   DrawButton(42, 15, 'B', 'Build menu');
-  DrawButton(42, 16, 'P', 'Pause game');
+  if Game.IsPause then
+    DrawButton(42, 16, 'P', 'Paused game')
+  else
+    DrawButton(42, 16, 'P', 'Pause game');
   DrawButton(42, 17, 'X', 'Clear land');
 
   AddButton(19, 'Q', 'Quit');
