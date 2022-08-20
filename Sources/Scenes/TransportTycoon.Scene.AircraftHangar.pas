@@ -19,9 +19,9 @@ type
 implementation
 
 uses
-  BearLibTerminal,
   Math,
   SysUtils,
+  BearLibTerminal,
   TransportTycoon.Game,
   TransportTycoon.Aircraft,
   TransportTycoon.Vehicles;

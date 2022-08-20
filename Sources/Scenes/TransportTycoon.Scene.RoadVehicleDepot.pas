@@ -4,10 +4,11 @@ interface
 
 uses
   TransportTycoon.Scenes,
-  TransportTycoon.Industries;
+  TransportTycoon.Industries,
+  TransportTycoon.Scene.VehicleDepot;
 
 type
-  TSceneRoadVehicleDepot = class(TScene)
+  TSceneRoadVehicleDepot = class(TSceneVehicleDepot)
   private
     FIndustry: TIndustry;
   public
@@ -28,48 +29,17 @@ uses
 
 procedure TSceneRoadVehicleDepot.Render;
 var
-  I, J, K: Integer;
-  S: string;
-  Cargo: TCargo;
+  SelVehicle: Integer;
 begin
-  DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
-
-  DrawFrame(10, 6, 60, 17);
+  inherited Render;
 
   FIndustry := Game.Map.Industry[Game.Map.CurrentIndustry];
-
   DrawTitle(8, FIndustry.Name + ' Road Vehicle Depot');
 
-  K := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
+  SelVehicle := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
     Length(RoadVehicleBase) - 1);
-
-  for I := 0 to Length(RoadVehicleBase) - 1 do
-    if RoadVehicleBase[I].Since <= Game.Calendar.Year then
-      if I = K then
-        DrawButton(12, I + 10, Chr(Ord('A') + I),
-          RoadVehicleBase[I].Name, 'yellow')
-      else
-        DrawButton(12, I + 10, Chr(Ord('A') + I), RoadVehicleBase[I].Name);
-
-  terminal_color('yellow');
-  terminal_composition(TK_ON);
-  DrawText(42, 10, RoadVehicleBase[K].Name);
-  S := '';
-  for J := 1 to Length(RoadVehicleBase[K].Name) do
-    S := S + '_';
-  DrawText(42, 10, S);
-  terminal_composition(TK_OFF);
-
-  terminal_color('white');
-  TextLineY := 11;
-  for Cargo := Succ(Low(TCargo)) to High(TCargo) do
-    if (Cargo in RoadVehicleBase[K].Cargo) then
-      DrawTextLine(42, Format('%s: %d', [CargoStr[Cargo],
-        RoadVehicleBase[K].Amount]));
-  DrawTextLine(42, Format('Speed: %d km/h', [RoadVehicleBase[K].Speed]));
-  DrawTextLine(42, Format('Cost: $%d', [RoadVehicleBase[K].Cost]));
-  DrawTextLine(42, Format('Running Cost: $%d/y',
-    [RoadVehicleBase[K].RunningCost]));
+  DrawVehiclesList(RoadVehicleBase, SelVehicle);
+  DrawVehicleInfo(RoadVehicleBase, SelVehicle);
 
   AddButton(20, Game.Vehicles.IsBuyRoadVehicleAllowed, 'Enter',
     'Buy Road Vehicle');
@@ -83,15 +53,9 @@ var
   I: Integer;
   Title: string;
 begin
+  inherited Update(Key);
   if (Key = TK_MOUSE_LEFT) then
   begin
-    case MX of
-      12 .. 38:
-        case MY of
-          10 .. 18:
-            Key := TK_A + (MY - 10);
-        end;
-    end;
     if (GetButtonsY = MY) then
     begin
       case MX of
