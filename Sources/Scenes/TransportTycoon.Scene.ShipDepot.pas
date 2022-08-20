@@ -59,18 +59,15 @@ begin
   terminal_composition(TK_OFF);
 
   terminal_color('white');
-  J := 11;
+  TextLineY := 11;
   for Cargo := Succ(Low(TCargo)) to High(TCargo) do
     if (Cargo in ShipBase[K].Cargo) then
-    begin
-      DrawText(42, J, Format('%s: %d', [CargoStr[Cargo], ShipBase[K].Amount]));
-      Inc(J);
-    end;
-  DrawText(42, J, Format('Speed: %d km/h', [ShipBase[K].Speed]));
-  Inc(J);
-  DrawText(42, J, Format('Cost: $%d', [ShipBase[K].Cost]));
-  Inc(J);
-  DrawText(42, J, Format('Running Cost: $%d/y', [ShipBase[K].RunningCost]));
+      DrawTextLine(42, Format('%s: %d', [CargoStr[Cargo],
+        ShipBase[K].Amount]));
+  DrawTextLine(42, Format('Speed: %d km/h', [ShipBase[K].Speed]));
+  DrawTextLine(42, Format('Cost: $%d', [ShipBase[K].Cost]));
+  DrawTextLine(42, Format('Running Cost: $%d/y',
+    [ShipBase[K].RunningCost]));
 
   AddButton(20, Game.Vehicles.IsBuyShipAllowed, 'Enter', 'Buy Ship');
   AddButton(20, 'Esc', 'Close');

@@ -29,6 +29,7 @@ type
     FRY: Integer;
     FButtonsY: Integer;
     FButtons: array [0 .. 4] of TButtonRec;
+    FTextLineY: Integer;
   public
     procedure Render; virtual; abstract;
     procedure Update(var Key: Word); virtual; abstract;
@@ -37,6 +38,7 @@ type
     procedure DrawText(const X, Y: Integer; Text: string;
       const Align: Integer = TK_ALIGN_LEFT); overload;
     procedure DrawText(const Y: Integer; Text: string); overload;
+    procedure DrawTextLine(const X: Integer; const Text: string);
     procedure DrawMoney(const X, Y, Money: Integer;
       const Align: Integer = TK_ALIGN_RIGHT; F: Boolean = False);
     procedure DrawButton(const X, Y: Integer; IsActive: Boolean;
@@ -75,6 +77,7 @@ type
     procedure ScrollLeft;
     procedure ScrollRight;
     function Check(const F: Boolean): string;
+    property TextLineY: Integer read FTextLineY write FTextLineY;
   end;
 
 type
@@ -93,7 +96,8 @@ type
     function GetScene(I: TSceneEnum): TScene;
     procedure SetScene(SceneEnum: TSceneEnum); overload;
     procedure SetScene(SceneEnum, BackSceneEnum: TSceneEnum); overload;
-    property CurrentVehicleScene: TSceneEnum read FCurrentVehicleScene write FCurrentVehicleScene;
+    property CurrentVehicleScene: TSceneEnum read FCurrentVehicleScene
+      write FCurrentVehicleScene;
     procedure Back;
     procedure ClearQScenes;
   end;
@@ -155,6 +159,12 @@ end;
 procedure TScene.DrawText(const Y: Integer; Text: string);
 begin
   terminal_print(ScreenWidth div 2, Y, TK_ALIGN_CENTER, Text);
+end;
+
+procedure TScene.DrawTextLine(const X: Integer; const Text: string);
+begin
+  DrawText(X, FTextLineY, Text);
+  Inc(FTextLineY);
 end;
 
 procedure TScene.DrawText(const X, Y: Integer; Text, Color, BkColor: string);

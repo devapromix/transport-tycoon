@@ -58,19 +58,16 @@ begin
     S := S + '_';
   DrawText(42, 10, S);
   terminal_composition(TK_OFF);
-  terminal_color('white');
 
-  J := 11;
+  terminal_color('white');
+  TextLineY := 11;
   for Cargo := Succ(Low(TCargo)) to High(TCargo) do
     if (Cargo in AircraftBase[K].Cargo) then
-    begin
-      DrawText(42, J, Format('%s: %d', [CargoStr[Cargo],
+      DrawTextLine(42, Format('%s: %d', [CargoStr[Cargo],
         AircraftBase[K].Amount]));
-      Inc(J);
-    end;
-  DrawText(42, 12, Format('Speed: %d km/h', [AircraftBase[K].Speed]));
-  DrawText(42, 13, Format('Cost: $%d', [AircraftBase[K].Cost]));
-  DrawText(42, 14, Format('Running Cost: $%d/y',
+  DrawTextLine(42, Format('Speed: %d km/h', [AircraftBase[K].Speed]));
+  DrawTextLine(42, Format('Cost: $%d', [AircraftBase[K].Cost]));
+  DrawTextLine(42, Format('Running Cost: $%d/y',
     [AircraftBase[K].RunningCost]));
 
   AddButton(20, Game.Vehicles.IsBuyAircraftAllowed, 'Enter', 'Buy Aircraft');

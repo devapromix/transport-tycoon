@@ -61,19 +61,14 @@ begin
   terminal_composition(TK_OFF);
 
   terminal_color('white');
-  J := 11;
+  TextLineY := 11;
   for Cargo := Succ(Low(TCargo)) to High(TCargo) do
     if (Cargo in RoadVehicleBase[K].Cargo) then
-    begin
-      DrawText(42, J, Format('%s: %d', [CargoStr[Cargo],
+      DrawTextLine(42, Format('%s: %d', [CargoStr[Cargo],
         RoadVehicleBase[K].Amount]));
-      Inc(J);
-    end;
-  DrawText(42, J, Format('Speed: %d km/h', [RoadVehicleBase[K].Speed]));
-  Inc(J);
-  DrawText(42, J, Format('Cost: $%d', [RoadVehicleBase[K].Cost]));
-  Inc(J);
-  DrawText(42, J, Format('Running Cost: $%d/y',
+  DrawTextLine(42, Format('Speed: %d km/h', [RoadVehicleBase[K].Speed]));
+  DrawTextLine(42, Format('Cost: $%d', [RoadVehicleBase[K].Cost]));
+  DrawTextLine(42, Format('Running Cost: $%d/y',
     [RoadVehicleBase[K].RunningCost]));
 
   AddButton(20, Game.Vehicles.IsBuyRoadVehicleAllowed, 'Enter',
