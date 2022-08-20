@@ -283,7 +283,18 @@ begin
                     end;
                   scRoadVehicle:
                     begin
-
+                      S := TTownIndustry(Game.Map.Industry[I]).TruckLoadingBay;
+                      F := not(RoadVehicle[CurrentVehicle].IsOrder(I) or
+                        not S.IsBuilding);
+                      if F then
+                        with Game.Vehicles do
+                        begin
+                          if S.IsBuilding then
+                          begin
+                            RoadVehicle[CurrentVehicle].AddOrder(I);
+                            Game.IsOrder := False;
+                          end;
+                        end;
                       Scenes.SetScene(scRoadVehicle, scWorld);
                     end;
                 end;
