@@ -160,7 +160,7 @@ type
     procedure NextSeaLevel;
     procedure NextRivers;
     procedure NextSize;
-    procedure BuildPlan(const AX, AY: Integer; AConstructEnum: TConstructEnum);
+    procedure BuildConstruct(const AX, AY: Integer; AConstructEnum: TConstructEnum);
     function GetNearTownName(const AX, AY: Integer): string;
     function IsNearTile(const AX, AY: Integer; const ATile: TTiles): Boolean;
     function TownCount: Integer;
@@ -372,7 +372,7 @@ begin
       FTile[X][Y] := tlGrass;
 end;
 
-procedure TMap.BuildPlan(const AX, AY: Integer; AConstructEnum: TConstructEnum);
+procedure TMap.BuildConstruct(const AX, AY: Integer; AConstructEnum: TConstructEnum);
 var
   LMoney: Word;
   LPlan: TBuildPlan;

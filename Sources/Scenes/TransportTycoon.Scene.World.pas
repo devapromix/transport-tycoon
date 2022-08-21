@@ -334,7 +334,7 @@ begin
       for LConstruct := Low(TConstructEnum) to High(TConstructEnum) do
         if Game.Construct.IsBuild(LConstruct) then
         begin
-          Game.Map.BuildPlan(RX, RY, LConstruct);
+          Game.Map.BuildConstruct(RX, RY, LConstruct);
           Scenes.Render;
           Exit;
         end;
