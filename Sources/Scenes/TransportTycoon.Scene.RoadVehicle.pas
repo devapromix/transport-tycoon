@@ -22,7 +22,8 @@ uses
   TransportTycoon.Game,
   TransportTycoon.RoadVehicle,
   TransportTycoon.Cargo,
-  TransportTycoon.Vehicle;
+  TransportTycoon.Vehicle,
+  TransportTycoon.Palette;
 
 procedure TSceneRoadVehicle.Render;
 var
@@ -39,7 +40,7 @@ begin
 
     with RoadVehicle[CurrentVehicle] do
     begin
-      terminal_color('yellow');
+      terminal_color(TPalette.Selected);
       terminal_composition(TK_ON);
       DrawText(12, 11, RoadVehicleBase[VehicleID].Name);
       S := '';
@@ -47,7 +48,7 @@ begin
         S := S + '_';
       DrawText(12, 11, S);
       terminal_composition(TK_OFF);
-      terminal_color('white');
+      terminal_color(TPalette.Default);
 
       if (CargoType <> cgNone) then
         DrawText(12, 12, Format('%s: %d/%d', [CargoStr[CargoType], CargoAmount,

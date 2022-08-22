@@ -65,7 +65,8 @@ uses
   BearLibTerminal,
   TransportTycoon.Game,
   TransportTycoon.Finances,
-  TransportTycoon.Industries;
+  TransportTycoon.Industries,
+  TransportTycoon.Palette;
 
 type
   TGetVehicleFunc = function(const AX, AY: Integer): Integer of object;
@@ -184,19 +185,19 @@ var
   I: Integer;
 begin
   // Aircrafts
-  terminal_color('lightest blue');
+  terminal_color(TAircraft.Color);
   for I := 0 to AircraftCount - 1 do
     Aircraft[I].Draw;
   // Ships
-  terminal_color('white');
+  terminal_color(TShip.Color);
   for I := 0 to ShipCount - 1 do
     Ship[I].Draw;
   // Road Vehicles
-  terminal_color('light red');
+  terminal_color(TRoadVehicle.Color);
   for I := 0 to RoadVehicleCount - 1 do
     RoadVehicle[I].Draw;
   //
-  terminal_color('white');
+  terminal_color(TPalette.Default);
 end;
 
 function TVehicles.GetAircraft(AID: Integer): TAircraft;

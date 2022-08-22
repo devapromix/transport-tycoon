@@ -24,7 +24,8 @@ uses
   BearLibTerminal,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Cargo;
+  TransportTycoon.Cargo,
+  TransportTycoon.Palette;
 
 { TSceneBusStation }
 
@@ -41,7 +42,7 @@ begin
 
   DrawTitle(FIndustry.Name + ' Truck Loading Bay');
 
-  terminal_color('white');
+  terminal_color(TPalette.Default);
   J := 11;
   for Cargo := Succ(Low(TCargo)) to High(TCargo) do
     if (Cargo <> cgPassengers) then

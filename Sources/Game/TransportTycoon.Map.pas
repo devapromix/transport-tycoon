@@ -3,7 +3,8 @@
 interface
 
 uses
-  TransportTycoon.Industries, TransportTycoon.Construct;
+  TransportTycoon.Industries,
+  TransportTycoon.Construct;
 
 type
   TTiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlRock, tlSand,
@@ -45,7 +46,8 @@ const
     //
     (Name: 'Rock'; Tile: '^'; Color: 'dark gray'; BkColor: 'darkest grey'),
     //
-    (Name: 'Sand'; Tile: ':'; Color: 'white'; BkColor: 'darkest yellow'),
+    (Name: 'Sand'; Tile: ':'; Color: 'lightest yellow';
+    BkColor: 'darkest yellow'),
     //
     (Name: 'Water'; Tile: '='; Color: 'blue'; BkColor: 'darkest blue'),
     //
@@ -160,7 +162,8 @@ type
     procedure NextSeaLevel;
     procedure NextRivers;
     procedure NextSize;
-    procedure BuildConstruct(const AX, AY: Integer; AConstructEnum: TConstructEnum);
+    procedure BuildConstruct(const AX, AY: Integer;
+      AConstructEnum: TConstructEnum);
     function GetNearTownName(const AX, AY: Integer): string;
     function IsNearTile(const AX, AY: Integer; const ATile: TTiles): Boolean;
     function TownCount: Integer;
@@ -177,7 +180,8 @@ uses
   SysUtils,
   BearLibTerminal,
   TransportTycoon.Game,
-  TransportTycoon.Finances;
+  TransportTycoon.Finances,
+  TransportTycoon.Palette;
 
 type
   TBuildPlan = record
@@ -191,16 +195,19 @@ const
     // ceClearLand
     (AffectedTiles: TreeTiles; ResultTile: tlDirt; Money: TMap.ClearLandCost),
     // ceBuildCanal
-    (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlCanal; Money: TMap.BuildCanalCost),
+    (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlCanal;
+    Money: TMap.BuildCanalCost),
     // ceBuildRoad
-    (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlRoad; Money: TMap.BuildRoadCost),
+    (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlRoad;
+    Money: TMap.BuildRoadCost),
     // ceBuildRoadTunnel
-    (AffectedTiles: MountainTiles; ResultTile: tlRoadTunnel; Money: TMap.BuildRoadTunnelCost),
+    (AffectedTiles: MountainTiles; ResultTile: tlRoadTunnel;
+    Money: TMap.BuildRoadTunnelCost),
     // ceBuildRoadBridge
-    (AffectedTiles: WaterTiles; ResultTile: tlRoadBridge; Money: TMap.BuildRoadBridgeCost)
-  );
+    (AffectedTiles: WaterTiles; ResultTile: tlRoadBridge;
+    Money: TMap.BuildRoadBridgeCost));
 
-{ TMap }
+  { TMap }
 
 function TMap.IsTownName(const ATownName: string): Boolean;
 var
@@ -372,21 +379,22 @@ begin
       FTile[X][Y] := tlGrass;
 end;
 
-procedure TMap.BuildConstruct(const AX, AY: Integer; AConstructEnum: TConstructEnum);
+procedure TMap.BuildConstruct(const AX, AY: Integer;
+  AConstructEnum: TConstructEnum);
 var
-  LMoney: Word;
-  LPlan: TBuildPlan;
+  Money: Word;
+  Plan: TBuildPlan;
 begin
-  LPlan := BuildPlans[AConstructEnum];
-  if not (FTile[AX][AY] in LPlan.AffectedTiles) then
+  Plan := BuildPlans[AConstructEnum];
+  if not(FTile[AX][AY] in Plan.AffectedTiles) then
     Exit;
-  LMoney := LPlan.Money;
-  if not (AConstructEnum in [ceClearLand]) and (FTile[AX][AY] in TreeTiles) then
-    Inc(LMoney, ClearLandCost);
-  if (Game.Money >= LMoney) then
+  Money := Plan.Money;
+  if not(AConstructEnum in [ceClearLand]) and (FTile[AX][AY] in TreeTiles) then
+    Inc(Money, ClearLandCost);
+  if (Game.Money >= Money) then
   begin
-    FTile[AX][AY] := LPlan.ResultTile;
-    Game.ModifyMoney(ttConstruction, -LMoney);
+    FTile[AX][AY] := Plan.ResultTile;
+    Game.ModifyMoney(ttConstruction, -Money);
   end;
 end;
 
@@ -397,8 +405,8 @@ begin
   for Y := 0 to AHeight - 1 do
     for X := 0 to AWidth - 1 do
       DrawTile(X, Y);
-  terminal_bkcolor('darkest gray');
-  terminal_color('white');
+  terminal_bkcolor(TPalette.Background);
+  terminal_color(TPalette.Default);
 end;
 
 procedure TMap.DrawTile(const X, Y: Integer);

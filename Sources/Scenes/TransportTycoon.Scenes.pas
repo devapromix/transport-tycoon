@@ -142,7 +142,8 @@ uses
   TransportTycoon.Scene.BusStation,
   TransportTycoon.Scene.TruckLoadingBay,
   TransportTycoon.Scene.RoadVehicleDepot,
-  TransportTycoon.Scene.RoadVehicles;
+  TransportTycoon.Scene.RoadVehicles,
+  TransportTycoon.Palette;
 
 procedure TScene.DrawText(const X, Y: Integer; Text: string;
   const Align: Integer = TK_ALIGN_LEFT);
@@ -152,8 +153,8 @@ end;
 
 procedure TScene.DrawTitle(const Y: Integer; const Title: string);
 begin
-  terminal_print(ScreenWidth div 2, Y, TK_ALIGN_CENTER,
-    '[c=yellow]' + UpperCase(Title) + '[/c]');
+  terminal_print(ScreenWidth div 2, Y, TK_ALIGN_CENTER, '[c=' + TPalette.Title +
+    ']' + UpperCase(Title) + '[/c]');
 end;
 
 procedure TScene.DrawText(const Y: Integer; Text: string);
@@ -191,8 +192,9 @@ end;
 
 procedure TScene.DrawButton(const X, Y: Integer; Button, Text: string);
 begin
-  terminal_print(X, Y, Format('[c=light yellow][[%s]][/c] [c=white]%s[/c]',
-    [UpperCase(Button), UpperCase(Text)]));
+  terminal_print(X, Y, Format('[c=%s][[%s]][/c] [c=%s]%s[/c]',
+    [TPalette.ButtonKey, UpperCase(Button), TPalette.Default,
+    UpperCase(Text)]));
 end;
 
 procedure TScene.AddButton(const Y: Integer; const Button, Text: string);
@@ -232,8 +234,8 @@ var
   Y: Integer;
 begin
   Y := Self.ScreenHeight - 1;
-  terminal_color('white');
-  terminal_bkcolor('darkest gray');
+  terminal_color(TPalette.Default);
+  terminal_bkcolor(TPalette.Background);
   terminal_clear_area(0, Y, 80, 1);
   DrawMoney(0, Y, Game.Money, TK_ALIGN_LEFT, True);
   DrawText(12, Y, Format('Turn:%d', [Game.Turn]));
@@ -261,21 +263,22 @@ end;
 procedure TScene.DrawButton(const Y: Integer; Button, Text: string);
 begin
   terminal_print(ScreenWidth div 2, Y, TK_ALIGN_CENTER,
-    Format('[c=light yellow][[%s]][/c] [c=white]%s[/c]', [UpperCase(Button),
-    UpperCase(Text)]));
+    Format('[c=%s][[%s]][/c] [c=%s]%s[/c]', [TPalette.ButtonKey,
+    UpperCase(Button), TPalette.Default, UpperCase(Text)]));
 end;
 
 procedure TScene.DrawButton(const X, Y, W: Integer; IsActive, IsFlag: Boolean;
   Button, Text: string);
 begin
   DrawButton(X, Y, IsActive, Button, Text);
-  DrawText(X + W - 4, Y, '[c=white][[' + Check(IsFlag) + ']][/c]');
+  DrawText(X + W - 4, Y, '[c=' + TPalette.Default + '][[' + Check(IsFlag) +
+    ']][/c]');
 end;
 
 procedure TScene.DrawButton(const X, Y: Integer; Button, Text, Color: string);
 begin
-  terminal_print(X, Y, Format('[c=light yellow][[%s]][/c] [c=%s]%s[/c]',
-    [UpperCase(Button), Color, UpperCase(Text)]));
+  terminal_print(X, Y, Format('[c=%s][[%s]][/c] [c=%s]%s[/c]',
+    [TPalette.ButtonKey, UpperCase(Button), Color, UpperCase(Text)]));
 end;
 
 procedure TScene.DrawButton(const X, Y: Integer; IsActive: Boolean;
@@ -285,13 +288,13 @@ var
 begin
   if IsActive then
   begin
-    CB := 'light yellow';
-    CT := 'white';
+    CB := TPalette.ButtonKey;
+    CT := TPalette.Default;
   end
   else
   begin
-    CB := 'gray';
-    CT := 'gray';
+    CB := TPalette.Unused;
+    CT := TPalette.Unused;
   end;
 
   terminal_print(X, Y, Format('[c=' + CB + '][[%s]][/c] [c=' + CT + ']%s[/c]',
@@ -336,7 +339,8 @@ procedure TScene.DrawMoney(const X, Y, Money: Integer;
   const Align: Integer = TK_ALIGN_RIGHT; F: Boolean = False);
 begin
   if Money = 0 then
-    terminal_print(X, Y, Align, Format('[c=white]$%d[/c]', [Money]));
+    terminal_print(X, Y, Align, Format('[c=%s]$%d[/c]',
+      [TPalette.Default, Money]));
   if Money > 0 then
     if F then
       terminal_print(X, Y, Align, Format('[c=green]$%d[/c]', [Money]))
@@ -403,13 +407,13 @@ var
 begin
   if IsActive then
   begin
-    CB := 'light yellow';
-    CT := 'white';
+    CB := TPalette.ButtonKey;
+    CT := TPalette.Default;
   end
   else
   begin
-    CB := 'gray';
-    CT := 'gray';
+    CB := TPalette.Unused;
+    CT := TPalette.Unused;
   end;
   Result := Format('[c=' + CB + '][[%s]][/c] [c=' + CT + ']%s[/c]',
     [UpperCase(Button), UpperCase(Text)]);
@@ -490,8 +494,8 @@ begin
       ClearButtons;
       Render;
       RenderButtons;
-      terminal_color('white');
-      terminal_bkcolor('darkest gray');
+      terminal_color(TPalette.Default);
+      terminal_bkcolor(TPalette.Background);
       if Game.IsDebug then
       begin
         terminal_print(0, 0, Format('X:%d, Y:%d', [RX, RY]));

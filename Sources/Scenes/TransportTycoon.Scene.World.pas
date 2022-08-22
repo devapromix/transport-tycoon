@@ -33,7 +33,8 @@ uses
   TransportTycoon.Industries,
   TransportTycoon.Construct,
   TransportTycoon.Scene.Menu.Settings,
-  TransportTycoon.Stations;
+  TransportTycoon.Stations,
+  TransportTycoon.Palette;
 
 { TSceneWorld }
 
@@ -61,7 +62,7 @@ begin
     VX := MX + 1
   else
     VX := MX - L;
-  terminal_bkcolor('darkest gray');
+  terminal_bkcolor(TPalette.Background);
   DrawFrame(VX, VY, L, 5);
   DrawText(VX + (L div 2), VY + 2, '[c=yellow]' + UpperCase(VehicleName) +
     '[/c]', TK_ALIGN_CENTER);
@@ -84,7 +85,7 @@ begin
     VX := MX + 1
   else
     VX := MX - L;
-  terminal_bkcolor('darkest gray');
+  terminal_bkcolor(TPalette.Background);
   DrawFrame(VX, VY, L, 7);
   DrawText(VX + (L div 2), VY + 2, '[c=yellow]' + UpperCase(S) + '[/c]',
     TK_ALIGN_CENTER);
@@ -156,7 +157,7 @@ begin
     VX := MX + 1
   else
     VX := MX - L;
-  terminal_bkcolor('darkest gray');
+  terminal_bkcolor(TPalette.Background);
   DrawFrame(VX, VY, L, 5);
   DrawText(VX + (L div 2), VY + 2, '[c=yellow]' + UpperCase(S) + '[/c]',
     TK_ALIGN_CENTER);

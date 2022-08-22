@@ -46,6 +46,8 @@ type
   private
     FT: Integer;
     FState: string;
+  public const
+    Color: string = 'lightest blue';
   public
     constructor Create(const AName: string; const AX, AY, ID: Integer);
     function Move(const AX, AY: Integer): Boolean; override;

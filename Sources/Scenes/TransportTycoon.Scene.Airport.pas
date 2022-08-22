@@ -21,7 +21,8 @@ uses
   BearLibTerminal,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Cargo;
+  TransportTycoon.Cargo,
+  TransportTycoon.Palette;
 
 procedure TSceneAirport.Render;
 var
@@ -36,7 +37,7 @@ begin
 
   DrawTitle(FTown.Name + ' Airport');
 
-  terminal_color('white');
+  terminal_color(TPalette.Default);
   DrawText(7, 11, 'Size: ' + AirportSizeStr[FTown.Airport.Level]);
   J := 12;
   for Cargo := Succ(Low(TCargo)) to High(TCargo) do

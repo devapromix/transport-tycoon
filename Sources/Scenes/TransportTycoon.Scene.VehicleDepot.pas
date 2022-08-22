@@ -28,7 +28,8 @@ uses
   SysUtils,
   BearLibTerminal,
   TransportTycoon.Cargo,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Palette;
 
 procedure TSceneVehicleDepot.DrawVehicleInfo(const V: array of TVehicleBase;
   const SelVehicle: Integer);
@@ -37,7 +38,7 @@ var
   S: string;
   I: Integer;
 begin
-  terminal_color('yellow');
+  terminal_color(TPalette.Selected);
   terminal_composition(TK_ON);
   DrawText(42, 10, V[SelVehicle].Name);
   S := '';
@@ -45,7 +46,7 @@ begin
     S := S + '_';
   DrawText(42, 10, S);
   terminal_composition(TK_OFF);
-  terminal_color('white');
+  terminal_color(TPalette.Default);
   TextLineY := 11;
   for C := Succ(Low(TCargo)) to High(TCargo) do
     if (C in V[SelVehicle].Cargo) then

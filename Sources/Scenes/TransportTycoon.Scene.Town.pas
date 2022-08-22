@@ -25,7 +25,8 @@ uses
   SysUtils,
   BearLibTerminal,
   TransportTycoon.Game,
-  TransportTycoon.Scene.Industry;
+  TransportTycoon.Scene.Industry,
+  TransportTycoon.Palette;
 
 { TSceneTown }
 
@@ -40,7 +41,7 @@ begin
   FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
 
   DrawTitle(8, FTown.Name);
-  terminal_color('white');
+  terminal_color(TPalette.Default);
   DrawText(12, 10, 'Population: ' + IntToStr(FTown.Population));
   DrawText(12, 11, 'Houses: ' + IntToStr(FTown.Houses));
   // Airport
@@ -60,7 +61,7 @@ begin
   if Game.Company.IsTownHQ then
     DrawButton(34, 15, 35, FTown.HQ.IsBuilding, FTown.HQ.IsBuilding, 'G',
       'Company Headquarters');
-  terminal_color('white');
+  terminal_color(TPalette.Default);
 
   TSceneIndustry(Scenes.GetScene(scIndustry)).IndustryInfo(FTown, 12, 18);
 

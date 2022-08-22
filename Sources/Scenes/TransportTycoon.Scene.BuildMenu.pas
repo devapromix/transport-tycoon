@@ -24,7 +24,8 @@ uses
   SysUtils,
   BearLibTerminal,
   TransportTycoon.Game,
-  TransportTycoon.Construct;
+  TransportTycoon.Construct,
+  TransportTycoon.Palette;
 
 { TSceneBuildMenu }
 
@@ -32,8 +33,8 @@ procedure TSceneBuildMenu.DrawLine(const Button, Text: string;
   const AMoney: Integer);
 begin
   DrawButton(22, StartYLine, Button, Text);
-  terminal_print(57, StartYLine, TK_ALIGN_RIGHT, Format('[c=light gray]$%d[/c]',
-    [AMoney]));
+  terminal_print(57, StartYLine, TK_ALIGN_RIGHT,
+    Format('[c=%s]$%d[/c]', [TPalette.Unused, AMoney]));
   Inc(StartYLine);
 end;
 

@@ -53,19 +53,19 @@ uses
   TransportTycoon.Scene.RoadVehicleDepot in 'Scenes\TransportTycoon.Scene.RoadVehicleDepot.pas',
   TransportTycoon.Scene.TruckLoadingBay in 'Scenes\TransportTycoon.Scene.TruckLoadingBay.pas',
   TransportTycoon.Scene.RoadVehicles in 'Scenes\TransportTycoon.Scene.RoadVehicles.pas',
-  TransportTycoon.Scene.VehicleDepot in 'Scenes\TransportTycoon.Scene.VehicleDepot.pas';
+  TransportTycoon.Scene.VehicleDepot in 'Scenes\TransportTycoon.Scene.VehicleDepot.pas',
+  TransportTycoon.Palette in 'Game\TransportTycoon.Palette.pas';
 
 var
   Key: Word = 0;
   Tmp: Word = 0;
 
 begin
-  {$IFDEF DEBUG}
-    {$IF CompilerVersion > 16}
-    ReportMemoryLeaksOnShutdown := True;
-    {$IFEND}
-  {$ENDIF}
-
+{$IFDEF DEBUG}
+{$IF CompilerVersion > 16}
+  ReportMemoryLeaksOnShutdown := True;
+{$IFEND}
+{$ENDIF}
   Randomize();
   terminal_open();
   terminal_set('window: size=80x30, title="Transport Tycoon v.' +

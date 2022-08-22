@@ -21,7 +21,8 @@ uses
   SysUtils,
   TransportTycoon.Game,
   TransportTycoon.Ship,
-  TransportTycoon.Cargo;
+  TransportTycoon.Cargo,
+  TransportTycoon.Palette;
 
 procedure TSceneShip.Render;
 var
@@ -38,7 +39,7 @@ begin
 
     with Ship[CurrentVehicle] do
     begin
-      terminal_color('yellow');
+      terminal_color(TPalette.Selected);
       terminal_composition(TK_ON);
       DrawText(12, 11, ShipBase[VehicleID].Name);
       S := '';
@@ -46,7 +47,7 @@ begin
         S := S + '_';
       DrawText(12, 11, S);
       terminal_composition(TK_OFF);
-      terminal_color('white');
+      terminal_color(TPalette.Default);
 
       if (CargoType <> cgNone) then
         DrawText(12, 12, Format('%s: %d/%d', [CargoStr[CargoType], CargoAmount,
