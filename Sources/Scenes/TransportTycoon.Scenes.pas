@@ -283,22 +283,8 @@ end;
 
 procedure TScene.DrawButton(const X, Y: Integer; IsActive: Boolean;
   Button, Text: string);
-var
-  CB, CT: string;
 begin
-  if IsActive then
-  begin
-    CB := TPalette.ButtonKey;
-    CT := TPalette.Default;
-  end
-  else
-  begin
-    CB := TPalette.Unused;
-    CT := TPalette.Unused;
-  end;
-
-  terminal_print(X, Y, Format('[c=' + CB + '][[%s]][/c] [c=' + CT + ']%s[/c]',
-    [UpperCase(Button), UpperCase(Text)]));
+  terminal_print(X, Y, MakeButton(IsActive, Button, Text));
 end;
 
 procedure TScene.DrawButton(const Y: Integer; IsActive: Boolean;
