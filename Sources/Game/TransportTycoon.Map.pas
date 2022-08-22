@@ -3,7 +3,7 @@
 interface
 
 uses
-  TransportTycoon.Industries;
+  TransportTycoon.Industries, TransportTycoon.Construct;
 
 type
   TTiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlRock, tlSand,
@@ -160,11 +160,7 @@ type
     procedure NextSeaLevel;
     procedure NextRivers;
     procedure NextSize;
-    procedure ClearLand(const AX, AY: Integer);
-    procedure BuildCanals(const AX, AY: Integer);
-    procedure BuildRoad(const AX, AY: Integer);
-    procedure BuildRoadTunnel(const AX, AY: Integer);
-    procedure BuildRoadBridge(const AX, AY: Integer);
+    procedure BuildConstruct(const AX, AY: Integer; AConstructEnum: TConstructEnum);
     function GetNearTownName(const AX, AY: Integer): string;
     function IsNearTile(const AX, AY: Integer; const ATile: TTiles): Boolean;
     function TownCount: Integer;
@@ -182,6 +178,27 @@ uses
   BearLibTerminal,
   TransportTycoon.Game,
   TransportTycoon.Finances;
+
+type
+  TBuildPlan = record
+    AffectedTiles: set of TTiles;
+    ResultTile: TTiles;
+    Money: Integer;
+  end;
+
+const
+  BuildPlans: array [TConstructEnum] of TBuildPlan = (
+    // ceClearLand
+    (AffectedTiles: TreeTiles; ResultTile: tlDirt; Money: TMap.ClearLandCost),
+    // ceBuildCanal
+    (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlCanal; Money: TMap.BuildCanalCost),
+    // ceBuildRoad
+    (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlRoad; Money: TMap.BuildRoadCost),
+    // ceBuildRoadTunnel
+    (AffectedTiles: MountainTiles; ResultTile: tlRoadTunnel; Money: TMap.BuildRoadTunnelCost),
+    // ceBuildRoadBridge
+    (AffectedTiles: WaterTiles; ResultTile: tlRoadBridge; Money: TMap.BuildRoadBridgeCost)
+  );
 
 { TMap }
 
@@ -355,70 +372,22 @@ begin
       FTile[X][Y] := tlGrass;
 end;
 
-procedure TMap.ClearLand(const AX, AY: Integer);
-begin
-  if (FTile[AX][AY] in TreeTiles) then
-    if (Game.Money >= ClearLandCost) then
-    begin
-      FTile[AX][AY] := tlDirt;
-      Game.ModifyMoney(ttConstruction, -ClearLandCost);
-    end;
-end;
-
-procedure TMap.BuildCanals(const AX, AY: Integer);
+procedure TMap.BuildConstruct(const AX, AY: Integer; AConstructEnum: TConstructEnum);
 var
-  Money: Word;
+  LMoney: Word;
+  LPlan: TBuildPlan;
 begin
-  Money := BuildCanalCost;
-  if (FTile[AX][AY] in TreeTiles) then
-    Inc(Money, ClearLandCost);
-  if (FTile[AX][AY] in TreeTiles + LandTiles) then
-    if (Game.Money >= Money) then
-    begin
-      FTile[AX][AY] := tlCanal;
-      Game.ModifyMoney(ttConstruction, -Money);
-    end;
-end;
-
-procedure TMap.BuildRoad(const AX, AY: Integer);
-var
-  Money: Word;
-begin
-  Money := BuildRoadCost;
-  if (FTile[AX][AY] in TreeTiles) then
-    Inc(Money, ClearLandCost);
-  if (FTile[AX][AY] in TreeTiles + LandTiles) then
-    if (Game.Money >= Money) then
-    begin
-      FTile[AX][AY] := tlRoad;
-      Game.ModifyMoney(ttConstruction, -Money);
-    end;
-end;
-
-procedure TMap.BuildRoadTunnel(const AX, AY: Integer);
-var
-  Money: Word;
-begin
-  Money := BuildRoadTunnelCost;
-  if (FTile[AX][AY] in MountainTiles) then
-    if (Game.Money >= Money) then
-    begin
-      FTile[AX][AY] := tlRoadTunnel;
-      Game.ModifyMoney(ttConstruction, -Money);
-    end;
-end;
-
-procedure TMap.BuildRoadBridge(const AX, AY: Integer);
-var
-  Money: Word;
-begin
-  Money := BuildRoadBridgeCost;
-  if (FTile[AX][AY] in WaterTiles) then
-    if (Game.Money >= Money) then
-    begin
-      FTile[AX][AY] := tlRoadBridge;
-      Game.ModifyMoney(ttConstruction, -Money);
-    end;
+  LPlan := BuildPlans[AConstructEnum];
+  if not (FTile[AX][AY] in LPlan.AffectedTiles) then
+    Exit;
+  LMoney := LPlan.Money;
+  if not (AConstructEnum in [ceClearLand]) and (FTile[AX][AY] in TreeTiles) then
+    Inc(LMoney, ClearLandCost);
+  if (Game.Money >= LMoney) then
+  begin
+    FTile[AX][AY] := LPlan.ResultTile;
+    Game.ModifyMoney(ttConstruction, -LMoney);
+  end;
 end;
 
 procedure TMap.Draw(const AWidth, AHeight: Integer);

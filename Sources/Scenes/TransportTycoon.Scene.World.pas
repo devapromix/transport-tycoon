@@ -222,6 +222,7 @@ var
   I: Integer;
   F: Boolean;
   S: TStation;
+  LConstruct: TConstructEnum;
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
@@ -330,36 +331,13 @@ begin
           Exit;
         end;
       end;
-      if Game.Construct.IsBuild(ceClearLand) then
-      begin
-        Game.Map.ClearLand(RX, RY);
-        Scenes.Render;
-        Exit;
-      end;
-      if Game.Construct.IsBuild(ceBuildCanal) then
-      begin
-        Game.Map.BuildCanals(RX, RY);
-        Scenes.Render;
-        Exit;
-      end;
-      if Game.Construct.IsBuild(ceBuildRoad) then
-      begin
-        Game.Map.BuildRoad(RX, RY);
-        Scenes.Render;
-        Exit;
-      end;
-      if Game.Construct.IsBuild(ceBuildRoadTunnel) then
-      begin
-        Game.Map.BuildRoadTunnel(RX, RY);
-        Scenes.Render;
-        Exit;
-      end;
-      if Game.Construct.IsBuild(ceBuildRoadBridge) then
-      begin
-        Game.Map.BuildRoadBridge(RX, RY);
-        Scenes.Render;
-        Exit;
-      end;
+      for LConstruct := Low(TConstructEnum) to High(TConstructEnum) do
+        if Game.Construct.IsBuild(LConstruct) then
+        begin
+          Game.Map.BuildConstruct(RX, RY, LConstruct);
+          Scenes.Render;
+          Exit;
+        end;
     end;
   end;
   if (Key = TK_MOUSE_RIGHT) then
