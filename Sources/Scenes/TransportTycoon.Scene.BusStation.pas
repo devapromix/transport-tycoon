@@ -46,7 +46,7 @@ begin
   J := 11;
   for Cargo := Succ(Low(TCargo)) to High(TCargo) do
   begin
-    if Cargo in FIndustry.Produces then
+    if Cargo in [cgPassengers] then
     begin
       DrawText(7, J, Format('%s: %d/%d', [CargoStr[Cargo],
         FIndustry.ProducesAmount[Cargo], FIndustry.MaxCargo]));

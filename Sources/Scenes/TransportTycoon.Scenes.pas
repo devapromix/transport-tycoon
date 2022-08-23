@@ -254,7 +254,8 @@ begin
   else
   begin
     if Game.IsPause then
-      DrawText(25, ScreenHeight - 1, '[c=yellow][[P]][/c] [c=red]PAUSED[/c]')
+      DrawText(25, ScreenHeight - 1, '[c=' + TPalette.ButtonKey +
+        '][[P]][/c] [c=red]PAUSED[/c]')
     else
       DrawButton(25, Y, 'P', 'Pause');
   end;
