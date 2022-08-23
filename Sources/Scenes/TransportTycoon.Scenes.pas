@@ -8,10 +8,10 @@ uses
 type
   TSceneEnum = (scMainMenu, scGameMenu, scGenMenu, scWorld, scTown,
     scBuildInTown, scAirport, scAircraftHangar, scAircraft, scAircrafts,
-    scAircraftOrders, scShipOrders, scFinances, scTowns, scCompany, scIndustry,
+    scFinances, scTowns, scCompany, scIndustry,
     scBuildNearIndustry, scDock, scShip, scShips, scShipDepot, scIndustries,
     scBuildMenu, scSettingsMenu, scOpenGameMenu, scRoadVehicle, scRoadVehicles,
-    scTruckLoadingBay, scBusStation, scRoadVehicleDepot, scRoadVehicleOrders);
+    scTruckLoadingBay, scBusStation, scRoadVehicleDepot);
 
 type
   TButtonRec = record
@@ -122,9 +122,6 @@ uses
   TransportTycoon.Scene.Airport,
   TransportTycoon.Scene.AircraftHangar,
   TransportTycoon.Scene.Aircraft,
-  TransportTycoon.Scene.AircraftOrders,
-  TransportTycoon.Scene.ShipOrders,
-  TransportTycoon.Scene.RoadVehicleOrders,
   TransportTycoon.Scene.Aircrafts,
   TransportTycoon.Scene.Finances,
   TransportTycoon.Scene.Towns,
@@ -438,7 +435,6 @@ begin
   FScene[scAircraft] := TSceneAircraft.Create;
   FScene[scAircrafts] := TSceneAircrafts.Create;
   FScene[scTowns] := TSceneTowns.Create;
-  FScene[scAircraftOrders] := TSceneAircraftOrders.Create;
   FScene[scFinances] := TSceneFinances.Create;
   FScene[scCompany] := TSceneCompany.Create;
   FScene[scIndustry] := TSceneIndustry.Create;
@@ -447,7 +443,6 @@ begin
   FScene[scShip] := TSceneShip.Create;
   FScene[scShips] := TSceneShips.Create;
   FScene[scShipDepot] := TSceneShipDepot.Create;
-  FScene[scShipOrders] := TSceneShipOrders.Create;
   FScene[scIndustries] := TSceneIndustries.Create;
   FScene[scBuildMenu] := TSceneBuildMenu.Create;
   FScene[scSettingsMenu] := TSceneSettingsMenu.Create;
@@ -457,7 +452,6 @@ begin
   FScene[scBusStation] := TSceneBusStation.Create;
   FScene[scTruckLoadingBay] := TSceneTruckLoadingBay.Create;
   FScene[scRoadVehicleDepot] := TSceneRoadVehicleDepot.Create;
-  FScene[scRoadVehicleOrders] := TSceneRoadVehicleOrders.Create;
 end;
 
 procedure TScenes.Update(var Key: Word);
