@@ -34,7 +34,8 @@ uses
   TransportTycoon.Construct,
   TransportTycoon.Scene.Menu.Settings,
   TransportTycoon.Stations,
-  TransportTycoon.Palette;
+  TransportTycoon.Palette,
+  TransportTycoon.RoadVehicle, TransportTycoon.Vehicle;
 
 { TSceneWorld }
 
@@ -285,7 +286,12 @@ begin
                     end;
                   scRoadVehicle:
                     begin
-                      S := TTownIndustry(Game.Map.Industry[I]).TruckLoadingBay;
+                      if RoadVehicleBase[CurrentVehicle].VehicleType = vtBus
+                      then
+                        S := TTownIndustry(Game.Map.Industry[I]).BusStation
+                      else
+                        S := TTownIndustry(Game.Map.Industry[I])
+                          .TruckLoadingBay;
                       F := not(RoadVehicle[CurrentVehicle].IsOrder(I) or
                         not S.IsBuilding);
                       if F then
