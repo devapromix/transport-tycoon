@@ -219,7 +219,7 @@ procedure TPrimaryIndustry.Grows;
 var
   Cargo: TCargo;
 begin
-  if Dock.IsBuilding then
+  if Dock.IsBuilding or TruckLoadingBay.IsBuilding then
   begin
     for Cargo := Succ(Low(TCargo)) to High(TCargo) do
       if (Cargo in Produces) then
@@ -233,7 +233,7 @@ procedure TSecondaryIndustry.Grows;
 var
   AcceptsCargo, ProducesCargo: TCargo;
 begin
-  if Dock.IsBuilding then
+  if Dock.IsBuilding or TruckLoadingBay.IsBuilding then
   begin
     for AcceptsCargo := Succ(Low(TCargo)) to High(TCargo) do
       if (AcceptsCargo in Accepts) then
