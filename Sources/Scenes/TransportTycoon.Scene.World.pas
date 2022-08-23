@@ -35,7 +35,8 @@ uses
   TransportTycoon.Scene.Menu.Settings,
   TransportTycoon.Stations,
   TransportTycoon.Palette,
-  TransportTycoon.RoadVehicle, TransportTycoon.Vehicle;
+  TransportTycoon.RoadVehicle,
+  TransportTycoon.Vehicle;
 
 { TSceneWorld }
 
@@ -317,7 +318,44 @@ begin
           if Game.Map.EnterInIndustry(RX, RY) then
             if Game.IsOrder then
             begin
-              Scenes.SetScene(scAircraft, scWorld);
+              with Game.Vehicles do
+              begin
+                I := Game.Map.GetCurrentIndustry(RX, RY);
+                case Scenes.CurrentVehicleScene of
+                  scShip:
+                    begin
+                      S := Game.Map.Industry[I].Dock;
+                      F := not(Ship[CurrentVehicle].IsOrder(I) or
+                        not S.IsBuilding);
+                      if F then
+                        with Game.Vehicles do
+                        begin
+                          if S.IsBuilding then
+                          begin
+                            Ship[CurrentVehicle].AddOrder(I);
+                            Game.IsOrder := False;
+                          end;
+                        end;
+                      Scenes.SetScene(scShip, scWorld);
+                    end;
+                  scRoadVehicle:
+                    begin
+                      S := Game.Map.Industry[I].TruckLoadingBay;
+                      F := not(RoadVehicle[CurrentVehicle].IsOrder(I) or
+                        not S.IsBuilding);
+                      if F then
+                        with Game.Vehicles do
+                        begin
+                          if S.IsBuilding then
+                          begin
+                            RoadVehicle[CurrentVehicle].AddOrder(I);
+                            Game.IsOrder := False;
+                          end;
+                        end;
+                      Scenes.SetScene(scRoadVehicle, scWorld);
+                    end;
+                end;
+              end;
             end
             else
               Scenes.SetScene(scIndustry);
