@@ -7,10 +7,22 @@ uses
   TransportTycoon.Cargo;
 
 const
-  RoadVehicleBase: array [0 .. 0] of TVehicleBase = (
+  RoadVehicleBase: array [0 .. 4] of TVehicleBase = (
     // #1
-    (Name: 'Perry Bus'; Cargo: [cgPassengers]; Amount: 27; Cost: 4000;
-    RunningCost: 18 * 12; Speed: 60; Since: 1950; VehicleType: vtBus;)
+    (Name: 'TG Perry Bus'; Cargo: [cgPassengers]; Amount: 27; Cost: 4000;
+    RunningCost: 18 * 12; Speed: 60; Since: 1950; VehicleType: vtBus;),
+    // #2
+    (Name: 'JK-5 Mail Truck'; Cargo: [cgMail]; Amount: 7; Cost: 3500;
+    RunningCost: 14 * 12; Speed: 60; Since: 1950; VehicleType: vtTruck;),
+    // #3
+    (Name: 'DR-2 Coal Truck'; Cargo: [cgCoal]; Amount: 9; Cost: 4800;
+    RunningCost: 18 * 12; Speed: 60; Since: 1950; VehicleType: vtTruck;),
+    // #4
+    (Name: 'ASV-11 Wood Truck'; Cargo: [cgWood]; Amount: 9; Cost: 5000;
+    RunningCost: 19 * 12; Speed: 60; Since: 1950; VehicleType: vtTruck;),
+    // #5
+    (Name: 'RT Goods Truck'; Cargo: [cgGoods]; Amount: 9; Cost: 4500;
+    RunningCost: 20 * 12; Speed: 60; Since: 1950; VehicleType: vtTruck;)
     //
     );
 

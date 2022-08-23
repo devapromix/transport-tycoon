@@ -15,7 +15,7 @@ const
     (Name: 'MF Cargo Ship'; Cargo: [cgCoal, cgWood]; Amount: 120; Cost: 27000;
     RunningCost: 95 * 12; Speed: 50; Since: 1950; VehicleType: vtShip;),
     // #3
-    (Name: 'TD-4 Ship'; Cargo: [cgGoods]; Amount: 110; Cost: 28000;
+    (Name: 'TD-4 Cargo Ship'; Cargo: [cgGoods]; Amount: 110; Cost: 28000;
     RunningCost: 97 * 12; Speed: 60; Since: 1955; VehicleType: vtShip;)
     //
     );
