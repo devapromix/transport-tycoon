@@ -189,6 +189,7 @@ end;
 
 procedure TIndustry.Grows;
 begin
+
 end;
 
 procedure TIndustry.IncAcceptsCargoAmount(const ACargo: TCargo;
@@ -299,7 +300,7 @@ begin
     ModifyPopulation(Math.RandomRange(GrowModif * 8, GrowModif * 12));
   WeekPassengers := FPopulation div Math.RandomRange(10, 12);
   WeekMail := FPopulation div Math.RandomRange(40, 50);
-  if Airport.IsBuilding or Dock.IsBuilding then
+  if Airport.IsBuilding or Dock.IsBuilding or BusStation.IsBuilding then
   begin
     SetCargoAmount(cgPassengers, WeekPassengers);
     SetCargoAmount(cgMail, WeekMail);
@@ -308,7 +309,8 @@ end;
 
 function TTownIndustry.GrowModif: Integer;
 begin
-  Result := Airport.Level + Dock.Level { + Trainstation } + 5;
+  Result := Airport.Level + Dock.Level +
+    BusStation.Level { + Trainstation } + 5;
 end;
 
 procedure TTownIndustry.ModifyPopulation(const APopulation: Integer);
