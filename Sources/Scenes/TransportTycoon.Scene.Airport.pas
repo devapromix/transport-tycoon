@@ -4,10 +4,14 @@ interface
 
 uses
   TransportTycoon.Scenes,
+  TransportTycoon.Scene.Station,
   TransportTycoon.Industries;
 
 type
-  TSceneAirport = class(TScene)
+
+  { TSceneAirport }
+
+  TSceneAirport = class(TSceneStation)
   private
     FTown: TTownIndustry;
   public
@@ -24,14 +28,14 @@ uses
   TransportTycoon.Cargo,
   TransportTycoon.Palette;
 
+{ TSceneAirport }
+
 procedure TSceneAirport.Render;
 var
   I, J: Integer;
   Cargo: TCargo;
 begin
-  DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
-
-  DrawFrame(5, 7, 70, 15);
+  inherited Render;
 
   FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
 
@@ -52,7 +56,7 @@ begin
 
   for I := 0 to Game.Vehicles.AircraftCount - 1 do
     DrawButton(37, I + 11, Game.Vehicles.Aircraft[I].InLocation(FTown.X,
-      FTown.Y), Chr(Ord('A') + I), Game.Vehicles.Aircraft[I].Name);
+      FTown.Y), Chr(Ord('A') + I), StrLim(Game.Vehicles.Aircraft[I].Name, 30));
 
   AddButton(19, 'H', 'Hangar');
   AddButton(19, 'Esc', 'Close');
@@ -64,18 +68,9 @@ procedure TSceneAirport.Update(var Key: Word);
 var
   I: Integer;
 begin
+  inherited Update(Key);
   if (Key = TK_MOUSE_LEFT) then
   begin
-    case MX of
-      37 .. 71:
-        begin
-          I := MY - 11;
-          case MY of
-            11 .. 17:
-              Key := TK_A + I;
-          end;
-        end;
-    end;
     if (GetButtonsY = MY) then
       case MX of
         28 .. 37:

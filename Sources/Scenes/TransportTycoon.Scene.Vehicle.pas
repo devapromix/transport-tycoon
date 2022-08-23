@@ -6,9 +6,10 @@ uses
   TransportTycoon.Scenes;
 
 type
-  TSceneVehicle = class(TScene)
-  private
 
+  { TSceneVehicle }
+
+  TSceneVehicle = class(TScene)
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;

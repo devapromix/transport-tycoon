@@ -52,7 +52,8 @@ uses
   TransportTycoon.Scene.RoadVehicles in 'Scenes\TransportTycoon.Scene.RoadVehicles.pas',
   TransportTycoon.Scene.VehicleDepot in 'Scenes\TransportTycoon.Scene.VehicleDepot.pas',
   TransportTycoon.Palette in 'Game\TransportTycoon.Palette.pas',
-  TransportTycoon.Scene.Vehicle in 'Scenes\TransportTycoon.Scene.Vehicle.pas';
+  TransportTycoon.Scene.Vehicle in 'Scenes\TransportTycoon.Scene.Vehicle.pas',
+  TransportTycoon.Scene.Station in 'Scenes\TransportTycoon.Scene.Station.pas';
 
 var
   Key: Word = 0;
