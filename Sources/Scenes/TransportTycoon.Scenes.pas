@@ -8,10 +8,10 @@ uses
 type
   TSceneEnum = (scMainMenu, scGameMenu, scGenMenu, scWorld, scTown,
     scBuildInTown, scAirport, scAircraftHangar, scAircraft, scAircrafts,
-    scFinances, scTowns, scCompany, scIndustry,
-    scBuildNearIndustry, scDock, scShip, scShips, scShipDepot, scIndustries,
-    scBuildMenu, scSettingsMenu, scOpenGameMenu, scRoadVehicle, scRoadVehicles,
-    scTruckLoadingBay, scBusStation, scRoadVehicleDepot);
+    scFinances, scTowns, scCompany, scIndustry, scBuildNearIndustry, scDock,
+    scShip, scShips, scShipDepot, scIndustries, scBuildMenu, scSettingsMenu,
+    scOpenGameMenu, scRoadVehicle, scRoadVehicles, scTruckLoadingBay,
+    scBusStation, scRoadVehicleDepot);
 
 type
   TButtonRec = record
@@ -459,10 +459,12 @@ begin
   if (FScene[Scene] <> nil) then
     with FScene[Scene] do
     begin
-      MX := terminal_state(TK_MOUSE_X);
-      MY := terminal_state(TK_MOUSE_Y);
-      RX := Game.Map.Left + MX;
-      RY := Game.Map.Top + MY;
+      MX := EnsureRange(terminal_state(TK_MOUSE_X), 0,
+        MapSizeInt[Game.Map.Size]);
+      MY := EnsureRange(terminal_state(TK_MOUSE_Y), 0,
+        MapSizeInt[Game.Map.Size]);
+      RX := EnsureRange(Game.Map.Left + MX, 0, MapSizeInt[Game.Map.Size]);
+      RY := EnsureRange(Game.Map.Top + MY, 0, MapSizeInt[Game.Map.Size]);
       Update(Key);
     end;
 end;
