@@ -287,8 +287,8 @@ begin
                     end;
                   scRoadVehicle:
                     begin
-                      if RoadVehicleBase[CurrentVehicle].VehicleType = vtBus
-                      then
+                      if RoadVehicleBase[RoadVehicle[CurrentVehicle].VehicleID]
+                        .VehicleType = vtBus then
                         S := TTownIndustry(Game.Map.Industry[I]).BusStation
                       else
                         S := TTownIndustry(Game.Map.Industry[I])

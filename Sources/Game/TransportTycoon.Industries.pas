@@ -298,11 +298,14 @@ var
 begin
   if Math.RandomRange(0, 25) <= GrowModif then
     ModifyPopulation(Math.RandomRange(GrowModif * 8, GrowModif * 12));
-  WeekPassengers := FPopulation div Math.RandomRange(10, 12);
-  WeekMail := FPopulation div Math.RandomRange(40, 50);
   if Airport.IsBuilding or Dock.IsBuilding or BusStation.IsBuilding then
   begin
+    WeekPassengers := FPopulation div Math.RandomRange(10, 12);
     SetCargoAmount(cgPassengers, WeekPassengers);
+  end;
+  if Airport.IsBuilding or Dock.IsBuilding or TruckLoadingBay.IsBuilding then
+  begin
+    WeekMail := FPopulation div Math.RandomRange(40, 50);
     SetCargoAmount(cgMail, WeekMail);
   end;
 end;
