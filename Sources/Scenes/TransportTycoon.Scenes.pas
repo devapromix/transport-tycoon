@@ -78,6 +78,7 @@ type
     procedure ScrollRight;
     function Check(const F: Boolean): string;
     property TextLineY: Integer read FTextLineY write FTextLineY;
+    function StrLim(const S: string; const N: Integer): string;
   end;
 
 type
@@ -356,6 +357,14 @@ procedure TScene.ScrollUp;
 begin
   if (Game.Map.Top > 0) then
     Game.Map.Top := Game.Map.Top - 1;
+end;
+
+function TScene.StrLim(const S: string; const N: Integer): string;
+begin
+  if Length(S) > N then
+  begin
+    Result := Trim(Copy(S, 1, N - 3)) + '...';
+  end else Result := S;
 end;
 
 function TScene.Check(const F: Boolean): string;

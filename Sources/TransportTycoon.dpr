@@ -51,7 +51,8 @@ uses
   TransportTycoon.Scene.TruckLoadingBay in 'Scenes\TransportTycoon.Scene.TruckLoadingBay.pas',
   TransportTycoon.Scene.RoadVehicles in 'Scenes\TransportTycoon.Scene.RoadVehicles.pas',
   TransportTycoon.Scene.VehicleDepot in 'Scenes\TransportTycoon.Scene.VehicleDepot.pas',
-  TransportTycoon.Palette in 'Game\TransportTycoon.Palette.pas';
+  TransportTycoon.Palette in 'Game\TransportTycoon.Palette.pas',
+  TransportTycoon.Scene.Vehicle in 'Scenes\TransportTycoon.Scene.Vehicle.pas';
 
 var
   Key: Word = 0;

@@ -41,13 +41,8 @@ uses
 { TSceneWorld }
 
 procedure TSceneWorld.TileInfo(S: string);
-var
-  L: Integer;
 begin
-  L := Length(S);
-  if L > 18 then
-    S := Trim(Copy(S, 1, 14)) + '...';
-  DrawText(45, ScreenHeight - 1, S, TK_ALIGN_CENTER);
+  DrawText(45, ScreenHeight - 1, StrLim(S, 18), TK_ALIGN_CENTER);
 end;
 
 procedure TSceneWorld.VehicleInfo(const VehicleName: string);
