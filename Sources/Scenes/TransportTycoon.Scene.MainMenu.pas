@@ -33,7 +33,7 @@ begin
   DrawButton(14, Game.IsGame, 'ESC', 'CONTINUE');
   DrawButton(15, 'L', 'OPEN GAME');
   DrawButton(16, 'D', 'SETTINGS');
-  DrawButton(17, 'Q', 'QUIT TO DESKTOP');
+  DrawButton(17, 'Q', 'QUIT');
 
   DrawText(20, 'Created by DevApromix (C) 2022');
 end;
