@@ -57,6 +57,7 @@ type
     property Aircraft[AID: Integer]: TAircraft read GetAircraft;
     property Ship[AID: Integer]: TShip read GetShip;
     property RoadVehicle[AID: Integer]: TRoadVehicle read GetRoadVehicle;
+    procedure ClearProfit;
   end;
 
 implementation
@@ -167,6 +168,18 @@ begin
   for I := 0 to RoadVehicleCount - 1 do
     RoadVehicle[I].Free;
   SetLength(FRoadVehicle, 0);
+end;
+
+procedure TVehicles.ClearProfit;
+var
+  I: Integer;
+begin
+  for I := 0 to AircraftCount - 1 do
+    Aircraft[I].Profit := 0;
+  for I := 0 to ShipCount - 1 do
+    Ship[I].Profit := 0;
+  for I := 0 to RoadVehicleCount - 1 do
+    RoadVehicle[I].Profit := 0;
 end;
 
 constructor TVehicles.Create;

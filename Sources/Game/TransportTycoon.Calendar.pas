@@ -87,6 +87,7 @@ end;
 
 procedure TCalendar.OnYear;
 begin
+  Game.Vehicles.ClearProfit;
   Game.Finances.SetYear(Year);
   Scenes.SetScene(scFinances);
 end;
