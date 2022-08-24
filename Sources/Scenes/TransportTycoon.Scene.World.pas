@@ -407,6 +407,13 @@ begin
             Scenes.SetScene(scShip, scWorld);
             Exit;
           end;
+          I := Game.Vehicles.GetCurrentRoadVehicle(RX, RY);
+          if I >= 0 then
+          begin
+            Game.Vehicles.CurrentVehicle := I;
+            Scenes.SetScene(scRoadVehicle, scWorld);
+            Exit;
+          end;
         end;
         for LConstruct := Low(TConstructEnum) to High(TConstructEnum) do
           if Game.Construct.IsBuild(LConstruct) then
