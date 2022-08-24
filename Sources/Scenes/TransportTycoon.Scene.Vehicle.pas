@@ -10,9 +10,12 @@ type
   { TSceneVehicle }
 
   TSceneVehicle = class(TScene)
+  private
+    FIsDetails: Boolean;
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
+    property IsDetails: Boolean read FIsDetails write FIsDetails;
   end;
 
 implementation
@@ -58,10 +61,15 @@ begin
         end;
     end;
     case MX of
-      7 .. 25:
+      7 .. 23:
         case MY of
-          17:
+          19:
             Key := TK_L;
+        end;
+      57 .. 72:
+        case MY of
+          19:
+            Key := TK_V;
         end;
     end;
   end;
