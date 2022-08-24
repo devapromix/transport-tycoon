@@ -133,9 +133,9 @@ begin
             end;
         IncOrder;
       end
-      else
-        IncDistance;
-    end;
+    end
+    else
+      IncDistance;
   end;
 end;
 
