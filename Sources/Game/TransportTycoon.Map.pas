@@ -248,7 +248,8 @@ end;
 
 function TMap.IsShipPath(const AX, AY: Integer): Boolean;
 begin
-  Result := FTile[AX][AY] in [tlTownIndustry, tlWater, tlCanal] + IndustryTiles;
+  Result := FTile[AX][AY] in [tlTownIndustry, tlWater, tlCanal, tlRoadBridge] +
+    IndustryTiles;
 end;
 
 procedure TMap.NextNoOfInd;
