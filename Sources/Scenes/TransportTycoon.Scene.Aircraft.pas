@@ -61,7 +61,10 @@ begin
 
       if IsDetails then
       begin
-        DrawText(27, 11, Format('Profit this year: %d', [Profit]));
+        DrawText(27, 11, 'Profit this year:');
+        DrawMoney(45, 11, Profit, TK_ALIGN_LEFT);
+        DrawText(27, 12, 'Profit last year:');
+        DrawMoney(45, 12, LastProfit, TK_ALIGN_LEFT);
       end
       else
       begin

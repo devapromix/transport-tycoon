@@ -178,11 +178,23 @@ var
   I: Integer;
 begin
   for I := 0 to AircraftCount - 1 do
-    Aircraft[I].Profit := 0;
+    with Aircraft[I] do
+    begin
+      LastProfit := Profit;
+      Profit := 0;
+    end;
   for I := 0 to ShipCount - 1 do
-    Ship[I].Profit := 0;
+    with Ship[I] do
+    begin
+      LastProfit := Profit;
+      Profit := 0;
+    end;
   for I := 0 to RoadVehicleCount - 1 do
-    RoadVehicle[I].Profit := 0;
+    with RoadVehicle[I] do
+    begin
+      LastProfit := Profit;
+      Profit := 0;
+    end;
 end;
 
 constructor TVehicles.Create;
