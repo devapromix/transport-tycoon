@@ -43,6 +43,7 @@ type
     FCargoType: TCargo;
     FCargoAmount: Integer;
     FCargoMaxAmount: Integer;
+    FProfit: Integer;
   public
     Order: array of TOrder;
     constructor Create(const AName: string; const AX, AY: Integer;
@@ -53,6 +54,7 @@ type
     procedure UnLoad; virtual; abstract;
     function Move(const AX, AY: Integer): Boolean; virtual; abstract;
     property VehicleID: Integer read FVehicleID write FVehicleID;
+    property Profit: Integer read FProfit write FProfit;
     property OrderIndex: Integer read FOrderIndex write FOrderIndex;
     property Distance: Integer read FDistance write FDistance;
     property LastStationId: Integer read FLastStationId;
@@ -87,6 +89,7 @@ begin
   inherited Create(AName, AX, AY);
   FOrderIndex := 0;
   FDistance := 0;
+  FProfit := 0;
   FLastStationId := 0;
   FFullLoad := False;
   ClearCargo;

@@ -166,6 +166,7 @@ begin
     Game.Map.Industry[Order[OrderIndex].ID].IncAcceptsCargoAmount(CargoType,
       CargoAmount);
     Game.ModifyMoney(ttRoadVehicleIncome, Money);
+    Profit := Profit + Money;
     ClearCargo;
   end;
   Distance := 0;
