@@ -111,6 +111,7 @@ implementation
 uses
   Math,
   SysUtils,
+  TransportTycoon.Log,
   TransportTycoon.Map,
   TransportTycoon.Game,
   TransportTycoon.Scene.GenMenu,
@@ -231,31 +232,36 @@ procedure TScene.DrawBar;
 var
   Y: Integer;
 begin
-  Y := Self.ScreenHeight - 1;
-  terminal_color(TPalette.Default);
-  terminal_bkcolor(TPalette.Background);
-  terminal_clear_area(0, Y, 80, 1);
-  DrawMoney(0, Y, Game.Money, TK_ALIGN_LEFT, True);
-  DrawText(12, Y, Format('Turn:%d', [Game.Turn]));
-  DrawText(56, Y, Game.Calendar.GetDate);
-  if (Scenes.FSceneEnum <> scWorld) then
-    DrawButton(70, Y, False, 'ESC', 'MENU')
-  else
-    DrawButton(70, Y, 'ESC', 'MENU');
-  if (Scenes.FSceneEnum <> scWorld) and (Scenes.FSceneEnum <> scGameMenu) then
-  begin
-    if Game.IsPause then
-      DrawButton(25, Y, False, 'P', 'Paused')
+  try
+    Y := Self.ScreenHeight - 1;
+    terminal_color(TPalette.Default);
+    terminal_bkcolor(TPalette.Background);
+    terminal_clear_area(0, Y, 80, 1);
+    DrawMoney(0, Y, Game.Money, TK_ALIGN_LEFT, True);
+    DrawText(12, Y, Format('Turn:%d', [Game.Turn]));
+    DrawText(56, Y, Game.Calendar.GetDate);
+    if (Scenes.FSceneEnum <> scWorld) then
+      DrawButton(70, Y, False, 'ESC', 'MENU')
     else
-      DrawButton(25, Y, False, 'P', 'Pause');
-  end
-  else
-  begin
-    if Game.IsPause then
-      DrawText(25, ScreenHeight - 1, '[c=' + TPalette.ButtonKey +
-        '][[P]][/c] [c=red]PAUSED[/c]')
+      DrawButton(70, Y, 'ESC', 'MENU');
+    if (Scenes.FSceneEnum <> scWorld) and (Scenes.FSceneEnum <> scGameMenu) then
+    begin
+      if Game.IsPause then
+        DrawButton(25, Y, False, 'P', 'Paused')
+      else
+        DrawButton(25, Y, False, 'P', 'Pause');
+    end
     else
-      DrawButton(25, Y, 'P', 'Pause');
+    begin
+      if Game.IsPause then
+        DrawText(25, ScreenHeight - 1, '[c=' + TPalette.ButtonKey +
+          '][[P]][/c] [c=red]PAUSED[/c]')
+      else
+        DrawButton(25, Y, 'P', 'Pause');
+    end;
+  except
+    on E: Exception do
+      Log.Add('TScene.DrawBar', E.Message);
   end;
 end;
 
@@ -316,8 +322,13 @@ end;
 
 procedure TScene.DrawMap(const AWidth, AHeight: Integer);
 begin
-  Game.Map.Draw(AWidth, AHeight);
-  Game.Vehicles.Draw;
+  try
+    Game.Map.Draw(AWidth, AHeight);
+    Game.Vehicles.Draw;
+  except
+    on E: Exception do
+      Log.Add('TScene.DrawMap', E.Message);
+  end;
 end;
 
 procedure TScene.DrawMoney(const X, Y, Money: Integer;
@@ -347,16 +358,26 @@ end;
 
 procedure TScene.ScrollTo(const X, Y: Integer);
 begin
-  Game.Map.Left := EnsureRange(X - (ScreenWidth div 2), 0,
-    Game.Map.Width - ScreenWidth);
-  Game.Map.Top := EnsureRange(Y - (ScreenHeight div 2), 0,
-    Game.Map.Height - ScreenHeight);
+  try
+    Game.Map.Left := EnsureRange(X - (ScreenWidth div 2), 0,
+      Game.Map.Width - ScreenWidth);
+    Game.Map.Top := EnsureRange(Y - (ScreenHeight div 2), 0,
+      Game.Map.Height - ScreenHeight);
+  except
+    on E: Exception do
+      Log.Add('TScene.ScrollTo', E.Message);
+  end;
 end;
 
 procedure TScene.ScrollUp;
 begin
-  if (Game.Map.Top > 0) then
-    Game.Map.Top := Game.Map.Top - 1;
+  try
+    if (Game.Map.Top > 0) then
+      Game.Map.Top := Game.Map.Top - 1;
+  except
+    on E: Exception do
+      Log.Add('TScenes.ScrollUp', E.Message);
+  end;
 end;
 
 function TScene.StrLim(const S: string; const N: Integer): string;
@@ -364,7 +385,9 @@ begin
   if Length(S) > N then
   begin
     Result := Trim(Copy(S, 1, N - 3)) + '...';
-  end else Result := S;
+  end
+  else
+    Result := S;
 end;
 
 function TScene.Check(const F: Boolean): string;
@@ -377,20 +400,35 @@ end;
 
 procedure TScene.ScrollDown;
 begin
-  if (Game.Map.Top <= Game.Map.Height - Self.ScreenHeight) then
-    Game.Map.Top := Game.Map.Top + 1;
+  try
+    if (Game.Map.Top <= Game.Map.Height - Self.ScreenHeight) then
+      Game.Map.Top := Game.Map.Top + 1;
+  except
+    on E: Exception do
+      Log.Add('TScenes.ScrollDown', E.Message);
+  end;
 end;
 
 procedure TScene.ScrollLeft;
 begin
-  if (Game.Map.Left > 0) then
-    Game.Map.Left := Game.Map.Left - 1;
+  try
+    if (Game.Map.Left > 0) then
+      Game.Map.Left := Game.Map.Left - 1;
+  except
+    on E: Exception do
+      Log.Add('TScene.ScrollLeft', E.Message);
+  end;
 end;
 
 procedure TScene.ScrollRight;
 begin
-  if (Game.Map.Left < Game.Map.Width - Self.ScreenWidth) then
-    Game.Map.Left := Game.Map.Left + 1;
+  try
+    if (Game.Map.Left < Game.Map.Width - Self.ScreenWidth) then
+      Game.Map.Left := Game.Map.Left + 1;
+  except
+    on E: Exception do
+      Log.Add('TScene.ScrollRight', E.Message);
+  end;
 end;
 
 function TScene.MakeButton(const IsActive: Boolean;
@@ -465,48 +503,63 @@ end;
 
 procedure TScenes.Update(var Key: Word);
 begin
-  if (FScene[Scene] <> nil) then
-    with FScene[Scene] do
-    begin
-      MX := EnsureRange(terminal_state(TK_MOUSE_X), 0,
-        MapSizeInt[Game.Map.Size]);
-      MY := EnsureRange(terminal_state(TK_MOUSE_Y), 0,
-        MapSizeInt[Game.Map.Size]);
-      RX := EnsureRange(Game.Map.Left + MX, 0, MapSizeInt[Game.Map.Size]);
-      RY := EnsureRange(Game.Map.Top + MY, 0, MapSizeInt[Game.Map.Size]);
-      Update(Key);
-    end;
+  try
+    if (FScene[Scene] <> nil) then
+      with FScene[Scene] do
+      begin
+        MX := EnsureRange(terminal_state(TK_MOUSE_X), 0,
+          MapSizeInt[Game.Map.Size]);
+        MY := EnsureRange(terminal_state(TK_MOUSE_Y), 0,
+          MapSizeInt[Game.Map.Size]);
+        RX := EnsureRange(Game.Map.Left + MX, 0, MapSizeInt[Game.Map.Size]);
+        RY := EnsureRange(Game.Map.Top + MY, 0, MapSizeInt[Game.Map.Size]);
+        Update(Key);
+      end;
+  except
+    on E: Exception do
+      Log.Add('TScenes.Update', E.Message);
+  end;
 end;
 
 procedure TScenes.Render;
 begin
-  if (FScene[Scene] <> nil) then
-    with FScene[Scene] do
-    begin
-      ClearButtons;
-      Render;
-      RenderButtons;
-      terminal_color(TPalette.Default);
-      terminal_bkcolor(TPalette.Background);
-      if Game.IsDebug then
+  try
+    if (FScene[Scene] <> nil) then
+      with FScene[Scene] do
       begin
-        terminal_print(0, 0, Format('X:%d, Y:%d', [RX, RY]));
-        terminal_print(0, 1, Format('MX:%d, MY:%d', [MX, MY]));
+        ClearButtons;
+        Render;
+        RenderButtons;
+        terminal_color(TPalette.Default);
+        terminal_bkcolor(TPalette.Background);
+        if Game.IsDebug then
+        begin
+          terminal_print(0, 0, Format('X:%d, Y:%d', [RX, RY]));
+          terminal_print(0, 1, Format('MX:%d, MY:%d', [MX, MY]));
+        end;
       end;
-    end;
+  except
+    on E: Exception do
+      Log.Add('TScenes.Render', E.Message);
+  end;
 end;
 
 procedure TScenes.SetScene(SceneEnum, BackSceneEnum: TSceneEnum);
 var
   I: Integer;
 begin
-  for I := 0 to High(FBackSceneEnum) do
-    if FBackSceneEnum[I] = scWorld then
-    begin
-      FBackSceneEnum[I] := BackSceneEnum;
-      Break;
-    end;
-  SetScene(SceneEnum);
+  try
+    for I := 0 to High(FBackSceneEnum) do
+      if FBackSceneEnum[I] = scWorld then
+      begin
+        FBackSceneEnum[I] := BackSceneEnum;
+        Break;
+      end;
+    SetScene(SceneEnum);
+  except
+    on E: Exception do
+      Log.Add('TScenes.SetScene', E.Message);
+  end;
 end;
 
 destructor TScenes.Destroy;
@@ -520,37 +573,57 @@ end;
 
 procedure TScenes.SetScene(SceneEnum: TSceneEnum);
 begin
-  Self.Scene := SceneEnum;
-  Self.Render;
+  try
+    Self.Scene := SceneEnum;
+    Self.Render;
+  except
+    on E: Exception do
+      Log.Add('TScenes.SetScene', E.Message);
+  end;
 end;
 
 function TScenes.GetScene(I: TSceneEnum): TScene;
 begin
-  Result := FScene[I];
+  try
+    Result := FScene[I];
+  except
+    on E: Exception do
+      Log.Add('TScenes.GetScene', E.Message);
+  end;
 end;
 
 procedure TScenes.Back;
 var
   I: Integer;
 begin
-  for I := High(FBackSceneEnum) downto 0 do
-    if FBackSceneEnum[I] <> scWorld then
-    begin
-      Self.Scene := FBackSceneEnum[I];
-      Self.Render;
-      FBackSceneEnum[I] := scWorld;
-      Exit;
-    end;
-  if FBackSceneEnum[0] = scWorld then
-    SetScene(scWorld);
+  try
+    for I := High(FBackSceneEnum) downto 0 do
+      if FBackSceneEnum[I] <> scWorld then
+      begin
+        Self.Scene := FBackSceneEnum[I];
+        Self.Render;
+        FBackSceneEnum[I] := scWorld;
+        Exit;
+      end;
+    if FBackSceneEnum[0] = scWorld then
+      SetScene(scWorld);
+  except
+    on E: Exception do
+      Log.Add('TScenes.Back', E.Message);
+  end;
 end;
 
 procedure TScenes.ClearQScenes;
 var
   I: Integer;
 begin
-  for I := 0 to High(FBackSceneEnum) do
-    FBackSceneEnum[I] := scWorld;
+  try
+    for I := 0 to High(FBackSceneEnum) do
+      FBackSceneEnum[I] := scWorld;
+  except
+    on E: Exception do
+      Log.Add('TScenes.ClearQScenes', E.Message);
+  end;
 end;
 
 end.

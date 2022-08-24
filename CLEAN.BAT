@@ -8,6 +8,7 @@ del /s *.compiled
 del /s *.otares
 del /s *.local
 del /s log.txt
+del /s errors.txt
 del /s *.dof
 del /s *.cfg
 del /s *.dbg

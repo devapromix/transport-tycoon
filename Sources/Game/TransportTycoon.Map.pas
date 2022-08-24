@@ -179,6 +179,7 @@ uses
   Math,
   SysUtils,
   BearLibTerminal,
+  TransportTycoon.Log,
   TransportTycoon.Game,
   TransportTycoon.Finances,
   TransportTycoon.Palette;
@@ -213,26 +214,36 @@ function TMap.IsTownName(const ATownName: string): Boolean;
 var
   I: Integer;
 begin
-  Result := False;
-  for I := 0 to Length(Industry) - 1 do
-    if (Industry[I].IndustryType = inTown) then
-      if Industry[I].Name = ATownName then
-        Exit(True);
+  try
+    Result := False;
+    for I := 0 to Length(Industry) - 1 do
+      if (Industry[I].IndustryType = inTown) then
+        if Industry[I].Name = ATownName then
+          Exit(True);
+  except
+    on E: Exception do
+      Log.Add('TMap.IsTownName', E.Message);
+  end;
 end;
 
 function TMap.IsNearTile(const AX, AY: Integer; const ATile: TTiles): Boolean;
 var
   X, Y: Integer;
 begin
-  Result := False;
-  for X := AX - 1 to AX + 1 do
-    for Y := AY - 1 to AY + 1 do
-    begin
-      if (X = AX) and (Y = AY) then
-        Continue;
-      if (FTile[X][Y] = ATile) then
-        Exit(True);
-    end;
+  try
+    Result := False;
+    for X := AX - 1 to AX + 1 do
+      for Y := AY - 1 to AY + 1 do
+      begin
+        if (X = AX) and (Y = AY) then
+          Continue;
+        if (FTile[X][Y] = ATile) then
+          Exit(True);
+      end;
+  except
+    on E: Exception do
+      Log.Add('TMap.IsNearTile', E.Message);
+  end;
 end;
 
 function TMap.IsAircraftPath(const AX, AY: Integer): Boolean;
@@ -242,14 +253,24 @@ end;
 
 function TMap.IsRoadVehiclePath(const AX, AY: Integer): Boolean;
 begin
-  Result := FTile[AX][AY] in [tlTownIndustry, tlRoad, tlRoadTunnel,
-    tlRoadBridge] + IndustryTiles;
+  try
+    Result := FTile[AX][AY] in [tlTownIndustry, tlRoad, tlRoadTunnel,
+      tlRoadBridge] + IndustryTiles;
+  except
+    on E: Exception do
+      Log.Add('TMap.IsRoadVehiclePath', E.Message);
+  end;
 end;
 
 function TMap.IsShipPath(const AX, AY: Integer): Boolean;
 begin
-  Result := FTile[AX][AY] in [tlTownIndustry, tlWater, tlCanal, tlRoadBridge] +
-    IndustryTiles;
+  try
+    Result := FTile[AX][AY] in [tlTownIndustry, tlWater, tlCanal, tlRoadBridge]
+      + IndustryTiles;
+  except
+    on E: Exception do
+      Log.Add('TMap.IsShipPath', E.Message);
+  end;
 end;
 
 procedure TMap.NextNoOfInd;
@@ -289,13 +310,18 @@ end;
 
 procedure TMap.Resize;
 begin
-  FTop := 0;
-  FLeft := 0;
-  FWidth := MapSizeInt[Size];
-  FHeight := MapSizeInt[Size];
-  SetLength(FTile, FWidth, FHeight);
-  FLastColor := '';
-  FLastBkColor := '';
+  try
+    FTop := 0;
+    FLeft := 0;
+    FWidth := MapSizeInt[Size];
+    FHeight := MapSizeInt[Size];
+    SetLength(FTile, FWidth, FHeight);
+    FLastColor := '';
+    FLastBkColor := '';
+  except
+    on E: Exception do
+      Log.Add('TMap.Resize', E.Message);
+  end;
 end;
 
 function TMap.SizeCoef: Integer;
@@ -325,30 +351,46 @@ end;
 
 function TMap.IsLandTile(const AX, AY: Integer): Boolean;
 begin
-  Result := FTile[AX][AY] in LandTiles;
+  try
+    Result := FTile[AX][AY] in LandTiles;
+  except
+    on E: Exception do
+      Log.Add('TMap.IsLandTile', E.Message);
+  end;
 end;
 
 function TMap.IsIndustryLocation(const AX, AY: Integer): Boolean;
 var
   I: Integer;
 begin
-  Result := False;
-  for I := 0 to Length(Industry) - 1 do
-    if Industry[I].InLocation(AX, AY) or
-      (GetDist(Industry[I].X, Industry[I].Y, AX, AY) < (Self.Width div 10)) then
-      Exit(True);
+  try
+    Result := False;
+    for I := 0 to Length(Industry) - 1 do
+      if Industry[I].InLocation(AX, AY) or
+        (GetDist(Industry[I].X, Industry[I].Y, AX, AY) < (Self.Width div 10))
+      then
+        Exit(True);
+  except
+    on E: Exception do
+      Log.Add('TMap.IsIndustryLocation', E.Message);
+  end;
 end;
 
 function TMap.IsTownLocation(const AX, AY: Integer): Boolean;
 var
   I: Integer;
 begin
-  Result := False;
-  for I := 0 to Length(Industry) - 1 do
-    if (Industry[I].IndustryType = inTown) then
-      if Industry[I].InLocation(AX, AY) or
-        (GetDist(Industry[I].X, Industry[I].Y, AX, AY) < 15) then
-        Exit(True);
+  try
+    Result := False;
+    for I := 0 to Length(Industry) - 1 do
+      if (Industry[I].IndustryType = inTown) then
+        if Industry[I].InLocation(AX, AY) or
+          (GetDist(Industry[I].X, Industry[I].Y, AX, AY) < 15) then
+          Exit(True);
+  except
+    on E: Exception do
+      Log.Add('TMap.IsTownLocation', E.Message);
+  end;
 end;
 
 constructor TMap.Create;
@@ -374,10 +416,15 @@ procedure TMap.Clear;
 var
   X, Y: Integer;
 begin
-  Resize;
-  for Y := 0 to FHeight - 1 do
-    for X := 0 to FWidth - 1 do
-      FTile[X][Y] := tlGrass;
+  try
+    Resize;
+    for Y := 0 to FHeight - 1 do
+      for X := 0 to FWidth - 1 do
+        FTile[X][Y] := tlGrass;
+  except
+    on E: Exception do
+      Log.Add('TMap.Clear', E.Message);
+  end;
 end;
 
 procedure TMap.BuildConstruct(const AX, AY: Integer;
@@ -386,16 +433,22 @@ var
   Money: Word;
   Plan: TBuildPlan;
 begin
-  Plan := BuildPlans[AConstructEnum];
-  if not(FTile[AX][AY] in Plan.AffectedTiles) then
-    Exit;
-  Money := Plan.Money;
-  if not(AConstructEnum in [ceClearLand]) and (FTile[AX][AY] in TreeTiles) then
-    Inc(Money, ClearLandCost);
-  if (Game.Money >= Money) then
-  begin
-    FTile[AX][AY] := Plan.ResultTile;
-    Game.ModifyMoney(ttConstruction, -Money);
+  try
+    Plan := BuildPlans[AConstructEnum];
+    if not(FTile[AX][AY] in Plan.AffectedTiles) then
+      Exit;
+    Money := Plan.Money;
+    if not(AConstructEnum in [ceClearLand]) and (FTile[AX][AY] in TreeTiles)
+    then
+      Inc(Money, ClearLandCost);
+    if (Game.Money >= Money) then
+    begin
+      FTile[AX][AY] := Plan.ResultTile;
+      Game.ModifyMoney(ttConstruction, -Money);
+    end;
+  except
+    on E: Exception do
+      Log.Add('TMap.BuildConstruct', E.Message);
   end;
 end;
 
@@ -403,11 +456,16 @@ procedure TMap.Draw(const AWidth, AHeight: Integer);
 var
   X, Y: Integer;
 begin
-  for Y := 0 to AHeight - 1 do
-    for X := 0 to AWidth - 1 do
-      DrawTile(X, Y);
-  terminal_bkcolor(TPalette.Background);
-  terminal_color(TPalette.Default);
+  try
+    for Y := 0 to AHeight - 1 do
+      for X := 0 to AWidth - 1 do
+        DrawTile(X, Y);
+    terminal_bkcolor(TPalette.Background);
+    terminal_color(TPalette.Default);
+  except
+    on E: Exception do
+      Log.Add('TMap.Draw', E.Message);
+  end;
 end;
 
 procedure TMap.DrawTile(const X, Y: Integer);
@@ -415,26 +473,36 @@ var
   DX, DY: Integer;
   F: Boolean;
 begin
-  DX := Left + X;
-  DY := Top + Y;
-  F := (X = 0) and (Y = 0);
-  if F or (Tile[FTile[DX][DY]].BkColor <> FLastBkColor) then
-  begin
-    terminal_bkcolor(Tile[FTile[DX][DY]].BkColor);
-    FLastBkColor := Tile[FTile[DX][DY]].BkColor;
+  try
+    DX := Left + X;
+    DY := Top + Y;
+    F := (X = 0) and (Y = 0);
+    if F or (Tile[FTile[DX][DY]].BkColor <> FLastBkColor) then
+    begin
+      terminal_bkcolor(Tile[FTile[DX][DY]].BkColor);
+      FLastBkColor := Tile[FTile[DX][DY]].BkColor;
+    end;
+    if F or (Tile[FTile[DX][DY]].Color <> FLastColor) then
+    begin
+      terminal_color(Tile[FTile[DX][DY]].Color);
+      FLastColor := Tile[FTile[DX][DY]].Color;
+    end;
+    terminal_put(X, Y, Tile[FTile[DX][DY]].Tile);
+  except
+    on E: Exception do
+      Log.Add('TMap.DrawTile', E.Message);
   end;
-  if F or (Tile[FTile[DX][DY]].Color <> FLastColor) then
-  begin
-    terminal_color(Tile[FTile[DX][DY]].Color);
-    FLastColor := Tile[FTile[DX][DY]].Color;
-  end;
-  terminal_put(X, Y, Tile[FTile[DX][DY]].Tile);
 end;
 
 function TMap.EnterInIndustry(const AX, AY: Integer): Boolean;
 begin
-  FCurrentIndustry := GetCurrentIndustry(AX, AY);
-  Result := FCurrentIndustry >= 0;
+  try
+    FCurrentIndustry := GetCurrentIndustry(AX, AY);
+    Result := FCurrentIndustry >= 0;
+  except
+    on E: Exception do
+      Log.Add('TMap.EnterInIndustry', E.Message);
+  end;
 end;
 
 procedure TMap.Gen(const AMapType: TMapType = mtNormal);
@@ -443,191 +511,196 @@ var
   TownName, S: string;
   IndustryType: TIndustryType;
 begin
-  // Terrain
-  if AMapType = mtRandom then
-  begin
-    SeaLevel := TMapSeaLevel(RandomRange(Ord(msVeryLow),
-      Ord(High(TMapSeaLevel)) + 1));
-  end;
-  Self.Clear;
-  D := 0;
-  if (SeaLevel >= msNormal) then
-    D := 5 + SizeCoef;
-  for Y := 0 to FHeight - 1 do
-  begin
-    for X := 0 to FWidth - 1 do
+  try
+    // Terrain
+    if AMapType = mtRandom then
     begin
-      case Math.RandomRange(0, 15) of
-        0 .. 1:
-          FTile[X][Y] := tlDirt;
-        2 .. 3:
-          FTile[X][Y] := tlSand;
-        4 .. 6:
-          AddTree(X, Y);
+      SeaLevel := TMapSeaLevel(RandomRange(Ord(msVeryLow),
+        Ord(High(TMapSeaLevel)) + 1));
+    end;
+    Self.Clear;
+    D := 0;
+    if (SeaLevel >= msNormal) then
+      D := 5 + SizeCoef;
+    for Y := 0 to FHeight - 1 do
+    begin
+      for X := 0 to FWidth - 1 do
+      begin
+        case Math.RandomRange(0, 15) of
+          0 .. 1:
+            FTile[X][Y] := tlDirt;
+          2 .. 3:
+            FTile[X][Y] := tlSand;
+          4 .. 6:
+            AddTree(X, Y);
+        else
+          FTile[X][Y] := tlGrass;
+        end;
+      end;
+      if (SeaLevel > msVeryLow) then
+      begin
+        J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + D;
+        for X := 0 to J do
+          FTile[X][Y] := tlWater;
+        J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + D;
+        for X := FWidth - 1 downto FWidth - J - 1 do
+          FTile[X][Y] := tlWater;
+      end;
+    end;
+    for I := 0 to 14 do
+    begin
+      X := Math.RandomRange((SizeCoef + 10), FWidth - (SizeCoef + 10));
+      Y := Math.RandomRange((SizeCoef + 10), FHeight - (SizeCoef + 10));
+      case RandomRange(0, 4) of
+        0:
+          AddSpot(X, Y, tlDirt);
+        1:
+          AddSpot(X, Y, tlRock);
+        2:
+          AddSpot(X, Y, tlWater);
       else
-        FTile[X][Y] := tlGrass;
+        AddSpot(X, Y, tlSand);
       end;
     end;
     if (SeaLevel > msVeryLow) then
     begin
-      J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + D;
-      for X := 0 to J do
-        FTile[X][Y] := tlWater;
-      J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + D;
-      for X := FWidth - 1 downto FWidth - J - 1 do
-        FTile[X][Y] := tlWater;
-    end;
-  end;
-  for I := 0 to 14 do
-  begin
-    X := Math.RandomRange((SizeCoef + 10), FWidth - (SizeCoef + 10));
-    Y := Math.RandomRange((SizeCoef + 10), FHeight - (SizeCoef + 10));
-    case RandomRange(0, 4) of
-      0:
-        AddSpot(X, Y, tlDirt);
-      1:
-        AddSpot(X, Y, tlRock);
-      2:
-        AddSpot(X, Y, tlWater);
-    else
-      AddSpot(X, Y, tlSand);
-    end;
-  end;
-  if (SeaLevel > msVeryLow) then
-  begin
-    for X := 0 to FWidth - 1 do
-    begin
-      J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + D;
-      for Y := 0 to J do
-        FTile[X][Y] := tlWater;
-      J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + D;
-      for Y := FHeight - 1 downto FHeight - J - 1 do
-        FTile[X][Y] := tlWater;
-    end;
-    D := SizeCoef * 9;
-    if (SeaLevel = msHigh) then
-      D := SizeCoef * 25;
-    if (SeaLevel >= msNormal) then
-    begin
-      for I := 0 to D do
+      for X := 0 to FWidth - 1 do
       begin
-        X := Math.RandomRange(10, FWidth - 11);
-        Y := Math.RandomRange(10, FWidth - 11);
-        AddSpot(X, Y, tlWater);
-      end;
-    end;
-    for Y := 1 to FHeight - 2 do
-    begin
-      for X := 1 to FWidth - 2 do
-      begin
-        if (FTile[X][Y] <> tlWater) and
-          (((FTile[X + 1][Y] = tlWater) and (FTile[X - 1][Y] = tlWater)) or
-          ((FTile[X][Y + 1] = tlWater) and (FTile[X][Y - 1] = tlWater))) then
+        J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + D;
+        for Y := 0 to J do
+          FTile[X][Y] := tlWater;
+        J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + D;
+        for Y := FHeight - 1 downto FHeight - J - 1 do
           FTile[X][Y] := tlWater;
       end;
-    end;
-    for Y := 1 to FHeight - 2 do
-    begin
-      for X := 1 to FWidth - 2 do
+      D := SizeCoef * 9;
+      if (SeaLevel = msHigh) then
+        D := SizeCoef * 25;
+      if (SeaLevel >= msNormal) then
       begin
-        if (FTile[X][Y] <> tlWater) and
-          (((FTile[X + 1][Y] = tlWater) and (FTile[X - 1][Y] = tlWater) and
-          (FTile[X][Y + 1] = tlWater) and (FTile[X][Y - 1] = tlWater))) then
-          FTile[X][Y] := tlWater;
-      end;
-    end;
-  end;
-  // Towns
-  for I := 0 to Length(Industry) - 1 do
-    Industry[I].Free;
-  SetLength(Industry, 0);
-  for I := 0 to MapTownCount - 1 do
-  begin
-    repeat
-      X := (Math.RandomRange(1, FWidth div 10) * 10) +
-        (Math.RandomRange(0, 10) - 5);
-      Y := (Math.RandomRange(1, FHeight div 10) * 10) +
-        (Math.RandomRange(0, 10) - 5);
-      TownName := TTownIndustry.GenName;
-
-      for N := 2 to 5 do
-      begin
-        if (FTile[X - N][Y] = tlWater) then
+        for I := 0 to D do
         begin
-          X := X - (N - 1);
-          Break;
-        end;
-        if (FTile[X + N][Y] = tlWater) then
-        begin
-          X := X + (N - 1);
-          Break;
-        end;
-        if (FTile[X][Y - N] = tlWater) then
-        begin
-          Y := Y - (N - 1);
-          Break;
-        end;
-        if (FTile[X][Y + N] = tlWater) then
-        begin
-          Y := Y + (N - 1);
-          Break;
+          X := Math.RandomRange(10, FWidth - 11);
+          Y := Math.RandomRange(10, FWidth - 11);
+          AddSpot(X, Y, tlWater);
         end;
       end;
-
-    until not IsTownName(TownName) and not IsTownLocation(X, Y) and
-      IsLandTile(X, Y);
-    SetLength(Industry, I + 1);
-    FTile[X][Y] := tlTownIndustry;
-    Industry[I] := TTownIndustry.Create(TownName, X, Y);
-  end;
-  // Industries
-  I := TownCount;
-  for J := 0 to MapIndCount - 1 do
-  begin
-    for IndustryType := Succ(Low(TIndustryType)) to High(TIndustryType) do
+      for Y := 1 to FHeight - 2 do
+      begin
+        for X := 1 to FWidth - 2 do
+        begin
+          if (FTile[X][Y] <> tlWater) and
+            (((FTile[X + 1][Y] = tlWater) and (FTile[X - 1][Y] = tlWater)) or
+            ((FTile[X][Y + 1] = tlWater) and (FTile[X][Y - 1] = tlWater))) then
+            FTile[X][Y] := tlWater;
+        end;
+      end;
+      for Y := 1 to FHeight - 2 do
+      begin
+        for X := 1 to FWidth - 2 do
+        begin
+          if (FTile[X][Y] <> tlWater) and
+            (((FTile[X + 1][Y] = tlWater) and (FTile[X - 1][Y] = tlWater) and
+            (FTile[X][Y + 1] = tlWater) and (FTile[X][Y - 1] = tlWater))) then
+            FTile[X][Y] := tlWater;
+        end;
+      end;
+    end;
+    // Towns
+    for I := 0 to Length(Industry) - 1 do
+      Industry[I].Free;
+    SetLength(Industry, 0);
+    for I := 0 to MapTownCount - 1 do
     begin
       repeat
         X := (Math.RandomRange(1, FWidth div 10) * 10) +
           (Math.RandomRange(0, 10) - 5);
         Y := (Math.RandomRange(1, FHeight div 10) * 10) +
           (Math.RandomRange(0, 10) - 5);
-      until IsLandTile(X, Y) and not IsTownLocation(X, Y) and
-        not IsIndustryLocation(X, Y);
-      case IndustryType of
-        inCoalMine:
+        TownName := TTownIndustry.GenName;
+
+        for N := 2 to 5 do
+        begin
+          if (FTile[X - N][Y] = tlWater) then
           begin
-            S := GetNearTownName(X, Y);
-            SetLength(Industry, I + 1);
-            FTile[X][Y] := tlCoalMineIndustry;
-            Industry[I] := TCoalMineIndustry.Create(S, X, Y);
-            Inc(I);
+            X := X - (N - 1);
+            Break;
           end;
-        inPowerPlant:
+          if (FTile[X + N][Y] = tlWater) then
           begin
-            S := GetNearTownName(X, Y);
-            SetLength(Industry, I + 1);
-            FTile[X][Y] := tlPowerPlantIndustry;
-            Industry[I] := TPowerPlantIndustry.Create(S, X, Y);
-            Inc(I);
+            X := X + (N - 1);
+            Break;
           end;
-        inForest:
+          if (FTile[X][Y - N] = tlWater) then
           begin
-            S := GetNearTownName(X, Y);
-            SetLength(Industry, I + 1);
-            FTile[X][Y] := tlForestIndustry;
-            Industry[I] := TForestIndustry.Create(S, X, Y);
-            Inc(I);
+            Y := Y - (N - 1);
+            Break;
           end;
-        inSawmill:
+          if (FTile[X][Y + N] = tlWater) then
           begin
-            S := GetNearTownName(X, Y);
-            SetLength(Industry, I + 1);
-            FTile[X][Y] := tlSawmillIndustry;
-            Industry[I] := TSawmillIndustry.Create(S, X, Y);
-            Inc(I);
+            Y := Y + (N - 1);
+            Break;
           end;
+        end;
+
+      until not IsTownName(TownName) and not IsTownLocation(X, Y) and
+        IsLandTile(X, Y);
+      SetLength(Industry, I + 1);
+      FTile[X][Y] := tlTownIndustry;
+      Industry[I] := TTownIndustry.Create(TownName, X, Y);
+    end;
+    // Industries
+    I := TownCount;
+    for J := 0 to MapIndCount - 1 do
+    begin
+      for IndustryType := Succ(Low(TIndustryType)) to High(TIndustryType) do
+      begin
+        repeat
+          X := (Math.RandomRange(1, FWidth div 10) * 10) +
+            (Math.RandomRange(0, 10) - 5);
+          Y := (Math.RandomRange(1, FHeight div 10) * 10) +
+            (Math.RandomRange(0, 10) - 5);
+        until IsLandTile(X, Y) and not IsTownLocation(X, Y) and
+          not IsIndustryLocation(X, Y);
+        case IndustryType of
+          inCoalMine:
+            begin
+              S := GetNearTownName(X, Y);
+              SetLength(Industry, I + 1);
+              FTile[X][Y] := tlCoalMineIndustry;
+              Industry[I] := TCoalMineIndustry.Create(S, X, Y);
+              Inc(I);
+            end;
+          inPowerPlant:
+            begin
+              S := GetNearTownName(X, Y);
+              SetLength(Industry, I + 1);
+              FTile[X][Y] := tlPowerPlantIndustry;
+              Industry[I] := TPowerPlantIndustry.Create(S, X, Y);
+              Inc(I);
+            end;
+          inForest:
+            begin
+              S := GetNearTownName(X, Y);
+              SetLength(Industry, I + 1);
+              FTile[X][Y] := tlForestIndustry;
+              Industry[I] := TForestIndustry.Create(S, X, Y);
+              Inc(I);
+            end;
+          inSawmill:
+            begin
+              S := GetNearTownName(X, Y);
+              SetLength(Industry, I + 1);
+              FTile[X][Y] := tlSawmillIndustry;
+              Industry[I] := TSawmillIndustry.Create(S, X, Y);
+              Inc(I);
+            end;
+        end;
       end;
     end;
+  except
+    on E: Exception do
+      Log.Add('TMap.Gen', E.Message);
   end;
 end;
 
@@ -635,43 +708,53 @@ procedure TMap.AddSpot(const AX, AY: Integer; const ATile: TTiles);
 var
   VSize, I, VX, VY: Integer;
 begin
-  VX := AX;
-  VY := AY;
-  VSize := RandomRange(100, 300) * SizeCoef;
-  for I := 0 to VSize do
-  begin
-    if (RandomRange(0, 6) = 0) and (VX > (SizeCoef + 10)) then
+  try
+    VX := AX;
+    VY := AY;
+    VSize := RandomRange(100, 300) * SizeCoef;
+    for I := 0 to VSize do
     begin
-      VX := VX - 1;
-      FTile[VX][VY] := ATile;
+      if (RandomRange(0, 6) = 0) and (VX > (SizeCoef + 10)) then
+      begin
+        VX := VX - 1;
+        FTile[VX][VY] := ATile;
+      end;
+      if (RandomRange(0, 6) = 0) and (VX < FWidth - (SizeCoef + 10)) then
+      begin
+        VX := VX + 1;
+        FTile[VX][VY] := ATile;
+      end;
+      if (RandomRange(0, 6) = 0) and (VY > (SizeCoef + 10)) then
+      begin
+        VY := VY - 1;
+        FTile[VX][VY] := ATile;
+      end;
+      if (RandomRange(0, 6) = 0) and (VY < FHeight - (SizeCoef + 10)) then
+      begin
+        VY := VY + 1;
+        FTile[VX][VY] := ATile;
+      end;
     end;
-    if (RandomRange(0, 6) = 0) and (VX < FWidth - (SizeCoef + 10)) then
-    begin
-      VX := VX + 1;
-      FTile[VX][VY] := ATile;
-    end;
-    if (RandomRange(0, 6) = 0) and (VY > (SizeCoef + 10)) then
-    begin
-      VY := VY - 1;
-      FTile[VX][VY] := ATile;
-    end;
-    if (RandomRange(0, 6) = 0) and (VY < FHeight - (SizeCoef + 10)) then
-    begin
-      VY := VY + 1;
-      FTile[VX][VY] := ATile;
-    end;
+  except
+    on E: Exception do
+      Log.Add('TMap.AddSpot', E.Message);
   end;
 end;
 
 procedure TMap.AddTree(const AX, AY: Integer);
 begin
-  case RandomRange(0, 4) of
-    0:
-      FTile[AX][AY] := tlTree;
-    1:
-      FTile[AX][AY] := tlSmallTree;
-  else
-    FTile[AX][AY] := tlBush;
+  try
+    case RandomRange(0, 4) of
+      0:
+        FTile[AX][AY] := tlTree;
+      1:
+        FTile[AX][AY] := tlSmallTree;
+    else
+      FTile[AX][AY] := tlBush;
+    end;
+  except
+    on E: Exception do
+      Log.Add('TMap.AddTree', E.Message);
   end;
 end;
 
@@ -679,38 +762,58 @@ procedure TMap.Grows;
 var
   I: Integer;
 begin
-  for I := 0 to Length(Industry) - 1 do
-    Industry[I].Grows;
+  try
+    for I := 0 to Length(Industry) - 1 do
+      Industry[I].Grows;
+  except
+    on E: Exception do
+      Log.Add('TMap.Grows', E.Message);
+  end;
 end;
 
 function TMap.GetCurrentIndustry(const AX, AY: Integer): Integer;
 var
   I: Integer;
 begin
-  Result := -1;
-  for I := 0 to Length(Industry) - 1 do
-    if Industry[I].InLocation(AX, AY) then
-      Exit(I);
+  try
+    Result := -1;
+    for I := 0 to Length(Industry) - 1 do
+      if Industry[I].InLocation(AX, AY) then
+        Exit(I);
+  except
+    on E: Exception do
+      Log.Add('TMap.GetCurrentIndustry', E.Message);
+  end;
 end;
 
 function TMap.TownCount: Integer;
 var
   I: Integer;
 begin
-  Result := 0;
-  for I := 0 to Length(Industry) - 1 do
-    if (Industry[I].IndustryType = inTown) then
-      Result := Result + 1;
+  try
+    Result := 0;
+    for I := 0 to Length(Industry) - 1 do
+      if (Industry[I].IndustryType = inTown) then
+        Result := Result + 1;
+  except
+    on E: Exception do
+      Log.Add('TMap.TownCount', E.Message);
+  end;
 end;
 
 function TMap.WorldPop: Integer;
 var
   I: Integer;
 begin
-  Result := 0;
-  for I := 0 to Length(Industry) - 1 do
-    if (Industry[I].IndustryType = inTown) then
-      Result := Result + TTownIndustry(Industry[I]).Population;
+  try
+    Result := 0;
+    for I := 0 to Length(Industry) - 1 do
+      if (Industry[I].IndustryType = inTown) then
+        Result := Result + TTownIndustry(Industry[I]).Population;
+  except
+    on E: Exception do
+      Log.Add('TMap.WorldPop', E.Message);
+  end;
 end;
 
 function TMap.GetDist(const X1, Y1, X2, Y2: Integer): Integer;
@@ -722,27 +825,37 @@ function TMap.GetNearTownName(const AX, AY: Integer): string;
 var
   I, D, Mx: Integer;
 begin
-  Mx := Width;
-  Result := '';
-  for I := 0 to Length(Industry) - 1 do
-    if (Industry[I].IndustryType = inTown) then
-    begin
-      D := GetDist(Industry[I].X, Industry[I].Y, AX, AY);
-      if (D < Mx) then
+  try
+    Mx := Width;
+    Result := '';
+    for I := 0 to Length(Industry) - 1 do
+      if (Industry[I].IndustryType = inTown) then
       begin
-        Result := Industry[I].Name;
-        Mx := D;
+        D := GetDist(Industry[I].X, Industry[I].Y, AX, AY);
+        if (D < Mx) then
+        begin
+          Result := Industry[I].Name;
+          Mx := D;
+        end;
       end;
-    end;
+  except
+    on E: Exception do
+      Log.Add('TMap.GetNearTownName', E.Message);
+  end;
 end;
 
 function TMap.GetTile: TTiles;
 var
   X, Y: Integer;
 begin
-  X := EnsureRange(Game.Map.Left + terminal_state(TK_MOUSE_X), 0, FWidth);
-  Y := EnsureRange(Game.Map.Top + terminal_state(TK_MOUSE_Y), 0, FHeight);
-  Result := FTile[X][Y];
+  try
+    X := EnsureRange(Game.Map.Left + terminal_state(TK_MOUSE_X), 0, FWidth);
+    Y := EnsureRange(Game.Map.Top + terminal_state(TK_MOUSE_Y), 0, FHeight);
+    Result := FTile[X][Y];
+  except
+    on E: Exception do
+      Log.Add('TMap.GetTile', E.Message);
+  end;
 end;
 
 end.
