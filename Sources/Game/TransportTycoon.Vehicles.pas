@@ -140,18 +140,21 @@ begin
     J := Aircraft[I].VehicleID;
     M := AircraftBase[J].RunningCost div 12;
     Game.ModifyMoney(ttAircraftRunningCosts, -M);
+    Aircraft[I].Profit := Aircraft[I].Profit - M;
   end;
   for I := 0 to ShipCount - 1 do
   begin
     J := Ship[I].VehicleID;
     M := ShipBase[J].RunningCost div 12;
     Game.ModifyMoney(ttShipRunningCosts, -M);
+    Ship[I].Profit := Ship[I].Profit - M;
   end;
   for I := 0 to RoadVehicleCount - 1 do
   begin
     J := RoadVehicle[I].VehicleID;
     M := RoadVehicleBase[J].RunningCost div 12;
     Game.ModifyMoney(ttRoadVehicleRunningCosts, -M);
+    RoadVehicle[I].Profit := RoadVehicle[I].Profit - M;
   end;
 end;
 
