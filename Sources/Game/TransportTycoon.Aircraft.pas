@@ -127,7 +127,7 @@ procedure TAircraft.Step;
 var
   C: TCargo;
 begin
-  if Length(Order) > 0 then
+  if OrderLength > 0 then
   begin
     if not Move(Order[OrderIndex].X, Order[OrderIndex].Y) then
     begin

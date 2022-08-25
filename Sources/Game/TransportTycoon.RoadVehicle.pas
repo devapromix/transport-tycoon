@@ -117,7 +117,7 @@ var
   C: TCargo;
   Station: TStation;
 begin
-  if Length(Order) > 0 then
+  if OrderLength > 0 then
   begin
     if not Move(Order[OrderIndex].X, Order[OrderIndex].Y) then
     begin

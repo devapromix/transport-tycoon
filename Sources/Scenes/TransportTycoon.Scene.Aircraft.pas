@@ -68,14 +68,14 @@ begin
       end
       else
       begin
-        for I := 0 to Length(Order) - 1 do
+        for I := 0 to OrderLength - 1 do
         begin
           if (OrderIndex = I) then
             C := '>'
           else
             C := #32;
           DrawText(27, I + 11, C);
-          DrawButton(29, I + 11, Length(Order) > 1, Chr(Ord('A') + I),
+          DrawButton(29, I + 11, OrderLength > 1, Chr(Ord('A') + I),
             StrLim('Go to ' + Order[I].Name + ' Airport', 40));
         end;
       end;
@@ -95,7 +95,7 @@ begin
         I := Key - TK_A;
         with Aircraft[CurrentVehicle] do
         begin
-          if (I > Length(Order) - 1) then
+          if (I > OrderLength - 1) then
             Exit;
           DelOrder(I);
           Scenes.Render;

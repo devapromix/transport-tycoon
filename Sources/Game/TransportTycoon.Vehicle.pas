@@ -45,8 +45,10 @@ type
     FCargoMaxAmount: Integer;
     FProfit: Integer;
     FLastProfit: Integer;
+    FOrder: array of TOrder;
+    function GetOrder(Index: Integer): TOrder;
+    procedure SetOrder(Index: Integer; AValue: TOrder);
   public
-    Order: array of TOrder;
     constructor Create(const AName: string; const AX, AY: Integer;
       const VehicleBase: array of TVehicleBase; const ID: Integer);
     procedure Draw;
@@ -67,8 +69,10 @@ type
     procedure AddOrder(const TownIndex: Integer; const AName: string;
       const AX, AY: Integer); overload;
     procedure DelOrder(const AIndex: Integer);
+    property Order[Index: Integer]: TOrder read GetOrder write SetOrder;
     function IsOrder(const AIndex: Integer): Boolean;
     procedure IncOrder;
+    function OrderLength: Integer;
     procedure IncDistance;
     procedure SetLastStation;
     property FullLoad: Boolean read FFullLoad write FFullLoad;
@@ -84,6 +88,16 @@ uses
   TransportTycoon.Game;
 
 { TVehicle }
+
+function TVehicle.GetOrder(Index: Integer): TOrder;
+begin
+  Result := FOrder[Index];
+end;
+
+procedure TVehicle.SetOrder(Index: Integer; AValue: TOrder);
+begin
+  FOrder[Index] := AValue
+end;
 
 constructor TVehicle.Create(const AName: string; const AX, AY: Integer;
   const VehicleBase: array of TVehicleBase; const ID: Integer);
@@ -114,31 +128,31 @@ end;
 procedure TVehicle.AddOrder(const TownIndex: Integer; const AName: string;
   const AX, AY: Integer);
 begin
-  SetLength(Order, Length(Order) + 1);
-  Order[High(Order)].ID := TownIndex;
-  Order[High(Order)].Name := AName;
-  Order[High(Order)].X := AX;
-  Order[High(Order)].Y := AY;
+  SetLength(FOrder, Length(FOrder) + 1);
+  FOrder[High(FOrder)].ID := TownIndex;
+  FOrder[High(FOrder)].Name := AName;
+  FOrder[High(FOrder)].X := AX;
+  FOrder[High(FOrder)].Y := AY;
 end;
 
 procedure TVehicle.DelOrder(const AIndex: Integer);
 var
   I: Integer;
 begin
-  if (Length(Order) > 1) then
+  if (Length(FOrder) > 1) then
   begin
-    if AIndex > High(Order) then
+    if AIndex > High(FOrder) then
       Exit;
-    if AIndex < Low(Order) then
+    if AIndex < Low(FOrder) then
       Exit;
-    if AIndex = High(Order) then
+    if AIndex = High(FOrder) then
     begin
-      SetLength(Order, Length(Order) - 1);
+      SetLength(FOrder, Length(FOrder) - 1);
       Exit;
     end;
-    for I := AIndex + 1 to Length(Order) - 1 do
-      Order[I - 1] := Order[I];
-    SetLength(Order, Length(Order) - 1);
+    for I := AIndex + 1 to Length(FOrder) - 1 do
+      FOrder[I - 1] := FOrder[I];
+    SetLength(FOrder, Length(FOrder) - 1);
   end;
 end;
 
@@ -147,16 +161,21 @@ var
   I: Integer;
 begin
   Result := False;
-  for I := 0 to Length(Order) - 1 do
-    if Order[I].ID = AIndex then
+  for I := 0 to Length(FOrder) - 1 do
+    if FOrder[I].ID = AIndex then
       Exit(True);
 end;
 
 procedure TVehicle.IncOrder;
 begin
   FOrderIndex := FOrderIndex + 1;
-  if (FOrderIndex > High(Order)) then
+  if (FOrderIndex > High(FOrder)) then
     FOrderIndex := 0;
+end;
+
+function TVehicle.OrderLength: Integer;
+begin
+  Result := Length(FOrder);
 end;
 
 procedure TVehicle.IncCargoAmount(const AValue: Integer);
