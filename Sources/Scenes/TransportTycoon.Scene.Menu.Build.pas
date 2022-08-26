@@ -11,7 +11,7 @@ type
 
   TSceneBuildMenu = class(TScene)
   private
-    StartYLine: Integer;
+    FX, FY: Integer;
     procedure DrawLine(const Button, Text: string; const AMoney: Integer);
   public
     procedure Render; override;
@@ -33,25 +33,34 @@ uses
 procedure TSceneBuildMenu.DrawLine(const Button, Text: string;
   const AMoney: Integer);
 begin
-  DrawButton(22, StartYLine, Button, Text);
-  terminal_print(57, StartYLine, TK_ALIGN_RIGHT,
+  DrawButton(FX, FY, Button, Text);
+  terminal_print(FX + 26, FY, TK_ALIGN_RIGHT,
     Format('[c=%s]$%d[/c]', [TPalette.Unused, AMoney]));
-  Inc(StartYLine);
+  Inc(FX, 29);
+  if (FX > 60) then
+  begin
+    FX := 12;
+    Inc(FY);
+  end;
 end;
 
 procedure TSceneBuildMenu.Render;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
-  DrawFrame(20, 8, 40, 13);
+  DrawFrame(10, 8, 60, 13);
   DrawTitle(10, Game.Company.Name);
 
-  StartYLine := 12;
+  FX := 12;
+  FY := 12;
 
   DrawLine('C', 'Build Canal', ConstructCost[ceBuildCanal]);
   DrawLine('R', 'Build Road', ConstructCost[ceBuildRoad]);
   DrawLine('B', 'Build Road Bridge', ConstructCost[ceBuildRoadBridge]);
   DrawLine('T', 'Build Road Tunnel', ConstructCost[ceBuildRoadTunnel]);
+
+  FX := 12;
+  FY := 16;
   DrawLine('X', 'Clear land', ConstructCost[ceClearLand]);
 
   AddButton(18, 'Esc', 'Close');
@@ -71,7 +80,7 @@ begin
       end;
     end;
     case MX of
-      22 .. 56:
+      12 .. 56:
         case MY of
           12:
             Key := TK_C;
