@@ -287,7 +287,7 @@ begin
                     scAircraft:
                       begin
                         S := TTownIndustry(Game.Map.Industry[I]).Airport;
-                        F := not(Aircraft[CurrentVehicle].IsOrder(I) or
+                        F := not(Aircraft[CurrentVehicle].Orders.IsOrder(I) or
                           not S.IsBuilding);
                         if F then
                           with Game.Vehicles do
@@ -303,7 +303,7 @@ begin
                     scShip:
                       begin
                         S := TTownIndustry(Game.Map.Industry[I]).Dock;
-                        F := not(Ship[CurrentVehicle].IsOrder(I) or
+                        F := not(Ship[CurrentVehicle].Orders.IsOrder(I) or
                           not S.IsBuilding);
                         if F then
                           with Game.Vehicles do
@@ -325,8 +325,8 @@ begin
                         else
                           S := TTownIndustry(Game.Map.Industry[I])
                             .TruckLoadingBay;
-                        F := not(RoadVehicle[CurrentVehicle].IsOrder(I) or
-                          not S.IsBuilding);
+                        F := not(RoadVehicle[CurrentVehicle].Orders.IsOrder(I)
+                          or not S.IsBuilding);
                         if F then
                           with Game.Vehicles do
                           begin
@@ -357,7 +357,7 @@ begin
                     scShip:
                       begin
                         S := Game.Map.Industry[I].Dock;
-                        F := not(Ship[CurrentVehicle].IsOrder(I) or
+                        F := not(Ship[CurrentVehicle].Orders.IsOrder(I) or
                           not S.IsBuilding);
                         if F then
                           with Game.Vehicles do
@@ -373,8 +373,8 @@ begin
                     scRoadVehicle:
                       begin
                         S := Game.Map.Industry[I].TruckLoadingBay;
-                        F := not(RoadVehicle[CurrentVehicle].IsOrder(I) or
-                          not S.IsBuilding);
+                        F := not(RoadVehicle[CurrentVehicle].Orders.IsOrder(I)
+                          or not S.IsBuilding);
                         if F then
                           with Game.Vehicles do
                           begin

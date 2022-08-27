@@ -78,7 +78,7 @@ end;
 procedure TAircraft.AddOrder(const AIndex: Integer);
 begin
   with TTownIndustry(Game.Map.Industry[AIndex]) do
-    AddOrder(AIndex, Name, X, Y);
+    Orders.AddOrder(AIndex, Name, X, Y);
 end;
 
 constructor TAircraft.Create(const AName: string; const AX, AY, ID: Integer);
@@ -94,14 +94,14 @@ var
 begin
   FState := 'Load';
   for C := Succ(Low(TCargo)) to High(TCargo) do
-    if (C in Game.Map.Industry[Order[OrderIndex].ID].Produces) and (C in Cargo)
-    then
+    if (C in Game.Map.Industry[Orders.Order[Orders.OrderIndex].ID].Produces) and
+      (C in Cargo) then
     begin
       SetCargoType(C);
-      while (Game.Map.Industry[Order[OrderIndex].ID].ProducesAmount[C] > 0) and
-        (CargoAmount < CargoMaxAmount) do
+      while (Game.Map.Industry[Orders.Order[Orders.OrderIndex].ID]
+        .ProducesAmount[C] > 0) and (CargoAmount < CargoMaxAmount) do
       begin
-        Game.Map.Industry[Order[OrderIndex].ID].DecCargoAmount(C);
+        Game.Map.Industry[Orders.Order[Orders.OrderIndex].ID].DecCargoAmount(C);
         IncCargoAmount;
       end;
       Exit;
@@ -127,29 +127,30 @@ procedure TAircraft.Step;
 var
   C: TCargo;
 begin
-  if OrderLength > 0 then
+  if Orders.Count > 0 then
   begin
-    if not Move(Order[OrderIndex].X, Order[OrderIndex].Y) then
+    if not Move(Orders.Order[Orders.OrderIndex].X,
+      Orders.Order[Orders.OrderIndex].Y) then
     begin
       Inc(FT);
-      if Order[OrderIndex].ID <> LastStationId then
+      if Orders.Order[Orders.OrderIndex].ID <> LastStationId then
         UnLoad;
       FState := 'Service';
-      if FT > (15 - (TTownIndustry(Game.Map.Industry[Order[OrderIndex].ID])
-        .Airport.Level * 2)) then
+      if FT > (15 - (TTownIndustry(Game.Map.Industry[Orders.Order
+        [Orders.OrderIndex].ID]).Airport.Level * 2)) then
       begin
         FT := 0;
         Load;
         if FullLoad then
           for C := Succ(Low(TCargo)) to High(TCargo) do
-            if (C in Game.Map.Industry[Order[OrderIndex].ID].Produces) and
-              (C in Cargo) then
+            if (C in Game.Map.Industry[Orders.Order[Orders.OrderIndex].ID]
+              .Produces) and (C in Cargo) then
             begin
               SetCargoType(C);
               if (CargoAmount < CargoMaxAmount) then
                 Exit;
             end;
-        IncOrder;
+        Orders.IncOrder;
       end
     end
     else
@@ -163,12 +164,12 @@ var
 begin
   SetLastStation;
   FState := 'Unload';
-  if (CargoType in Game.Map.Industry[Order[OrderIndex].ID].Accepts) and
-    (CargoType <> cgNone) and (CargoAmount > 0) then
+  if (CargoType in Game.Map.Industry[Orders.Order[Orders.OrderIndex].ID]
+    .Accepts) and (CargoType <> cgNone) and (CargoAmount > 0) then
   begin
     Money := (CargoAmount * (Distance div 10)) * CargoPrice[CargoType];
-    Game.Map.Industry[Order[OrderIndex].ID].IncAcceptsCargoAmount(CargoType,
-      CargoAmount);
+    Game.Map.Industry[Orders.Order[Orders.OrderIndex].ID].IncAcceptsCargoAmount
+      (CargoType, CargoAmount);
     Game.ModifyMoney(ttAircraftIncome, Money);
     Profit := Profit + Money;
     ClearCargo;

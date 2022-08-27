@@ -68,15 +68,15 @@ begin
       end
       else
       begin
-        for I := 0 to OrderLength - 1 do
+        for I := 0 to Orders.Count - 1 do
         begin
-          if (OrderIndex = I) then
+          if (Orders.OrderIndex = I) then
             C := '>'
           else
             C := #32;
           DrawText(27, I + 11, C);
-          DrawButton(29, I + 11, OrderLength > 1, Chr(Ord('A') + I),
-            StrLim('Go to ' + Order[I].Name + ' Dock', 40));
+          DrawButton(29, I + 11, Orders.Count > 1, Chr(Ord('A') + I),
+            StrLim('Go to ' + Orders.Order[I].Name + ' Dock', 40));
         end;
       end;
     end;
@@ -95,9 +95,9 @@ begin
         I := Key - TK_A;
         with Ship[CurrentVehicle] do
         begin
-          if (I > OrderLength - 1) then
+          if (I > Orders.Count - 1) then
             Exit;
-          DelOrder(I);
+          Orders.DelOrder(I);
           Scenes.Render;
         end;
       end;

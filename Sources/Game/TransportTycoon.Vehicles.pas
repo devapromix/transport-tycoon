@@ -88,7 +88,7 @@ begin
 
   with FAircraft[High(FAircraft)] do
   begin
-    AddOrder(AIndex, Town.Name, Town.X, Town.Y);
+    Orders.AddOrder(AIndex, Town.Name, Town.X, Town.Y);
     Game.ModifyMoney(ttNewVehicles, -AircraftBase[AircraftID].Cost);
     VehicleID := AircraftID;
   end;
@@ -105,7 +105,7 @@ begin
 
   with FRoadVehicle[High(FRoadVehicle)] do
   begin
-    AddOrder(AIndex, Game.Map.Industry[AIndex].Name,
+    Orders.AddOrder(AIndex, Game.Map.Industry[AIndex].Name,
       Game.Map.Industry[AIndex].X, Game.Map.Industry[AIndex].Y);
     Game.ModifyMoney(ttNewVehicles, -RoadVehicleBase[RoadVehicleID].Cost);
     VehicleID := RoadVehicleID;
@@ -124,7 +124,7 @@ begin
 
   with FShip[High(FShip)] do
   begin
-    AddOrder(AIndex, Game.Map.Industry[AIndex].Name,
+    Orders.AddOrder(AIndex, Game.Map.Industry[AIndex].Name,
       Game.Map.Industry[AIndex].X, Game.Map.Industry[AIndex].Y);
     Game.ModifyMoney(ttNewVehicles, -ShipBase[ShipID].Cost);
     VehicleID := ShipID;
