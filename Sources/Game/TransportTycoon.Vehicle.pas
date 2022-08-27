@@ -70,6 +70,7 @@ type
     procedure SetCargoType(const ACargo: TCargo);
     procedure IncCargoAmount(const AValue: Integer = 1);
     property Orders: TOrders read FOrders;
+    function CurOrder: TOrder;
   end;
 
 implementation
@@ -117,6 +118,11 @@ begin
   Inc(FCargoAmount, AValue);
 end;
 
+function TVehicle.CurOrder: TOrder;
+begin
+  Result := Orders.Order[Orders.OrderIndex];
+end;
+
 procedure TVehicle.IncDistance;
 begin
   Inc(FDistance);
@@ -129,7 +135,7 @@ end;
 
 procedure TVehicle.SetLastStation;
 begin
-  FLastStationId := Orders.Order[Orders.OrderIndex].ID;
+  FLastStationId := CurOrder.ID;
 end;
 
 end.

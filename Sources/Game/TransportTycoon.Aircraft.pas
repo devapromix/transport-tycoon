@@ -94,14 +94,14 @@ var
 begin
   FState := 'Load';
   for C := Succ(Low(TCargo)) to High(TCargo) do
-    if (C in Game.Map.Industry[Orders.Order[Orders.OrderIndex].ID].Produces) and
+    if (C in Game.Map.Industry[CurOrder.ID].Produces) and
       (C in Cargo) then
     begin
       SetCargoType(C);
-      while (Game.Map.Industry[Orders.Order[Orders.OrderIndex].ID]
+      while (Game.Map.Industry[CurOrder.ID]
         .ProducesAmount[C] > 0) and (CargoAmount < CargoMaxAmount) do
       begin
-        Game.Map.Industry[Orders.Order[Orders.OrderIndex].ID].DecCargoAmount(C);
+        Game.Map.Industry[CurOrder.ID].DecCargoAmount(C);
         IncCargoAmount;
       end;
       Exit;
@@ -129,11 +129,11 @@ var
 begin
   if Orders.Count > 0 then
   begin
-    if not Move(Orders.Order[Orders.OrderIndex].X,
-      Orders.Order[Orders.OrderIndex].Y) then
+    if not Move(CurOrder.X,
+      CurOrder.Y) then
     begin
       Inc(FT);
-      if Orders.Order[Orders.OrderIndex].ID <> LastStationId then
+      if CurOrder.ID <> LastStationId then
         UnLoad;
       FState := 'Service';
       if FT > (15 - (TTownIndustry(Game.Map.Industry[Orders.Order
@@ -143,7 +143,7 @@ begin
         Load;
         if FullLoad then
           for C := Succ(Low(TCargo)) to High(TCargo) do
-            if (C in Game.Map.Industry[Orders.Order[Orders.OrderIndex].ID]
+            if (C in Game.Map.Industry[CurOrder.ID]
               .Produces) and (C in Cargo) then
             begin
               SetCargoType(C);
@@ -164,11 +164,11 @@ var
 begin
   SetLastStation;
   FState := 'Unload';
-  if (CargoType in Game.Map.Industry[Orders.Order[Orders.OrderIndex].ID]
+  if (CargoType in Game.Map.Industry[CurOrder.ID]
     .Accepts) and (CargoType <> cgNone) and (CargoAmount > 0) then
   begin
     Money := (CargoAmount * (Distance div 10)) * CargoPrice[CargoType];
-    Game.Map.Industry[Orders.Order[Orders.OrderIndex].ID].IncAcceptsCargoAmount
+    Game.Map.Industry[CurOrder.ID].IncAcceptsCargoAmount
       (CargoType, CargoAmount);
     Game.ModifyMoney(ttAircraftIncome, Money);
     Profit := Profit + Money;
