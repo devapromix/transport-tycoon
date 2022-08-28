@@ -87,6 +87,7 @@ type
 const
   MapSizeStr: array [TMapSize] of string = ('Tiny', 'Small', 'Medium', 'Large');
   MapSizeInt: array [TMapSize] of Integer = (80, 160, 320, 640);
+  MapRiversInt: array [TMapRivers] of Integer = (0, 2, 4, 8);
   MapSeaLevelStr: array [TMapSeaLevel] of string = ('Very Low', 'Low',
     'Normal', 'High');
   MapNoOfIndStr: array [TMapNoOfInd] of string = ('Very Low', 'Low',
@@ -127,6 +128,8 @@ type
     function MapIndCount: Integer;
     function MapTownCount: Integer;
     procedure DrawTile(const X, Y: Integer);
+    procedure AddHRiver;
+    procedure AddVRiver;
   public const
     ClearLandCost = 100;
     BuildCanalCost = 2000;
@@ -494,6 +497,54 @@ begin
   end;
 end;
 
+procedure TMap.AddHRiver;
+var
+  X, Y: Integer;
+begin
+  try
+    X := 0;
+    Y := RandomRange(10, FHeight - 11);
+    while(X <= FWidth - 1) do
+    begin
+      if RandomRange(0, 3) = 1 then
+        if RandomRange(0, 2) = 1 then
+          Inc(Y)
+        else
+          Dec(Y);
+      Y := EnsureRange(Y, 1, FHeight - 1);
+      FTile[X][Y] := tlWater;
+      Inc(X);
+    end;
+  except
+    on E: Exception do
+      Log.Add('TMap.AddHRiver', E.Message);
+  end;
+end;
+
+procedure TMap.AddVRiver;
+var
+  X, Y: Integer;
+begin
+  try
+    X := RandomRange(10, FWidth - 11);
+    Y := 0;
+    while(Y <= FHeight - 1) do
+    begin
+      if RandomRange(0, 3) = 1 then
+        if RandomRange(0, 2) = 1 then
+          Inc(X)
+        else
+          Dec(X);
+      X := EnsureRange(X, 1, FWidth - 1);
+      FTile[X][Y] := tlWater;
+      Inc(Y);
+    end;
+  except
+    on E: Exception do
+      Log.Add('TMap.AddVRiver', E.Message);
+  end;
+end;
+
 function TMap.EnterInIndustry(const AX, AY: Integer): Boolean;
 begin
   try
@@ -606,6 +657,12 @@ begin
         end;
       end;
     end;
+    // Rivers
+    for I := 0 to MapRiversInt[Rivers] - 1 do
+      if (RandomRange(0, 2) = 0) then
+        AddHRiver
+      else
+        AddVRiver;
     // Towns
     for I := 0 to Length(Industry) - 1 do
       Industry[I].Free;
