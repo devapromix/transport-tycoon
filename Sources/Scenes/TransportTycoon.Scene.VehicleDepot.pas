@@ -36,14 +36,12 @@ procedure TSceneVehicleDepot.DrawVehicleInfo(const V: array of TVehicleBase;
 var
   C: TCargo;
   S: string;
-  I: Integer;
 begin
   terminal_color(TPalette.Selected);
   terminal_composition(TK_ON);
   DrawText(42, 10, V[SelVehicle].Name);
   S := '';
-  for I := 1 to Length(V[SelVehicle].Name) do
-    S := S + '_';
+  S := StringOfChar('_', Length(V[SelVehicle].Name));
   DrawText(42, 10, S);
   terminal_composition(TK_OFF);
   terminal_color(TPalette.Default);
