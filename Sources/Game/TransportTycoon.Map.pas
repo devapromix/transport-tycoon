@@ -217,8 +217,8 @@ function TMap.IsTownName(const ATownName: string): Boolean;
 var
   I: Integer;
 begin
+  Result := False;
   try
-    Result := False;
     for I := 0 to Length(Industry) - 1 do
       if (Industry[I].IndustryType = inTown) then
         if Industry[I].Name = ATownName then
@@ -233,8 +233,8 @@ function TMap.IsNearTile(const AX, AY: Integer; const ATile: TTiles): Boolean;
 var
   X, Y: Integer;
 begin
+  Result := False;
   try
-    Result := False;
     for X := AX - 1 to AX + 1 do
       for Y := AY - 1 to AY + 1 do
       begin
@@ -256,6 +256,7 @@ end;
 
 function TMap.IsRoadVehiclePath(const AX, AY: Integer): Boolean;
 begin
+  Result := True;
   try
     Result := FTile[AX][AY] in [tlTownIndustry, tlRoad, tlRoadTunnel,
       tlRoadBridge] + IndustryTiles;
@@ -267,6 +268,7 @@ end;
 
 function TMap.IsShipPath(const AX, AY: Integer): Boolean;
 begin
+  Result := True;
   try
     Result := FTile[AX][AY] in [tlTownIndustry, tlWater, tlCanal, tlRoadBridge]
       + IndustryTiles;
@@ -354,6 +356,7 @@ end;
 
 function TMap.IsLandTile(const AX, AY: Integer): Boolean;
 begin
+  Result := False;
   try
     Result := FTile[AX][AY] in LandTiles;
   except
@@ -366,8 +369,8 @@ function TMap.IsIndustryLocation(const AX, AY: Integer): Boolean;
 var
   I: Integer;
 begin
+  Result := False;
   try
-    Result := False;
     for I := 0 to Length(Industry) - 1 do
       if Industry[I].InLocation(AX, AY) or
         (GetDist(Industry[I].X, Industry[I].Y, AX, AY) < (Self.Width div 10))
@@ -383,8 +386,8 @@ function TMap.IsTownLocation(const AX, AY: Integer): Boolean;
 var
   I: Integer;
 begin
+  Result := False;
   try
-    Result := False;
     for I := 0 to Length(Industry) - 1 do
       if (Industry[I].IndustryType = inTown) then
         if Industry[I].InLocation(AX, AY) or
@@ -504,7 +507,7 @@ begin
   try
     X := 0;
     Y := RandomRange(10, FHeight - 11);
-    while(X <= FWidth - 1) do
+    while (X <= FWidth - 1) do
     begin
       if RandomRange(0, 3) = 1 then
         if RandomRange(0, 2) = 1 then
@@ -528,7 +531,7 @@ begin
   try
     X := RandomRange(10, FWidth - 11);
     Y := 0;
-    while(Y <= FHeight - 1) do
+    while (Y <= FHeight - 1) do
     begin
       if RandomRange(0, 3) = 1 then
         if RandomRange(0, 2) = 1 then
@@ -547,6 +550,7 @@ end;
 
 function TMap.EnterInIndustry(const AX, AY: Integer): Boolean;
 begin
+  Result := False;
   try
     FCurrentIndustry := GetCurrentIndustry(AX, AY);
     Result := FCurrentIndustry >= 0;
@@ -832,8 +836,8 @@ function TMap.GetCurrentIndustry(const AX, AY: Integer): Integer;
 var
   I: Integer;
 begin
+  Result := -1;
   try
-    Result := -1;
     for I := 0 to Length(Industry) - 1 do
       if Industry[I].InLocation(AX, AY) then
         Exit(I);
@@ -847,8 +851,8 @@ function TMap.TownCount: Integer;
 var
   I: Integer;
 begin
+  Result := 0;
   try
-    Result := 0;
     for I := 0 to Length(Industry) - 1 do
       if (Industry[I].IndustryType = inTown) then
         Result := Result + 1;
@@ -862,8 +866,8 @@ function TMap.WorldPop: Integer;
 var
   I: Integer;
 begin
+  Result := 0;
   try
-    Result := 0;
     for I := 0 to Length(Industry) - 1 do
       if (Industry[I].IndustryType = inTown) then
         Result := Result + TTownIndustry(Industry[I]).Population;
@@ -905,6 +909,7 @@ function TMap.GetTile: TTiles;
 var
   X, Y: Integer;
 begin
+  Result := tlGrass;
   try
     X := EnsureRange(Game.Map.Left + terminal_state(TK_MOUSE_X), 0, FWidth);
     Y := EnsureRange(Game.Map.Top + terminal_state(TK_MOUSE_Y), 0, FHeight);
