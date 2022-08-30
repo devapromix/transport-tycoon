@@ -3,12 +3,16 @@
 interface
 
 uses
-  TransportTycoon.Scenes;
+  TransportTycoon.Scenes,
+  TransportTycoon.Construct,
+  TransportTycoon.Company;
 
 type
   TSceneCompany = class(TScene)
   private
-
+    FX: Integer;
+    FY: Integer;
+    procedure AddStatLine(const I: TConstructEnum);
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -20,10 +24,27 @@ uses
   BearLibTerminal,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Industries,
-  TransportTycoon.Company;
+  TransportTycoon.Industries;
+
+procedure TSceneCompany.AddStatLine(const I: TConstructEnum);
+const
+  StatStr: array [TConstructEnum] of string = ('', 'Canals', 'Roads', 'Tunnels',
+    'Road Bridges');
+begin
+  DrawText(FX, FY, StatStr[I] + ': ' + IntToStr(Game.Company.Stat.GetStat(I)));
+  if FX = 40 then
+  begin
+    FX := 22;
+    Inc(FY);
+    Exit;
+  end;
+  if FX = 22 then
+    FX := 40;
+end;
 
 procedure TSceneCompany.Render;
+var
+  I: TConstructEnum;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
@@ -31,8 +52,10 @@ begin
   DrawTitle(10, Game.Company.Name);
   DrawText(22, 12, 'Inavgurated: ' + IntToStr(Game.Company.Inavgurated));
 
-  DrawText(22, 14, 'Roads: ' + IntToStr(Game.Company.Stat.GetStat(seRoad)));
-  DrawText(22, 15, 'Tunnels: ' + IntToStr(Game.Company.Stat.GetStat(seTunnel)));
+  FX := 22;
+  FY := 14;
+  for I := Succ(Low(TConstructEnum)) to High(TConstructEnum) do
+    AddStatLine(I);
 
   if TTownIndustry(Game.Map.Industry[Game.Company.TownID]).HQ.IsBuilding then
     DrawText(22, 17, 'Company headquarters in ' + Game.Map.Industry

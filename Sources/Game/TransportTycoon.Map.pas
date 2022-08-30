@@ -451,6 +451,7 @@ begin
     begin
       FTile[AX][AY] := Plan.ResultTile;
       Game.ModifyMoney(ttConstruction, -Money);
+      Game.Company.Stat.IncStat(AConstructEnum);
     end;
   except
     on E: Exception do

@@ -2,8 +2,8 @@
 
 interface
 
-type
-  TStatEnum = (seRoad, seTunnel, seCanal, seRoadBridge);
+uses
+  TransportTycoon.Construct;
 
 type
 
@@ -11,11 +11,11 @@ type
 
   TStat = class(TObject)
   private
-    FSt: array [TStatEnum] of Integer;
+    FSt: array [TConstructEnum] of Integer;
   public
     procedure Clear;
-    function GetStat(const I: TStatEnum): Integer;
-    procedure IncStat(const I: TStatEnum; const Value: Integer);
+    function GetStat(const I: TConstructEnum): Integer;
+    procedure IncStat(const I: TConstructEnum; const Value: Integer = 1);
   end;
 
 type
@@ -49,18 +49,18 @@ uses
 
 procedure TStat.Clear;
 var
-  I: TStatEnum;
+  I: TConstructEnum;
 begin
-  for I := Low(TStatEnum) to High(TStatEnum) do
+  for I := Low(TConstructEnum) to High(TConstructEnum) do
     FSt[I] := 0;
 end;
 
-function TStat.GetStat(const I: TStatEnum): Integer;
+function TStat.GetStat(const I: TConstructEnum): Integer;
 begin
   Result := FSt[I];
 end;
 
-procedure TStat.IncStat(const I: TStatEnum; const Value: Integer);
+procedure TStat.IncStat(const I: TConstructEnum; const Value: Integer = 1);
 begin
   Inc(FSt[I], Value);
 end;
