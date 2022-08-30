@@ -96,7 +96,7 @@ begin
   FIsDebug := False;
   for I := 1 to ParamCount do
   begin
-    if (LowerCase(ParamStr(I)) = '-debug') then
+    if (LowerCase(ParamStr(I)) = '-debug') or (DebugHook > 0) then
       FIsDebug := True;
   end;
   FLockScreen := False;
