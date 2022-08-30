@@ -584,12 +584,7 @@ end;
 
 function TScenes.GetScene(I: TSceneEnum): TScene;
 begin
-  try
-    Result := FScene[I];
-  except
-    on E: Exception do
-      Log.Add('TScenes.GetScene', E.Message);
-  end;
+  Result := FScene[I];
 end;
 
 procedure TScenes.Back;

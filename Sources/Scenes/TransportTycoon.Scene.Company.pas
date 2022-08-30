@@ -20,21 +20,25 @@ uses
   BearLibTerminal,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Industries;
+  TransportTycoon.Industries,
+  TransportTycoon.Company;
 
 procedure TSceneCompany.Render;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
-  DrawFrame(20, 8, 40, 13);
+  DrawFrame(20, 8, 40, 14);
   DrawTitle(10, Game.Company.Name);
   DrawText(22, 12, 'Inavgurated: ' + IntToStr(Game.Company.Inavgurated));
 
+  DrawText(22, 14, 'Roads: ' + IntToStr(Game.Company.Stat.GetStat(seRoad)));
+  DrawText(22, 15, 'Tunnels: ' + IntToStr(Game.Company.Stat.GetStat(seTunnel)));
+
   if TTownIndustry(Game.Map.Industry[Game.Company.TownID]).HQ.IsBuilding then
-    DrawText(22, 16, 'Company headquarters in ' + Game.Map.Industry
+    DrawText(22, 17, 'Company headquarters in ' + Game.Map.Industry
       [Game.Company.TownID].Name);
 
-  AddButton(18, 'Esc', 'Close');
+  AddButton(19, 'Esc', 'Close');
 
   DrawBar;
 end;
