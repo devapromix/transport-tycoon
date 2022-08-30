@@ -63,7 +63,8 @@ var
 begin
 {$IFDEF DEBUG}
 {$IF CompilerVersion > 16}
-  ReportMemoryLeaksOnShutdown := True;
+{$WARN SYMBOL_PLATFORM OFF}
+  ReportMemoryLeaksOnShutdown := DebugHook <> 0;
 {$IFEND}
 {$ENDIF}
   Randomize();
