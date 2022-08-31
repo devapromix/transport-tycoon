@@ -96,7 +96,14 @@ begin
   FIsDebug := False;
   for I := 1 to ParamCount do
   begin
-    if (LowerCase(ParamStr(I)) = '-debug') or (DebugHook > 0) then
+    if (LowerCase(ParamStr(I)) = '-debug')
+{$IFDEF DEBUG}
+{$IF CompilerVersion > 16}
+{$WARN SYMBOL_PLATFORM OFF}
+    or (DebugHook > 0)
+{$IFEND}
+{$ENDIF}
+    then
       FIsDebug := True;
   end;
   FLockScreen := False;
