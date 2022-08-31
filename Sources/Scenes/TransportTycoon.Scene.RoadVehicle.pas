@@ -29,7 +29,6 @@ uses
 procedure TSceneRoadVehicle.Render;
 var
   I: Integer;
-  S: string;
   C: Char;
 begin
   inherited Render;
@@ -43,10 +42,8 @@ begin
       terminal_color(TPalette.Selected);
       terminal_composition(TK_ON);
       DrawText(7, 11, RoadVehicleBase[VehicleID].Name);
-      S := '';
-      for I := 1 to Length(RoadVehicleBase[VehicleID].Name) do
-        S := S + '_';
-      DrawText(7, 11, S);
+      DrawText(7, 11, StringOfChar('_',
+        Length(RoadVehicleBase[VehicleID].Name)));
       terminal_composition(TK_OFF);
       terminal_color(TPalette.Default);
 
