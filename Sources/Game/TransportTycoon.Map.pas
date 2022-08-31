@@ -128,8 +128,10 @@ type
     function MapIndCount: Integer;
     function MapTownCount: Integer;
     procedure DrawTile(const X, Y: Integer);
-    procedure AddHRiver;
-    procedure AddVRiver;
+    procedure AddHLRiver;
+    procedure AddVTRiver;
+    procedure AddHRRiver;
+    procedure AddVDRiver;
   public const
     ClearLandCost = 100;
     BuildCanalCost = 2000;
@@ -501,14 +503,14 @@ begin
   end;
 end;
 
-procedure TMap.AddHRiver;
+procedure TMap.AddHLRiver;
 var
   X, Y: Integer;
 begin
   try
     X := 0;
-    Y := RandomRange(10, FHeight - 11);
-    while (X <= FWidth - 1) do
+    Y := RandomRange(FHeight div 3, (FHeight div 3) * 2);
+    while (X <= FWidth div 3) do
     begin
       if RandomRange(0, 3) = 1 then
         if RandomRange(0, 2) = 1 then
@@ -516,23 +518,27 @@ begin
         else
           Dec(Y);
       Y := EnsureRange(Y, 1, FHeight - 1);
+      if (FTile[X][Y] in [tlWater, tlRock]) and (X > FWidth div 3) then
+        Break;
+      if (X > ((FWidth div 3) * 2)) and (RandomRange(0, 5) = 0) then
+        Break;
       FTile[X][Y] := tlWater;
       Inc(X);
     end;
   except
     on E: Exception do
-      Log.Add('TMap.AddHRiver', E.Message);
+      Log.Add('TMap.AddHLRiver', E.Message);
   end;
 end;
 
-procedure TMap.AddVRiver;
+procedure TMap.AddVTRiver;
 var
   X, Y: Integer;
 begin
   try
-    X := RandomRange(10, FWidth - 11);
+    X := RandomRange(FWidth div 3, (FWidth div 3) * 2);
     Y := 0;
-    while (Y <= FHeight - 1) do
+    while (Y <= FHeight div 3) do
     begin
       if RandomRange(0, 3) = 1 then
         if RandomRange(0, 2) = 1 then
@@ -540,12 +546,72 @@ begin
         else
           Dec(X);
       X := EnsureRange(X, 1, FWidth - 1);
+      if (FTile[X][Y] in [tlWater, tlRock]) and (Y > FHeight div 3) then
+        Break;
+      if (Y > ((FHeight div 3) * 2)) and (RandomRange(0, 5) = 0) then
+        Break;
       FTile[X][Y] := tlWater;
       Inc(Y);
     end;
   except
     on E: Exception do
-      Log.Add('TMap.AddVRiver', E.Message);
+      Log.Add('TMap.AddVTRiver', E.Message);
+  end;
+end;
+
+procedure TMap.AddHRRiver;
+var
+  X, Y: Integer;
+begin
+  try
+    X := FWidth - 1;
+    Y := RandomRange(FHeight div 3, (FHeight div 3) * 2);
+    while (X >= 1) do
+    begin
+      if RandomRange(0, 3) = 1 then
+        if RandomRange(0, 2) = 1 then
+          Inc(Y)
+        else
+          Dec(Y);
+      Y := EnsureRange(Y, 1, FHeight - 1);
+      if (FTile[X][Y] in [tlWater, tlRock]) and (X < ((FWidth div 3) * 2)) then
+        Break;
+      if (X < ((FWidth div 3) * 2)) and (RandomRange(0, 5) = 0) then
+        Break;
+      FTile[X][Y] := tlWater;
+      Dec(X);
+    end;
+  except
+    on E: Exception do
+      Log.Add('TMap.AddHRRiver', E.Message);
+  end;
+end;
+
+procedure TMap.AddVDRiver;
+var
+  X, Y: Integer;
+begin
+  try
+    X := RandomRange(FWidth div 3, (FWidth div 3) * 2);
+    Y := FHeight - 1;
+    while (Y >= 1) do
+    begin
+      if RandomRange(0, 3) = 1 then
+        if RandomRange(0, 2) = 1 then
+          Inc(X)
+        else
+          Dec(X);
+      X := EnsureRange(X, 1, FWidth - 1);
+      if (FTile[X][Y] in [tlWater, tlRock]) and (Y < ((FHeight div 3) * 2)) then
+        Break;
+      if (Y < ((FHeight div 3) * 2)) and (RandomRange(0, 5) = 0) then
+        Break;
+      FTile[X][Y] := tlWater;
+      Dec(Y);
+    end;
+  except
+    on E: Exception do
+      Log.Add('TMap.AddVDRiver', E.Message);
   end;
 end;
 
@@ -566,6 +632,7 @@ var
   X, Y, I, J, N, D: Integer;
   TownName, S: string;
   IndustryType: TIndustryType;
+  RF: Boolean;
 begin
   try
     // Terrain
@@ -664,10 +731,16 @@ begin
     end;
     // Rivers
     for I := 0 to MapRiversInt[Rivers] - 1 do
-      if (RandomRange(0, 2) = 0) then
-        AddHRiver
+      case RandomRange(0, 5) of
+        0:
+          AddHLRiver;
+        1:
+          AddVTRiver;
+        2:
+          AddVDRiver;
       else
-        AddVRiver;
+        AddHRRiver;
+      end;
     // Towns
     for I := 0 to Length(Industry) - 1 do
       Industry[I].Free;
@@ -887,6 +960,7 @@ function TMap.GetNearTownName(const AX, AY: Integer): string;
 var
   I, D, Mx: Integer;
 begin
+  Result := '';
   try
     Mx := Width;
     Result := '';
