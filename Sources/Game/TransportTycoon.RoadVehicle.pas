@@ -9,19 +9,19 @@ uses
 const
   RoadVehicleBase: array [0 .. 4] of TVehicleBase = (
     // #1
-    (Name: 'TG Perry Bus'; Cargo: [cgPassengers]; Amount: 27; Cost: 4000;
+    (Name: 'TG Perry Bus'; CargoSet: [cgPassengers]; Amount: 27; Cost: 4000;
     RunningCost: 18 * 12; Speed: 60; Since: 1950; VehicleType: vtBus;),
     // #2
-    (Name: 'JK-5 Mail Truck'; Cargo: [cgMail]; Amount: 7; Cost: 3500;
+    (Name: 'JK-5 Mail Truck'; CargoSet: [cgMail]; Amount: 7; Cost: 3500;
     RunningCost: 14 * 12; Speed: 60; Since: 1950; VehicleType: vtTruck;),
     // #3
-    (Name: 'DR-2 Coal Truck'; Cargo: [cgCoal]; Amount: 9; Cost: 4800;
+    (Name: 'DR-2 Coal Truck'; CargoSet: [cgCoal]; Amount: 9; Cost: 4800;
     RunningCost: 18 * 12; Speed: 60; Since: 1950; VehicleType: vtTruck;),
     // #4
-    (Name: 'ASV-11 Wood Truck'; Cargo: [cgWood]; Amount: 9; Cost: 5000;
+    (Name: 'ASV-11 Wood Truck'; CargoSet: [cgWood]; Amount: 9; Cost: 5000;
     RunningCost: 19 * 12; Speed: 60; Since: 1950; VehicleType: vtTruck;),
     // #5
-    (Name: 'RT Goods Truck'; Cargo: [cgGoods]; Amount: 9; Cost: 4500;
+    (Name: 'RT Goods Truck'; CargoSet: [cgGoods]; Amount: 9; Cost: 4500;
     RunningCost: 20 * 12; Speed: 60; Since: 1950; VehicleType: vtTruck;)
     //
     );
@@ -79,18 +79,18 @@ end;
 
 procedure TRoadVehicle.Load;
 var
-  C: TCargo;
+  Cargo: TCargo;
 begin
   FState := 'Load';
-  for C := Succ(Low(TCargo)) to High(TCargo) do
-    if (C in Game.Map.Industry[CurOrder.ID].Produces) and
-      (C in Cargo) then
+  for Cargo := Succ(Low(TCargo)) to High(TCargo) do
+    if (Cargo in Game.Map.Industry[CurOrder.ID].Produces) and (Cargo in CargoSet)
+    then
     begin
-      SetCargoType(C);
-      while (Game.Map.Industry[CurOrder.ID]
-        .ProducesAmount[C] > 0) and (CargoAmount < CargoMaxAmount) do
+      SetCargoType(Cargo);
+      while (Game.Map.Industry[CurOrder.ID].ProducesAmount[Cargo] > 0) and
+        (CargoAmount < CargoMaxAmount) do
       begin
-        Game.Map.Industry[CurOrder.ID].DecCargoAmount(C);
+        Game.Map.Industry[CurOrder.ID].DecCargoAmount(Cargo);
         IncCargoAmount;
       end;
       Exit;
@@ -114,24 +114,21 @@ end;
 
 procedure TRoadVehicle.Step;
 var
-  C: TCargo;
+  Cargo: TCargo;
   Station: TStation;
 begin
   if Orders.Count > 0 then
   begin
-    if not Move(CurOrder.X,
-      CurOrder.Y) then
+    if not Move(CurOrder.X, CurOrder.Y) then
     begin
       Inc(FT);
       if CurOrder.ID <> LastStationId then
         UnLoad;
       case CargoType of
         cgPassengers:
-          Station := TTownIndustry
-            (Game.Map.Industry[CurOrder.ID]).BusStation;
+          Station := TTownIndustry(Game.Map.Industry[CurOrder.ID]).BusStation;
       else
-        Station := Game.Map.Industry[CurOrder.ID]
-          .TruckLoadingBay;
+        Station := Game.Map.Industry[CurOrder.ID].TruckLoadingBay;
       end;
       FState := 'Service';
       if FT > (15 - (Station.Level * 2)) then
@@ -139,11 +136,11 @@ begin
         FT := 0;
         Load;
         if FullLoad then
-          for C := Succ(Low(TCargo)) to High(TCargo) do
-            if (C in Game.Map.Industry[CurOrder.ID]
-              .Produces) and (C in Cargo) then
+          for Cargo := Succ(Low(TCargo)) to High(TCargo) do
+            if (Cargo in Game.Map.Industry[CurOrder.ID].Produces) and
+              (Cargo in CargoSet) then
             begin
-              SetCargoType(C);
+              SetCargoType(Cargo);
               if (CargoAmount < CargoMaxAmount) then
                 Exit;
             end;
@@ -161,12 +158,12 @@ var
 begin
   SetLastStation;
   FState := 'Unload';
-  if (CargoType in Game.Map.Industry[CurOrder.ID]
-    .Accepts) and (CargoType <> cgNone) and (CargoAmount > 0) then
+  if (CargoType in Game.Map.Industry[CurOrder.ID].Accepts) and
+    (CargoType <> cgNone) and (CargoAmount > 0) then
   begin
     Money := (CargoAmount * (Distance div 10)) * CargoPrice[CargoType];
-    Game.Map.Industry[CurOrder.ID].IncAcceptsCargoAmount
-      (CargoType, CargoAmount);
+    Game.Map.Industry[CurOrder.ID].IncAcceptsCargoAmount(CargoType,
+      CargoAmount);
     Game.ModifyMoney(ttRoadVehicleIncome, Money);
     Profit := Profit + Money;
     ClearCargo;
