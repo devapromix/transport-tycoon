@@ -1,4 +1,4 @@
-﻿unit TransportTycoon.Scene.GenMenu;
+﻿unit TransportTycoon.Scene.Menu.Gen;
 
 interface
 

@@ -126,7 +126,6 @@
         <DCCReference Include="Scenes\TransportTycoon.Scene.World.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Airport.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.MainMenu.pas"/>
-        <DCCReference Include="Scenes\TransportTycoon.Scene.GenMenu.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.GameMenu.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.AircraftHangar.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Aircraft.pas"/>
@@ -143,6 +142,7 @@
         <DCCReference Include="Scenes\TransportTycoon.Scene.ShipDepot.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Town.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Industries.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.Gen.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.Settings.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.OpenGame.pas"/>
         <DCCReference Include="Game\TransportTycoon.RoadVehicle.pas"/>
