@@ -272,22 +272,22 @@ end;
 
 class function TTownIndustry.GenName: string;
 var
-  S: array [0 .. 1] of TStringList;
+  StringList: array [0 .. 1] of TStringList;
   I: Integer;
 begin
   for I := 0 to 1 do
-    S[I] := TStringList.Create;
-  S[0].DelimitedText :=
+    StringList[I] := TStringList.Create;
+  StringList[0].DelimitedText :=
     '"Eding","Graning","Vorg","Tra","Nording","Agring","Gran","Funt","Grufing",'
     + '"Trening","Chend","Drinning","Long","Tor","Mar","Fin"';
-  S[1].DelimitedText :=
+  StringList[1].DelimitedText :=
     '"ville","burg","ley","ly","field","town","well","bell","bridge","ton",' +
     '"stone","hattan"';
   Result := '';
   for I := 0 to 1 do
   begin
-    Result := Result + S[I][Random(S[I].Count - 1)];
-    S[I].Free;
+    Result := Result + StringList[I][Random(StringList[I].Count - 1)];
+    StringList[I].Free;
   end;
 end;
 

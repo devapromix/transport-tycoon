@@ -14,8 +14,9 @@ type
     FSt: array [TConstructEnum] of Integer;
   public
     procedure Clear;
-    function GetStat(const I: TConstructEnum): Integer;
-    procedure IncStat(const I: TConstructEnum; const Value: Integer = 1);
+    function GetStat(const ConstructEnum: TConstructEnum): Integer;
+    procedure IncStat(const ConstructEnum: TConstructEnum;
+      const Value: Integer = 1);
   end;
 
 type
@@ -49,20 +50,21 @@ uses
 
 procedure TStat.Clear;
 var
-  I: TConstructEnum;
+  ConstructEnum: TConstructEnum;
 begin
-  for I := Low(TConstructEnum) to High(TConstructEnum) do
-    FSt[I] := 0;
+  for ConstructEnum := Low(TConstructEnum) to High(TConstructEnum) do
+    FSt[ConstructEnum] := 0;
 end;
 
-function TStat.GetStat(const I: TConstructEnum): Integer;
+function TStat.GetStat(const ConstructEnum: TConstructEnum): Integer;
 begin
-  Result := FSt[I];
+  Result := FSt[ConstructEnum];
 end;
 
-procedure TStat.IncStat(const I: TConstructEnum; const Value: Integer = 1);
+procedure TStat.IncStat(const ConstructEnum: TConstructEnum;
+  const Value: Integer = 1);
 begin
-  Inc(FSt[I], Value);
+  Inc(FSt[ConstructEnum], Value);
 end;
 
 { TCompany }
