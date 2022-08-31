@@ -32,7 +32,7 @@ uses
 
 procedure TSceneTruckLoadingBay.Render;
 var
-  I, J: Integer;
+  I, Y: Integer;
   Cargo: TCargo;
 begin
   inherited Render;
@@ -42,15 +42,15 @@ begin
   DrawTitle(FIndustry.Name + ' Truck Loading Bay');
 
   terminal_color(TPalette.Default);
-  J := 11;
+  Y := 11;
   for Cargo := Succ(Low(TCargo)) to High(TCargo) do
     if (Cargo <> cgPassengers) then
     begin
       if Cargo in FIndustry.Produces then
       begin
-        DrawText(7, J, Format('%s: %d/%d', [CargoStr[Cargo],
+        DrawText(7, Y, Format('%s: %d/%d', [CargoStr[Cargo],
           FIndustry.ProducesAmount[Cargo], FIndustry.MaxCargo]));
-        Inc(J);
+        Inc(Y);
       end;
     end;
 
