@@ -19,7 +19,7 @@ type
 
   TVehicleBase = record
     Name: string;
-    Cargo: TCargoSet;
+    CargoSet: TCargoSet;
     Amount: Integer;
     Cost: Word;
     RunningCost: Word;
@@ -38,7 +38,7 @@ type
     FLastStationId: Integer;
     FVehicleID: Integer;
     FFullLoad: Boolean;
-    FCargo: TCargoSet;
+    FCargoSet: TCargoSet;
     FCargoType: TCargo;
     FCargoAmount: Integer;
     FCargoMaxAmount: Integer;
@@ -59,7 +59,7 @@ type
     property LastProfit: Integer read FLastProfit write FLastProfit;
     property Distance: Integer read FDistance write FDistance;
     property LastStationId: Integer read FLastStationId;
-    property Cargo: TCargoSet read FCargo;
+    property CargoSet: TCargoSet read FCargoSet;
     property CargoType: TCargo read FCargoType;
     property CargoAmount: Integer read FCargoAmount;
     property CargoMaxAmount: Integer read FCargoMaxAmount;
@@ -92,7 +92,7 @@ begin
   FFullLoad := False;
   ClearCargo;
   FCargoMaxAmount := VehicleBase[ID].Amount;
-  FCargo := VehicleBase[ID].Cargo;
+  FCargoSet := VehicleBase[ID].CargoSet;
   FOrders := TOrders.Create;
 end;
 

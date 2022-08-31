@@ -133,28 +133,28 @@ end;
 
 procedure TVehicles.RunningCosts;
 var
-  I, J, M: Integer;
+  I, ID, Money: Integer;
 begin
   for I := 0 to AircraftCount - 1 do
   begin
-    J := Aircraft[I].VehicleID;
-    M := AircraftBase[J].RunningCost div 12;
-    Game.ModifyMoney(ttAircraftRunningCosts, -M);
-    Aircraft[I].Profit := Aircraft[I].Profit - M;
+    ID := Aircraft[I].VehicleID;
+    Money := AircraftBase[ID].RunningCost div 12;
+    Game.ModifyMoney(ttAircraftRunningCosts, -Money);
+    Aircraft[I].Profit := Aircraft[I].Profit - Money;
   end;
   for I := 0 to ShipCount - 1 do
   begin
-    J := Ship[I].VehicleID;
-    M := ShipBase[J].RunningCost div 12;
-    Game.ModifyMoney(ttShipRunningCosts, -M);
-    Ship[I].Profit := Ship[I].Profit - M;
+    ID := Ship[I].VehicleID;
+    Money := ShipBase[ID].RunningCost div 12;
+    Game.ModifyMoney(ttShipRunningCosts, -Money);
+    Ship[I].Profit := Ship[I].Profit - Money;
   end;
   for I := 0 to RoadVehicleCount - 1 do
   begin
-    J := RoadVehicle[I].VehicleID;
-    M := RoadVehicleBase[J].RunningCost div 12;
-    Game.ModifyMoney(ttRoadVehicleRunningCosts, -M);
-    RoadVehicle[I].Profit := RoadVehicle[I].Profit - M;
+    ID := RoadVehicle[I].VehicleID;
+    Money := RoadVehicleBase[ID].RunningCost div 12;
+    Game.ModifyMoney(ttRoadVehicleRunningCosts, -Money);
+    RoadVehicle[I].Profit := RoadVehicle[I].Profit - Money;
   end;
 end;
 
@@ -281,6 +281,7 @@ end;
 
 function TVehicles.IsVehicleOnMap(const AX, AY: Integer;
   out AVehicleName: string): Boolean;
+
   function GetVehicle(AFunc: TGetVehicleFunc;
     AVehicles: TArray<TVehicle>): Boolean;
   var

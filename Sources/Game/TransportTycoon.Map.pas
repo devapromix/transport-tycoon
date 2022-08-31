@@ -632,7 +632,6 @@ var
   X, Y, I, J, N, D: Integer;
   TownName, S: string;
   IndustryType: TIndustryType;
-  RF: Boolean;
 begin
   try
     // Terrain
