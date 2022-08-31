@@ -80,14 +80,14 @@ end;
 procedure TSceneWorld.TownInfo(const TownID: Integer);
 var
   VX, VY, L: Integer;
-  S: string;
+  TownName: string;
 begin
   try
     if TownID < 0 then
       Exit;
-    S := Game.Map.Industry[TownID].Name;
-    L := EnsureRange(Length(S) + 8, 20, 40);
-    TileInfo(S);
+    TownName := Game.Map.Industry[TownID].Name;
+    L := EnsureRange(Length(TownName) + 8, 20, 40);
+    TileInfo(TownName);
     if (MY < ScreenHeight - 10) then
       VY := MY + 1
     else
@@ -98,8 +98,8 @@ begin
       VX := MX - L;
     terminal_bkcolor(TPalette.Background);
     DrawFrame(VX, VY, L, 7);
-    DrawText(VX + (L div 2), VY + 2, '[c=yellow]' + UpperCase(S) + '[/c]',
-      TK_ALIGN_CENTER);
+    DrawText(VX + (L div 2), VY + 2, '[c=yellow]' + UpperCase(TownName) +
+      '[/c]', TK_ALIGN_CENTER);
     DrawText(VX + (L div 2), VY + 4,
       'Pop.: ' + IntToStr(TTownIndustry(Game.Map.Industry[TownID]).Population),
       TK_ALIGN_CENTER);
@@ -164,14 +164,14 @@ end;
 procedure TSceneWorld.IndustryInfo(const IndustryID: Integer);
 var
   VX, VY, L: Integer;
-  S: string;
+  IndustryName: string;
 begin
   try
     if IndustryID < 0 then
       Exit;
-    S := Game.Map.Industry[IndustryID].Name;
-    L := Length(S) + 8;
-    TileInfo(S);
+    IndustryName := Game.Map.Industry[IndustryID].Name;
+    L := Length(IndustryName) + 8;
+    TileInfo(IndustryName);
     if (MY < ScreenHeight - 10) then
       VY := MY + 1
     else
@@ -182,8 +182,8 @@ begin
       VX := MX - L;
     terminal_bkcolor(TPalette.Background);
     DrawFrame(VX, VY, L, 5);
-    DrawText(VX + (L div 2), VY + 2, '[c=yellow]' + UpperCase(S) + '[/c]',
-      TK_ALIGN_CENTER);
+    DrawText(VX + (L div 2), VY + 2, '[c=yellow]' + UpperCase(IndustryName) +
+      '[/c]', TK_ALIGN_CENTER);
     DrawText(MX, MY, Tile[Game.Map.GetTile].Tile, 'yellow', 'gray');
   except
     on E: Exception do
@@ -254,8 +254,8 @@ procedure TSceneWorld.Update(var Key: Word);
 var
   I: Integer;
   F: Boolean;
-  S: TStation;
-  LConstruct: TConstructEnum;
+  Station: TStation;
+  Construct: TConstructEnum;
 begin
   try
     if (Key = TK_MOUSE_LEFT) then
@@ -286,13 +286,13 @@ begin
                   case Scenes.CurrentVehicleScene of
                     scAircraft:
                       begin
-                        S := TTownIndustry(Game.Map.Industry[I]).Airport;
+                        Station := TTownIndustry(Game.Map.Industry[I]).Airport;
                         F := not(Aircraft[CurrentVehicle].Orders.IsOrder(I) or
-                          not S.IsBuilding);
+                          not Station.IsBuilding);
                         if F then
                           with Game.Vehicles do
                           begin
-                            if S.IsBuilding then
+                            if Station.IsBuilding then
                             begin
                               Aircraft[CurrentVehicle].AddOrder(I);
                               Game.IsOrder := False;
@@ -302,13 +302,13 @@ begin
                       end;
                     scShip:
                       begin
-                        S := TTownIndustry(Game.Map.Industry[I]).Dock;
+                        Station := TTownIndustry(Game.Map.Industry[I]).Dock;
                         F := not(Ship[CurrentVehicle].Orders.IsOrder(I) or
-                          not S.IsBuilding);
+                          not Station.IsBuilding);
                         if F then
                           with Game.Vehicles do
                           begin
-                            if S.IsBuilding then
+                            if Station.IsBuilding then
                             begin
                               Ship[CurrentVehicle].AddOrder(I);
                               Game.IsOrder := False;
@@ -321,16 +321,17 @@ begin
                         if RoadVehicleBase
                           [RoadVehicle[CurrentVehicle].VehicleID].VehicleType = vtBus
                         then
-                          S := TTownIndustry(Game.Map.Industry[I]).BusStation
+                          Station := TTownIndustry(Game.Map.Industry[I])
+                            .BusStation
                         else
-                          S := TTownIndustry(Game.Map.Industry[I])
+                          Station := TTownIndustry(Game.Map.Industry[I])
                             .TruckLoadingBay;
                         F := not(RoadVehicle[CurrentVehicle].Orders.IsOrder(I)
-                          or not S.IsBuilding);
+                          or not Station.IsBuilding);
                         if F then
                           with Game.Vehicles do
                           begin
-                            if S.IsBuilding then
+                            if Station.IsBuilding then
                             begin
                               RoadVehicle[CurrentVehicle].AddOrder(I);
                               Game.IsOrder := False;
@@ -356,13 +357,13 @@ begin
                   case Scenes.CurrentVehicleScene of
                     scShip:
                       begin
-                        S := Game.Map.Industry[I].Dock;
+                        Station := Game.Map.Industry[I].Dock;
                         F := not(Ship[CurrentVehicle].Orders.IsOrder(I) or
-                          not S.IsBuilding);
+                          not Station.IsBuilding);
                         if F then
                           with Game.Vehicles do
                           begin
-                            if S.IsBuilding then
+                            if Station.IsBuilding then
                             begin
                               Ship[CurrentVehicle].AddOrder(I);
                               Game.IsOrder := False;
@@ -372,13 +373,13 @@ begin
                       end;
                     scRoadVehicle:
                       begin
-                        S := Game.Map.Industry[I].TruckLoadingBay;
+                        Station := Game.Map.Industry[I].TruckLoadingBay;
                         F := not(RoadVehicle[CurrentVehicle].Orders.IsOrder(I)
-                          or not S.IsBuilding);
+                          or not Station.IsBuilding);
                         if F then
                           with Game.Vehicles do
                           begin
-                            if S.IsBuilding then
+                            if Station.IsBuilding then
                             begin
                               RoadVehicle[CurrentVehicle].AddOrder(I);
                               Game.IsOrder := False;
@@ -415,10 +416,10 @@ begin
             Exit;
           end;
         end;
-        for LConstruct := Low(TConstructEnum) to High(TConstructEnum) do
-          if Game.Construct.IsBuild(LConstruct) then
+        for Construct := Low(TConstructEnum) to High(TConstructEnum) do
+          if Game.Construct.IsBuild(Construct) then
           begin
-            Game.Map.BuildConstruct(RX, RY, LConstruct);
+            Game.Map.BuildConstruct(RX, RY, Construct);
             Scenes.Render;
             Exit;
           end;

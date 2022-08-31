@@ -434,20 +434,20 @@ end;
 function TScene.MakeButton(const IsActive: Boolean;
   const Button, Text: string): string;
 var
-  CB, CT: string;
+  ColorButton, ColorText: string;
 begin
   if IsActive then
   begin
-    CB := TPalette.ButtonKey;
-    CT := TPalette.Default;
+    ColorButton := TPalette.ButtonKey;
+    ColorText := TPalette.Default;
   end
   else
   begin
-    CB := TPalette.Unused;
-    CT := TPalette.Unused;
+    ColorButton := TPalette.Unused;
+    ColorText := TPalette.Unused;
   end;
-  Result := Format('[c=' + CB + '][[%s]][/c] [c=' + CT + ']%s[/c]',
-    [UpperCase(Button), UpperCase(Text)]);
+  Result := Format('[c=' + ColorButton + '][[%s]][/c] [c=' + ColorText +
+    ']%s[/c]', [UpperCase(Button), UpperCase(Text)]);
 end;
 
 procedure TScene.RenderButtons;
@@ -564,10 +564,10 @@ end;
 
 destructor TScenes.Destroy;
 var
-  I: TSceneEnum;
+  SceneEnum: TSceneEnum;
 begin
-  for I := Low(TSceneEnum) to High(TSceneEnum) do
-    FScene[I].Free;
+  for SceneEnum := Low(TSceneEnum) to High(TSceneEnum) do
+    FScene[SceneEnum].Free;
   inherited;
 end;
 

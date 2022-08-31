@@ -34,7 +34,7 @@ uses
 procedure TSceneVehicleDepot.DrawVehicleInfo(const V: array of TVehicleBase;
   const SelVehicle: Integer);
 var
-  C: TCargo;
+  Cargo: TCargo;
   S: string;
 begin
   terminal_color(TPalette.Selected);
@@ -46,9 +46,10 @@ begin
   terminal_composition(TK_OFF);
   terminal_color(TPalette.Default);
   TextLineY := 11;
-  for C := Succ(Low(TCargo)) to High(TCargo) do
-    if (C in V[SelVehicle].Cargo) then
-      DrawTextLine(42, Format('%s: %d', [CargoStr[C], V[SelVehicle].Amount]));
+  for Cargo := Succ(Low(TCargo)) to High(TCargo) do
+    if (Cargo in V[SelVehicle].CargoSet) then
+      DrawTextLine(42, Format('%s: %d', [CargoStr[Cargo],
+        V[SelVehicle].Amount]));
   DrawTextLine(42, Format('Speed: %d km/h', [V[SelVehicle].Speed]));
   DrawTextLine(42, Format('Cost: $%d', [V[SelVehicle].Cost]));
   DrawTextLine(42, Format('Running Cost: $%d/y', [V[SelVehicle].RunningCost]));
