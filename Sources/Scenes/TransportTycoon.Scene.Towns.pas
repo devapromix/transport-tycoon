@@ -26,7 +26,7 @@ uses
 procedure TSceneTowns.Render;
 var
   I: Integer;
-  Town: TTownIndustry;
+  LTown: TTownIndustry;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
@@ -37,13 +37,13 @@ begin
   for I := 0 to Length(Game.Map.Industry) - 1 do
     if (Game.Map.Industry[I].IndustryType = inTown) then
     begin
-      Town := TTownIndustry(Game.Map.Industry[I]);
+      LTown := TTownIndustry(Game.Map.Industry[I]);
       if (Game.Company.TownID = I) then
         DrawButton(27, I + 8, Chr(Ord('A') + I),
-          Format('%s (%d)', [Town.Name, Town.Population]), 'yellow')
+          Format('%s (%d)', [LTown.Name, LTown.Population]), 'yellow')
       else
         DrawButton(27, I + 8, Chr(Ord('A') + I),
-          Format('%s (%d)', [Town.Name, Town.Population]));
+          Format('%s (%d)', [LTown.Name, LTown.Population]));
     end;
 
   DrawText(20, Format('World population: %d', [Game.Map.WorldPop]));

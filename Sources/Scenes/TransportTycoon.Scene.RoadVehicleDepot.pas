@@ -29,17 +29,17 @@ uses
 
 procedure TSceneRoadVehicleDepot.Render;
 var
-  SelVehicle: Integer;
+  LSelVehicle: Integer;
 begin
   inherited Render;
 
   FIndustry := Game.Map.Industry[Game.Map.CurrentIndustry];
   DrawTitle(8, FIndustry.Name + ' Road Vehicle Depot');
 
-  SelVehicle := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
+  LSelVehicle := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
     Length(RoadVehicleBase) - 1);
-  DrawVehiclesList(RoadVehicleBase, SelVehicle);
-  DrawVehicleInfo(RoadVehicleBase, SelVehicle);
+  DrawVehiclesList(RoadVehicleBase, LSelVehicle);
+  DrawVehicleInfo(RoadVehicleBase, LSelVehicle);
 
   AddButton(20, Game.Vehicles.IsBuyRoadVehicleAllowed, 'Enter',
     'Buy Road Vehicle');
@@ -51,7 +51,7 @@ end;
 procedure TSceneRoadVehicleDepot.Update(var Key: Word);
 var
   I: Integer;
-  Title: string;
+  LTitle: string;
 begin
   inherited Update(Key);
   if (Key = TK_MOUSE_LEFT) then
@@ -86,9 +86,9 @@ begin
           I := Game.Vehicles.CurrentVehicle;
           if (Game.Money >= RoadVehicleBase[I].Cost) then
           begin
-            Title := Format('Road Vehicle #%d (%s)',
+            LTitle := Format('Road Vehicle #%d (%s)',
               [Game.Vehicles.RoadVehicleCount + 1, RoadVehicleBase[I].Name]);
-            Game.Vehicles.AddRoadVehicle(Title, Game.Map.CurrentIndustry, I);
+            Game.Vehicles.AddRoadVehicle(LTitle, Game.Map.CurrentIndustry, I);
             Scenes.Back;
           end;
         end;

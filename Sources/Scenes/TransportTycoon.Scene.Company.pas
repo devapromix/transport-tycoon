@@ -44,7 +44,7 @@ end;
 
 procedure TSceneCompany.Render;
 var
-  I: TConstructEnum;
+  LConstructEnum: TConstructEnum;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
@@ -54,8 +54,8 @@ begin
 
   FX := 22;
   FY := 14;
-  for I := Succ(Low(TConstructEnum)) to High(TConstructEnum) do
-    AddStatLine(I);
+  for LConstructEnum := Succ(Low(TConstructEnum)) to High(TConstructEnum) do
+    AddStatLine(LConstructEnum);
 
   if TTownIndustry(Game.Map.Industry[Game.Company.TownID]).HQ.IsBuilding then
     DrawText(22, 17, 'Company headquarters in ' + Game.Map.Industry

@@ -29,17 +29,17 @@ uses
 
 procedure TSceneShipDepot.Render;
 var
-  SelVehicle: Integer;
+  LSelVehicle: Integer;
 begin
   inherited Render;
 
   FIndustry := Game.Map.Industry[Game.Map.CurrentIndustry];
   DrawTitle(8, FIndustry.Name + ' Ship Depot');
 
-  SelVehicle := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
+  LSelVehicle := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
     Length(ShipBase) - 1);
-  DrawVehiclesList(ShipBase, SelVehicle);
-  DrawVehicleInfo(ShipBase, SelVehicle);
+  DrawVehiclesList(ShipBase, LSelVehicle);
+  DrawVehicleInfo(ShipBase, LSelVehicle);
 
   AddButton(20, Game.Vehicles.IsBuyShipAllowed, 'Enter', 'Buy Ship');
   AddButton(20, 'Esc', 'Close');
@@ -50,7 +50,7 @@ end;
 procedure TSceneShipDepot.Update(var Key: Word);
 var
   I: Integer;
-  Title: string;
+  LTitle: string;
 begin
   inherited Update(Key);
   if (Key = TK_MOUSE_LEFT) then
@@ -85,9 +85,9 @@ begin
           I := Game.Vehicles.CurrentVehicle;
           if (Game.Money >= ShipBase[I].Cost) then
           begin
-            Title := Format('Ship #%d (%s)', [Game.Vehicles.ShipCount + 1,
+            LTitle := Format('Ship #%d (%s)', [Game.Vehicles.ShipCount + 1,
               ShipBase[I].Name]);
-            Game.Vehicles.AddShip(Title, Game.Map.CurrentIndustry, I);
+            Game.Vehicles.AddShip(LTitle, Game.Map.CurrentIndustry, I);
             Scenes.SetScene(scDock);
           end;
         end;

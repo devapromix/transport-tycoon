@@ -47,7 +47,7 @@ begin
   with FLog do
     if (FLog.Count > 0) then
       SaveToFile('errors.txt');
-  FLog.Free;
+  FreeAndNil(FLog);
   inherited;
 end;
 
@@ -57,6 +57,6 @@ Log := TLog.Create;
 
 finalization
 
-Log.Free;
+FreeAndNil(Log);
 
 end.

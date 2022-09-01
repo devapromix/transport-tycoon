@@ -8,7 +8,7 @@ uses
   TransportTycoon.MapObject;
 
 type
-  TGetXYVal = function(X, Y: Integer): Boolean; stdcall;
+  TGetXYVal = function(AX, AY: Integer): Boolean; stdcall;
 
 type
   TVehicleType = (vtAircraft, vtShip, vtBus, vtTruck);
@@ -47,7 +47,7 @@ type
     FOrders: TOrders;
   public
     constructor Create(const AName: string; const AX, AY: Integer;
-      const VehicleBase: array of TVehicleBase; const ID: Integer);
+      const AVehicleBase: array of TVehicleBase; const AID: Integer);
     destructor Destroy; override;
     procedure Draw;
     procedure Step; virtual; abstract;
@@ -76,13 +76,14 @@ type
 implementation
 
 uses
+  SysUtils,
   BearLibTerminal,
   TransportTycoon.Game;
 
 { TVehicle }
 
 constructor TVehicle.Create(const AName: string; const AX, AY: Integer;
-  const VehicleBase: array of TVehicleBase; const ID: Integer);
+  const AVehicleBase: array of TVehicleBase; const AID: Integer);
 begin
   inherited Create(AName, AX, AY);
   FDistance := 0;
@@ -91,8 +92,8 @@ begin
   FLastStationId := 0;
   FFullLoad := False;
   ClearCargo;
-  FCargoMaxAmount := VehicleBase[ID].Amount;
-  FCargoSet := VehicleBase[ID].CargoSet;
+  FCargoMaxAmount := AVehicleBase[AID].Amount;
+  FCargoSet := AVehicleBase[AID].CargoSet;
   FOrders := TOrders.Create;
 end;
 
@@ -109,7 +110,7 @@ end;
 
 destructor TVehicle.Destroy;
 begin
-  FOrders.Free;
+  FreeAndNil(FOrders);
   inherited;
 end;
 

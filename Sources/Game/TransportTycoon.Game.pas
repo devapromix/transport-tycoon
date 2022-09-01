@@ -63,9 +63,9 @@ type
     property Speed: TGameSpeedEnum read FSpeed;
     procedure Clear;
     procedure Step;
-    function GetPath(SubDir: string): string;
+    function GetPath(ASubDir: string): string;
     procedure ModifyMoney(const AMoney: Integer); overload;
-    procedure ModifyMoney(const ValueEnum: TValueEnum;
+    procedure ModifyMoney(const AValueEnum: TValueEnum;
       const AMoney: Integer); overload;
     procedure LoadSettings;
     procedure SaveSettings;
@@ -100,7 +100,7 @@ begin
 {$IFDEF DEBUG}
 {$IF CompilerVersion > 16}
 {$WARN SYMBOL_PLATFORM OFF}
-    or (DebugHook > 0)
+      or (DebugHook > 0)
 {$IFEND}
 {$ENDIF}
     then
@@ -120,55 +120,56 @@ end;
 
 destructor TGame.Destroy;
 begin
-  FMap.Free;
-  FConstruct.Free;
-  FVehicles.Free;
-  FFinances.Free;
-  FCompany.Free;
-  FCalendar.Free;
+  FreeAndNil(FMap);
+  FreeAndNil(FConstruct);
+  FreeAndNil(FVehicles);
+  FreeAndNil(FFinances);
+  FreeAndNil(FCompany);
+  FreeAndNil(FCalendar);
   inherited Destroy;
 end;
 
-function TGame.GetPath(SubDir: string): string;
+function TGame.GetPath(ASubDir: string): string;
 begin
   Result := ExtractFilePath(ParamStr(0));
-  Result := IncludeTrailingPathDelimiter(Result + SubDir);
+  Result := IncludeTrailingPathDelimiter(Result + ASubDir);
 end;
 
 procedure TGame.LoadSettings;
 var
-  IniFile: TMemIniFile;
+  LIniFile: TMemIniFile;
 begin
-  IniFile := TMemIniFile.Create(GetPath('') + 'Settings.ini', TEncoding.UTF8);
+  LIniFile := TMemIniFile.Create(GetPath('') + 'Settings.ini', TEncoding.UTF8);
   try
-    Game.Map.Size := TMapSize(IniFile.ReadInteger('Main', 'MapSize', 0));
-    Game.Map.SeaLevel := TMapSeaLevel(IniFile.ReadInteger('Main',
+    Game.Map.Size := TMapSize(LIniFile.ReadInteger('Main', 'MapSize', 0));
+    Game.Map.SeaLevel := TMapSeaLevel(LIniFile.ReadInteger('Main',
       'SeaLevel', 0));
-    Game.Map.NoOfTowns := IniFile.ReadInteger('Main', 'NoOfTowns', 1);
-    Game.Calendar.Year := EnsureRange(IniFile.ReadInteger('Main', 'Year',
+    Game.Map.NoOfTowns := LIniFile.ReadInteger('Main', 'NoOfTowns', 1);
+    Game.Calendar.Year := EnsureRange(LIniFile.ReadInteger('Main', 'Year',
       StartYear), StartYear, FinishYear);
-    Game.Map.Rivers := TMapRivers(IniFile.ReadInteger('Main', 'Rivers', 0));
-    Game.Map.NoOfInd := TMapNoOfInd(IniFile.ReadInteger('Main', 'NoOfInd', 0));
+    Game.Map.Rivers := TMapRivers(LIniFile.ReadInteger('Main', 'Rivers', 0));
+    Game.Map.NoOfInd := TMapNoOfInd(LIniFile.ReadInteger('Main', 'NoOfInd', 0));
   finally
-    FreeAndNil(IniFile);
+    FreeAndNil(LIniFile);
   end;
 end;
 
-procedure TGame.ModifyMoney(const ValueEnum: TValueEnum; const AMoney: Integer);
+procedure TGame.ModifyMoney(const AValueEnum: TValueEnum;
+  const AMoney: Integer);
 begin
-  Finances.ModifyValue(ValueEnum, Abs(AMoney));
+  Finances.ModifyValue(AValueEnum, Abs(AMoney));
   FMoney := FMoney + AMoney;
 end;
 
 procedure TGame.NextSpeed;
 var
-  HighSpeed: TGameSpeedEnum;
+  LHighSpeed: TGameSpeedEnum;
 begin
   if FIsDebug then
-    HighSpeed := High(TGameSpeedEnum)
+    LHighSpeed := High(TGameSpeedEnum)
   else
-    HighSpeed := Pred(High(TGameSpeedEnum));
-  if (FSpeed = HighSpeed) then
+    LHighSpeed := Pred(High(TGameSpeedEnum));
+  if (FSpeed = LHighSpeed) then
   begin
     FSpeed := Low(TGameSpeedEnum);
     Exit;
@@ -178,15 +179,15 @@ end;
 
 procedure TGame.PrevSpeed;
 var
-  HighSpeed: TGameSpeedEnum;
+  LHighSpeed: TGameSpeedEnum;
 begin
   if FIsDebug then
-    HighSpeed := High(TGameSpeedEnum)
+    LHighSpeed := High(TGameSpeedEnum)
   else
-    HighSpeed := Pred(High(TGameSpeedEnum));
+    LHighSpeed := Pred(High(TGameSpeedEnum));
   if (FSpeed = Low(TGameSpeedEnum)) then
   begin
-    FSpeed := HighSpeed;
+    FSpeed := LHighSpeed;
     Exit;
   end;
   Dec(FSpeed);
@@ -223,19 +224,19 @@ end;
 
 procedure TGame.SaveSettings;
 var
-  IniFile: TMemIniFile;
+  LIniFile: TMemIniFile;
 begin
-  IniFile := TMemIniFile.Create(GetPath('') + 'Settings.ini', TEncoding.UTF8);
+  LIniFile := TMemIniFile.Create(GetPath('') + 'Settings.ini', TEncoding.UTF8);
   try
-    IniFile.WriteInteger('Main', 'MapSize', Ord(Game.Map.Size));
-    IniFile.WriteInteger('Main', 'SeaLevel', Ord(Game.Map.SeaLevel));
-    IniFile.WriteInteger('Main', 'NoOfTowns', Game.Map.NoOfTowns);
-    IniFile.WriteInteger('Main', 'Year', Game.Calendar.Year);
-    IniFile.WriteInteger('Main', 'Rivers', Ord(Game.Map.Rivers));
-    IniFile.WriteInteger('Main', 'NoOfInd', Ord(Game.Map.NoOfInd));
-    IniFile.UpdateFile;
+    LIniFile.WriteInteger('Main', 'MapSize', Ord(Game.Map.Size));
+    LIniFile.WriteInteger('Main', 'SeaLevel', Ord(Game.Map.SeaLevel));
+    LIniFile.WriteInteger('Main', 'NoOfTowns', Game.Map.NoOfTowns);
+    LIniFile.WriteInteger('Main', 'Year', Game.Calendar.Year);
+    LIniFile.WriteInteger('Main', 'Rivers', Ord(Game.Map.Rivers));
+    LIniFile.WriteInteger('Main', 'NoOfInd', Ord(Game.Map.NoOfInd));
+    LIniFile.UpdateFile;
   finally
-    FreeAndNil(IniFile);
+    FreeAndNil(LIniFile);
   end;
 end;
 

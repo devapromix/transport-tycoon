@@ -32,12 +32,12 @@ type
 
   TRoadVehicle = class(TVehicle)
   private
-    FT: Integer;
+    FTimer: Integer;
     FState: string;
   public const
     Color: string = 'light red';
   public
-    constructor Create(const AName: string; const AX, AY, ID: Integer);
+    constructor Create(const AName: string; const AX, AY, AIndex: Integer);
     function Move(const AX, AY: Integer): Boolean; override;
     property State: string read FState;
     procedure Step; override;
@@ -59,9 +59,9 @@ uses
 
 { TRoadVehicle }
 
-function IsPath(X, Y: Integer): Boolean; stdcall;
+function IsPath(AX, AY: Integer): Boolean; stdcall;
 begin
-  Result := Game.Map.IsRoadVehiclePath(X, Y);
+  Result := Game.Map.IsRoadVehiclePath(AX, AY);
 end;
 
 procedure TRoadVehicle.AddOrder(const AIndex: Integer);
@@ -70,27 +70,28 @@ begin
     Orders.AddOrder(AIndex, Name, X, Y);
 end;
 
-constructor TRoadVehicle.Create(const AName: string; const AX, AY, ID: Integer);
+constructor TRoadVehicle.Create(const AName: string;
+  const AX, AY, AIndex: Integer);
 begin
-  inherited Create(AName, AX, AY, RoadVehicleBase, ID);
-  FT := 0;
+  inherited Create(AName, AX, AY, RoadVehicleBase, AIndex);
+  FTimer := 0;
   FState := 'Wait';
 end;
 
 procedure TRoadVehicle.Load;
 var
-  Cargo: TCargo;
+  LCargo: TCargo;
 begin
   FState := 'Load';
-  for Cargo := Succ(Low(TCargo)) to High(TCargo) do
-    if (Cargo in Game.Map.Industry[CurOrder.ID].Produces) and (Cargo in CargoSet)
-    then
+  for LCargo := Succ(Low(TCargo)) to High(TCargo) do
+    if (LCargo in Game.Map.Industry[CurOrder.ID].Produces) and
+      (LCargo in CargoSet) then
     begin
-      SetCargoType(Cargo);
-      while (Game.Map.Industry[CurOrder.ID].ProducesAmount[Cargo] > 0) and
+      SetCargoType(LCargo);
+      while (Game.Map.Industry[CurOrder.ID].ProducesAmount[LCargo] > 0) and
         (CargoAmount < CargoMaxAmount) do
       begin
-        Game.Map.Industry[CurOrder.ID].DecCargoAmount(Cargo);
+        Game.Map.Industry[CurOrder.ID].DecCargoAmount(LCargo);
         IncCargoAmount;
       end;
       Exit;
@@ -99,48 +100,48 @@ end;
 
 function TRoadVehicle.Move(const AX, AY: Integer): Boolean;
 var
-  NX, NY: Integer;
+  LX, LY: Integer;
 begin
   Result := False;
   FState := 'Move';
-  NX := 0;
-  NY := 0;
-  if not IsMove(Game.Map.Width, Game.Map.Height, X, Y, AX, AY, @IsPath, NX, NY)
+  LX := 0;
+  LY := 0;
+  if not IsMove(Game.Map.Width, Game.Map.Height, X, Y, AX, AY, @IsPath, LX, LY)
   then
     Exit;
-  SetLocation(NX, NY);
+  SetLocation(LX, LY);
   Result := (X <> AX) or (Y <> AY);
 end;
 
 procedure TRoadVehicle.Step;
 var
-  Cargo: TCargo;
-  Station: TStation;
+  LCargo: TCargo;
+  LStation: TStation;
 begin
   if Orders.Count > 0 then
   begin
     if not Move(CurOrder.X, CurOrder.Y) then
     begin
-      Inc(FT);
+      Inc(FTimer);
       if CurOrder.ID <> LastStationId then
         UnLoad;
       case CargoType of
         cgPassengers:
-          Station := TTownIndustry(Game.Map.Industry[CurOrder.ID]).BusStation;
+          LStation := TTownIndustry(Game.Map.Industry[CurOrder.ID]).BusStation;
       else
-        Station := Game.Map.Industry[CurOrder.ID].TruckLoadingBay;
+        LStation := Game.Map.Industry[CurOrder.ID].TruckLoadingBay;
       end;
       FState := 'Service';
-      if FT > (15 - (Station.Level * 2)) then
+      if FTimer > (15 - (LStation.Level * 2)) then
       begin
-        FT := 0;
+        FTimer := 0;
         Load;
         if FullLoad then
-          for Cargo := Succ(Low(TCargo)) to High(TCargo) do
-            if (Cargo in Game.Map.Industry[CurOrder.ID].Produces) and
-              (Cargo in CargoSet) then
+          for LCargo := Succ(Low(TCargo)) to High(TCargo) do
+            if (LCargo in Game.Map.Industry[CurOrder.ID].Produces) and
+              (LCargo in CargoSet) then
             begin
-              SetCargoType(Cargo);
+              SetCargoType(LCargo);
               if (CargoAmount < CargoMaxAmount) then
                 Exit;
             end;
@@ -154,18 +155,18 @@ end;
 
 procedure TRoadVehicle.UnLoad;
 var
-  Money: Integer;
+  LMoney: Integer;
 begin
   SetLastStation;
   FState := 'Unload';
   if (CargoType in Game.Map.Industry[CurOrder.ID].Accepts) and
     (CargoType <> cgNone) and (CargoAmount > 0) then
   begin
-    Money := (CargoAmount * (Distance div 10)) * CargoPrice[CargoType];
+    LMoney := (CargoAmount * (Distance div 10)) * CargoPrice[CargoType];
     Game.Map.Industry[CurOrder.ID].IncAcceptsCargoAmount(CargoType,
       CargoAmount);
-    Game.ModifyMoney(ttRoadVehicleIncome, Money);
-    Profit := Profit + Money;
+    Game.ModifyMoney(ttRoadVehicleIncome, LMoney);
+    Profit := Profit + LMoney;
     ClearCargo;
   end;
   Distance := 0;

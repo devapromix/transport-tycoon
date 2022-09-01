@@ -140,8 +140,8 @@ type
     function SizeCoef: Integer;
     function MapIndCount: Integer;
     function MapTownCount: Integer;
-    procedure DrawTile(const X, Y: Integer);
-    procedure AddRiver(const DirectionEnum: TDirectionEnum);
+    procedure DrawTile(const AX, AY: Integer);
+    procedure AddRiver(const ADirectionEnum: TDirectionEnum);
   public
     Industry: array of TIndustry;
     constructor Create;
@@ -165,7 +165,7 @@ type
     function GetCurrentIndustry(const AX, AY: Integer): Integer;
     function EnterInIndustry(const AX, AY: Integer): Boolean;
     function WorldPop: Integer;
-    function GetDist(const X1, Y1, X2, Y2: Integer): Integer;
+    function GetDist(const AX1, AY1, AX2, AY2: Integer): Integer;
     procedure NextNoOfInd;
     procedure NextNoOfTowns;
     procedure NextSeaLevel;
@@ -232,16 +232,16 @@ end;
 
 function TMap.IsNearTile(const AX, AY: Integer; const ATile: TTiles): Boolean;
 var
-  X, Y: Integer;
+  LX, LY: Integer;
 begin
   Result := False;
   try
-    for X := AX - 1 to AX + 1 do
-      for Y := AY - 1 to AY + 1 do
+    for LX := AX - 1 to AX + 1 do
+      for LY := AY - 1 to AY + 1 do
       begin
-        if (X = AX) and (Y = AY) then
+        if (LX = AX) and (LY = AY) then
           Continue;
-        if (FTile[X][Y] = ATile) then
+        if (FTile[LX][LY] = ATile) then
           Exit(True);
       end;
   except
@@ -415,19 +415,19 @@ var
   I: Integer;
 begin
   for I := 0 to Length(Industry) - 1 do
-    Industry[I].Free;
+    FreeAndNil(Industry[I]);
   inherited;
 end;
 
 procedure TMap.Clear;
 var
-  X, Y: Integer;
+  LX, LY: Integer;
 begin
   try
     Resize;
-    for Y := 0 to FHeight - 1 do
-      for X := 0 to FWidth - 1 do
-        FTile[X][Y] := tlGrass;
+    for LY := 0 to FHeight - 1 do
+      for LX := 0 to FWidth - 1 do
+        FTile[LX][LY] := tlGrass;
   except
     on E: Exception do
       Log.Add('TMap.Clear', E.Message);
@@ -437,21 +437,21 @@ end;
 procedure TMap.BuildConstruct(const AX, AY: Integer;
   AConstructEnum: TConstructEnum);
 var
-  Money: Word;
-  Plan: TBuildPlan;
+  LMoney: Word;
+  LPlan: TBuildPlan;
 begin
   try
-    Plan := BuildPlans[AConstructEnum];
-    if not(FTile[AX][AY] in Plan.AffectedTiles) then
+    LPlan := BuildPlans[AConstructEnum];
+    if not(FTile[AX][AY] in LPlan.AffectedTiles) then
       Exit;
-    Money := ConstructCost[AConstructEnum];
+    LMoney := ConstructCost[AConstructEnum];
     if not(AConstructEnum in [ceClearLand]) and (FTile[AX][AY] in TreeTiles)
     then
-      Inc(Money, ConstructCost[ceClearLand]);
-    if (Game.Money >= Money) then
+      Inc(LMoney, ConstructCost[ceClearLand]);
+    if (Game.Money >= LMoney) then
     begin
-      FTile[AX][AY] := Plan.ResultTile;
-      Game.ModifyMoney(ttConstruction, -Money);
+      FTile[AX][AY] := LPlan.ResultTile;
+      Game.ModifyMoney(ttConstruction, -LMoney);
       Game.Company.Stat.IncStat(AConstructEnum);
     end;
   except
@@ -462,12 +462,12 @@ end;
 
 procedure TMap.Draw(const AWidth, AHeight: Integer);
 var
-  X, Y: Integer;
+  LX, LY: Integer;
 begin
   try
-    for Y := 0 to AHeight - 1 do
-      for X := 0 to AWidth - 1 do
-        DrawTile(X, Y);
+    for LY := 0 to AHeight - 1 do
+      for LX := 0 to AWidth - 1 do
+        DrawTile(LX, LY);
     terminal_bkcolor(TPalette.Background);
     terminal_color(TPalette.Default);
   except
@@ -476,93 +476,93 @@ begin
   end;
 end;
 
-procedure TMap.DrawTile(const X, Y: Integer);
+procedure TMap.DrawTile(const AX, AY: Integer);
 var
-  DX, DY: Integer;
-  F: Boolean;
+  LX, LY: Integer;
+  LIsFlag: Boolean;
 begin
   try
-    DX := Left + X;
-    DY := Top + Y;
-    F := (X = 0) and (Y = 0);
-    if F or (Tile[FTile[DX][DY]].BkColor <> FLastBkColor) then
+    LX := Left + AX;
+    LY := Top + AY;
+    LIsFlag := (AX = 0) and (AY = 0);
+    if LIsFlag or (Tile[FTile[LX][LY]].BkColor <> FLastBkColor) then
     begin
-      terminal_bkcolor(Tile[FTile[DX][DY]].BkColor);
-      FLastBkColor := Tile[FTile[DX][DY]].BkColor;
+      terminal_bkcolor(Tile[FTile[LX][LY]].BkColor);
+      FLastBkColor := Tile[FTile[LX][LY]].BkColor;
     end;
-    if F or (Tile[FTile[DX][DY]].Color <> FLastColor) then
+    if LIsFlag or (Tile[FTile[LX][LY]].Color <> FLastColor) then
     begin
-      terminal_color(Tile[FTile[DX][DY]].Color);
-      FLastColor := Tile[FTile[DX][DY]].Color;
+      terminal_color(Tile[FTile[LX][LY]].Color);
+      FLastColor := Tile[FTile[LX][LY]].Color;
     end;
-    terminal_put(X, Y, Tile[FTile[DX][DY]].Tile);
+    terminal_put(AX, AY, Tile[FTile[LX][LY]].Tile);
   except
     on E: Exception do
       Log.Add('TMap.DrawTile', E.Message);
   end;
 end;
 
-procedure TMap.AddRiver(const DirectionEnum: TDirectionEnum);
+procedure TMap.AddRiver(const ADirectionEnum: TDirectionEnum);
 var
-  I, X, Y, Start, Finish: Integer;
+  I, LX, LY, LStart, LFinish: Integer;
 begin
   try
-    case DirectionEnum of
+    case ADirectionEnum of
       drEast:
         begin
-          X := (Width div 3) * 2;
-          Y := RandomRange(FHeight div 3, (FHeight div 3) * 2);
-          Start := (FWidth div 3) * 2;
-          Finish := FWidth - 1;
+          LX := (Width div 3) * 2;
+          LY := RandomRange(FHeight div 3, (FHeight div 3) * 2);
+          LStart := (FWidth div 3) * 2;
+          LFinish := FWidth - 1;
         end;
       drWest:
         begin
-          X := 0;
-          Y := RandomRange(FHeight div 3, (FHeight div 3) * 2);
-          Start := 0;
-          Finish := FWidth div 3;
+          LX := 0;
+          LY := RandomRange(FHeight div 3, (FHeight div 3) * 2);
+          LStart := 0;
+          LFinish := FWidth div 3;
         end;
       drSouth:
         begin
-          X := RandomRange(FWidth div 3, (FWidth div 3) * 2);
-          Y := (FHeight div 3) * 2;
-          Start := (FHeight div 3) * 2;;
-          Finish := FHeight - 1;
+          LX := RandomRange(FWidth div 3, (FWidth div 3) * 2);
+          LY := (FHeight div 3) * 2;
+          LStart := (FHeight div 3) * 2;;
+          LFinish := FHeight - 1;
         end;
       drNorth:
         begin
-          X := RandomRange(FWidth div 3, (FWidth div 3) * 2);
-          Y := 0;
-          Start := 0;
-          Finish := FHeight div 3;
+          LX := RandomRange(FWidth div 3, (FWidth div 3) * 2);
+          LY := 0;
+          LStart := 0;
+          LFinish := FHeight div 3;
         end;
     end;
-    for I := Start to Finish do
+    for I := LStart to LFinish do
     begin
-      case DirectionEnum of
+      case ADirectionEnum of
         drEast, drWest:
           if RandomRange(0, 3) = 1 then
             if RandomRange(0, 2) = 1 then
-              Inc(Y)
+              Inc(LY)
             else
-              Dec(Y);
+              Dec(LY);
         drSouth, drNorth:
           if RandomRange(0, 3) = 1 then
             if RandomRange(0, 2) = 1 then
-              Inc(X)
+              Inc(LX)
             else
-              Dec(X);
+              Dec(LX);
       end;
-      X := EnsureRange(X, 0, FWidth - 1);
-      Y := EnsureRange(Y, 0, FHeight - 1);
-      if (FTile[X][Y] in [tlWater, tlRock]) then
+      LX := EnsureRange(LX, 0, FWidth - 1);
+      LY := EnsureRange(LY, 0, FHeight - 1);
+      if (FTile[LX][LY] in [tlWater, tlRock]) then
         Break;
-      FTile[X][Y] := tlWater;
-      case DirectionEnum of
+      FTile[LX][LY] := tlWater;
+      case ADirectionEnum of
         drEast, drWest:
-          Inc(X);
+          Inc(LX);
         drSouth, drNorth:
-          Inc(Y);
+          Inc(LY);
       end;
     end;
   except
@@ -585,9 +585,9 @@ end;
 
 procedure TMap.Gen(const AMapType: TMapType = mtNormal);
 var
-  X, Y, I, J, N, D: Integer;
-  TownName, S: string;
-  IndustryType: TIndustryType;
+  X, Y, I, J, N, LCoef: Integer;
+  LTownName, S: string;
+  LIndustryType: TIndustryType;
 begin
   try
     // Terrain
@@ -597,9 +597,9 @@ begin
         Ord(High(TMapSeaLevel)) + 1));
     end;
     Self.Clear;
-    D := 0;
+    LCoef := 0;
     if (SeaLevel >= msNormal) then
-      D := 5 + SizeCoef;
+      LCoef := 5 + SizeCoef;
     for Y := 0 to FHeight - 1 do
     begin
       for X := 0 to FWidth - 1 do
@@ -617,10 +617,10 @@ begin
       end;
       if (SeaLevel > msVeryLow) then
       begin
-        J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + D;
+        J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + LCoef;
         for X := 0 to J do
           FTile[X][Y] := tlWater;
-        J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + D;
+        J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + LCoef;
         for X := FWidth - 1 downto FWidth - J - 1 do
           FTile[X][Y] := tlWater;
       end;
@@ -644,19 +644,19 @@ begin
     begin
       for X := 0 to FWidth - 1 do
       begin
-        J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + D;
+        J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + LCoef;
         for Y := 0 to J do
           FTile[X][Y] := tlWater;
-        J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + D;
+        J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + LCoef;
         for Y := FHeight - 1 downto FHeight - J - 1 do
           FTile[X][Y] := tlWater;
       end;
-      D := SizeCoef * 9;
+      LCoef := SizeCoef * 9;
       if (SeaLevel = msHigh) then
-        D := SizeCoef * 25;
+        LCoef := SizeCoef * 25;
       if (SeaLevel >= msNormal) then
       begin
-        for I := 0 to D do
+        for I := 0 to LCoef do
         begin
           X := Math.RandomRange(10, FWidth - 11);
           Y := Math.RandomRange(10, FWidth - 11);
@@ -689,7 +689,7 @@ begin
       AddRiver(TDirectionEnum(RandomRange(0, 4)));
     // Towns
     for I := 0 to Length(Industry) - 1 do
-      Industry[I].Free;
+      FreeAndNil(Industry[I]);
     SetLength(Industry, 0);
     for I := 0 to MapTownCount - 1 do
     begin
@@ -698,7 +698,7 @@ begin
           (Math.RandomRange(0, 10) - 5);
         Y := (Math.RandomRange(1, FHeight div 10) * 10) +
           (Math.RandomRange(0, 10) - 5);
-        TownName := TTownIndustry.GenName;
+        LTownName := TTownIndustry.GenName;
 
         for N := 2 to 5 do
         begin
@@ -724,17 +724,17 @@ begin
           end;
         end;
 
-      until not IsTownName(TownName) and not IsTownLocation(X, Y) and
+      until not IsTownName(LTownName) and not IsTownLocation(X, Y) and
         IsLandTile(X, Y);
       SetLength(Industry, I + 1);
       FTile[X][Y] := tlTownIndustry;
-      Industry[I] := TTownIndustry.Create(TownName, X, Y);
+      Industry[I] := TTownIndustry.Create(LTownName, X, Y);
     end;
     // Industries
     I := TownCount;
     for J := 0 to MapIndCount - 1 do
     begin
-      for IndustryType := Succ(Low(TIndustryType)) to High(TIndustryType) do
+      for LIndustryType := Succ(Low(TIndustryType)) to High(TIndustryType) do
       begin
         repeat
           X := (Math.RandomRange(1, FWidth div 10) * 10) +
@@ -743,7 +743,7 @@ begin
             (Math.RandomRange(0, 10) - 5);
         until IsLandTile(X, Y) and not IsTownLocation(X, Y) and
           not IsIndustryLocation(X, Y);
-        case IndustryType of
+        case LIndustryType of
           inCoalMine:
             begin
               S := GetNearTownName(X, Y);
@@ -787,33 +787,33 @@ end;
 
 procedure TMap.AddSpot(const AX, AY: Integer; const ATile: TTiles);
 var
-  VSize, I, VX, VY: Integer;
+  I, LSize, LX, LY: Integer;
 begin
   try
-    VX := AX;
-    VY := AY;
-    VSize := RandomRange(100, 300) * SizeCoef;
-    for I := 0 to VSize do
+    LX := AX;
+    LY := AY;
+    LSize := RandomRange(100, 300) * SizeCoef;
+    for I := 0 to LSize do
     begin
-      if (RandomRange(0, 6) = 0) and (VX > (SizeCoef + 10)) then
+      if (RandomRange(0, 6) = 0) and (LX > (SizeCoef + 10)) then
       begin
-        VX := VX - 1;
-        FTile[VX][VY] := ATile;
+        LX := LX - 1;
+        FTile[LX][LY] := ATile;
       end;
-      if (RandomRange(0, 6) = 0) and (VX < FWidth - (SizeCoef + 10)) then
+      if (RandomRange(0, 6) = 0) and (LX < FWidth - (SizeCoef + 10)) then
       begin
-        VX := VX + 1;
-        FTile[VX][VY] := ATile;
+        LX := LX + 1;
+        FTile[LX][LY] := ATile;
       end;
-      if (RandomRange(0, 6) = 0) and (VY > (SizeCoef + 10)) then
+      if (RandomRange(0, 6) = 0) and (LY > (SizeCoef + 10)) then
       begin
-        VY := VY - 1;
-        FTile[VX][VY] := ATile;
+        LY := LY - 1;
+        FTile[LX][LY] := ATile;
       end;
-      if (RandomRange(0, 6) = 0) and (VY < FHeight - (SizeCoef + 10)) then
+      if (RandomRange(0, 6) = 0) and (LY < FHeight - (SizeCoef + 10)) then
       begin
-        VY := VY + 1;
-        FTile[VX][VY] := ATile;
+        LY := LY + 1;
+        FTile[LX][LY] := ATile;
       end;
     end;
   except
@@ -897,27 +897,27 @@ begin
   end;
 end;
 
-function TMap.GetDist(const X1, Y1, X2, Y2: Integer): Integer;
+function TMap.GetDist(const AX1, AY1, AX2, AY2: Integer): Integer;
 begin
-  Result := Round(Sqrt(Sqr(X2 - X1) + Sqr(Y2 - Y1)));
+  Result := Round(Sqrt(Sqr(AX2 - AX1) + Sqr(AY2 - AY1)));
 end;
 
 function TMap.GetNearTownName(const AX, AY: Integer): string;
 var
-  I, D, Mx: Integer;
+  I, LDist, LMax: Integer;
 begin
   Result := '';
   try
-    Mx := Width;
+    LMax := Width;
     Result := '';
     for I := 0 to Length(Industry) - 1 do
       if (Industry[I].IndustryType = inTown) then
       begin
-        D := GetDist(Industry[I].X, Industry[I].Y, AX, AY);
-        if (D < Mx) then
+        LDist := GetDist(Industry[I].X, Industry[I].Y, AX, AY);
+        if (LDist < LMax) then
         begin
           Result := Industry[I].Name;
-          Mx := D;
+          LMax := LDist;
         end;
       end;
   except
@@ -928,13 +928,13 @@ end;
 
 function TMap.GetTile: TTiles;
 var
-  X, Y: Integer;
+  LX, LY: Integer;
 begin
   Result := tlGrass;
   try
-    X := EnsureRange(Game.Map.Left + terminal_state(TK_MOUSE_X), 0, FWidth);
-    Y := EnsureRange(Game.Map.Top + terminal_state(TK_MOUSE_Y), 0, FHeight);
-    Result := FTile[X][Y];
+    LX := EnsureRange(Game.Map.Left + terminal_state(TK_MOUSE_X), 0, FWidth);
+    LY := EnsureRange(Game.Map.Top + terminal_state(TK_MOUSE_Y), 0, FHeight);
+    Result := FTile[LX][LY];
   except
     on E: Exception do
       Log.Add('TMap.GetTile', E.Message);

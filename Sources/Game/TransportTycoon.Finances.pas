@@ -51,14 +51,15 @@ implementation
 { TFinanceYear }
 
 uses
+  SysUtils,
   TransportTycoon.Game;
 
 procedure TFinanceYear.Clear;
 var
-  ValueEnum: TValueEnum;
+  LValueEnum: TValueEnum;
 begin
-  for ValueEnum := Low(TValueEnum) to High(TValueEnum) do
-    FValue[ValueEnum] := 0;
+  for LValueEnum := Low(TValueEnum) to High(TValueEnum) do
+    FValue[LValueEnum] := 0;
 end;
 
 constructor TFinanceYear.Create;
@@ -90,40 +91,40 @@ end;
 
 procedure TFinances.Clear;
 var
-  Year: Word;
+  LYear: Word;
 begin
-  for Year := StartYear to FinishYear do
+  for LYear := StartYear to FinishYear do
   begin
-    FFinanceYear[Year].Clear;
-    FIsYear[Year] := False;
+    FFinanceYear[LYear].Clear;
+    FIsYear[LYear] := False;
   end;
 end;
 
 function TFinances.Count: Integer;
 var
-  Year: Word;
+  LYear: Word;
 begin
   Result := 0;
-  for Year := StartYear to FinishYear do
-    if FIsYear[Year] then
+  for LYear := StartYear to FinishYear do
+    if FIsYear[LYear] then
       Inc(Result);
 end;
 
 constructor TFinances.Create;
 var
-  Year: Word;
+  LYear: Word;
 begin
-  for Year := StartYear to FinishYear do
-    FFinanceYear[Year] := TFinanceYear.Create;
+  for LYear := StartYear to FinishYear do
+    FFinanceYear[LYear] := TFinanceYear.Create;
   Clear;
 end;
 
 destructor TFinances.Destroy;
 var
-  Year: Word;
+  LYear: Word;
 begin
-  for Year := StartYear to FinishYear do
-    FFinanceYear[Year].Free;
+  for LYear := StartYear to FinishYear do
+    FreeAndNil(FFinanceYear[LYear]);
   inherited;
 end;
 

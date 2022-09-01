@@ -33,7 +33,7 @@ uses
 procedure TSceneBusStation.Render;
 var
   I, J: Integer;
-  Cargo: TCargo;
+  LCargo: TCargo;
 begin
   inherited Render;
 
@@ -43,12 +43,12 @@ begin
 
   terminal_color(TPalette.Default);
   J := 11;
-  for Cargo := Succ(Low(TCargo)) to High(TCargo) do
+  for LCargo := Succ(Low(TCargo)) to High(TCargo) do
   begin
-    if Cargo in [cgPassengers] then
+    if LCargo in [cgPassengers] then
     begin
-      DrawText(7, J, Format('%s: %d/%d', [CargoStr[Cargo],
-        FIndustry.ProducesAmount[Cargo], FIndustry.MaxCargo]));
+      DrawText(7, J, Format('%s: %d/%d', [CargoStr[LCargo],
+        FIndustry.ProducesAmount[LCargo], FIndustry.MaxCargo]));
       Inc(J);
     end;
   end;

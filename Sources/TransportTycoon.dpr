@@ -98,8 +98,8 @@ begin
     until (Key = TK_CLOSE);
     terminal_close();
   finally
-    Scenes.Free;
-    Game.Free;
+    FreeAndNil(Scenes);
+    FreeAndNil(Game);
   end;
 
 end.

@@ -34,10 +34,10 @@ type
     procedure Draw;
     procedure Step;
     procedure AddAircraft(const AName: string;
-      const AIndex, AircraftID: Integer);
-    procedure AddShip(const AName: string; const AIndex, ShipID: Integer);
+      const AIndex, AAircraftID: Integer);
+    procedure AddShip(const AName: string; const AIndex, AShipID: Integer);
     procedure AddRoadVehicle(const AName: string;
-      const AIndex, RoadVehicleID: Integer);
+      const AIndex, ARoadVehicleID: Integer);
     procedure RunningCosts;
     function GetCurrentAircraft(const AX, AY: Integer): Integer;
     function GetCurrentShip(const AX, AY: Integer): Integer;
@@ -63,6 +63,7 @@ type
 implementation
 
 uses
+  SysUtils,
   BearLibTerminal,
   TransportTycoon.Game,
   TransportTycoon.Finances,
@@ -73,88 +74,89 @@ type
   TGetVehicleFunc = function(const AX, AY: Integer): Integer of object;
 
 procedure TVehicles.AddAircraft(const AName: string;
-  const AIndex, AircraftID: Integer);
+  const AIndex, AAircraftID: Integer);
 var
-  Town: TTownIndustry;
+  LTown: TTownIndustry;
 begin
-  Town := TTownIndustry(Game.Map.Industry[AIndex]);
+  LTown := TTownIndustry(Game.Map.Industry[AIndex]);
 
-  if (Town.Airport.IsBuilding and (Game.Money >= AircraftBase[AircraftID].Cost))
-  then
+  if (LTown.Airport.IsBuilding and (Game.Money >= AircraftBase[AAircraftID]
+    .Cost)) then
     SetLength(FAircraft, AircraftCount + 1);
 
-  FAircraft[High(FAircraft)] := TAircraft.Create(AName, Town.X, Town.Y,
-    AircraftID);
+  FAircraft[High(FAircraft)] := TAircraft.Create(AName, LTown.X, LTown.Y,
+    AAircraftID);
 
   with FAircraft[High(FAircraft)] do
   begin
-    Orders.AddOrder(AIndex, Town.Name, Town.X, Town.Y);
-    Game.ModifyMoney(ttNewVehicles, -AircraftBase[AircraftID].Cost);
-    VehicleID := AircraftID;
+    Orders.AddOrder(AIndex, LTown.Name, LTown.X, LTown.Y);
+    Game.ModifyMoney(ttNewVehicles, -AircraftBase[AAircraftID].Cost);
+    VehicleID := AAircraftID;
   end;
 end;
 
 procedure TVehicles.AddRoadVehicle(const AName: string;
-  const AIndex, RoadVehicleID: Integer);
+  const AIndex, ARoadVehicleID: Integer);
 begin
-  if ((Game.Money >= RoadVehicleBase[RoadVehicleID].Cost)) then
+  if ((Game.Money >= RoadVehicleBase[ARoadVehicleID].Cost)) then
     SetLength(FRoadVehicle, RoadVehicleCount + 1);
 
   FRoadVehicle[High(FRoadVehicle)] := TRoadVehicle.Create(AName,
-    Game.Map.Industry[AIndex].X, Game.Map.Industry[AIndex].Y, RoadVehicleID);
+    Game.Map.Industry[AIndex].X, Game.Map.Industry[AIndex].Y, ARoadVehicleID);
 
   with FRoadVehicle[High(FRoadVehicle)] do
   begin
     Orders.AddOrder(AIndex, Game.Map.Industry[AIndex].Name,
       Game.Map.Industry[AIndex].X, Game.Map.Industry[AIndex].Y);
-    Game.ModifyMoney(ttNewVehicles, -RoadVehicleBase[RoadVehicleID].Cost);
-    VehicleID := RoadVehicleID;
+    Game.ModifyMoney(ttNewVehicles, -RoadVehicleBase[ARoadVehicleID].Cost);
+    VehicleID := ARoadVehicleID;
   end;
 end;
 
-procedure TVehicles.AddShip(const AName: string; const AIndex, ShipID: Integer);
+procedure TVehicles.AddShip(const AName: string;
+  const AIndex, AShipID: Integer);
 begin
   if (Game.Map.Industry[AIndex].Dock.IsBuilding and
-    (Game.Money >= ShipBase[ShipID].Cost)) then
+    (Game.Money >= ShipBase[AShipID].Cost)) then
 
     SetLength(FShip, ShipCount + 1);
 
   FShip[High(FShip)] := TShip.Create(AName, Game.Map.Industry[AIndex].X,
-    Game.Map.Industry[AIndex].Y, ShipID);
+    Game.Map.Industry[AIndex].Y, AShipID);
 
   with FShip[High(FShip)] do
   begin
     Orders.AddOrder(AIndex, Game.Map.Industry[AIndex].Name,
       Game.Map.Industry[AIndex].X, Game.Map.Industry[AIndex].Y);
-    Game.ModifyMoney(ttNewVehicles, -ShipBase[ShipID].Cost);
-    VehicleID := ShipID;
+    Game.ModifyMoney(ttNewVehicles, -ShipBase[AShipID].Cost);
+    VehicleID := AShipID;
   end;
 end;
 
 procedure TVehicles.RunningCosts;
 var
-  I, ID, Money: Integer;
+  I, LID, LMoney: Integer;
 begin
   for I := 0 to AircraftCount - 1 do
   begin
-    ID := Aircraft[I].VehicleID;
-    Money := AircraftBase[ID].RunningCost div 12;
-    Game.ModifyMoney(ttAircraftRunningCosts, -Money);
-    Aircraft[I].Profit := Aircraft[I].Profit - Money;
+    LID := Aircraft[I].VehicleID;
+    LMoney := AircraftBase[LID].RunningCost div 12;
+    Game.ModifyMoney(ttAircraftRunningCosts, -LMoney);
+    Aircraft[I].Profit := Aircraft[I].Profit - LMoney;
   end;
   for I := 0 to ShipCount - 1 do
   begin
-    ID := Ship[I].VehicleID;
-    Money := ShipBase[ID].RunningCost div 12;
-    Game.ModifyMoney(ttShipRunningCosts, -Money);
-    Ship[I].Profit := Ship[I].Profit - Money;
+    LID := Ship[I].VehicleID;
+    LMoney := ShipBase[LID].RunningCost div 12;
+    Game.ModifyMoney(ttShipRunningCosts, -LMoney);
+    Ship[I].Profit := Ship[I].Profit - LMoney;
   end;
   for I := 0 to RoadVehicleCount - 1 do
   begin
-    ID := RoadVehicle[I].VehicleID;
-    Money := RoadVehicleBase[ID].RunningCost div 12;
-    Game.ModifyMoney(ttRoadVehicleRunningCosts, -Money);
-    RoadVehicle[I].Profit := RoadVehicle[I].Profit - Money;
+    LID := RoadVehicle[I].VehicleID;
+    LMoney := RoadVehicleBase[LID].RunningCost div 12;
+    Game.ModifyMoney(ttRoadVehicleRunningCosts, -LMoney);
+    RoadVehicle[I].Profit := RoadVehicle[I].Profit - LMoney;
   end;
 end;
 
@@ -163,13 +165,13 @@ var
   I: Integer;
 begin
   for I := 0 to AircraftCount - 1 do
-    Aircraft[I].Free;
+    FreeAndNil(Aircraft[I]);
   SetLength(FAircraft, 0);
   for I := 0 to ShipCount - 1 do
-    Ship[I].Free;
+    FreeAndNil(Ship[I]);
   SetLength(FShip, 0);
   for I := 0 to RoadVehicleCount - 1 do
-    RoadVehicle[I].Free;
+    FreeAndNil(RoadVehicle[I]);
   SetLength(FRoadVehicle, 0);
 end;
 
@@ -285,13 +287,12 @@ function TVehicles.IsVehicleOnMap(const AX, AY: Integer;
   function GetVehicle(AFunc: TGetVehicleFunc;
     AVehicles: TArray<TVehicle>): Boolean;
   var
-    ID: Integer;
+    LID: Integer;
   begin
-    ID := AFunc(AX, AY);
-    Result := ID >= 0;
+    LID := AFunc(AX, AY);
+    Result := LID >= 0;
     if Result then
-
-      AVehicleName := AVehicles[ID].Name;
+      AVehicleName := AVehicles[LID].Name;
   end;
 
 begin

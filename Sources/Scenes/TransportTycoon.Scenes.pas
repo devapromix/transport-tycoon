@@ -34,35 +34,37 @@ type
   public
     procedure Render; virtual; abstract;
     procedure Update(var Key: Word); virtual; abstract;
-    procedure DrawText(const X, Y: Integer;
-      Text, Color, BkColor: string); overload;
-    procedure DrawText(const X, Y: Integer; Text: string;
-      const Align: Integer = TK_ALIGN_LEFT); overload;
-    procedure DrawText(const Y: Integer; Text: string); overload;
-    procedure DrawTextLine(const X: Integer; const Text: string);
-    procedure DrawMoney(const X, Y, Money: Integer;
-      const Align: Integer = TK_ALIGN_RIGHT; F: Boolean = False);
-    procedure DrawButton(const X, Y: Integer; IsActive: Boolean;
-      Button, Text: string); overload;
-    procedure DrawButton(const X, Y, W: Integer; IsActive, IsFlag: Boolean;
-      Button, Text: string); overload;
-    procedure DrawButton(const Y: Integer; IsActive: Boolean;
-      Button, Text: string); overload;
-    procedure DrawButton(const X, Y: Integer; Button, Text: string); overload;
-    procedure DrawButton(const X, Y: Integer;
-      Button, Text, Color: string); overload;
-    procedure DrawButton(const Y: Integer; Button, Text: string); overload;
-    function MakeButton(const IsActive: Boolean;
-      const Button, Text: string): string;
-    procedure DrawTitle(const Y: Integer; const Title: string); overload;
-    procedure DrawTitle(const Title: string); overload;
-    procedure DrawFrame(const X, Y, W, H: Integer);
+    procedure DrawText(const AX, AY: Integer;
+      AText, AColor, ABkColor: string); overload;
+    procedure DrawText(const AX, AY: Integer; AText: string;
+      const ATextAlign: Integer = TK_ALIGN_LEFT); overload;
+    procedure DrawText(const AY: Integer; AText: string); overload;
+    procedure DrawTextLine(const AX: Integer; const AText: string);
+    procedure DrawMoney(const AX, AY, AMoney: Integer;
+      const ATextAlign: Integer = TK_ALIGN_RIGHT; AIsFlag: Boolean = False);
+    procedure DrawButton(const AX, AY: Integer; AIsActive: Boolean;
+      AButton, AText: string); overload;
+    procedure DrawButton(const AX, AY, AWidth: Integer;
+      AIsActive, AIsFlag: Boolean; AButton, AText: string); overload;
+    procedure DrawButton(const AY: Integer; AIsActive: Boolean;
+      AButton, AText: string); overload;
+    procedure DrawButton(const AX, AY: Integer;
+      AButton, AText: string); overload;
+    procedure DrawButton(const AX, AY: Integer;
+      AButton, AText, AColor: string); overload;
+    procedure DrawButton(const AY: Integer; AButton, AText: string); overload;
+    function MakeButton(const AIsActive: Boolean;
+      const AButton, AText: string): string;
+    procedure DrawTitle(const AY: Integer; const ATitle: string); overload;
+    procedure DrawTitle(const ATitle: string); overload;
+    procedure DrawFrame(const AX, AY, AWidth, AHeight: Integer);
     procedure DrawMap(const AWidth, AHeight: Integer);
     procedure ClearButtons;
-    procedure AddButton(const Y: Integer; const Button, Text: string); overload;
-    procedure AddButton(const Y: Integer; const IsActive: Boolean;
-      const Button, Text: string); overload;
-    function GetButton(const N: Integer): TButtonRec;
+    procedure AddButton(const AY: Integer;
+      const AButton, AText: string); overload;
+    procedure AddButton(const AY: Integer; const AIsActive: Boolean;
+      const AButton, AText: string); overload;
+    function GetButton(const AIndex: Integer): TButtonRec;
     function GetButtonsY: Integer;
     procedure RenderButtons;
     procedure DrawBar;
@@ -72,9 +74,9 @@ type
     property MY: Integer read FMY write FMY;
     property RX: Integer read FRX write FRX;
     property RY: Integer read FRY write FRY;
-    procedure ScrollTo(const X, Y: Integer);
-    procedure Scroll(const DirectionEnum: TDirectionEnum);
-    function Check(const F: Boolean): string;
+    procedure ScrollTo(const AX, AY: Integer);
+    procedure Scroll(const ADirectionEnum: TDirectionEnum);
+    function Check(const AIsCheck: Boolean): string;
     property TextLineY: Integer read FTextLineY write FTextLineY;
     function StrLim(const S: string; const N: Integer): string;
   end;
@@ -92,9 +94,9 @@ type
     procedure Render; override;
     procedure Update(var Key: Word); override;
     property Scene: TSceneEnum read FSceneEnum write FSceneEnum;
-    function GetScene(I: TSceneEnum): TScene;
-    procedure SetScene(SceneEnum: TSceneEnum); overload;
-    procedure SetScene(SceneEnum, BackSceneEnum: TSceneEnum); overload;
+    function GetScene(ASceneEnum: TSceneEnum): TScene;
+    procedure SetScene(ASceneEnum: TSceneEnum); overload;
+    procedure SetScene(ASceneEnum, ABackSceneEnum: TSceneEnum); overload;
     property CurrentVehicleScene: TSceneEnum read FCurrentVehicleScene
       write FCurrentVehicleScene;
     procedure Back;
@@ -141,44 +143,45 @@ uses
   TransportTycoon.Scene.RoadVehicles,
   TransportTycoon.Palette;
 
-procedure TScene.DrawText(const X, Y: Integer; Text: string;
-  const Align: Integer = TK_ALIGN_LEFT);
+procedure TScene.DrawText(const AX, AY: Integer; AText: string;
+  const ATextAlign: Integer = TK_ALIGN_LEFT);
 begin
-  terminal_print(X, Y, Align, Text);
+  terminal_print(AX, AY, ATextAlign, AText);
 end;
 
-procedure TScene.DrawTitle(const Y: Integer; const Title: string);
+procedure TScene.DrawTitle(const AY: Integer; const ATitle: string);
 begin
-  terminal_print(ScreenWidth div 2, Y, TK_ALIGN_CENTER, '[c=' + TPalette.Title +
-    ']' + UpperCase(Title) + '[/c]');
+  terminal_print(ScreenWidth div 2, AY, TK_ALIGN_CENTER,
+    '[c=' + TPalette.Title + ']' + UpperCase(ATitle) + '[/c]');
 end;
 
-procedure TScene.DrawText(const Y: Integer; Text: string);
+procedure TScene.DrawText(const AY: Integer; AText: string);
 begin
-  terminal_print(ScreenWidth div 2, Y, TK_ALIGN_CENTER, Text);
+  terminal_print(ScreenWidth div 2, AY, TK_ALIGN_CENTER, AText);
 end;
 
-procedure TScene.DrawTextLine(const X: Integer; const Text: string);
+procedure TScene.DrawTextLine(const AX: Integer; const AText: string);
 begin
-  DrawText(X, FTextLineY, Text);
+  DrawText(AX, FTextLineY, AText);
   Inc(FTextLineY);
 end;
 
-procedure TScene.DrawText(const X, Y: Integer; Text, Color, BkColor: string);
+procedure TScene.DrawText(const AX, AY: Integer;
+  AText, AColor, ABkColor: string);
 begin
-  terminal_color(Color);
-  terminal_bkcolor(BkColor);
-  terminal_print(X, Y, Text);
+  terminal_color(AColor);
+  terminal_bkcolor(ABkColor);
+  terminal_print(AX, AY, AText);
 end;
 
-procedure TScene.DrawTitle(const Title: string);
+procedure TScene.DrawTitle(const ATitle: string);
 begin
-  DrawTitle(9, Title);
+  DrawTitle(9, ATitle);
 end;
 
-function TScene.GetButton(const N: Integer): TButtonRec;
+function TScene.GetButton(const AIndex: Integer): TButtonRec;
 begin
-  Result := FButtons[N];
+  Result := FButtons[AIndex];
 end;
 
 function TScene.GetButtonsY: Integer;
@@ -186,30 +189,30 @@ begin
   Result := FButtonsY;
 end;
 
-procedure TScene.DrawButton(const X, Y: Integer; Button, Text: string);
+procedure TScene.DrawButton(const AX, AY: Integer; AButton, AText: string);
 begin
-  terminal_print(X, Y, Format('[c=%s][[%s]][/c] [c=%s]%s[/c]',
-    [TPalette.ButtonKey, UpperCase(Button), TPalette.Default,
-    UpperCase(Text)]));
+  terminal_print(AX, AY, Format('[c=%s][[%s]][/c] [c=%s]%s[/c]',
+    [TPalette.ButtonKey, UpperCase(AButton), TPalette.Default,
+    UpperCase(AText)]));
 end;
 
-procedure TScene.AddButton(const Y: Integer; const Button, Text: string);
+procedure TScene.AddButton(const AY: Integer; const AButton, AText: string);
 begin
-  AddButton(Y, True, Button, Text);
+  AddButton(AY, True, AButton, AText);
 end;
 
-procedure TScene.AddButton(const Y: Integer; const IsActive: Boolean;
-  const Button, Text: string);
+procedure TScene.AddButton(const AY: Integer; const AIsActive: Boolean;
+  const AButton, AText: string);
 var
   I: Integer;
 begin
-  FButtonsY := Y;
+  FButtonsY := AY;
   for I := Low(FButtons) to High(FButtons) do
     if (FButtons[I].ButtonKey = '') then
     begin
-      FButtons[I].ButtonIsActive := IsActive;
-      FButtons[I].ButtonKey := Button;
-      FButtons[I].ButtonLabel := Text;
+      FButtons[I].ButtonIsActive := AIsActive;
+      FButtons[I].ButtonKey := AButton;
+      FButtons[I].ButtonLabel := AText;
       Exit;
     end;
 end;
@@ -262,59 +265,60 @@ begin
   end;
 end;
 
-procedure TScene.DrawButton(const Y: Integer; Button, Text: string);
+procedure TScene.DrawButton(const AY: Integer; AButton, AText: string);
 begin
-  terminal_print(ScreenWidth div 2, Y, TK_ALIGN_CENTER,
+  terminal_print(ScreenWidth div 2, AY, TK_ALIGN_CENTER,
     Format('[c=%s][[%s]][/c] [c=%s]%s[/c]', [TPalette.ButtonKey,
-    UpperCase(Button), TPalette.Default, UpperCase(Text)]));
+    UpperCase(AButton), TPalette.Default, UpperCase(AText)]));
 end;
 
-procedure TScene.DrawButton(const X, Y, W: Integer; IsActive, IsFlag: Boolean;
-  Button, Text: string);
+procedure TScene.DrawButton(const AX, AY, AWidth: Integer;
+  AIsActive, AIsFlag: Boolean; AButton, AText: string);
 begin
-  DrawButton(X, Y, IsActive, Button, Text);
-  DrawText(X + W - 4, Y, '[c=' + TPalette.Default + '][[' + Check(IsFlag) +
-    ']][/c]');
+  DrawButton(AX, AY, AIsActive, AButton, AText);
+  DrawText(AX + AWidth - 4, AY, '[c=' + TPalette.Default + '][[' +
+    Check(AIsFlag) + ']][/c]');
 end;
 
-procedure TScene.DrawButton(const X, Y: Integer; Button, Text, Color: string);
+procedure TScene.DrawButton(const AX, AY: Integer;
+  AButton, AText, AColor: string);
 begin
-  terminal_print(X, Y, Format('[c=%s][[%s]][/c] [c=%s]%s[/c]',
-    [TPalette.ButtonKey, UpperCase(Button), Color, UpperCase(Text)]));
+  terminal_print(AX, AY, Format('[c=%s][[%s]][/c] [c=%s]%s[/c]',
+    [TPalette.ButtonKey, UpperCase(AButton), AColor, UpperCase(AText)]));
 end;
 
-procedure TScene.DrawButton(const X, Y: Integer; IsActive: Boolean;
-  Button, Text: string);
+procedure TScene.DrawButton(const AX, AY: Integer; AIsActive: Boolean;
+  AButton, AText: string);
 begin
-  terminal_print(X, Y, MakeButton(IsActive, Button, Text));
+  terminal_print(AX, AY, MakeButton(AIsActive, AButton, AText));
 end;
 
-procedure TScene.DrawButton(const Y: Integer; IsActive: Boolean;
-  Button, Text: string);
+procedure TScene.DrawButton(const AY: Integer; AIsActive: Boolean;
+  AButton, AText: string);
 begin
-  terminal_print(ScreenWidth div 2, Y, TK_ALIGN_CENTER,
-    MakeButton(IsActive, Button, Text));
+  terminal_print(ScreenWidth div 2, AY, TK_ALIGN_CENTER,
+    MakeButton(AIsActive, AButton, AText));
 end;
 
-procedure TScene.DrawFrame(const X, Y, W, H: Integer);
+procedure TScene.DrawFrame(const AX, AY, AWidth, AHeight: Integer);
 var
   I: Integer;
 begin
-  terminal_clear_area(X, Y, W, H);
-  for I := X + 1 to X + W - 2 do
+  terminal_clear_area(AX, AY, AWidth, AHeight);
+  for I := AX + 1 to AX + AWidth - 2 do
   begin
-    terminal_put(I, Y, $2550);
-    terminal_put(I, Y + H - 1, $2550);
+    terminal_put(I, AY, $2550);
+    terminal_put(I, AY + AHeight - 1, $2550);
   end;
-  for I := Y + 1 to Y + H - 2 do
+  for I := AY + 1 to AY + AHeight - 2 do
   begin
-    terminal_put(X, I, $2551);
-    terminal_put(X + W - 1, I, $2551);
+    terminal_put(AX, I, $2551);
+    terminal_put(AX + AWidth - 1, I, $2551);
   end;
-  terminal_put(X, Y, $2554);
-  terminal_put(X + W - 1, Y, $2557);
-  terminal_put(X, Y + H - 1, $255A);
-  terminal_put(X + W - 1, Y + H - 1, $255D);
+  terminal_put(AX, AY, $2554);
+  terminal_put(AX + AWidth - 1, AY, $2557);
+  terminal_put(AX, AY + AHeight - 1, $255A);
+  terminal_put(AX + AWidth - 1, AY + AHeight - 1, $255D);
 end;
 
 procedure TScene.DrawMap(const AWidth, AHeight: Integer);
@@ -328,19 +332,20 @@ begin
   end;
 end;
 
-procedure TScene.DrawMoney(const X, Y, Money: Integer;
-  const Align: Integer = TK_ALIGN_RIGHT; F: Boolean = False);
+procedure TScene.DrawMoney(const AX, AY, AMoney: Integer;
+  const ATextAlign: Integer = TK_ALIGN_RIGHT; AIsFlag: Boolean = False);
 begin
-  if Money = 0 then
-    terminal_print(X, Y, Align, Format('[c=%s]$%d[/c]',
-      [TPalette.Default, Money]));
-  if Money > 0 then
-    if F then
-      terminal_print(X, Y, Align, Format('[c=green]$%d[/c]', [Money]))
+  if AMoney = 0 then
+    terminal_print(AX, AY, ATextAlign, Format('[c=%s]$%d[/c]',
+      [TPalette.Default, AMoney]));
+  if AMoney > 0 then
+    if AIsFlag then
+      terminal_print(AX, AY, ATextAlign, Format('[c=green]$%d[/c]', [AMoney]))
     else
-      terminal_print(X, Y, Align, Format('[c=green]+$%d[/c]', [Money]));
-  if Money < 0 then
-    terminal_print(X, Y, Align, Format('[c=red]-$%d[/c]', [Abs(Money)]));
+      terminal_print(AX, AY, ATextAlign, Format('[c=green]+$%d[/c]', [AMoney]));
+  if AMoney < 0 then
+    terminal_print(AX, AY, ATextAlign, Format('[c=red]-$%d[/c]',
+      [Abs(AMoney)]));
 end;
 
 function TScene.ScreenWidth: Integer;
@@ -353,12 +358,12 @@ begin
   Result := terminal_state(TK_HEIGHT);
 end;
 
-procedure TScene.ScrollTo(const X, Y: Integer);
+procedure TScene.ScrollTo(const AX, AY: Integer);
 begin
   try
-    Game.Map.Left := EnsureRange(X - (ScreenWidth div 2), 0,
+    Game.Map.Left := EnsureRange(AX - (ScreenWidth div 2), 0,
       Game.Map.Width - ScreenWidth);
-    Game.Map.Top := EnsureRange(Y - (ScreenHeight div 2), 0,
+    Game.Map.Top := EnsureRange(AY - (ScreenHeight div 2), 0,
       Game.Map.Height - ScreenHeight);
   except
     on E: Exception do
@@ -376,21 +381,21 @@ begin
     Result := S;
 end;
 
-function TScene.Check(const F: Boolean): string;
+function TScene.Check(const AIsCheck: Boolean): string;
 begin
-  if F then
+  if AIsCheck then
     Result := 'X'
   else
     Result := #32;
 end;
 
-procedure TScene.Scroll(const DirectionEnum: TDirectionEnum);
+procedure TScene.Scroll(const ADirectionEnum: TDirectionEnum);
 var
   F: Boolean;
 begin
   F := False;
   try
-    case DirectionEnum of
+    case ADirectionEnum of
       drEast:
         F := (Game.Map.Left > 0);
       drWest:
@@ -402,8 +407,8 @@ begin
     end;
     if F then
     begin
-      Game.Map.Top := Game.Map.Top + Direction[DirectionEnum].Y;
-      Game.Map.Left := Game.Map.Left + Direction[DirectionEnum].X;
+      Game.Map.Top := Game.Map.Top + Direction[ADirectionEnum].Y;
+      Game.Map.Left := Game.Map.Left + Direction[ADirectionEnum].X;
     end;
   except
     on E: Exception do
@@ -411,23 +416,23 @@ begin
   end;
 end;
 
-function TScene.MakeButton(const IsActive: Boolean;
-  const Button, Text: string): string;
+function TScene.MakeButton(const AIsActive: Boolean;
+  const AButton, AText: string): string;
 var
-  ColorButton, ColorText: string;
+  LColorButton, LColorText: string;
 begin
-  if IsActive then
+  if AIsActive then
   begin
-    ColorButton := TPalette.ButtonKey;
-    ColorText := TPalette.Default;
+    LColorButton := TPalette.ButtonKey;
+    LColorText := TPalette.Default;
   end
   else
   begin
-    ColorButton := TPalette.Unused;
-    ColorText := TPalette.Unused;
+    LColorButton := TPalette.Unused;
+    LColorText := TPalette.Unused;
   end;
-  Result := Format('[c=' + ColorButton + '][[%s]][/c] [c=' + ColorText +
-    ']%s[/c]', [UpperCase(Button), UpperCase(Text)]);
+  Result := Format('[c=' + LColorButton + '][[%s]][/c] [c=' + LColorText +
+    ']%s[/c]', [UpperCase(AButton), UpperCase(AText)]);
 end;
 
 procedure TScene.RenderButtons;
@@ -524,7 +529,7 @@ begin
   end;
 end;
 
-procedure TScenes.SetScene(SceneEnum, BackSceneEnum: TSceneEnum);
+procedure TScenes.SetScene(ASceneEnum, ABackSceneEnum: TSceneEnum);
 var
   I: Integer;
 begin
@@ -532,10 +537,10 @@ begin
     for I := 0 to High(FBackSceneEnum) do
       if FBackSceneEnum[I] = scWorld then
       begin
-        FBackSceneEnum[I] := BackSceneEnum;
+        FBackSceneEnum[I] := ABackSceneEnum;
         Break;
       end;
-    SetScene(SceneEnum);
+    SetScene(ASceneEnum);
   except
     on E: Exception do
       Log.Add('TScenes.SetScene', E.Message);
@@ -544,17 +549,17 @@ end;
 
 destructor TScenes.Destroy;
 var
-  SceneEnum: TSceneEnum;
+  LSceneEnum: TSceneEnum;
 begin
-  for SceneEnum := Low(TSceneEnum) to High(TSceneEnum) do
-    FScene[SceneEnum].Free;
+  for LSceneEnum := Low(TSceneEnum) to High(TSceneEnum) do
+    FreeAndNil(FScene[LSceneEnum]);
   inherited;
 end;
 
-procedure TScenes.SetScene(SceneEnum: TSceneEnum);
+procedure TScenes.SetScene(ASceneEnum: TSceneEnum);
 begin
   try
-    Self.Scene := SceneEnum;
+    Self.Scene := ASceneEnum;
     Self.Render;
   except
     on E: Exception do
@@ -562,9 +567,9 @@ begin
   end;
 end;
 
-function TScenes.GetScene(I: TSceneEnum): TScene;
+function TScenes.GetScene(ASceneEnum: TSceneEnum): TScene;
 begin
-  Result := FScene[I];
+  Result := FScene[ASceneEnum];
 end;
 
 procedure TScenes.Back;

@@ -17,26 +17,26 @@ type
     constructor Create;
     procedure Clear;
     function IsConstruct: Boolean;
-    function IsBuild(const ConstructEnum: TConstructEnum): Boolean;
-    procedure Build(const ConstructEnum: TConstructEnum);
+    function IsBuild(const AConstructEnum: TConstructEnum): Boolean;
+    procedure Build(const AConstructEnum: TConstructEnum);
   end;
 
 implementation
 
 { TConstruct }
 
-procedure TConstruct.Build(const ConstructEnum: TConstructEnum);
+procedure TConstruct.Build(const AConstructEnum: TConstructEnum);
 begin
   Clear;
-  FConstruct[ConstructEnum] := True;
+  FConstruct[AConstructEnum] := True;
 end;
 
 procedure TConstruct.Clear;
 var
-  ConstructEnum: TConstructEnum;
+  LConstructEnum: TConstructEnum;
 begin
-  for ConstructEnum := Low(TConstructEnum) to High(TConstructEnum) do
-    FConstruct[ConstructEnum] := False;
+  for LConstructEnum := Low(TConstructEnum) to High(TConstructEnum) do
+    FConstruct[LConstructEnum] := False;
 end;
 
 constructor TConstruct.Create;
@@ -44,18 +44,18 @@ begin
   Clear;
 end;
 
-function TConstruct.IsBuild(const ConstructEnum: TConstructEnum): Boolean;
+function TConstruct.IsBuild(const AConstructEnum: TConstructEnum): Boolean;
 begin
-  Result := FConstruct[ConstructEnum];
+  Result := FConstruct[AConstructEnum];
 end;
 
 function TConstruct.IsConstruct: Boolean;
 var
-  ConstructEnum: TConstructEnum;
+  LConstructEnum: TConstructEnum;
 begin
   Result := False;
-  for ConstructEnum := Low(TConstructEnum) to High(TConstructEnum) do
-    if FConstruct[ConstructEnum] then
+  for LConstructEnum := Low(TConstructEnum) to High(TConstructEnum) do
+    if FConstruct[LConstructEnum] then
       Exit(True);
 end;
 

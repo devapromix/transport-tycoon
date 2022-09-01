@@ -141,16 +141,16 @@ uses
 
 constructor TIndustry.Create(const AName: string; const AX, AY: Integer);
 var
-  Cargo: TCargo;
+  LCargo: TCargo;
 begin
   inherited Create(AName, AX, AY);
   FIndustryType := inNone;
   FAccepts := [];
   FProduces := [];
-  for Cargo := Succ(Low(TCargo)) to High(TCargo) do
+  for LCargo := Succ(Low(TCargo)) to High(TCargo) do
   begin
-    FAcceptsAmount[Cargo] := 0;
-    FProducesAmount[Cargo] := 0;
+    FAcceptsAmount[LCargo] := 0;
+    FProducesAmount[LCargo] := 0;
   end;
   FDock := TDock.Create(9000);
   FTruckLoadingBay := TStation.Create(300);
@@ -170,19 +170,19 @@ end;
 
 destructor TIndustry.Destroy;
 begin
-  FTruckLoadingBay.Free;
-  FDock.Free;
+  FreeAndNil(FTruckLoadingBay);
+  FreeAndNil(FDock);
   inherited;
 end;
 
 function TIndustry.GetCargoStr(const ACargoSet: TCargoSet): string;
 var
-  Cargo: TCargo;
+  LCargo: TCargo;
 begin
   Result := '';
-  for Cargo := Succ(Low(TCargo)) to High(TCargo) do
-    if (Cargo in ACargoSet) then
-      Result := Result + CargoStr[Cargo] + ' ';
+  for LCargo := Succ(Low(TCargo)) to High(TCargo) do
+    if (LCargo in ACargoSet) then
+      Result := Result + CargoStr[LCargo] + ' ';
   Result := Trim(Result);
   Result := StringReplace(Result, ' ', ', ', [rfReplaceAll]);
 end;
@@ -217,13 +217,13 @@ end;
 
 procedure TPrimaryIndustry.Grows;
 var
-  Cargo: TCargo;
+  LCargo: TCargo;
 begin
   if Dock.IsBuilding or TruckLoadingBay.IsBuilding then
   begin
-    for Cargo := Succ(Low(TCargo)) to High(TCargo) do
-      if (Cargo in Produces) then
-        IncProducesCargoAmount(Cargo, RandomRange(4, 6));
+    for LCargo := Succ(Low(TCargo)) to High(TCargo) do
+      if (LCargo in Produces) then
+        IncProducesCargoAmount(LCargo, RandomRange(4, 6));
   end;
 end;
 
@@ -231,18 +231,19 @@ end;
 
 procedure TSecondaryIndustry.Grows;
 var
-  AcceptsCargo, ProducesCargo: TCargo;
+  LAcceptsCargo, LProducesCargo: TCargo;
 begin
   if Dock.IsBuilding or TruckLoadingBay.IsBuilding then
   begin
-    for AcceptsCargo := Succ(Low(TCargo)) to High(TCargo) do
-      if (AcceptsCargo in Accepts) then
-        for ProducesCargo := Succ(Low(TCargo)) to High(TCargo) do
-          if (ProducesCargo in Produces) and (FAcceptsAmount[AcceptsCargo] > 0)
+    for LAcceptsCargo := Succ(Low(TCargo)) to High(TCargo) do
+      if (LAcceptsCargo in Accepts) then
+        for LProducesCargo := Succ(Low(TCargo)) to High(TCargo) do
+          if (LProducesCargo in Produces) and (FAcceptsAmount[LAcceptsCargo] > 0)
           then
           begin
-            IncProducesCargoAmount(ProducesCargo, FAcceptsAmount[AcceptsCargo]);
-            FAcceptsAmount[AcceptsCargo] := 0;
+            IncProducesCargoAmount(LProducesCargo,
+              FAcceptsAmount[LAcceptsCargo]);
+            FAcceptsAmount[LAcceptsCargo] := 0;
           end;
   end;
 end;
@@ -264,49 +265,49 @@ end;
 
 destructor TTownIndustry.Destroy;
 begin
-  FHQ.Free;
-  FBusStation.Free;
-  FAirport.Free;
+  FreeAndNil(FHQ);
+  FreeAndNil(FBusStation);
+  FreeAndNil(FAirport);
   inherited;
 end;
 
 class function TTownIndustry.GenName: string;
 var
-  StringList: array [0 .. 1] of TStringList;
+  LStringList: array [0 .. 1] of TStringList;
   I: Integer;
 begin
   for I := 0 to 1 do
-    StringList[I] := TStringList.Create;
-  StringList[0].DelimitedText :=
+    LStringList[I] := TStringList.Create;
+  LStringList[0].DelimitedText :=
     '"Eding","Graning","Vorg","Tra","Nording","Agring","Gran","Funt","Grufing",'
     + '"Trening","Chend","Drinning","Long","Tor","Mar","Fin"';
-  StringList[1].DelimitedText :=
+  LStringList[1].DelimitedText :=
     '"ville","burg","ley","ly","field","town","well","bell","bridge","ton",' +
     '"stone","hattan"';
   Result := '';
   for I := 0 to 1 do
   begin
-    Result := Result + StringList[I][Random(StringList[I].Count - 1)];
-    StringList[I].Free;
+    Result := Result + LStringList[I][Random(LStringList[I].Count - 1)];
+    FreeAndNil(LStringList[I]);
   end;
 end;
 
 procedure TTownIndustry.Grows;
 var
-  WeekPassengers: Integer;
-  WeekMail: Integer;
+  LWeekPassengers: Integer;
+  LWeekMail: Integer;
 begin
   if Math.RandomRange(0, 25) <= GrowModif then
     ModifyPopulation(Math.RandomRange(GrowModif * 8, GrowModif * 12));
   if Airport.IsBuilding or Dock.IsBuilding or BusStation.IsBuilding then
   begin
-    WeekPassengers := FPopulation div Math.RandomRange(10, 12);
-    SetCargoAmount(cgPassengers, WeekPassengers);
+    LWeekPassengers := FPopulation div Math.RandomRange(10, 12);
+    SetCargoAmount(cgPassengers, LWeekPassengers);
   end;
   if Airport.IsBuilding or Dock.IsBuilding or TruckLoadingBay.IsBuilding then
   begin
-    WeekMail := FPopulation div Math.RandomRange(40, 50);
-    SetCargoAmount(cgMail, WeekMail);
+    LWeekMail := FPopulation div Math.RandomRange(40, 50);
+    SetCargoAmount(cgMail, LWeekMail);
   end;
 end;
 

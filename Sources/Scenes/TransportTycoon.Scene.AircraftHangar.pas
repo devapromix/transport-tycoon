@@ -28,17 +28,17 @@ uses
 
 procedure TSceneAircraftHangar.Render;
 var
-  SelVehicle: Integer;
+  LSelVehicle: Integer;
 begin
   inherited Render;
 
   FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
   DrawTitle(8, FTown.Name + ' Airport Hangar');
 
-  SelVehicle := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
+  LSelVehicle := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
     Length(AircraftBase) - 1);
-  DrawVehiclesList(AircraftBase, SelVehicle);
-  DrawVehicleInfo(AircraftBase, SelVehicle);
+  DrawVehiclesList(AircraftBase, LSelVehicle);
+  DrawVehicleInfo(AircraftBase, LSelVehicle);
 
   AddButton(20, Game.Vehicles.IsBuyAircraftAllowed, 'Enter', 'Buy Aircraft');
   AddButton(20, 'Esc', 'Close');
@@ -49,7 +49,7 @@ end;
 procedure TSceneAircraftHangar.Update(var Key: Word);
 var
   I: Integer;
-  Title: string;
+  LTitle: string;
 begin
   inherited Update(Key);
   if (Key = TK_MOUSE_LEFT) then
@@ -82,9 +82,9 @@ begin
           I := Game.Vehicles.CurrentVehicle;
           if (Game.Money >= AircraftBase[I].Cost) then
           begin
-            Title := Format('Aircraft #%d (%s)',
+            LTitle := Format('Aircraft #%d (%s)',
               [Game.Vehicles.AircraftCount + 1, AircraftBase[I].Name]);
-            Game.Vehicles.AddAircraft(Title, Game.Map.CurrentIndustry, I);
+            Game.Vehicles.AddAircraft(LTitle, Game.Map.CurrentIndustry, I);
             Scenes.SetScene(scAirport);
           end;
         end;

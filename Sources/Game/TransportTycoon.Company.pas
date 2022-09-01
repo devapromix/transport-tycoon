@@ -11,12 +11,12 @@ type
 
   TStat = class(TObject)
   private
-    FSt: array [TConstructEnum] of Integer;
+    FStat: array [TConstructEnum] of Integer;
   public
     procedure Clear;
-    function GetStat(const ConstructEnum: TConstructEnum): Integer;
-    procedure IncStat(const ConstructEnum: TConstructEnum;
-      const Value: Integer = 1);
+    function GetStat(const AConstructEnum: TConstructEnum): Integer;
+    procedure IncStat(const AConstructEnum: TConstructEnum;
+      const AValue: Integer = 1);
   end;
 
 type
@@ -43,6 +43,7 @@ implementation
 
 uses
   Math,
+  SysUtils,
   TransportTycoon.Game,
   TransportTycoon.Map;
 
@@ -50,21 +51,21 @@ uses
 
 procedure TStat.Clear;
 var
-  ConstructEnum: TConstructEnum;
+  LConstructEnum: TConstructEnum;
 begin
-  for ConstructEnum := Low(TConstructEnum) to High(TConstructEnum) do
-    FSt[ConstructEnum] := 0;
+  for LConstructEnum := Low(TConstructEnum) to High(TConstructEnum) do
+    FStat[LConstructEnum] := 0;
 end;
 
-function TStat.GetStat(const ConstructEnum: TConstructEnum): Integer;
+function TStat.GetStat(const AConstructEnum: TConstructEnum): Integer;
 begin
-  Result := FSt[ConstructEnum];
+  Result := FStat[AConstructEnum];
 end;
 
-procedure TStat.IncStat(const ConstructEnum: TConstructEnum;
-  const Value: Integer = 1);
+procedure TStat.IncStat(const AConstructEnum: TConstructEnum;
+  const AValue: Integer = 1);
 begin
-  Inc(FSt[ConstructEnum], Value);
+  Inc(FStat[AConstructEnum], AValue);
 end;
 
 { TCompany }
@@ -83,7 +84,7 @@ end;
 
 destructor TCompany.Destroy;
 begin
-  FStat.Free;
+  FreeAndNil(FStat);
   inherited;
 end;
 

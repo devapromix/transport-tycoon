@@ -33,7 +33,7 @@ uses
 procedure TSceneAirport.Render;
 var
   I, J: Integer;
-  Cargo: TCargo;
+  LCargo: TCargo;
 begin
   inherited Render;
 
@@ -44,12 +44,12 @@ begin
   terminal_color(TPalette.Default);
   DrawText(7, 11, 'Size: ' + AirportSizeStr[FTown.Airport.Level]);
   J := 12;
-  for Cargo := Succ(Low(TCargo)) to High(TCargo) do
+  for LCargo := Succ(Low(TCargo)) to High(TCargo) do
   begin
-    if Cargo in [cgPassengers] then
+    if LCargo in [cgPassengers] then
     begin
-      DrawText(7, J, Format('%s: %d/%d', [CargoStr[Cargo],
-        FTown.ProducesAmount[Cargo], FTown.MaxCargo]));
+      DrawText(7, J, Format('%s: %d/%d', [CargoStr[LCargo],
+        FTown.ProducesAmount[LCargo], FTown.MaxCargo]));
       Inc(J);
     end;
   end;

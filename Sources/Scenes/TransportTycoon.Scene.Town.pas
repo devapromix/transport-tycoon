@@ -32,7 +32,7 @@ uses
 
 procedure TSceneTown.Render;
 var
-  AirportLevel: Integer;
+  LAirportLevel: Integer;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
@@ -45,9 +45,9 @@ begin
   DrawText(12, 10, 'Population: ' + IntToStr(FTown.Population));
   DrawText(12, 11, 'Houses: ' + IntToStr(FTown.Houses));
   // Airport
-  AirportLevel := Math.EnsureRange(FTown.Airport.Level, 1, 5);
+  LAirportLevel := Math.EnsureRange(FTown.Airport.Level, 1, 5);
   DrawButton(34, 10, 35, FTown.Airport.IsBuilding, FTown.Airport.IsBuilding,
-    'A', AirportSizeStr[AirportLevel]);
+    'A', AirportSizeStr[LAirportLevel]);
   // Dock
   DrawButton(34, 11, 35, FTown.Dock.IsBuilding, FTown.Dock.IsBuilding,
     'D', 'Dock');
