@@ -105,9 +105,12 @@ type
     drNorthEast, drNorthWest, drOrigin);
 
 const
-  Direction: array [TDirectionEnum] of TLocation = ((X: 1; Y: 0), (X: - 1; Y: 0),
-    (X: 0; Y: 1), (X: 0; Y: - 1), (X: 1; Y: 1), (X: - 1; Y: 1), (X: 1; Y: - 1),
-    (X: - 1; Y: - 1), (X: 0; Y: 0));
+  Direction: array [TDirectionEnum] of TLocation = ((X: 1; Y: 0), (X: - 1;
+    Y: 0), (X: 0; Y: 1), (X: 0; Y: - 1), (X: 1; Y: 1), (X: - 1; Y: 1), (X: 1;
+    Y: - 1), (X: - 1; Y: - 1), (X: 0; Y: 0));
+
+const
+  ConstructCost: array [TConstructEnum] of Word = (100, 2000, 250, 5000, 1500);
 
 type
 
@@ -138,16 +141,7 @@ type
     function MapIndCount: Integer;
     function MapTownCount: Integer;
     procedure DrawTile(const X, Y: Integer);
-    procedure AddHLRiver;
-    procedure AddVTRiver;
-    procedure AddHRRiver;
-    procedure AddVDRiver;
-  public const
-    ClearLandCost = 100;
-    BuildCanalCost = 2000;
-    BuildRoadCost = 250;
-    BuildRoadTunnelCost = 5000;
-    BuildRoadBridgeCost = 2000;
+    procedure AddRiver(const DirectionEnum: TDirectionEnum);
   public
     Industry: array of TIndustry;
     constructor Create;
@@ -203,25 +197,20 @@ type
   TBuildPlan = record
     AffectedTiles: set of TTiles;
     ResultTile: TTiles;
-    Money: Integer;
   end;
 
 const
   BuildPlans: array [TConstructEnum] of TBuildPlan = (
     // ceClearLand
-    (AffectedTiles: TreeTiles; ResultTile: tlDirt; Money: TMap.ClearLandCost),
+    (AffectedTiles: TreeTiles; ResultTile: tlDirt),
     // ceBuildCanal
-    (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlCanal;
-    Money: TMap.BuildCanalCost),
+    (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlCanal),
     // ceBuildRoad
-    (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlRoad;
-    Money: TMap.BuildRoadCost),
+    (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlRoad),
     // ceBuildRoadTunnel
-    (AffectedTiles: MountainTiles; ResultTile: tlRoadTunnel;
-    Money: TMap.BuildRoadTunnelCost),
+    (AffectedTiles: MountainTiles; ResultTile: tlRoadTunnel),
     // ceBuildRoadBridge
-    (AffectedTiles: WaterTiles; ResultTile: tlRoadBridge;
-    Money: TMap.BuildRoadBridgeCost));
+    (AffectedTiles: WaterTiles; ResultTile: tlRoadBridge));
 
   { TMap }
 
@@ -455,10 +444,10 @@ begin
     Plan := BuildPlans[AConstructEnum];
     if not(FTile[AX][AY] in Plan.AffectedTiles) then
       Exit;
-    Money := Plan.Money;
+    Money := ConstructCost[AConstructEnum];
     if not(AConstructEnum in [ceClearLand]) and (FTile[AX][AY] in TreeTiles)
     then
-      Inc(Money, ClearLandCost);
+      Inc(Money, ConstructCost[ceClearLand]);
     if (Game.Money >= Money) then
     begin
       FTile[AX][AY] := Plan.ResultTile;
@@ -513,115 +502,72 @@ begin
   end;
 end;
 
-procedure TMap.AddHLRiver;
+procedure TMap.AddRiver(const DirectionEnum: TDirectionEnum);
 var
-  X, Y: Integer;
+  I, X, Y, Start, Finish: Integer;
 begin
   try
-    X := 0;
-    Y := RandomRange(FHeight div 3, (FHeight div 3) * 2);
-    while (X <= FWidth div 3) do
+    case DirectionEnum of
+      drEast:
+        begin
+          X := (Width div 3) * 2;
+          Y := RandomRange(FHeight div 3, (FHeight div 3) * 2);
+          Start := (FWidth div 3) * 2;
+          Finish := FWidth - 1;
+        end;
+      drWest:
+        begin
+          X := 0;
+          Y := RandomRange(FHeight div 3, (FHeight div 3) * 2);
+          Start := 0;
+          Finish := FWidth div 3;
+        end;
+      drSouth:
+        begin
+          X := RandomRange(FWidth div 3, (FWidth div 3) * 2);
+          Y := (FHeight div 3) * 2;
+          Start := (FHeight div 3) * 2;;
+          Finish := FHeight - 1;
+        end;
+      drNorth:
+        begin
+          X := RandomRange(FWidth div 3, (FWidth div 3) * 2);
+          Y := 0;
+          Start := 0;
+          Finish := FHeight div 3;
+        end;
+    end;
+    for I := Start to Finish do
     begin
-      if RandomRange(0, 3) = 1 then
-        if RandomRange(0, 2) = 1 then
-          Inc(Y)
-        else
-          Dec(Y);
-      Y := EnsureRange(Y, 1, FHeight - 1);
-      if (FTile[X][Y] in [tlWater, tlRock]) and (X > FWidth div 3) then
-        Break;
-      if (X > ((FWidth div 3) * 2)) and (RandomRange(0, 5) = 0) then
+      case DirectionEnum of
+        drEast, drWest:
+          if RandomRange(0, 3) = 1 then
+            if RandomRange(0, 2) = 1 then
+              Inc(Y)
+            else
+              Dec(Y);
+        drSouth, drNorth:
+          if RandomRange(0, 3) = 1 then
+            if RandomRange(0, 2) = 1 then
+              Inc(X)
+            else
+              Dec(X);
+      end;
+      X := EnsureRange(X, 0, FWidth - 1);
+      Y := EnsureRange(Y, 0, FHeight - 1);
+      if (FTile[X][Y] in [tlWater, tlRock]) then
         Break;
       FTile[X][Y] := tlWater;
-      Inc(X);
+      case DirectionEnum of
+        drEast, drWest:
+          Inc(X);
+        drSouth, drNorth:
+          Inc(Y);
+      end;
     end;
   except
     on E: Exception do
-      Log.Add('TMap.AddHLRiver', E.Message);
-  end;
-end;
-
-procedure TMap.AddVTRiver;
-var
-  X, Y: Integer;
-begin
-  try
-    X := RandomRange(FWidth div 3, (FWidth div 3) * 2);
-    Y := 0;
-    while (Y <= FHeight div 3) do
-    begin
-      if RandomRange(0, 3) = 1 then
-        if RandomRange(0, 2) = 1 then
-          Inc(X)
-        else
-          Dec(X);
-      X := EnsureRange(X, 1, FWidth - 1);
-      if (FTile[X][Y] in [tlWater, tlRock]) and (Y > FHeight div 3) then
-        Break;
-      if (Y > ((FHeight div 3) * 2)) and (RandomRange(0, 5) = 0) then
-        Break;
-      FTile[X][Y] := tlWater;
-      Inc(Y);
-    end;
-  except
-    on E: Exception do
-      Log.Add('TMap.AddVTRiver', E.Message);
-  end;
-end;
-
-procedure TMap.AddHRRiver;
-var
-  X, Y: Integer;
-begin
-  try
-    X := FWidth - 1;
-    Y := RandomRange(FHeight div 3, (FHeight div 3) * 2);
-    while (X >= 1) do
-    begin
-      if RandomRange(0, 3) = 1 then
-        if RandomRange(0, 2) = 1 then
-          Inc(Y)
-        else
-          Dec(Y);
-      Y := EnsureRange(Y, 1, FHeight - 1);
-      if (FTile[X][Y] in [tlWater, tlRock]) and (X < ((FWidth div 3) * 2)) then
-        Break;
-      if (X < ((FWidth div 3) * 2)) and (RandomRange(0, 5) = 0) then
-        Break;
-      FTile[X][Y] := tlWater;
-      Dec(X);
-    end;
-  except
-    on E: Exception do
-      Log.Add('TMap.AddHRRiver', E.Message);
-  end;
-end;
-
-procedure TMap.AddVDRiver;
-var
-  X, Y: Integer;
-begin
-  try
-    X := RandomRange(FWidth div 3, (FWidth div 3) * 2);
-    Y := FHeight - 1;
-    while (Y >= 1) do
-    begin
-      if RandomRange(0, 3) = 1 then
-        if RandomRange(0, 2) = 1 then
-          Inc(X)
-        else
-          Dec(X);
-      X := EnsureRange(X, 1, FWidth - 1);
-      if (FTile[X][Y] in [tlWater, tlRock]) and (Y < ((FHeight div 3) * 2)) then
-        Break;
-      if (Y < ((FHeight div 3) * 2)) and (RandomRange(0, 5) = 0) then
-        Break;
-      FTile[X][Y] := tlWater;
-      Dec(Y);
-    end;
-  except
-    on E: Exception do
-      Log.Add('TMap.AddVDRiver', E.Message);
+      Log.Add('TMap.AddRiver', E.Message);
   end;
 end;
 
@@ -740,16 +686,7 @@ begin
     end;
     // Rivers
     for I := 0 to MapRiversInt[Rivers] - 1 do
-      case RandomRange(0, 5) of
-        0:
-          AddHLRiver;
-        1:
-          AddVTRiver;
-        2:
-          AddVDRiver;
-      else
-        AddHRRiver;
-      end;
+      AddRiver(TDirectionEnum(RandomRange(0, 4)));
     // Towns
     for I := 0 to Length(Industry) - 1 do
       Industry[I].Free;

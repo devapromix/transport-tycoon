@@ -25,7 +25,8 @@ uses
   BearLibTerminal,
   TransportTycoon.Game,
   TransportTycoon.Construct,
-  TransportTycoon.Palette;
+  TransportTycoon.Palette,
+  TransportTycoon.Map;
 
 { TSceneBuildMenu }
 
@@ -47,11 +48,11 @@ begin
 
   StartYLine := 12;
 
-  DrawLine('C', 'Build Canal', Game.Map.BuildCanalCost);
-  DrawLine('R', 'Build Road', Game.Map.BuildRoadCost);
-  DrawLine('B', 'Build Road Bridge', Game.Map.BuildRoadBridgeCost);
-  DrawLine('T', 'Build Road Tunnel', Game.Map.BuildRoadTunnelCost);
-  DrawLine('X', 'Clear land', Game.Map.ClearLandCost);
+  DrawLine('C', 'Build Canal', ConstructCost[ceBuildCanal]);
+  DrawLine('R', 'Build Road', ConstructCost[ceBuildRoad]);
+  DrawLine('B', 'Build Road Bridge', ConstructCost[ceBuildRoadBridge]);
+  DrawLine('T', 'Build Road Tunnel', ConstructCost[ceBuildRoadTunnel]);
+  DrawLine('X', 'Clear land', ConstructCost[ceClearLand]);
 
   AddButton(18, 'Esc', 'Close');
 
