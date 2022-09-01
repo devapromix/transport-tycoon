@@ -237,13 +237,13 @@ begin
         TileInfo(Tile[Game.Map.GetTile].Name);
     end;
     if (MY = Self.ScreenHeight - 2) then
-      ScrollDown;
+      Scroll(drSouth);
     if (MY = 0) then
-      ScrollUp;
+      Scroll(drNorth);
     if (MX = Self.ScreenWidth - 1) then
-      ScrollRight;
+      Scroll(drEast);
     if (MX = 0) then
-      ScrollLeft;
+      Scroll(drWest);
   except
     on E: Exception do
       Log.Add('TSceneWorld.Render', E.Message);
@@ -453,13 +453,13 @@ begin
           Scenes.SetScene(scGameMenu);
         end;
       TK_LEFT:
-        ScrollLeft;
+        Scroll(drWest);
       TK_RIGHT:
-        ScrollRight;
+        Scroll(drEast);
       TK_UP:
-        ScrollUp;
+        Scroll(drNorth);
       TK_DOWN:
-        ScrollDown;
+        Scroll(drSouth);
     end;
     GlobalKeys(Key);
   except

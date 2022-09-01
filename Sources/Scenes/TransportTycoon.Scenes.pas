@@ -3,6 +3,7 @@
 interface
 
 uses
+  TransportTycoon.Map,
   BearLibTerminal;
 
 type
@@ -72,10 +73,7 @@ type
     property RX: Integer read FRX write FRX;
     property RY: Integer read FRY write FRY;
     procedure ScrollTo(const X, Y: Integer);
-    procedure ScrollUp;
-    procedure ScrollDown;
-    procedure ScrollLeft;
-    procedure ScrollRight;
+    procedure Scroll(const DirectionEnum: TDirectionEnum);
     function Check(const F: Boolean): string;
     property TextLineY: Integer read FTextLineY write FTextLineY;
     function StrLim(const S: string; const N: Integer): string;
@@ -112,7 +110,6 @@ uses
   Math,
   SysUtils,
   TransportTycoon.Log,
-  TransportTycoon.Map,
   TransportTycoon.Game,
   TransportTycoon.Scene.MainMenu,
   TransportTycoon.Scene.GameMenu,
@@ -369,17 +366,6 @@ begin
   end;
 end;
 
-procedure TScene.ScrollUp;
-begin
-  try
-    if (Game.Map.Top > 0) then
-      Game.Map.Top := Game.Map.Top - 1;
-  except
-    on E: Exception do
-      Log.Add('TScenes.ScrollUp', E.Message);
-  end;
-end;
-
 function TScene.StrLim(const S: string; const N: Integer): string;
 begin
   if Length(S) > N then
@@ -398,36 +384,30 @@ begin
     Result := #32;
 end;
 
-procedure TScene.ScrollDown;
+procedure TScene.Scroll(const DirectionEnum: TDirectionEnum);
+var
+  F: Boolean;
 begin
+  F := False;
   try
-    if (Game.Map.Top <= Game.Map.Height - Self.ScreenHeight) then
-      Game.Map.Top := Game.Map.Top + 1;
+    case DirectionEnum of
+      drEast:
+        F := (Game.Map.Left > 0);
+      drWest:
+        F := (Game.Map.Left < Game.Map.Width - Self.ScreenWidth);
+      drSouth:
+        F := (Game.Map.Top <= Game.Map.Height - Self.ScreenHeight);
+      drNorth:
+        F := (Game.Map.Top > 0);
+    end;
+    if F then
+    begin
+      Game.Map.Top := Game.Map.Top + Direction[DirectionEnum].Y;
+      Game.Map.Left := Game.Map.Left + Direction[DirectionEnum].X;
+    end;
   except
     on E: Exception do
-      Log.Add('TScenes.ScrollDown', E.Message);
-  end;
-end;
-
-procedure TScene.ScrollLeft;
-begin
-  try
-    if (Game.Map.Left > 0) then
-      Game.Map.Left := Game.Map.Left - 1;
-  except
-    on E: Exception do
-      Log.Add('TScene.ScrollLeft', E.Message);
-  end;
-end;
-
-procedure TScene.ScrollRight;
-begin
-  try
-    if (Game.Map.Left < Game.Map.Width - Self.ScreenWidth) then
-      Game.Map.Left := Game.Map.Left + 1;
-  except
-    on E: Exception do
-      Log.Add('TScene.ScrollRight', E.Message);
+      Log.Add('TScenes.Scroll', E.Message);
   end;
 end;
 

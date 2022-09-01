@@ -4,6 +4,7 @@ interface
 
 uses
   TransportTycoon.Industries,
+  TransportTycoon.MapObject,
   TransportTycoon.Construct;
 
 type
@@ -98,6 +99,15 @@ const
     'Normal', 'High');
   MapNoOfTownsInt: array [1 .. 4] of Integer = (3, 5, 8, 11);
   MapNoOfInd: array [TMapNoOfInd] of Integer = (1, 2, 3, 5);
+
+type
+  TDirectionEnum = (drEast, drWest, drSouth, drNorth, drSouthEast, drSouthWest,
+    drNorthEast, drNorthWest, drOrigin);
+
+const
+  Direction: array [TDirectionEnum] of TLocation = ((X: 1; Y: 0), (X: - 1; Y: 0),
+    (X: 0; Y: 1), (X: 0; Y: - 1), (X: 1; Y: 1), (X: - 1; Y: 1), (X: 1; Y: - 1),
+    (X: - 1; Y: - 1), (X: 0; Y: 0));
 
 type
 
