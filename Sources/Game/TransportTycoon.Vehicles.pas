@@ -165,13 +165,13 @@ var
   I: Integer;
 begin
   for I := 0 to AircraftCount - 1 do
-    FreeAndNil(Aircraft[I]);
+    FreeAndNil(FAircraft[I]);
   SetLength(FAircraft, 0);
   for I := 0 to ShipCount - 1 do
-    FreeAndNil(Ship[I]);
+    FreeAndNil(FShip[I]);
   SetLength(FShip, 0);
   for I := 0 to RoadVehicleCount - 1 do
-    FreeAndNil(RoadVehicle[I]);
+    FreeAndNil(FRoadVehicle[I]);
   SetLength(FRoadVehicle, 0);
 end;
 
