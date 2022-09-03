@@ -1,4 +1,4 @@
-﻿unit TransportTycoon.Scene.GameMenu;
+﻿unit TransportTycoon.Scene.Menu.Game;
 
 interface
 

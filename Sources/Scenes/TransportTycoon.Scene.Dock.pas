@@ -32,7 +32,7 @@ uses
 
 procedure TSceneDock.Render;
 var
-  I, J: Integer;
+  I, LY: Integer;
   LCargo: TCargo;
 begin
   inherited Render;
@@ -42,14 +42,14 @@ begin
   DrawTitle(FIndustry.Name + ' Dock');
 
   terminal_color(TPalette.Default);
-  J := 11;
+  LY := 11;
   for LCargo := Succ(Low(TCargo)) to High(TCargo) do
   begin
     if LCargo in FIndustry.Produces then
     begin
-      DrawText(7, J, Format('%s: %d/%d', [CargoStr[LCargo],
+      DrawText(7, LY, Format('%s: %d/%d', [CargoStr[LCargo],
         FIndustry.ProducesAmount[LCargo], FIndustry.MaxCargo]));
-      Inc(J);
+      Inc(LY);
     end;
   end;
 

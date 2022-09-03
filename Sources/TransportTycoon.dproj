@@ -121,12 +121,12 @@
         <DCCReference Include="Game\TransportTycoon.Stations.pas"/>
         <DCCReference Include="Game\TransportTycoon.Industries.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scenes.pas"/>
-        <DCCReference Include="Scenes\TransportTycoon.Scene.BuildMenu.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.Build.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.BuildInTown.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.World.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Airport.pas"/>
-        <DCCReference Include="Scenes\TransportTycoon.Scene.MainMenu.pas"/>
-        <DCCReference Include="Scenes\TransportTycoon.Scene.GameMenu.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.Main.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.Game.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.AircraftHangar.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Aircraft.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Aircrafts.pas"/>
