@@ -136,7 +136,7 @@ end;
 
 procedure TVehicle.SetLastStation;
 begin
-  FLastStationId := CurOrder.ID;
+  FLastStationId := CurOrder.IndustryIndex;
 end;
 
 end.

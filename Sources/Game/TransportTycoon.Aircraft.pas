@@ -94,14 +94,14 @@ var
 begin
   FState := 'Load';
   for LCargo := Succ(Low(TCargo)) to High(TCargo) do
-    if (LCargo in Game.Map.Industry[CurOrder.ID].Produces) and
+    if (LCargo in Game.Map.Industry[CurOrder.IndustryIndex].Produces) and
       (LCargo in CargoSet) then
     begin
       SetCargoType(LCargo);
-      while (Game.Map.Industry[CurOrder.ID].ProducesAmount[LCargo] > 0) and
+      while (Game.Map.Industry[CurOrder.IndustryIndex].ProducesAmount[LCargo] > 0) and
         (CargoAmount < CargoMaxAmount) do
       begin
-        Game.Map.Industry[CurOrder.ID].DecCargoAmount(LCargo);
+        Game.Map.Industry[CurOrder.IndustryIndex].DecCargoAmount(LCargo);
         IncCargoAmount;
       end;
       Exit;
@@ -132,18 +132,18 @@ begin
     if not Move(CurOrder.X, CurOrder.Y) then
     begin
       Inc(FTimer);
-      if CurOrder.ID <> LastStationId then
+      if CurOrder.IndustryIndex <> LastStationId then
         UnLoad;
       FState := 'Service';
       if FTimer >
         (15 - (TTownIndustry(Game.Map.Industry[Orders.Order[Orders.OrderIndex]
-        .ID]).Airport.Level * 2)) then
+        .IndustryIndex]).Airport.Level * 2)) then
       begin
         FTimer := 0;
         Load;
         if FullLoad then
           for LCargo := Succ(Low(TCargo)) to High(TCargo) do
-            if (LCargo in Game.Map.Industry[CurOrder.ID].Produces) and
+            if (LCargo in Game.Map.Industry[CurOrder.IndustryIndex].Produces) and
               (LCargo in CargoSet) then
             begin
               SetCargoType(LCargo);
@@ -164,11 +164,11 @@ var
 begin
   SetLastStation;
   FState := 'Unload';
-  if (CargoType in Game.Map.Industry[CurOrder.ID].Accepts) and
+  if (CargoType in Game.Map.Industry[CurOrder.IndustryIndex].Accepts) and
     (CargoType <> cgNone) and (CargoAmount > 0) then
   begin
     LMoney := (CargoAmount * (Distance div 10)) * CargoPrice[CargoType];
-    Game.Map.Industry[CurOrder.ID].IncAcceptsCargoAmount(CargoType,
+    Game.Map.Industry[CurOrder.IndustryIndex].IncAcceptsCargoAmount(CargoType,
       CargoAmount);
     Game.ModifyMoney(ttAircraftIncome, LMoney);
     Profit := Profit + LMoney;

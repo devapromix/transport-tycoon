@@ -2,24 +2,29 @@
 
 interface
 
+uses
+  TransportTycoon.MapObject;
+
 type
-  TOrder = record
-    Id: Integer;
-    Name: string;
-    X, Y: Integer;
+  TOrder = class(TMapObject)
+  private
+    FIndustryIndex: Integer;
+  public
+    property IndustryIndex: Integer read FIndustryIndex write FIndustryIndex;
   end;
 
 type
   TOrders = class(TObject)
   private
-    FOrder: array of TOrder;
+    FOrder: TArray<TOrder>;
     FOrderIndex: Integer;
     function GetOrder(Index: Integer): TOrder;
-    procedure SetOrder(Index: Integer; const Value: TOrder);
+    procedure SetOrder(Index: Integer; Value: TOrder);
   public
+    destructor Destroy; override;
     property Order[Index: Integer]: TOrder read GetOrder write SetOrder;
-    procedure AddOrder(const TownIndex: Integer; const AName: string;
-      const AX, AY: Integer);
+    procedure AddOrder(const AIndustryIndex: Integer;
+      const AIndustryName: string; const AX, AY: Integer);
     procedure DelOrder(const AIndex: Integer);
     function IsOrder(const AIndex: Integer): Boolean;
     procedure IncOrder;
@@ -29,16 +34,17 @@ type
 
 implementation
 
+uses
+  SysUtils;
+
 { TOrders }
 
-procedure TOrders.AddOrder(const TownIndex: Integer; const AName: string;
-  const AX, AY: Integer);
+procedure TOrders.AddOrder(const AIndustryIndex: Integer;
+  const AIndustryName: string; const AX, AY: Integer);
 begin
   SetLength(FOrder, Length(FOrder) + 1);
-  FOrder[High(FOrder)].Id := TownIndex;
-  FOrder[High(FOrder)].Name := AName;
-  FOrder[High(FOrder)].X := AX;
-  FOrder[High(FOrder)].Y := AY;
+  FOrder[High(FOrder)] := TOrder.Create(AIndustryName, AX, AY);
+  FOrder[High(FOrder)].IndustryIndex := AIndustryIndex;
 end;
 
 function TOrders.Count: Integer;
@@ -67,6 +73,15 @@ begin
   end;
 end;
 
+destructor TOrders.Destroy;
+var
+  I: Integer;
+begin
+  for I := 0 to Count - 1 do
+    FreeAndNil(FOrder[I]);
+  inherited;
+end;
+
 function TOrders.GetOrder(Index: Integer): TOrder;
 begin
   Result := FOrder[Index];
@@ -85,11 +100,11 @@ var
 begin
   Result := False;
   for I := 0 to Length(FOrder) - 1 do
-    if FOrder[I].Id = AIndex then
+    if FOrder[I].IndustryIndex = AIndex then
       Exit(True);
 end;
 
-procedure TOrders.SetOrder(Index: Integer; const Value: TOrder);
+procedure TOrders.SetOrder(Index: Integer; Value: TOrder);
 begin
   FOrder[Index] := Value
 end;
