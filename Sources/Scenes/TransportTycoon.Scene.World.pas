@@ -184,7 +184,7 @@ begin
     DrawFrame(LX, LY, LNameLength, 5);
     DrawText(LX + (LNameLength div 2), LY + 2,
       '[c=yellow]' + UpperCase(LIndustryName) + '[/c]', TK_ALIGN_CENTER);
-    DrawText(MX, MY, Tile[Game.Map.GetTile].Tile, 'yellow', 'gray');
+    DrawText(MX, MY, Tile[Game.Map.GetTileEnum].Glyph, 'yellow', 'gray');
   except
     on E: Exception do
       Log.Add('TSceneWorld.IndustryInfo', E.Message);
@@ -200,7 +200,7 @@ begin
 
     if Game.Construct.IsBuild(ceClearLand) then
     begin
-      if (Game.Map.GetTile in TreeTiles) then
+      if (Game.Map.GetTileEnum in TreeTiles) then
         DrawTileBkColor('light red')
       else
         DrawTileBkColor;
@@ -210,7 +210,7 @@ begin
       Game.Construct.IsBuild(ceBuildRoadBridge) or
       Game.Construct.IsBuild(ceBuildRoadTunnel) then
     begin
-      if (Game.Map.GetTile in TreeTiles + LandTiles) then
+      if (Game.Map.GetTileEnum in TreeTiles + LandTiles) then
         DrawTileBkColor('light yellow')
       else
         DrawTileBkColor;
@@ -221,20 +221,20 @@ begin
       DrawTileBkColor;
 
     terminal_color('black');
-    terminal_put(MX, MY, Tile[Game.Map.GetTile].Tile);
+    terminal_put(MX, MY, Tile[Game.Map.GetTileEnum].Glyph);
 
     DrawBar;
 
     if (MY < Self.ScreenHeight - 1) then
     begin
-      if Game.Map.GetTile = tlTownIndustry then
+      if Game.Map.GetTileEnum = tlTownIndustry then
         TownInfo(Game.Map.GetCurrentIndustry(RX, RY))
-      else if Game.Map.GetTile in IndustryTiles then
+      else if Game.Map.GetTileEnum in IndustryTiles then
         IndustryInfo(Game.Map.GetCurrentIndustry(RX, RY))
       else if Game.Vehicles.IsVehicleOnMap(RX, RY, LVehicleName) then
         VehicleInfo(LVehicleName)
       else
-        TileInfo(Tile[Game.Map.GetTile].Name);
+        TileInfo(Tile[Game.Map.GetTileEnum].Name);
     end;
     if (MY = Self.ScreenHeight - 2) then
       Scroll(drSouth);
@@ -275,7 +275,7 @@ begin
       begin
         if not Game.Construct.IsConstruct then
         begin
-          if (Game.Map.GetTile = tlTownIndustry) then
+          if (Game.Map.GetTileEnum = tlTownIndustry) then
           begin
             if Game.Map.EnterInIndustry(RX, RY) then
               if Game.IsOrder then
@@ -348,7 +348,7 @@ begin
                 Scenes.SetScene(scTown);
             Exit;
           end;
-          if (Game.Map.GetTile in IndustryTiles) then
+          if (Game.Map.GetTileEnum in IndustryTiles) then
           begin
             if Game.Map.EnterInIndustry(RX, RY) then
               if Game.IsOrder then

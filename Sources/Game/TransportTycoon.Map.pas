@@ -8,7 +8,7 @@ uses
   TransportTycoon.Construct;
 
 type
-  TTiles = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlRock, tlSand,
+  TTileEnum = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlRock, tlSand,
     tlWater, tlCanal, tlRoad, tlRoadTunnel, tlRoadBridge, tlTownIndustry,
     tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
     tlPowerPlantIndustry);
@@ -24,7 +24,7 @@ const
 type
   TTile = record
     Name: string;
-    Tile: Char;
+    Glyph: Char;
     Color: string;
     BkColor: string;
   end;
@@ -33,47 +33,48 @@ type
   TMapType = (mtRandom, mtNormal);
 
 const
-  Tile: array [TTiles] of TTile = (
+  Tile: array [TTileEnum] of TTile = (
     //
-    (Name: 'Grass'; Tile: '"'; Color: 'green'; BkColor: 'darkest green'),
+    (Name: 'Grass'; Glyph: '"'; Color: 'green'; BkColor: 'darkest green'),
     //
-    (Name: 'Dirt'; Tile: ':'; Color: 'dark yellow'; BkColor: 'darkest yellow'),
+    (Name: 'Dirt'; Glyph: ':'; Color: 'dark yellow'; BkColor: 'darkest yellow'),
     //
-    (Name: 'Oak'; Tile: 'f'; Color: 'green'; BkColor: 'darkest green'),
+    (Name: 'Oak'; Glyph: 'f'; Color: 'green'; BkColor: 'darkest green'),
     //
-    (Name: 'Pine'; Tile: 't'; Color: 'dark green'; BkColor: 'darkest green'),
+    (Name: 'Pine'; Glyph: 't'; Color: 'dark green'; BkColor: 'darkest green'),
     //
-    (Name: 'Bush'; Tile: 'b'; Color: 'dark green'; BkColor: 'darkest green'),
+    (Name: 'Bush'; Glyph: 'b'; Color: 'dark green'; BkColor: 'darkest green'),
     //
-    (Name: 'Rock'; Tile: '^'; Color: 'dark gray'; BkColor: 'darkest grey'),
+    (Name: 'Rock'; Glyph: '^'; Color: 'dark gray'; BkColor: 'darkest grey'),
     //
-    (Name: 'Sand'; Tile: ':'; Color: 'lightest yellow';
+    (Name: 'Sand'; Glyph: ':'; Color: 'lightest yellow';
     BkColor: 'darkest yellow'),
     //
-    (Name: 'Water'; Tile: '='; Color: 'blue'; BkColor: 'darkest blue'),
+    (Name: 'Water'; Glyph: '='; Color: 'blue'; BkColor: 'darkest blue'),
     //
-    (Name: 'Canal'; Tile: '='; Color: 'light blue'; BkColor: 'darkest blue'),
+    (Name: 'Canal'; Glyph: '='; Color: 'light blue'; BkColor: 'darkest blue'),
     //
-    (Name: 'Road'; Tile: '*'; Color: 'light gray'; BkColor: 'darkest gray'),
+    (Name: 'Road'; Glyph: '*'; Color: 'light gray'; BkColor: 'darkest gray'),
     //
-    (Name: 'Road Tunnel'; Tile: '~'; Color: 'dark gray';
+    (Name: 'Road Tunnel'; Glyph: '~'; Color: 'dark gray';
     BkColor: 'darkest gray'),
     //
-    (Name: 'Road Bridge'; Tile: '='; Color: 'light gray';
+    (Name: 'Road Bridge'; Glyph: '='; Color: 'light gray';
     BkColor: 'darkest blue'),
     //
-    (Name: 'Town'; Tile: '#'; Color: 'light yellow'; BkColor: 'darkest yellow'),
-    //
-    (Name: 'Forest'; Tile: 'F'; Color: 'light yellow';
+    (Name: 'Town'; Glyph: '#'; Color: 'light yellow';
     BkColor: 'darkest yellow'),
     //
-    (Name: 'Sawmill'; Tile: 'S'; Color: 'light yellow';
+    (Name: 'Forest'; Glyph: 'F'; Color: 'light yellow';
     BkColor: 'darkest yellow'),
     //
-    (Name: 'Coal Mine'; Tile: 'C'; Color: 'light yellow';
+    (Name: 'Sawmill'; Glyph: 'S'; Color: 'light yellow';
     BkColor: 'darkest yellow'),
     //
-    (Name: 'Power Plant'; Tile: 'P'; Color: 'light yellow';
+    (Name: 'Coal Mine'; Glyph: 'C'; Color: 'light yellow';
+    BkColor: 'darkest yellow'),
+    //
+    (Name: 'Power Plant'; Glyph: 'P'; Color: 'light yellow';
     BkColor: 'darkest yellow')
     //
     );
@@ -130,11 +131,11 @@ type
     FSeaLevel: TMapSeaLevel;
     FSize: TMapSize;
     FCurrentIndustry: Integer;
-    FTile: array of array of TTiles;
+    FTile: array of array of TTileEnum;
     function IsIndustryLocation(const AX, AY: Integer): Boolean;
     function IsTownLocation(const AX, AY: Integer): Boolean;
     function IsLandTile(const AX, AY: Integer): Boolean;
-    procedure AddSpot(const AX, AY: Integer; const ATile: TTiles);
+    procedure AddSpot(const AX, AY: Integer; const ATileEnum: TTileEnum);
     procedure AddTree(const AX, AY: Integer);
     procedure Resize;
     function SizeCoef: Integer;
@@ -174,12 +175,13 @@ type
     procedure BuildConstruct(const AX, AY: Integer;
       AConstructEnum: TConstructEnum);
     function GetNearTownName(const AX, AY: Integer): string;
-    function IsNearTile(const AX, AY: Integer; const ATile: TTiles): Boolean;
+    function IsNearTile(const AX, AY: Integer;
+      const ATileEnum: TTileEnum): Boolean;
     function TownCount: Integer;
     function IsAircraftPath(const AX, AY: Integer): Boolean;
     function IsShipPath(const AX, AY: Integer): Boolean;
     function IsRoadVehiclePath(const AX, AY: Integer): Boolean;
-    function GetTile: TTiles;
+    function GetTileEnum: TTileEnum;
   end;
 
 implementation
@@ -195,8 +197,8 @@ uses
 
 type
   TBuildPlan = record
-    AffectedTiles: set of TTiles;
-    ResultTile: TTiles;
+    AffectedTiles: set of TTileEnum;
+    ResultTile: TTileEnum;
   end;
 
 const
@@ -230,7 +232,8 @@ begin
   end;
 end;
 
-function TMap.IsNearTile(const AX, AY: Integer; const ATile: TTiles): Boolean;
+function TMap.IsNearTile(const AX, AY: Integer;
+  const ATileEnum: TTileEnum): Boolean;
 var
   LX, LY: Integer;
 begin
@@ -241,7 +244,7 @@ begin
       begin
         if (LX = AX) and (LY = AY) then
           Continue;
-        if (FTile[LX][LY] = ATile) then
+        if (FTile[LX][LY] = ATileEnum) then
           Exit(True);
       end;
   except
@@ -495,7 +498,7 @@ begin
       terminal_color(Tile[FTile[LX][LY]].Color);
       FLastColor := Tile[FTile[LX][LY]].Color;
     end;
-    terminal_put(AX, AY, Tile[FTile[LX][LY]].Tile);
+    terminal_put(AX, AY, Tile[FTile[LX][LY]].Glyph);
   except
     on E: Exception do
       Log.Add('TMap.DrawTile', E.Message);
@@ -785,7 +788,7 @@ begin
   end;
 end;
 
-procedure TMap.AddSpot(const AX, AY: Integer; const ATile: TTiles);
+procedure TMap.AddSpot(const AX, AY: Integer; const ATileEnum: TTileEnum);
 var
   I, LSize, LX, LY: Integer;
 begin
@@ -798,22 +801,22 @@ begin
       if (RandomRange(0, 6) = 0) and (LX > (SizeCoef + 10)) then
       begin
         LX := LX - 1;
-        FTile[LX][LY] := ATile;
+        FTile[LX][LY] := ATileEnum;
       end;
       if (RandomRange(0, 6) = 0) and (LX < FWidth - (SizeCoef + 10)) then
       begin
         LX := LX + 1;
-        FTile[LX][LY] := ATile;
+        FTile[LX][LY] := ATileEnum;
       end;
       if (RandomRange(0, 6) = 0) and (LY > (SizeCoef + 10)) then
       begin
         LY := LY - 1;
-        FTile[LX][LY] := ATile;
+        FTile[LX][LY] := ATileEnum;
       end;
       if (RandomRange(0, 6) = 0) and (LY < FHeight - (SizeCoef + 10)) then
       begin
         LY := LY + 1;
-        FTile[LX][LY] := ATile;
+        FTile[LX][LY] := ATileEnum;
       end;
     end;
   except
@@ -926,7 +929,7 @@ begin
   end;
 end;
 
-function TMap.GetTile: TTiles;
+function TMap.GetTileEnum: TTileEnum;
 var
   LX, LY: Integer;
 begin

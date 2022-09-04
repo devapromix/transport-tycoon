@@ -6,6 +6,9 @@ uses
   TransportTycoon.MapObject;
 
 type
+
+  { TOrder }
+
   TOrder = class(TMapObject)
   private
     FIndustryIndex: Integer;
@@ -14,6 +17,9 @@ type
   end;
 
 type
+
+  { TOrders }
+
   TOrders = class(TObject)
   private
     FOrder: TArray<TOrder>;
