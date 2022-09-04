@@ -40,10 +40,7 @@ begin
     Dec(I);
   end;
   if AIndustry.Accepts <> [] then
-  begin
     DrawText(AX, I, 'Accepts: ' + AIndustry.GetCargoStr(AIndustry.Accepts));
-    Dec(I);
-  end;
 end;
 
 procedure TSceneIndustry.Render;

@@ -53,10 +53,10 @@ end;
 
 procedure TSceneWorld.VehicleInfo(const AVehicleName: string);
 var
-  LX, LY, LN: Integer;
+  LX, LY, LNameLength: Integer;
 begin
   try
-    LN := EnsureRange(Length(AVehicleName) + 8, 20, 40);
+    LNameLength := EnsureRange(Length(AVehicleName) + 8, 20, 40);
     TileInfo(AVehicleName);
     if (MY < ScreenHeight - 10) then
       LY := MY + 1
@@ -65,11 +65,11 @@ begin
     if (MX < ScreenWidth - (ScreenWidth div 2)) then
       LX := MX + 1
     else
-      LX := MX - LN;
+      LX := MX - LNameLength;
     terminal_bkcolor(TPalette.Background);
-    DrawFrame(LX, LY, LN, 5);
-    DrawText(LX + (LN div 2), LY + 2, '[c=yellow]' + UpperCase(AVehicleName) +
-      '[/c]', TK_ALIGN_CENTER);
+    DrawFrame(LX, LY, LNameLength, 5);
+    DrawText(LX + (LNameLength div 2), LY + 2,
+      '[c=yellow]' + UpperCase(AVehicleName) + '[/c]', TK_ALIGN_CENTER);
     DrawText(MX, MY, '@', 'yellow', 'gray');
   except
     on E: Exception do
@@ -79,14 +79,14 @@ end;
 
 procedure TSceneWorld.TownInfo(const ATownID: Integer);
 var
-  LX, LY, LN: Integer;
+  LX, LY, LNameLength: Integer;
   LTownName: string;
 begin
   try
     if ATownID < 0 then
       Exit;
     LTownName := Game.Map.Industry[ATownID].Name;
-    LN := EnsureRange(Length(LTownName) + 8, 20, 40);
+    LNameLength := EnsureRange(Length(LTownName) + 8, 20, 40);
     TileInfo(LTownName);
     if (MY < ScreenHeight - 10) then
       LY := MY + 1
@@ -95,12 +95,12 @@ begin
     if (MX < ScreenWidth - (ScreenWidth div 2)) then
       LX := MX + 1
     else
-      LX := MX - LN;
+      LX := MX - LNameLength;
     terminal_bkcolor(TPalette.Background);
-    DrawFrame(LX, LY, LN, 7);
-    DrawText(LX + (LN div 2), LY + 2, '[c=yellow]' + UpperCase(LTownName) +
-      '[/c]', TK_ALIGN_CENTER);
-    DrawText(LX + (LN div 2), LY + 4,
+    DrawFrame(LX, LY, LNameLength, 7);
+    DrawText(LX + (LNameLength div 2), LY + 2,
+      '[c=yellow]' + UpperCase(LTownName) + '[/c]', TK_ALIGN_CENTER);
+    DrawText(LX + (LNameLength div 2), LY + 4,
       'Pop.: ' + IntToStr(TTownIndustry(Game.Map.Industry[ATownID]).Population),
       TK_ALIGN_CENTER);
     DrawText(MX, MY, '#', 'yellow', 'gray');
@@ -163,14 +163,14 @@ end;
 
 procedure TSceneWorld.IndustryInfo(const AIndustryID: Integer);
 var
-  LX, LY, LN: Integer;
+  LX, LY, LNameLength: Integer;
   LIndustryName: string;
 begin
   try
     if AIndustryID < 0 then
       Exit;
     LIndustryName := Game.Map.Industry[AIndustryID].Name;
-    LN := Length(LIndustryName) + 8;
+    LNameLength := Length(LIndustryName) + 8;
     TileInfo(LIndustryName);
     if (MY < ScreenHeight - 10) then
       LY := MY + 1
@@ -179,11 +179,11 @@ begin
     if (MX < ScreenWidth - (ScreenWidth div 2)) then
       LX := MX + 1
     else
-      LX := MX - LN;
+      LX := MX - LNameLength;
     terminal_bkcolor(TPalette.Background);
-    DrawFrame(LX, LY, LN, 5);
-    DrawText(LX + (LN div 2), LY + 2, '[c=yellow]' + UpperCase(LIndustryName) +
-      '[/c]', TK_ALIGN_CENTER);
+    DrawFrame(LX, LY, LNameLength, 5);
+    DrawText(LX + (LNameLength div 2), LY + 2,
+      '[c=yellow]' + UpperCase(LIndustryName) + '[/c]', TK_ALIGN_CENTER);
     DrawText(MX, MY, Tile[Game.Map.GetTile].Tile, 'yellow', 'gray');
   except
     on E: Exception do

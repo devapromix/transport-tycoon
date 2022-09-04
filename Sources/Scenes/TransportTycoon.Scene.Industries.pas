@@ -29,7 +29,7 @@ uses
 
 procedure TSceneIndustries.Render;
 var
-  I, J: Integer;
+  I, LY: Integer;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
@@ -37,12 +37,12 @@ begin
 
   DrawTitle(6, 'INDUSTRIES');
 
-  J := 0;
+  LY := 0;
   for I := 0 to Length(Game.Map.Industry) - 1 do
     if (Game.Map.Industry[I].IndustryType <> inTown) then
     begin
-      DrawButton(27, J + 8, Chr(Ord('A') + J), Game.Map.Industry[I].Name);
-      Inc(J);
+      DrawButton(27, LY + 8, Chr(Ord('A') + LY), Game.Map.Industry[I].Name);
+      Inc(LY);
     end;
 
   AddButton(22, 'Esc', 'Close');

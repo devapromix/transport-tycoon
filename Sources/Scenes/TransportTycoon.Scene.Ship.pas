@@ -28,7 +28,6 @@ uses
 procedure TSceneShip.Render;
 var
   I: Integer;
-  C: Char;
 begin
   inherited Render;
 
@@ -67,10 +66,7 @@ begin
         for I := 0 to Orders.Count - 1 do
         begin
           if (Orders.OrderIndex = I) then
-            C := '>'
-          else
-            C := #32;
-          DrawText(27, I + 11, C);
+            DrawText(27, I + 11, '>');
           DrawButton(29, I + 11, Orders.Count > 1, Chr(Ord('A') + I),
             StrLim('Go to ' + Orders.Order[I].Name + ' Dock', 40));
         end;

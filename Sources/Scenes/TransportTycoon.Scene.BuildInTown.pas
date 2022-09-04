@@ -30,7 +30,7 @@ uses
 
 procedure TSceneBuildInTown.Render;
 var
-  N: Integer;
+  LAirportLevel: Integer;
   S: string;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
@@ -41,11 +41,11 @@ begin
   DrawTitle('BUILD IN ' + FTown.Name);
   // Airport
   S := '';
-  N := Math.EnsureRange(FTown.Airport.Level + 1, 0, 5);
+  LAirportLevel := Math.EnsureRange(FTown.Airport.Level + 1, 0, 5);
   if FTown.Airport.Level < FTown.Airport.MaxLevel then
     S := ' ($' + IntToStr(FTown.Airport.Cost) + ')';
   DrawButton(17, 11, FTown.Airport.CanBuild, 'A',
-    'Build ' + AirportSizeStr[N] + S);
+    'Build ' + AirportSizeStr[LAirportLevel] + S);
   // Dock
   S := '';
   if FTown.Dock.Level = 0 then
