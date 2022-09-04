@@ -120,18 +120,18 @@ type
   TMap = class(TObject)
   private
     FNoOfInd: TMapNoOfInd;
-    FTop: Word;
-    FWidth: Word;
-    FHeight: Word;
-    FLeft: Word;
+    FTop: Integer;
+    FWidth: Integer;
+    FHeight: Integer;
+    FLeft: Integer;
     FLastColor: string;
     FLastBkColor: string;
     FNoOfTowns: Integer;
     FRivers: TMapRivers;
     FSeaLevel: TMapSeaLevel;
-    FSize: TMapSize;
+    FMapSize: TMapSize;
     FCurrentIndustry: Integer;
-    FTile: array of array of TTileEnum;
+    FTileEnum: array of array of TTileEnum;
     function IsIndustryLocation(const AX, AY: Integer): Boolean;
     function IsTownLocation(const AX, AY: Integer): Boolean;
     function IsLandTile(const AX, AY: Integer): Boolean;
@@ -147,13 +147,13 @@ type
     Industry: array of TIndustry;
     constructor Create;
     destructor Destroy; override;
-    property Top: Word read FTop write FTop;
-    property Left: Word read FLeft write FLeft;
-    property Height: Word read FHeight;
-    property Width: Word read FWidth;
+    property Top: Integer read FTop write FTop;
+    property Left: Integer read FLeft write FLeft;
+    property Height: Integer read FHeight;
+    property Width: Integer read FWidth;
     property CurrentIndustry: Integer read FCurrentIndustry
       write FCurrentIndustry;
-    property Size: TMapSize read FSize write FSize;
+    property MapSize: TMapSize read FMapSize write FMapSize;
     property SeaLevel: TMapSeaLevel read FSeaLevel write FSeaLevel;
     property Rivers: TMapRivers read FRivers write FRivers;
     property NoOfTowns: Integer read FNoOfTowns write FNoOfTowns;
@@ -244,7 +244,7 @@ begin
       begin
         if (LX = AX) and (LY = AY) then
           Continue;
-        if (FTile[LX][LY] = ATileEnum) then
+        if (FTileEnum[LX][LY] = ATileEnum) then
           Exit(True);
       end;
   except
@@ -262,7 +262,7 @@ function TMap.IsRoadVehiclePath(const AX, AY: Integer): Boolean;
 begin
   Result := True;
   try
-    Result := FTile[AX][AY] in [tlTownIndustry, tlRoad, tlRoadTunnel,
+    Result := FTileEnum[AX][AY] in [tlTownIndustry, tlRoad, tlRoadTunnel,
       tlRoadBridge] + IndustryTiles;
   except
     on E: Exception do
@@ -274,8 +274,8 @@ function TMap.IsShipPath(const AX, AY: Integer): Boolean;
 begin
   Result := True;
   try
-    Result := FTile[AX][AY] in [tlTownIndustry, tlWater, tlCanal, tlRoadBridge]
-      + IndustryTiles;
+    Result := FTileEnum[AX][AY] in [tlTownIndustry, tlWater, tlCanal,
+      tlRoadBridge] + IndustryTiles;
   except
     on E: Exception do
       Log.Add('TMap.IsShipPath', E.Message);
@@ -312,9 +312,9 @@ end;
 
 procedure TMap.NextSize;
 begin
-  Inc(FSize);
-  if (FSize > msLarge) then
-    FSize := msTiny;
+  Inc(FMapSize);
+  if (FMapSize > msLarge) then
+    FMapSize := msTiny;
 end;
 
 procedure TMap.Resize;
@@ -322,9 +322,9 @@ begin
   try
     FTop := 0;
     FLeft := 0;
-    FWidth := MapSizeInt[Size];
-    FHeight := MapSizeInt[Size];
-    SetLength(FTile, FWidth, FHeight);
+    FWidth := MapSizeInt[MapSize];
+    FHeight := MapSizeInt[MapSize];
+    SetLength(FTileEnum, FWidth, FHeight);
     FLastColor := '';
     FLastBkColor := '';
   except
@@ -335,26 +335,26 @@ end;
 
 function TMap.SizeCoef: Integer;
 begin
-  Result := (Ord(Size) + 1) * (Ord(Size) + 1);
+  Result := (Ord(MapSize) + 1) * (Ord(MapSize) + 1);
 end;
 
 function TMap.MapIndCount: Integer;
 begin
   Result := MapNoOfInd[NoOfInd];
-  if (Size = msTiny) then
+  if (MapSize = msTiny) then
     Result := MapNoOfInd[niVeryLow];
-  if (Size = msSmall) then
+  if (MapSize = msSmall) then
     Result := MapNoOfInd[niLow];
 end;
 
 function TMap.MapTownCount: Integer;
 begin
   Result := MapNoOfTownsInt[NoOfTowns];
-  if (Size = msSmall) then
+  if (MapSize = msSmall) then
     Result := MapNoOfTownsInt[2];
-  if (Size = msMedium) then
+  if (MapSize = msMedium) then
     Result := MapNoOfTownsInt[3];
-  if (Size = msLarge) then
+  if (MapSize = msLarge) then
     Result := MapNoOfTownsInt[4];
 end;
 
@@ -362,7 +362,7 @@ function TMap.IsLandTile(const AX, AY: Integer): Boolean;
 begin
   Result := False;
   try
-    Result := FTile[AX][AY] in LandTiles;
+    Result := FTileEnum[AX][AY] in LandTiles;
   except
     on E: Exception do
       Log.Add('TMap.IsLandTile', E.Message);
@@ -405,7 +405,7 @@ end;
 
 constructor TMap.Create;
 begin
-  FSize := msTiny;
+  FMapSize := msTiny;
   FSeaLevel := msVeryLow;
   FNoOfTowns := 1;
   FRivers := mrNone;
@@ -430,7 +430,7 @@ begin
     Resize;
     for LY := 0 to FHeight - 1 do
       for LX := 0 to FWidth - 1 do
-        FTile[LX][LY] := tlGrass;
+        FTileEnum[LX][LY] := tlGrass;
   except
     on E: Exception do
       Log.Add('TMap.Clear', E.Message);
@@ -445,15 +445,15 @@ var
 begin
   try
     LPlan := BuildPlans[AConstructEnum];
-    if not(FTile[AX][AY] in LPlan.AffectedTiles) then
+    if not(FTileEnum[AX][AY] in LPlan.AffectedTiles) then
       Exit;
     LMoney := ConstructCost[AConstructEnum];
-    if not(AConstructEnum in [ceClearLand]) and (FTile[AX][AY] in TreeTiles)
+    if not(AConstructEnum in [ceClearLand]) and (FTileEnum[AX][AY] in TreeTiles)
     then
       Inc(LMoney, ConstructCost[ceClearLand]);
     if (Game.Money >= LMoney) then
     begin
-      FTile[AX][AY] := LPlan.ResultTile;
+      FTileEnum[AX][AY] := LPlan.ResultTile;
       Game.ModifyMoney(ttConstruction, -LMoney);
       Game.Company.Stat.IncStat(AConstructEnum);
     end;
@@ -485,20 +485,20 @@ var
   LIsFlag: Boolean;
 begin
   try
-    LX := Left + AX;
-    LY := Top + AY;
+    LX := EnsureRange(Left + AX, 0, MapSizeInt[Game.Map.MapSize]);
+    LY := EnsureRange(Top + AY, 0, MapSizeInt[Game.Map.MapSize]);
     LIsFlag := (AX = 0) and (AY = 0);
-    if LIsFlag or (Tile[FTile[LX][LY]].BkColor <> FLastBkColor) then
+    if LIsFlag or (Tile[FTileEnum[LX][LY]].BkColor <> FLastBkColor) then
     begin
-      terminal_bkcolor(Tile[FTile[LX][LY]].BkColor);
-      FLastBkColor := Tile[FTile[LX][LY]].BkColor;
+      terminal_bkcolor(Tile[FTileEnum[LX][LY]].BkColor);
+      FLastBkColor := Tile[FTileEnum[LX][LY]].BkColor;
     end;
-    if LIsFlag or (Tile[FTile[LX][LY]].Color <> FLastColor) then
+    if LIsFlag or (Tile[FTileEnum[LX][LY]].Color <> FLastColor) then
     begin
-      terminal_color(Tile[FTile[LX][LY]].Color);
-      FLastColor := Tile[FTile[LX][LY]].Color;
+      terminal_color(Tile[FTileEnum[LX][LY]].Color);
+      FLastColor := Tile[FTileEnum[LX][LY]].Color;
     end;
-    terminal_put(AX, AY, Tile[FTile[LX][LY]].Glyph);
+    terminal_put(AX, AY, Tile[FTileEnum[LX][LY]].Glyph);
   except
     on E: Exception do
       Log.Add('TMap.DrawTile', E.Message);
@@ -558,9 +558,9 @@ begin
       end;
       LX := EnsureRange(LX, 0, FWidth - 1);
       LY := EnsureRange(LY, 0, FHeight - 1);
-      if (FTile[LX][LY] in [tlWater, tlRock]) then
+      if (FTileEnum[LX][LY] in [tlWater, tlRock]) then
         Break;
-      FTile[LX][LY] := tlWater;
+      FTileEnum[LX][LY] := tlWater;
       case ADirectionEnum of
         drEast, drWest:
           Inc(LX);
@@ -609,23 +609,23 @@ begin
       begin
         case Math.RandomRange(0, 15) of
           0 .. 1:
-            FTile[X][Y] := tlDirt;
+            FTileEnum[X][Y] := tlDirt;
           2 .. 3:
-            FTile[X][Y] := tlSand;
+            FTileEnum[X][Y] := tlSand;
           4 .. 6:
             AddTree(X, Y);
         else
-          FTile[X][Y] := tlGrass;
+          FTileEnum[X][Y] := tlGrass;
         end;
       end;
       if (SeaLevel > msVeryLow) then
       begin
         J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + LCoef;
         for X := 0 to J do
-          FTile[X][Y] := tlWater;
+          FTileEnum[X][Y] := tlWater;
         J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + LCoef;
         for X := FWidth - 1 downto FWidth - J - 1 do
-          FTile[X][Y] := tlWater;
+          FTileEnum[X][Y] := tlWater;
       end;
     end;
     for I := 0 to 14 do
@@ -649,10 +649,10 @@ begin
       begin
         J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + LCoef;
         for Y := 0 to J do
-          FTile[X][Y] := tlWater;
+          FTileEnum[X][Y] := tlWater;
         J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + LCoef;
         for Y := FHeight - 1 downto FHeight - J - 1 do
-          FTile[X][Y] := tlWater;
+          FTileEnum[X][Y] := tlWater;
       end;
       LCoef := SizeCoef * 9;
       if (SeaLevel = msHigh) then
@@ -670,20 +670,23 @@ begin
       begin
         for X := 1 to FWidth - 2 do
         begin
-          if (FTile[X][Y] <> tlWater) and
-            (((FTile[X + 1][Y] = tlWater) and (FTile[X - 1][Y] = tlWater)) or
-            ((FTile[X][Y + 1] = tlWater) and (FTile[X][Y - 1] = tlWater))) then
-            FTile[X][Y] := tlWater;
+          if (FTileEnum[X][Y] <> tlWater) and
+            (((FTileEnum[X + 1][Y] = tlWater) and
+            (FTileEnum[X - 1][Y] = tlWater)) or
+            ((FTileEnum[X][Y + 1] = tlWater) and
+            (FTileEnum[X][Y - 1] = tlWater))) then
+            FTileEnum[X][Y] := tlWater;
         end;
       end;
       for Y := 1 to FHeight - 2 do
       begin
         for X := 1 to FWidth - 2 do
         begin
-          if (FTile[X][Y] <> tlWater) and
-            (((FTile[X + 1][Y] = tlWater) and (FTile[X - 1][Y] = tlWater) and
-            (FTile[X][Y + 1] = tlWater) and (FTile[X][Y - 1] = tlWater))) then
-            FTile[X][Y] := tlWater;
+          if (FTileEnum[X][Y] <> tlWater) and
+            (((FTileEnum[X + 1][Y] = tlWater) and
+            (FTileEnum[X - 1][Y] = tlWater) and (FTileEnum[X][Y + 1] = tlWater)
+            and (FTileEnum[X][Y - 1] = tlWater))) then
+            FTileEnum[X][Y] := tlWater;
         end;
       end;
     end;
@@ -709,22 +712,22 @@ begin
 
         for N := 2 to 5 do
         begin
-          if (FTile[X - N][Y] = tlWater) then
+          if (FTileEnum[X - N][Y] = tlWater) then
           begin
             X := X - (N - 1);
             Break;
           end;
-          if (FTile[X + N][Y] = tlWater) then
+          if (FTileEnum[X + N][Y] = tlWater) then
           begin
             X := X + (N - 1);
             Break;
           end;
-          if (FTile[X][Y - N] = tlWater) then
+          if (FTileEnum[X][Y - N] = tlWater) then
           begin
             Y := Y - (N - 1);
             Break;
           end;
-          if (FTile[X][Y + N] = tlWater) then
+          if (FTileEnum[X][Y + N] = tlWater) then
           begin
             Y := Y + (N - 1);
             Break;
@@ -734,7 +737,7 @@ begin
       until not IsTownName(LTownName) and not IsTownLocation(X, Y) and
         IsLandTile(X, Y);
       SetLength(Industry, I + 1);
-      FTile[X][Y] := tlTownIndustry;
+      FTileEnum[X][Y] := tlTownIndustry;
       Industry[I] := TTownIndustry.Create(LTownName, X, Y);
     end;
     // Industries
@@ -755,7 +758,7 @@ begin
             begin
               S := GetNearTownName(X, Y);
               SetLength(Industry, I + 1);
-              FTile[X][Y] := tlCoalMineIndustry;
+              FTileEnum[X][Y] := tlCoalMineIndustry;
               Industry[I] := TCoalMineIndustry.Create(S, X, Y);
               Inc(I);
             end;
@@ -763,7 +766,7 @@ begin
             begin
               S := GetNearTownName(X, Y);
               SetLength(Industry, I + 1);
-              FTile[X][Y] := tlPowerPlantIndustry;
+              FTileEnum[X][Y] := tlPowerPlantIndustry;
               Industry[I] := TPowerPlantIndustry.Create(S, X, Y);
               Inc(I);
             end;
@@ -771,7 +774,7 @@ begin
             begin
               S := GetNearTownName(X, Y);
               SetLength(Industry, I + 1);
-              FTile[X][Y] := tlForestIndustry;
+              FTileEnum[X][Y] := tlForestIndustry;
               Industry[I] := TForestIndustry.Create(S, X, Y);
               Inc(I);
             end;
@@ -779,7 +782,7 @@ begin
             begin
               S := GetNearTownName(X, Y);
               SetLength(Industry, I + 1);
-              FTile[X][Y] := tlSawmillIndustry;
+              FTileEnum[X][Y] := tlSawmillIndustry;
               Industry[I] := TSawmillIndustry.Create(S, X, Y);
               Inc(I);
             end;
@@ -805,22 +808,22 @@ begin
       if (RandomRange(0, 6) = 0) and (LX > (SizeCoef + 10)) then
       begin
         LX := LX - 1;
-        FTile[LX][LY] := ATileEnum;
+        FTileEnum[LX][LY] := ATileEnum;
       end;
       if (RandomRange(0, 6) = 0) and (LX < FWidth - (SizeCoef + 10)) then
       begin
         LX := LX + 1;
-        FTile[LX][LY] := ATileEnum;
+        FTileEnum[LX][LY] := ATileEnum;
       end;
       if (RandomRange(0, 6) = 0) and (LY > (SizeCoef + 10)) then
       begin
         LY := LY - 1;
-        FTile[LX][LY] := ATileEnum;
+        FTileEnum[LX][LY] := ATileEnum;
       end;
       if (RandomRange(0, 6) = 0) and (LY < FHeight - (SizeCoef + 10)) then
       begin
         LY := LY + 1;
-        FTile[LX][LY] := ATileEnum;
+        FTileEnum[LX][LY] := ATileEnum;
       end;
     end;
   except
@@ -834,11 +837,11 @@ begin
   try
     case RandomRange(0, 4) of
       0:
-        FTile[AX][AY] := tlTree;
+        FTileEnum[AX][AY] := tlTree;
       1:
-        FTile[AX][AY] := tlSmallTree;
+        FTileEnum[AX][AY] := tlSmallTree;
     else
-      FTile[AX][AY] := tlBush;
+      FTileEnum[AX][AY] := tlBush;
     end;
   except
     on E: Exception do
@@ -941,7 +944,7 @@ begin
   try
     LX := EnsureRange(Game.Map.Left + terminal_state(TK_MOUSE_X), 0, FWidth);
     LY := EnsureRange(Game.Map.Top + terminal_state(TK_MOUSE_Y), 0, FHeight);
-    Result := FTile[LX][LY];
+    Result := FTileEnum[LX][LY];
   except
     on E: Exception do
       Log.Add('TMap.GetTile', E.Message);

@@ -397,9 +397,9 @@ begin
   try
     case ADirectionEnum of
       drEast:
-        F := (Game.Map.Left > 0);
-      drWest:
         F := (Game.Map.Left < Game.Map.Width - Self.ScreenWidth);
+      drWest:
+        F := (Game.Map.Left > 0);
       drSouth:
         F := (Game.Map.Top <= Game.Map.Height - Self.ScreenHeight);
       drNorth:
@@ -493,11 +493,11 @@ begin
       with FScene[Scene] do
       begin
         MX := EnsureRange(terminal_state(TK_MOUSE_X), 0,
-          MapSizeInt[Game.Map.Size]);
+          MapSizeInt[Game.Map.MapSize]);
         MY := EnsureRange(terminal_state(TK_MOUSE_Y), 0,
-          MapSizeInt[Game.Map.Size]);
-        RX := EnsureRange(Game.Map.Left + MX, 0, MapSizeInt[Game.Map.Size]);
-        RY := EnsureRange(Game.Map.Top + MY, 0, MapSizeInt[Game.Map.Size]);
+          MapSizeInt[Game.Map.MapSize]);
+        RX := EnsureRange(Game.Map.Left + MX, 0, MapSizeInt[Game.Map.MapSize]);
+        RY := EnsureRange(Game.Map.Top + MY, 0, MapSizeInt[Game.Map.MapSize]);
         Update(Key);
       end;
   except

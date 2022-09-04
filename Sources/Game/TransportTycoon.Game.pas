@@ -141,7 +141,7 @@ var
 begin
   LIniFile := TMemIniFile.Create(GetPath('') + 'Settings.ini', TEncoding.UTF8);
   try
-    Game.Map.Size := TMapSize(LIniFile.ReadInteger('Main', 'MapSize', 0));
+    Game.Map.MapSize := TMapSize(LIniFile.ReadInteger('Main', 'MapSize', 0));
     Game.Map.SeaLevel := TMapSeaLevel(LIniFile.ReadInteger('Main',
       'SeaLevel', 0));
     Game.Map.NoOfTowns := LIniFile.ReadInteger('Main', 'NoOfTowns', 1);
@@ -228,7 +228,7 @@ var
 begin
   LIniFile := TMemIniFile.Create(GetPath('') + 'Settings.ini', TEncoding.UTF8);
   try
-    LIniFile.WriteInteger('Main', 'MapSize', Ord(Game.Map.Size));
+    LIniFile.WriteInteger('Main', 'MapSize', Ord(Game.Map.MapSize));
     LIniFile.WriteInteger('Main', 'SeaLevel', Ord(Game.Map.SeaLevel));
     LIniFile.WriteInteger('Main', 'NoOfTowns', Game.Map.NoOfTowns);
     LIniFile.WriteInteger('Main', 'Year', Game.Calendar.Year);

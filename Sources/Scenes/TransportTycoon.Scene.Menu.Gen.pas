@@ -29,7 +29,7 @@ begin
   DrawFrame(10, 9, 60, 11);
   DrawTitle(11, 'WORLD GENERATION');
 
-  DrawButton(12, 13, 'F', 'Map size: ' + MapSizeStr[Game.Map.Size]);
+  DrawButton(12, 13, 'F', 'Map size: ' + MapSizeStr[Game.Map.MapSize]);
   DrawButton(12, 14, 'H', 'Rivers: ' + MapRiversStr[Game.Map.Rivers]);
   DrawButton(12, 15, 'J', 'No. of indust.: ' + MapNoOfIndStr[Game.Map.NoOfInd]);
 
