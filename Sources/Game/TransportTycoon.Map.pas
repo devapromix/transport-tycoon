@@ -688,7 +688,11 @@ begin
       end;
     end;
     // Rivers
-    for I := 0 to MapRiversInt[Rivers] - 1 do
+    if AMapType = mtRandom then
+      J := MapRiversInt[TMapRivers(RandomRange(0, 4))]
+    else
+      J := MapRiversInt[Rivers];
+    for I := 0 to J - 1 do
       AddRiver(TDirectionEnum(RandomRange(0, 4)));
     // Towns
     for I := 0 to Length(Industry) - 1 do
