@@ -17,7 +17,7 @@ const
     VehicleType: vtShip;),
     // #3
     (Name: 'TD-4 Cargo Ship'; CargoSet: [cgGoods]; Amount: 110; Cost: 28000;
-    RunningCost: 97 * 12; Speed: 60; Since: 1955; VehicleType: vtShip;)
+    RunningCost: 97 * 12; Speed: 60; Since: 1952; VehicleType: vtShip;)
     //
     );
 

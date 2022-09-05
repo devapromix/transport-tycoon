@@ -45,6 +45,8 @@ type
     FProfit: Integer;
     FLastProfit: Integer;
     FOrders: TOrders;
+    FAP: Integer;
+    FMaxAP: Integer;
   public
     constructor Create(const AName: string; const AX, AY: Integer;
       const AVehicleBase: array of TVehicleBase; const AID: Integer);
@@ -71,6 +73,8 @@ type
     procedure IncCargoAmount(const AValue: Integer = 1);
     property Orders: TOrders read FOrders;
     function CurOrder: TOrder;
+    property AP: Integer read FAP write FAP;
+    property MaxAP: Integer read FMaxAP write FMaxAP;
   end;
 
 implementation
@@ -94,6 +98,8 @@ begin
   ClearCargo;
   FCargoMaxAmount := AVehicleBase[AID].Amount;
   FCargoSet := AVehicleBase[AID].CargoSet;
+  FMaxAP := 200 - (AVehicleBase[AID].Speed div 10);
+  FAP := FMaxAP;
   FOrders := TOrders.Create;
 end;
 

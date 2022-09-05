@@ -68,7 +68,8 @@ uses
   TransportTycoon.Game,
   TransportTycoon.Finances,
   TransportTycoon.Industries,
-  TransportTycoon.Palette;
+  TransportTycoon.Palette,
+  TransportTycoon.Log;
 
 type
   TGetVehicleFunc = function(const AX, AY: Integer): Integer of object;
@@ -341,14 +342,43 @@ end;
 
 procedure TVehicles.Step;
 var
-  I: Integer;
+  I, J: Integer;
 begin
-  for I := 0 to AircraftCount - 1 do
-    Aircraft[I].Step;
-  for I := 0 to ShipCount - 1 do
-    Ship[I].Step;
-  for I := 0 to RoadVehicleCount - 1 do
-    RoadVehicle[I].Step;
+  try
+    for J := 0 to 200 - 1 do
+    begin
+      for I := 0 to AircraftCount - 1 do
+        with Aircraft[I] do
+          if AP <= 0 then
+          begin
+            Step;
+            AP := MaxAP;
+          end
+          else
+            AP := AP - 1;
+      for I := 0 to ShipCount - 1 do
+        with Ship[I] do
+          if AP <= 0 then
+          begin
+            Step;
+            AP := MaxAP;
+          end
+          else
+            AP := AP - 1;
+      for I := 0 to RoadVehicleCount - 1 do
+        with RoadVehicle[I] do
+          if AP <= 0 then
+          begin
+            Step;
+            AP := MaxAP;
+          end
+          else
+            AP := AP - 1;
+    end;
+  except
+    on E: Exception do
+      Log.Add('TVehicles.Step', E.Message);
+  end;
 end;
 
 end.
