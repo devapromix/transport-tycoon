@@ -34,8 +34,8 @@ procedure TSceneBuildMenu.DrawLine(const Button, Text: string;
   const AMoney: Integer);
 begin
   DrawButton(FX, FY, Button, Text);
-  terminal_print(FX + 26, FY, TK_ALIGN_RIGHT,
-    Format('[c=%s]$%d[/c]', [TPalette.Unused, AMoney]));
+  terminal_print(FX + 26, FY, TK_ALIGN_RIGHT, Format('[c=%s]$%d[/c]',
+    [TPalette.Unused, AMoney]));
   Inc(FX, 29);
   if (FX > 60) then
   begin
@@ -80,18 +80,31 @@ begin
       end;
     end;
     case MX of
-      12 .. 56:
+      12 .. 38:
         case MY of
           12:
             Key := TK_C;
           13:
-            Key := TK_R;
-          14:
             Key := TK_B;
-          15:
-            Key := TK_T;
+          { 14:
+            Key := TK_;
+            15:
+            Key := TK_; }
           16:
             Key := TK_X;
+        end;
+      41 .. 67:
+        case MY of
+          12:
+            Key := TK_R;
+          13:
+            Key := TK_T;
+          { 14:
+            Key := TK_;
+            15:
+            Key := TK_;
+            16:
+            Key := TK_; }
         end;
     end;
   end;
