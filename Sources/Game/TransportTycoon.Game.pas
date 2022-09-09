@@ -34,6 +34,7 @@ type
     FCalendar: TCalendar;
     FIsDebug: Boolean;
     FTurn: Integer;
+    FCount: Byte;
     FIsPause: Boolean;
     FIsGame: Boolean;
     FConstruct: TConstruct;
@@ -106,6 +107,7 @@ begin
     then
       FIsDebug := True;
   end;
+  FCount := 0;
   FLockScreen := False;
   FSpeed := spNormal;
   FCalendar := TCalendar.Create;
@@ -245,7 +247,12 @@ begin
   if not IsGame or IsPause then
     Exit;
   Inc(FTurn);
-  FCalendar.Step;
+  Inc(FCount);
+  if (FCount >= 3) then
+  begin
+    FCount := 0;
+    FCalendar.Step;
+  end;
   FVehicles.Step;
 end;
 
