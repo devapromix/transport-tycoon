@@ -43,6 +43,7 @@ type
     FIsOrder: Boolean;
   public const
     MaxLoan = 200000;
+    LoanMoney = 10000;
     StartMoney = MaxLoan div 2;
     Version = '0.4';
   public
@@ -197,15 +198,15 @@ end;
 
 function TGame.CanRepay: Boolean;
 begin
-  Result := (FLoan >= 10000) and (FMoney >= 10000);
+  Result := (FLoan >= LoanMoney) and (FMoney >= LoanMoney);
 end;
 
 procedure TGame.Repay;
 begin
   if CanRepay then
   begin
-    FLoan := FLoan - 10000;
-    FMoney := FMoney - 10000;
+    FLoan := FLoan - LoanMoney;
+    FMoney := FMoney - LoanMoney;
   end
 end;
 
