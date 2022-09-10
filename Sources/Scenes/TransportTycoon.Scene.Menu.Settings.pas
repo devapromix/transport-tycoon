@@ -39,8 +39,11 @@ begin
   DrawFrame(25, 9, 30, 11);
   DrawTitle(11, 'GAME SETTINGS');
 
+  // Game Speed
   DrawButton(27, 13, 'S', Format('Game Speed: %s', [GameSpeedStr[Game.Speed]]));
-
+  // Fullscreen
+  DrawButton(27, 15, 27, True, terminal_check(TK_FULLSCREEN), 'ALT+ENTER',
+    'Fullscreen');
   AddButton(17, 'Esc', 'Close');
 
   if IsShowBar then
