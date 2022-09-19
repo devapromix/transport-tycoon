@@ -54,7 +54,8 @@ uses
   TransportTycoon.Palette in 'Game\TransportTycoon.Palette.pas',
   TransportTycoon.Scene.Vehicle in 'Scenes\TransportTycoon.Scene.Vehicle.pas',
   TransportTycoon.Scene.Station in 'Scenes\TransportTycoon.Scene.Station.pas',
-  TransportTycoon.Log in 'Game\TransportTycoon.Log.pas';
+  TransportTycoon.Log in 'Game\TransportTycoon.Log.pas',
+  TransportTycoon.Scene.Menu.SaveGame in 'Scenes\TransportTycoon.Scene.Menu.SaveGame.pas';
 
 var
   Key: Word = 0;

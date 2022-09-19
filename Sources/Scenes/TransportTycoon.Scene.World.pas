@@ -138,6 +138,8 @@ begin
         Scenes.SetScene(scIndustries);
       TK_N:
         Scenes.SetScene(scTowns);
+      TK_U:
+        Scenes.SetScene(scSaveGameMenu);
       TK_P:
         begin
           Game.IsPause := not Game.IsPause;

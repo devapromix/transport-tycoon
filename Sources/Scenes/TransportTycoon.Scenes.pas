@@ -11,8 +11,8 @@ type
     scBuildInTown, scAirport, scAircraftHangar, scAircraft, scAircrafts,
     scFinances, scTowns, scCompany, scIndustry, scBuildNearIndustry, scDock,
     scShip, scShips, scShipDepot, scIndustries, scBuildMenu, scSettingsMenu,
-    scOpenGameMenu, scRoadVehicle, scRoadVehicles, scTruckLoadingBay,
-    scBusStation, scRoadVehicleDepot);
+    scOpenGameMenu, scSaveGameMenu, scRoadVehicle, scRoadVehicles,
+    scTruckLoadingBay, scBusStation, scRoadVehicleDepot);
 
 type
   TButtonRec = record
@@ -136,6 +136,7 @@ uses
   TransportTycoon.Scene.Menu.Gen,
   TransportTycoon.Scene.Menu.Settings,
   TransportTycoon.Scene.Menu.OpenGame,
+  TransportTycoon.Scene.Menu.SaveGame,
   TransportTycoon.Scene.RoadVehicle,
   TransportTycoon.Scene.BusStation,
   TransportTycoon.Scene.TruckLoadingBay,
@@ -479,6 +480,7 @@ begin
   FScene[scBuildMenu] := TSceneBuildMenu.Create;
   FScene[scSettingsMenu] := TSceneSettingsMenu.Create;
   FScene[scOpenGameMenu] := TSceneOpenGameMenu.Create;
+  FScene[scSaveGameMenu] := TSceneSaveGameMenu.Create;
   FScene[scRoadVehicle] := TSceneRoadVehicle.Create;
   FScene[scRoadVehicles] := TSceneRoadVehicles.Create;
   FScene[scBusStation] := TSceneBusStation.Create;

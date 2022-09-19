@@ -37,6 +37,8 @@ begin
   DrawButton(12, 12, 'N', 'TOWN DIRECTORY');
   DrawButton(42, 12, 'I', 'LIST OF INDUSTRIES');
 
+  DrawButton(42, 13, 'U', 'SAVE GAME');
+
   DrawButton(12, 14, Game.Vehicles.GotRoadVehicles, 'R',
     'LIST OF ROAD VEHICLES');
   DrawButton(12, 15, False, 'T', 'LIST OF TRAINS');
@@ -83,6 +85,8 @@ begin
             Key := TK_G;
           12:
             Key := TK_I;
+          13:
+            Key := TK_U;
           14:
             Key := TK_D;
           15:
