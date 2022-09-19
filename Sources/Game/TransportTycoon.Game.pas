@@ -41,6 +41,7 @@ type
     FSpeed: TGameSpeedEnum;
     FLockScreen: Boolean;
     FIsOrder: Boolean;
+    procedure ForceDirs;
   public const
     MaxLoan = 200000;
     LoanMoney = 10000;
@@ -119,6 +120,7 @@ begin
   FMap.Gen(mtRandom);
   FVehicles := TVehicles.Create;
   FConstruct := TConstruct.Create;
+  ForceDirs;
 end;
 
 destructor TGame.Destroy;
@@ -218,6 +220,15 @@ end;
 procedure TGame.Load;
 begin
 
+end;
+
+procedure TGame.ForceDirs;
+var
+  I: Integer;
+begin
+  ForceDirectories(GetPath('Saves'));
+  for I := 0 to 9 do
+    ForceDirectories(GetPath(Format('Saves/%d', [I])));
 end;
 
 procedure TGame.Save;

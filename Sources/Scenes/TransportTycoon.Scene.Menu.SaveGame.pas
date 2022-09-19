@@ -33,7 +33,7 @@ begin
   Game.Map.Draw(Self.ScreenWidth, Self.ScreenHeight);
 
   DrawFrame(10, 6, 60, 18);
-  DrawTitle(8, 'SAVE GAME');
+  DrawTitle(8, 'SAVE CURRENT GAME');
 
   for I := 0 to 9 do
     DrawButton(12, I + 10, False, Chr(Ord('A') + I),
