@@ -31,6 +31,8 @@ const
   StatStr: array [TConstructEnum] of string = ('', 'Canals', 'Roads', 'Tunnels',
     'Road Bridges');
 begin
+  if Game.Company.Stat.GetStat(I) = 0 then
+    Exit;
   DrawText(FX, FY, StatStr[I] + ': ' + IntToStr(Game.Company.Stat.GetStat(I)));
   if FX = 40 then
   begin
