@@ -588,7 +588,7 @@ end;
 
 procedure TMap.Gen(const AMapType: TMapType = mtNormal);
 var
-  X, Y, I, J, N, LCoef: Integer;
+  LX, LY, I, J, N, LCoef: Integer;
   LTownName, S: string;
   LIndustryType: TIndustryType;
 begin
@@ -603,56 +603,56 @@ begin
     LCoef := 0;
     if (SeaLevel >= msNormal) then
       LCoef := 5 + SizeCoef;
-    for Y := 0 to FHeight - 1 do
+    for LY := 0 to FHeight - 1 do
     begin
-      for X := 0 to FWidth - 1 do
+      for LX := 0 to FWidth - 1 do
       begin
         case Math.RandomRange(0, 15) of
           0 .. 1:
-            FTileEnum[X][Y] := tlDirt;
+            FTileEnum[LX][LY] := tlDirt;
           2 .. 3:
-            FTileEnum[X][Y] := tlSand;
+            FTileEnum[LX][LY] := tlSand;
           4 .. 6:
-            AddTree(X, Y);
+            AddTree(LX, LY);
         else
-          FTileEnum[X][Y] := tlGrass;
+          FTileEnum[LX][LY] := tlGrass;
         end;
       end;
       if (SeaLevel > msVeryLow) then
       begin
         J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + LCoef;
-        for X := 0 to J do
-          FTileEnum[X][Y] := tlWater;
+        for LX := 0 to J do
+          FTileEnum[LX][LY] := tlWater;
         J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + LCoef;
-        for X := FWidth - 1 downto FWidth - J - 1 do
-          FTileEnum[X][Y] := tlWater;
+        for LX := FWidth - 1 downto FWidth - J - 1 do
+          FTileEnum[LX][LY] := tlWater;
       end;
     end;
     for I := 0 to 14 do
     begin
-      X := Math.RandomRange((SizeCoef + 10), FWidth - (SizeCoef + 10));
-      Y := Math.RandomRange((SizeCoef + 10), FHeight - (SizeCoef + 10));
+      LX := Math.RandomRange((SizeCoef + 10), FWidth - (SizeCoef + 10));
+      LY := Math.RandomRange((SizeCoef + 10), FHeight - (SizeCoef + 10));
       case RandomRange(0, 4) of
         0:
-          AddSpot(X, Y, tlDirt);
+          AddSpot(LX, LY, tlDirt);
         1:
-          AddSpot(X, Y, tlRock);
+          AddSpot(LX, LY, tlRock);
         2:
-          AddSpot(X, Y, tlWater);
+          AddSpot(LX, LY, tlWater);
       else
-        AddSpot(X, Y, tlSand);
+        AddSpot(LX, LY, tlSand);
       end;
     end;
     if (SeaLevel > msVeryLow) then
     begin
-      for X := 0 to FWidth - 1 do
+      for LX := 0 to FWidth - 1 do
       begin
         J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + LCoef;
-        for Y := 0 to J do
-          FTileEnum[X][Y] := tlWater;
+        for LY := 0 to J do
+          FTileEnum[LX][LY] := tlWater;
         J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + LCoef;
-        for Y := FHeight - 1 downto FHeight - J - 1 do
-          FTileEnum[X][Y] := tlWater;
+        for LY := FHeight - 1 downto FHeight - J - 1 do
+          FTileEnum[LX][LY] := tlWater;
       end;
       LCoef := SizeCoef * 9;
       if (SeaLevel = msHigh) then
@@ -661,32 +661,32 @@ begin
       begin
         for I := 0 to LCoef do
         begin
-          X := Math.RandomRange(10, FWidth - 11);
-          Y := Math.RandomRange(10, FWidth - 11);
-          AddSpot(X, Y, tlWater);
+          LX := Math.RandomRange(10, FWidth - 11);
+          LY := Math.RandomRange(10, FWidth - 11);
+          AddSpot(LX, LY, tlWater);
         end;
       end;
-      for Y := 1 to FHeight - 2 do
+      for LY := 1 to FHeight - 2 do
       begin
-        for X := 1 to FWidth - 2 do
+        for LX := 1 to FWidth - 2 do
         begin
-          if (FTileEnum[X][Y] <> tlWater) and
-            (((FTileEnum[X + 1][Y] = tlWater) and
-            (FTileEnum[X - 1][Y] = tlWater)) or
-            ((FTileEnum[X][Y + 1] = tlWater) and
-            (FTileEnum[X][Y - 1] = tlWater))) then
-            FTileEnum[X][Y] := tlWater;
+          if (FTileEnum[LX][LY] <> tlWater) and
+            (((FTileEnum[LX + 1][LY] = tlWater) and
+            (FTileEnum[LX - 1][LY] = tlWater)) or
+            ((FTileEnum[LX][LY + 1] = tlWater) and
+            (FTileEnum[LX][LY - 1] = tlWater))) then
+            FTileEnum[LX][LY] := tlWater;
         end;
       end;
-      for Y := 1 to FHeight - 2 do
+      for LY := 1 to FHeight - 2 do
       begin
-        for X := 1 to FWidth - 2 do
+        for LX := 1 to FWidth - 2 do
         begin
-          if (FTileEnum[X][Y] <> tlWater) and
-            (((FTileEnum[X + 1][Y] = tlWater) and
-            (FTileEnum[X - 1][Y] = tlWater) and (FTileEnum[X][Y + 1] = tlWater)
-            and (FTileEnum[X][Y - 1] = tlWater))) then
-            FTileEnum[X][Y] := tlWater;
+          if (FTileEnum[LX][LY] <> tlWater) and
+            (((FTileEnum[LX + 1][LY] = tlWater) and
+            (FTileEnum[LX - 1][LY] = tlWater) and (FTileEnum[LX][LY + 1] = tlWater)
+            and (FTileEnum[LX][LY - 1] = tlWater))) then
+            FTileEnum[LX][LY] := tlWater;
         end;
       end;
     end;
@@ -704,41 +704,41 @@ begin
     for I := 0 to MapTownCount - 1 do
     begin
       repeat
-        X := (Math.RandomRange(1, FWidth div 10) * 10) +
+        LX := (Math.RandomRange(1, FWidth div 10) * 10) +
           (Math.RandomRange(0, 10) - 5);
-        Y := (Math.RandomRange(1, FHeight div 10) * 10) +
+        LY := (Math.RandomRange(1, FHeight div 10) * 10) +
           (Math.RandomRange(0, 10) - 5);
         LTownName := TTownIndustry.GenName;
 
         for N := 2 to 5 do
         begin
-          if (FTileEnum[X - N][Y] = tlWater) then
+          if (FTileEnum[LX - N][LY] = tlWater) then
           begin
-            X := X - (N - 1);
+            LX := LX - (N - 1);
             Break;
           end;
-          if (FTileEnum[X + N][Y] = tlWater) then
+          if (FTileEnum[LX + N][LY] = tlWater) then
           begin
-            X := X + (N - 1);
+            LX := LX + (N - 1);
             Break;
           end;
-          if (FTileEnum[X][Y - N] = tlWater) then
+          if (FTileEnum[LX][LY - N] = tlWater) then
           begin
-            Y := Y - (N - 1);
+            LY := LY - (N - 1);
             Break;
           end;
-          if (FTileEnum[X][Y + N] = tlWater) then
+          if (FTileEnum[LX][LY + N] = tlWater) then
           begin
-            Y := Y + (N - 1);
+            LY := LY + (N - 1);
             Break;
           end;
         end;
 
-      until not IsTownName(LTownName) and not IsTownLocation(X, Y) and
-        IsLandTile(X, Y);
+      until not IsTownName(LTownName) and not IsTownLocation(LX, LY) and
+        IsLandTile(LX, LY);
       SetLength(Industry, I + 1);
-      FTileEnum[X][Y] := tlTownIndustry;
-      Industry[I] := TTownIndustry.Create(LTownName, X, Y);
+      FTileEnum[LX][LY] := tlTownIndustry;
+      Industry[I] := TTownIndustry.Create(LTownName, LX, LY);
     end;
     // Industries
     I := TownCount;
@@ -747,43 +747,43 @@ begin
       for LIndustryType := Succ(Low(TIndustryType)) to High(TIndustryType) do
       begin
         repeat
-          X := (Math.RandomRange(1, FWidth div 10) * 10) +
+          LX := (Math.RandomRange(1, FWidth div 10) * 10) +
             (Math.RandomRange(0, 10) - 5);
-          Y := (Math.RandomRange(1, FHeight div 10) * 10) +
+          LY := (Math.RandomRange(1, FHeight div 10) * 10) +
             (Math.RandomRange(0, 10) - 5);
-        until IsLandTile(X, Y) and not IsTownLocation(X, Y) and
-          not IsIndustryLocation(X, Y);
+        until IsLandTile(LX, LY) and not IsTownLocation(LX, LY) and
+          not IsIndustryLocation(LX, LY);
         case LIndustryType of
           inCoalMine:
             begin
-              S := GetNearTownName(X, Y);
+              S := GetNearTownName(LX, LY);
               SetLength(Industry, I + 1);
-              FTileEnum[X][Y] := tlCoalMineIndustry;
-              Industry[I] := TCoalMineIndustry.Create(S, X, Y);
+              FTileEnum[LX][LY] := tlCoalMineIndustry;
+              Industry[I] := TCoalMineIndustry.Create(S, LX, LY);
               Inc(I);
             end;
           inPowerPlant:
             begin
-              S := GetNearTownName(X, Y);
+              S := GetNearTownName(LX, LY);
               SetLength(Industry, I + 1);
-              FTileEnum[X][Y] := tlPowerPlantIndustry;
-              Industry[I] := TPowerPlantIndustry.Create(S, X, Y);
+              FTileEnum[LX][LY] := tlPowerPlantIndustry;
+              Industry[I] := TPowerPlantIndustry.Create(S, LX, LY);
               Inc(I);
             end;
           inForest:
             begin
-              S := GetNearTownName(X, Y);
+              S := GetNearTownName(LX, LY);
               SetLength(Industry, I + 1);
-              FTileEnum[X][Y] := tlForestIndustry;
-              Industry[I] := TForestIndustry.Create(S, X, Y);
+              FTileEnum[LX][LY] := tlForestIndustry;
+              Industry[I] := TForestIndustry.Create(S, LX, LY);
               Inc(I);
             end;
           inSawmill:
             begin
-              S := GetNearTownName(X, Y);
+              S := GetNearTownName(LX, LY);
               SetLength(Industry, I + 1);
-              FTileEnum[X][Y] := tlSawmillIndustry;
-              Industry[I] := TSawmillIndustry.Create(S, X, Y);
+              FTileEnum[LX][LY] := tlSawmillIndustry;
+              Industry[I] := TSawmillIndustry.Create(S, LX, LY);
               Inc(I);
             end;
         end;
