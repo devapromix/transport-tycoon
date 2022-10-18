@@ -34,12 +34,12 @@ procedure TSceneBuildMenu.DrawLine(const Button, Text: string;
   const AMoney: Integer);
 begin
   DrawButton(FX, FY, Button, Text);
-  terminal_print(FX + 26, FY, TK_ALIGN_RIGHT, Format('[c=%s]$%d[/c]',
+  terminal_print(FX + 31, FY, TK_ALIGN_RIGHT, Format('[c=%s]$%d[/c]',
     [TPalette.Unused, AMoney]));
-  Inc(FX, 29);
-  if (FX > 60) then
+  Inc(FX, 34);
+  if (FX > 66) then
   begin
-    FX := 12;
+    FX := 7;
     Inc(FY);
   end;
 end;
@@ -48,18 +48,18 @@ procedure TSceneBuildMenu.Render;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
-  DrawFrame(10, 8, 60, 13);
+  DrawFrame(5, 8, 70, 13);
   DrawTitle(10, Game.Company.Name);
 
-  FX := 12;
+  FX := 7;
   FY := 12;
 
   DrawLine('C', 'Build Canal', ConstructCost[ceBuildCanal]);
   DrawLine('R', 'Build Road', ConstructCost[ceBuildRoad]);
   DrawLine('B', 'Build Road Bridge', ConstructCost[ceBuildRoadBridge]);
-  DrawLine('T', 'Build Road Tunnel', ConstructCost[ceBuildRoadTunnel]);
+  DrawLine('T', 'Build RailRoad Tunnel', ConstructCost[ceBuildRoadTunnel]);
 
-  FX := 12;
+  FX := 7;
   FY := 16;
   DrawLine('X', 'Clear land', ConstructCost[ceClearLand]);
 
@@ -80,7 +80,7 @@ begin
       end;
     end;
     case MX of
-      12 .. 38:
+      7 .. 38:
         case MY of
           12:
             Key := TK_C;
@@ -93,7 +93,7 @@ begin
           16:
             Key := TK_X;
         end;
-      41 .. 67:
+      41 .. 72:
         case MY of
           12:
             Key := TK_R;
