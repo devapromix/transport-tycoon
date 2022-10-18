@@ -57,7 +57,7 @@ begin
   DrawLine('C', 'Build Canal', ConstructCost[ceBuildCanal]);
   DrawLine('R', 'Build Road', ConstructCost[ceBuildRoad]);
   DrawLine('B', 'Build Road Bridge', ConstructCost[ceBuildRoadBridge]);
-  DrawLine('T', 'Build RailRoad Tunnel', ConstructCost[ceBuildRoadTunnel]);
+  DrawLine('T', 'Build Road Tunnel', ConstructCost[ceBuildRoadTunnel]);
 
   FX := 7;
   FY := 16;
