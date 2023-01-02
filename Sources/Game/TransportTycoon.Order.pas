@@ -24,8 +24,8 @@ type
   private
     FOrder: TArray<TOrder>;
     FOrderIndex: Integer;
-    function GetOrder(Index: Integer): TOrder;
-    procedure SetOrder(Index: Integer; Value: TOrder);
+    function GetOrder(AIndex: Integer): TOrder;
+    procedure SetOrder(AIndex: Integer; AOrder: TOrder);
   public
     destructor Destroy; override;
     property Order[Index: Integer]: TOrder read GetOrder write SetOrder;
@@ -60,7 +60,7 @@ end;
 
 procedure TOrders.DelOrder(const AIndex: Integer);
 var
-  I: Integer;
+  LOrder: Integer;
 begin
   if (Length(FOrder) > 1) then
   begin
@@ -73,24 +73,24 @@ begin
       SetLength(FOrder, Length(FOrder) - 1);
       Exit;
     end;
-    for I := AIndex + 1 to Length(FOrder) - 1 do
-      FOrder[I - 1] := FOrder[I];
+    for LOrder := AIndex + 1 to Length(FOrder) - 1 do
+      FOrder[LOrder - 1] := FOrder[LOrder];
     SetLength(FOrder, Length(FOrder) - 1);
   end;
 end;
 
 destructor TOrders.Destroy;
 var
-  I: Integer;
+  LOrder: Integer;
 begin
-  for I := 0 to Count - 1 do
-    FreeAndNil(FOrder[I]);
+  for LOrder := 0 to Count - 1 do
+    FreeAndNil(FOrder[LOrder]);
   inherited;
 end;
 
-function TOrders.GetOrder(Index: Integer): TOrder;
+function TOrders.GetOrder(AIndex: Integer): TOrder;
 begin
-  Result := FOrder[Index];
+  Result := FOrder[AIndex];
 end;
 
 procedure TOrders.IncOrder;
@@ -102,17 +102,17 @@ end;
 
 function TOrders.IsOrder(const AIndex: Integer): Boolean;
 var
-  I: Integer;
+  LOrder: Integer;
 begin
   Result := False;
-  for I := 0 to Length(FOrder) - 1 do
-    if FOrder[I].IndustryIndex = AIndex then
+  for LOrder := 0 to Length(FOrder) - 1 do
+    if FOrder[LOrder].IndustryIndex = AIndex then
       Exit(True);
 end;
 
-procedure TOrders.SetOrder(Index: Integer; Value: TOrder);
+procedure TOrders.SetOrder(AIndex: Integer; AOrder: TOrder);
 begin
-  FOrder[Index] := Value
+  FOrder[AIndex] := AOrder
 end;
 
 end.
