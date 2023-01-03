@@ -145,6 +145,7 @@ type
     function MapIndCount: Integer;
     procedure DrawTile(const AX, AY: Integer);
     procedure AddRiver(const ADirectionEnum: TDirectionEnum);
+    procedure AddIndustries();
   public
     Industry: array of TIndustry;
     constructor Create;
@@ -227,13 +228,13 @@ const
 
 function TMap.IsTownName(const ATownName: string): Boolean;
 var
-  I: Integer;
+  LIndustry: Integer;
 begin
   Result := False;
   try
-    for I := 0 to Length(Industry) - 1 do
-      if (Industry[I].IndustryType = inTown) then
-        if Industry[I].Name = ATownName then
+    for LIndustry := 0 to Length(Industry) - 1 do
+      if (Industry[LIndustry].IndustryType = inTown) then
+        if Industry[LIndustry].Name = ATownName then
           Exit(True);
   except
     on E: Exception do
@@ -424,14 +425,14 @@ end;
 
 function TMap.IsIndustryLocation(const AX, AY: Integer): Boolean;
 var
-  I: Integer;
+  LIndustry: Integer;
 begin
   Result := False;
   try
-    for I := 0 to Length(Industry) - 1 do
-      if Industry[I].InLocation(AX, AY) or
-        (GetDist(Industry[I].X, Industry[I].Y, AX, AY) < (Self.Width div 10))
-      then
+    for LIndustry := 0 to Length(Industry) - 1 do
+      if Industry[LIndustry].InLocation(AX, AY) or
+        (GetDist(Industry[LIndustry].X, Industry[LIndustry].Y, AX, AY) <
+        (Self.Width div 10)) then
         Exit(True);
   except
     on E: Exception do
@@ -441,14 +442,15 @@ end;
 
 function TMap.IsTownLocation(const AX, AY: Integer): Boolean;
 var
-  I: Integer;
+  LIndustry: Integer;
 begin
   Result := False;
   try
-    for I := 0 to Length(Industry) - 1 do
-      if (Industry[I].IndustryType = inTown) then
-        if Industry[I].InLocation(AX, AY) or
-          (GetDist(Industry[I].X, Industry[I].Y, AX, AY) < 15) then
+    for LIndustry := 0 to Length(Industry) - 1 do
+      if (Industry[LIndustry].IndustryType = inTown) then
+        if Industry[LIndustry].InLocation(AX, AY) or
+          (GetDist(Industry[LIndustry].X, Industry[LIndustry].Y, AX, AY) < 15)
+        then
           Exit(True);
   except
     on E: Exception do
@@ -468,10 +470,10 @@ end;
 
 destructor TMap.Destroy;
 var
-  I: Integer;
+  LIndustry: Integer;
 begin
-  for I := 0 to Length(Industry) - 1 do
-    FreeAndNil(Industry[I]);
+  for LIndustry := 0 to Length(Industry) - 1 do
+    FreeAndNil(Industry[LIndustry]);
   inherited;
 end;
 
@@ -562,7 +564,7 @@ end;
 
 procedure TMap.AddRiver(const ADirectionEnum: TDirectionEnum);
 var
-  I, LX, LY, LStart, LFinish: Integer;
+  LPos, LX, LY, LStart, LFinish: Integer;
 begin
   LX := 0;
   LY := 0;
@@ -599,7 +601,7 @@ begin
           LFinish := FHeight div 3;
         end;
     end;
-    for I := LStart to LFinish do
+    for LPos := LStart to LFinish do
     begin
       case ADirectionEnum of
         drEast, drWest:
@@ -647,10 +649,9 @@ end;
 
 procedure TMap.Gen(const AMapType: TMapType = mtNormal);
 var
-  LX, LY, I, J, N, LCoef: Integer;
-  LTownName, S: string;
+  LX, LY, I, J, LNum, LCoef: Integer;
+  LTownName: string;
   LTownRace: TRaceEnum;
-  LIndustryType: TIndustryType;
 begin
   try
     // Terrain
@@ -793,26 +794,26 @@ begin
         LY := (Math.RandomRange(1, FHeight div 10) * 10) +
           (Math.RandomRange(0, 10) - 5);
 
-        for N := 2 to 5 do
+        for LNum := 2 to 5 do
         begin
-          if (FTileEnum[LX - N][LY] = tlWater) then
+          if (FTileEnum[LX - LNum][LY] = tlWater) then
           begin
-            LX := LX - (N - 1);
+            LX := LX - (LNum - 1);
             Break;
           end;
-          if (FTileEnum[LX + N][LY] = tlWater) then
+          if (FTileEnum[LX + LNum][LY] = tlWater) then
           begin
-            LX := LX + (N - 1);
+            LX := LX + (LNum - 1);
             Break;
           end;
-          if (FTileEnum[LX][LY - N] = tlWater) then
+          if (FTileEnum[LX][LY - LNum] = tlWater) then
           begin
-            LY := LY - (N - 1);
+            LY := LY - (LNum - 1);
             Break;
           end;
-          if (FTileEnum[LX][LY + N] = tlWater) then
+          if (FTileEnum[LX][LY + LNum] = tlWater) then
           begin
-            LY := LY + (N - 1);
+            LY := LY + (LNum - 1);
             Break;
           end;
         end;
@@ -824,54 +825,7 @@ begin
       Industry[I] := TTownIndustry.Create(LTownName, LTownRace, LX, LY);
     end;
     // Industries
-    I := TownCount;
-    for J := 0 to MapIndCount - 1 do
-    begin
-      for LIndustryType := Succ(Low(TIndustryType)) to High(TIndustryType) do
-      begin
-        repeat
-          LX := (Math.RandomRange(1, FWidth div 10) * 10) +
-            (Math.RandomRange(0, 10) - 5);
-          LY := (Math.RandomRange(1, FHeight div 10) * 10) +
-            (Math.RandomRange(0, 10) - 5);
-        until IsLandTile(LX, LY) and not IsTownLocation(LX, LY) and
-          not IsIndustryLocation(LX, LY);
-        case LIndustryType of
-          inCoalMine:
-            begin
-              S := GetNearTownName(LX, LY);
-              SetLength(Industry, I + 1);
-              FTileEnum[LX][LY] := tlCoalMineIndustry;
-              Industry[I] := TCoalMineIndustry.Create(S, LX, LY);
-              Inc(I);
-            end;
-          inPowerPlant:
-            begin
-              S := GetNearTownName(LX, LY);
-              SetLength(Industry, I + 1);
-              FTileEnum[LX][LY] := tlPowerPlantIndustry;
-              Industry[I] := TPowerPlantIndustry.Create(S, LX, LY);
-              Inc(I);
-            end;
-          inForest:
-            begin
-              S := GetNearTownName(LX, LY);
-              SetLength(Industry, I + 1);
-              FTileEnum[LX][LY] := tlForestIndustry;
-              Industry[I] := TForestIndustry.Create(S, LX, LY);
-              Inc(I);
-            end;
-          inSawmill:
-            begin
-              S := GetNearTownName(LX, LY);
-              SetLength(Industry, I + 1);
-              FTileEnum[LX][LY] := tlSawmillIndustry;
-              Industry[I] := TSawmillIndustry.Create(S, LX, LY);
-              Inc(I);
-            end;
-        end;
-      end;
-    end;
+    AddIndustries();
   except
     on E: Exception do
       Log.Add('TMap.Gen', E.Message);
@@ -934,11 +888,11 @@ end;
 
 procedure TMap.Grows;
 var
-  I: Integer;
+  LIndustry: Integer;
 begin
   try
-    for I := 0 to Length(Industry) - 1 do
-      Industry[I].Grows;
+    for LIndustry := 0 to Length(Industry) - 1 do
+      Industry[LIndustry].Grows;
   except
     on E: Exception do
       Log.Add('TMap.Grows', E.Message);
@@ -947,13 +901,13 @@ end;
 
 function TMap.GetCurrentIndustry(const AX, AY: Integer): Integer;
 var
-  I: Integer;
+  LIndustry: Integer;
 begin
   Result := -1;
   try
-    for I := 0 to Length(Industry) - 1 do
-      if Industry[I].InLocation(AX, AY) then
-        Exit(I);
+    for LIndustry := 0 to Length(Industry) - 1 do
+      if Industry[LIndustry].InLocation(AX, AY) then
+        Exit(LIndustry);
   except
     on E: Exception do
       Log.Add('TMap.GetCurrentIndustry', E.Message);
@@ -962,12 +916,12 @@ end;
 
 function TMap.TownCount: Integer;
 var
-  I: Integer;
+  LIndustry: Integer;
 begin
   Result := 0;
   try
-    for I := 0 to Length(Industry) - 1 do
-      if (Industry[I].IndustryType = inTown) then
+    for LIndustry := 0 to Length(Industry) - 1 do
+      if (Industry[LIndustry].IndustryType = inTown) then
         Result := Result + 1;
   except
     on E: Exception do
@@ -977,13 +931,13 @@ end;
 
 function TMap.WorldPop: Integer;
 var
-  I: Integer;
+  LIndustry: Integer;
 begin
   Result := 0;
   try
-    for I := 0 to Length(Industry) - 1 do
-      if (Industry[I].IndustryType = inTown) then
-        Result := Result + TTownIndustry(Industry[I]).Population;
+    for LIndustry := 0 to Length(Industry) - 1 do
+      if (Industry[LIndustry].IndustryType = inTown) then
+        Result := Result + TTownIndustry(Industry[LIndustry]).Population;
   except
     on E: Exception do
       Log.Add('TMap.WorldPop', E.Message);
@@ -997,19 +951,19 @@ end;
 
 function TMap.GetNearTownName(const AX, AY: Integer): string;
 var
-  I, LDist, LMax: Integer;
+  LIndustry, LDist, LMax: Integer;
 begin
   Result := '';
   try
     LMax := Width;
     Result := '';
-    for I := 0 to Length(Industry) - 1 do
-      if (Industry[I].IndustryType = inTown) then
+    for LIndustry := 0 to Length(Industry) - 1 do
+      if (Industry[LIndustry].IndustryType = inTown) then
       begin
-        LDist := GetDist(Industry[I].X, Industry[I].Y, AX, AY);
+        LDist := GetDist(Industry[LIndustry].X, Industry[LIndustry].Y, AX, AY);
         if (LDist < LMax) then
         begin
-          Result := Industry[I].Name;
+          Result := Industry[LIndustry].Name;
           LMax := LDist;
         end;
       end;
@@ -1031,6 +985,66 @@ begin
   except
     on E: Exception do
       Log.Add('TMap.GetTile', E.Message);
+  end;
+end;
+
+procedure TMap.AddIndustries();
+var
+  LIndustryType: TIndustryType;
+  LTownName: string;
+  LX, LY, LIndustry, LIndustryCounter: Integer;
+begin
+  LIndustryCounter := TownCount();
+  for LIndustry := 0 to MapIndCount - 1 do
+  begin
+    for LIndustryType := Succ(Low(TIndustryType)) to High(TIndustryType) do
+    begin
+      repeat
+        LX := (Math.RandomRange(1, FWidth div 10) * 10) +
+          (Math.RandomRange(0, 10) - 5);
+        LY := (Math.RandomRange(1, FHeight div 10) * 10) +
+          (Math.RandomRange(0, 10) - 5);
+      until IsLandTile(LX, LY) and not IsTownLocation(LX, LY) and
+        not IsIndustryLocation(LX, LY);
+      case LIndustryType of
+        inCoalMine:
+          begin
+            LTownName := GetNearTownName(LX, LY);
+            SetLength(Industry, LIndustryCounter + 1);
+            FTileEnum[LX][LY] := tlCoalMineIndustry;
+            Industry[LIndustryCounter] := TCoalMineIndustry.Create
+              (LTownName, LX, LY);
+            Inc(LIndustryCounter);
+          end;
+        inPowerPlant:
+          begin
+            LTownName := GetNearTownName(LX, LY);
+            SetLength(Industry, LIndustryCounter + 1);
+            FTileEnum[LX][LY] := tlPowerPlantIndustry;
+            Industry[LIndustryCounter] := TPowerPlantIndustry.Create
+              (LTownName, LX, LY);
+            Inc(LIndustryCounter);
+          end;
+        inForest:
+          begin
+            LTownName := GetNearTownName(LX, LY);
+            SetLength(Industry, LIndustryCounter + 1);
+            FTileEnum[LX][LY] := tlForestIndustry;
+            Industry[LIndustryCounter] :=
+              TForestIndustry.Create(LTownName, LX, LY);
+            Inc(LIndustryCounter);
+          end;
+        inSawmill:
+          begin
+            LTownName := GetNearTownName(LX, LY);
+            SetLength(Industry, LIndustryCounter + 1);
+            FTileEnum[LX][LY] := tlSawmillIndustry;
+            Industry[LIndustryCounter] :=
+              TSawmillIndustry.Create(LTownName, LX, LY);
+            Inc(LIndustryCounter);
+          end;
+      end;
+    end;
   end;
 end;
 
