@@ -98,14 +98,14 @@ uses
 
 constructor TGame.Create;
 var
-  I: Integer;
+  LParam: Integer;
 begin
   FRace := reHuman;
   FIsOrder := False;
   FIsDebug := False;
-  for I := 1 to ParamCount do
+  for LParam := 1 to ParamCount do
   begin
-    if (LowerCase(ParamStr(I)) = '-debug')
+    if (LowerCase(ParamStr(LParam)) = '-debug')
 {$IFDEF DEBUG}
 {$IF CompilerVersion > 16}
 {$WARN SYMBOL_PLATFORM OFF}
@@ -247,11 +247,11 @@ end;
 
 procedure TGame.ForceDirs;
 var
-  I: Integer;
+  LSlot: Integer;
 begin
   ForceDirectories(GetPath('Saves'));
-  for I := 0 to 9 do
-    ForceDirectories(GetPath(Format('Saves/%d', [I])));
+  for LSlot := 0 to 9 do
+    ForceDirectories(GetPath(Format('Saves/%d', [LSlot])));
 end;
 
 procedure TGame.Save;
