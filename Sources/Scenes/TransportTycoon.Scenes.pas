@@ -350,18 +350,18 @@ end;
 
 procedure TScene.DrawFrame(const AX, AY, AWidth, AHeight: Integer);
 var
-  I: Integer;
+  LX, LY: Integer;
 begin
   terminal_clear_area(AX, AY, AWidth, AHeight);
-  for I := AX + 1 to AX + AWidth - 2 do
+  for LX := AX + 1 to AX + AWidth - 2 do
   begin
-    terminal_put(I, AY, $2550);
-    terminal_put(I, AY + AHeight - 1, $2550);
+    terminal_put(LX, AY, $2550);
+    terminal_put(LX, AY + AHeight - 1, $2550);
   end;
-  for I := AY + 1 to AY + AHeight - 2 do
+  for LY := AY + 1 to AY + AHeight - 2 do
   begin
-    terminal_put(AX, I, $2551);
-    terminal_put(AX + AWidth - 1, I, $2551);
+    terminal_put(AX, LY, $2551);
+    terminal_put(AX + AWidth - 1, LY, $2551);
   end;
   terminal_put(AX, AY, $2554);
   terminal_put(AX + AWidth - 1, AY, $2557);
