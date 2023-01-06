@@ -27,7 +27,7 @@ uses
 
 procedure TSceneAircraft.Render;
 var
-  LOrderIndex: Integer;
+  LOrder: Integer;
 begin
   inherited Render;
 
@@ -63,13 +63,12 @@ begin
       end
       else
       begin
-        for LOrderIndex := 0 to Orders.Count - 1 do
+        for LOrder := 0 to Orders.Count - 1 do
         begin
-          if (Orders.OrderIndex = LOrderIndex) then
-            DrawText(27, LOrderIndex + 11, '>');
-          DrawButton(29, LOrderIndex + 11, Orders.Count > 1,
-            Chr(Ord('A') + LOrderIndex),
-            StrLim('Go to ' + Orders.Order[LOrderIndex].Name + ' Airport', 40));
+          if (Orders.OrderIndex = LOrder) then
+            DrawText(27, LOrder + 11, '>');
+          DrawButton(29, LOrder + 11, Orders.Count > 1, Chr(Ord('A') + LOrder),
+            StrLim('Go to ' + Orders.Order[LOrder].Name + ' Airport', 40));
         end;
       end;
     end;
@@ -78,19 +77,19 @@ end;
 
 procedure TSceneAircraft.Update(var AKey: Word);
 var
-  LOrderIndex: Integer;
+  LOrder: Integer;
 begin
   inherited Update(AKey);
   case AKey of
     TK_A .. TK_G:
       with Game.Vehicles do
       begin
-        LOrderIndex := AKey - TK_A;
+        LOrder := AKey - TK_A;
         with Aircraft[CurrentVehicle] do
         begin
-          if (LOrderIndex > Orders.Count - 1) then
+          if (LOrder > Orders.Count - 1) then
             Exit;
-          Orders.DelOrder(LOrderIndex);
+          Orders.DelOrder(LOrder);
           Scenes.Render;
         end;
       end;
