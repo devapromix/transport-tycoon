@@ -29,28 +29,28 @@ uses
 
 procedure TSceneAircrafts.Render;
 var
-  LCurrentAircraft: Integer;
+  LVehicle: Integer;
 begin
   inherited Render;
   DrawTitle(Game.Company.Name + ' AIRCRAFTS');
-  for LCurrentAircraft := 0 to Game.Vehicles.AircraftCount - 1 do
-    DrawButton(12, LCurrentAircraft + 11, Chr(Ord('A') + LCurrentAircraft),
-      Game.Vehicles.Aircraft[LCurrentAircraft].Name);
+  for LVehicle := 0 to Game.Vehicles.AircraftCount - 1 do
+    DrawButton(12, LVehicle + 11, Chr(Ord('A') + LVehicle),
+      Game.Vehicles.Aircraft[LVehicle].Name);
 end;
 
 procedure TSceneAircrafts.Update(var AKey: Word);
 var
-  LCurrentAircraft: Integer;
+  LVehicle: Integer;
 begin
   inherited Update(AKey);
   case AKey of
     TK_A .. TK_G:
       begin
-        LCurrentAircraft := AKey - TK_A;
-        if LCurrentAircraft > Game.Vehicles.AircraftCount - 1 then
+        LVehicle := AKey - TK_A;
+        if LVehicle > Game.Vehicles.AircraftCount - 1 then
           Exit;
-        Game.Vehicles.CurrentVehicle := LCurrentAircraft;
-        with Game.Vehicles.Aircraft[LCurrentAircraft] do
+        Game.Vehicles.CurrentVehicle := LVehicle;
+        with Game.Vehicles.Aircraft[LVehicle] do
           ScrollTo(X, Y);
         Scenes.SetScene(scAircraft, scAircrafts);
       end;
