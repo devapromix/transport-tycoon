@@ -15,7 +15,7 @@ type
     FIndustry: TIndustry;
   public
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
   end;
 
 implementation
@@ -29,7 +29,7 @@ uses
 
 procedure TSceneBuildNearIndustry.Render;
 var
-  S: string;
+  LHint: string;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
@@ -38,26 +38,26 @@ begin
   FIndustry := Game.Map.Industry[Game.Map.CurrentIndustry];
   DrawTitle('BUILD IN ' + FIndustry.Name);
   // Dock
-  S := '';
+  LHint := '';
   if FIndustry.Dock.Level = 0 then
-    S := ' ($' + IntToStr(FIndustry.Dock.Cost) + ')';
+    LHint := ' ($' + IntToStr(FIndustry.Dock.Cost) + ')';
   DrawButton(17, 11, FIndustry.Dock.CanBuild(FIndustry.X, FIndustry.Y), 'D',
-    'Build Dock' + S);
+    'Build Dock' + LHint);
   // Truck Loading Bay
-  S := '';
+  LHint := '';
   if FIndustry.TruckLoadingBay.Level = 0 then
-    S := ' ($' + IntToStr(FIndustry.TruckLoadingBay.Cost) + ')';
+    LHint := ' ($' + IntToStr(FIndustry.TruckLoadingBay.Cost) + ')';
   DrawButton(17, 12, FIndustry.TruckLoadingBay.CanBuild, 'L',
-    'Build Truck Loading Bay' + S);
+    'Build Truck Loading Bay' + LHint);
 
   AddButton(19, 'Esc', 'Close');
 
   DrawGameBar;
 end;
 
-procedure TSceneBuildNearIndustry.Update(var Key: Word);
+procedure TSceneBuildNearIndustry.Update(var AKey: Word);
 begin
-  if (Key = TK_MOUSE_LEFT) then
+  if (AKey = TK_MOUSE_LEFT) then
   begin
     if (GetButtonsY = MY) then
     begin
@@ -65,7 +65,7 @@ begin
         35 .. 45:
           case MY of
             19:
-              Key := TK_ESCAPE;
+              AKey := TK_ESCAPE;
           end;
       end;
     end;
@@ -73,13 +73,13 @@ begin
       17 .. 62:
         case MY of
           11:
-            Key := TK_D;
+            AKey := TK_D;
           12:
-            Key := TK_L;
+            AKey := TK_L;
         end;
     end;
   end;
-  case Key of
+  case AKey of
     TK_ESCAPE:
       Scenes.SetScene(scIndustry);
     TK_D:

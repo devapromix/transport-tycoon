@@ -15,7 +15,7 @@ type
     FTown: TTownIndustry;
   public
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
   end;
 
 implementation
@@ -31,7 +31,7 @@ uses
 procedure TSceneBuildInTown.Render;
 var
   LAirportLevel: Integer;
-  S: string;
+  LHint: string;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
@@ -40,29 +40,30 @@ begin
   FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
   DrawTitle('BUILD IN ' + FTown.Name);
   // Airport
-  S := '';
+  LHint := '';
   LAirportLevel := Math.EnsureRange(FTown.Airport.Level + 1, 0, 5);
   if FTown.Airport.Level < FTown.Airport.MaxLevel then
-    S := ' ($' + IntToStr(FTown.Airport.Cost) + ')';
+    LHint := ' ($' + IntToStr(FTown.Airport.Cost) + ')';
   DrawButton(17, 11, FTown.Airport.CanBuild, 'A',
-    'Build ' + AirportSizeStr[LAirportLevel] + S);
+    'Build ' + AirportSizeStr[LAirportLevel] + LHint);
   // Dock
-  S := '';
+  LHint := '';
   if FTown.Dock.Level = 0 then
-    S := ' ($' + IntToStr(FTown.Dock.Cost) + ')';
+    LHint := ' ($' + IntToStr(FTown.Dock.Cost) + ')';
   DrawButton(17, 12, FTown.Dock.CanBuild(FTown.X, FTown.Y), 'D',
-    'Build Dock' + S);
+    'Build Dock' + LHint);
   // Bus Station
-  S := '';
+  LHint := '';
   if not FTown.BusStation.IsBuilding then
-    S := ' ($' + IntToStr(FTown.BusStation.Cost) + ')';
-  DrawButton(17, 13, FTown.BusStation.CanBuild, 'S', 'Build Bus Station' + S);
+    LHint := ' ($' + IntToStr(FTown.BusStation.Cost) + ')';
+  DrawButton(17, 13, FTown.BusStation.CanBuild, 'S',
+    'Build Bus Station' + LHint);
   // Truck Loading Bay
-  S := '';
+  LHint := '';
   if not FTown.TruckLoadingBay.IsBuilding then
-    S := ' ($' + IntToStr(FTown.TruckLoadingBay.Cost) + ')';
+    LHint := ' ($' + IntToStr(FTown.TruckLoadingBay.Cost) + ')';
   DrawButton(17, 14, FTown.TruckLoadingBay.CanBuild, 'L',
-    'Build Truck Loading Bay' + S);
+    'Build Truck Loading Bay' + LHint);
   // Company Headquarters
   if (Game.Map.CurrentIndustry = Game.Company.TownIndex) then
     DrawButton(17, 17, FTown.HQ.CanBuild, 'G', 'Build Company Headquarters ($' +
@@ -73,32 +74,32 @@ begin
   DrawGameBar;
 end;
 
-procedure TSceneBuildInTown.Update(var Key: Word);
+procedure TSceneBuildInTown.Update(var AKey: Word);
 begin
-  if (Key = TK_MOUSE_LEFT) then
+  if (AKey = TK_MOUSE_LEFT) then
   begin
     if (GetButtonsY = MY) then
       case MX of
         35 .. 45:
-          Key := TK_ESCAPE;
+          AKey := TK_ESCAPE;
       end;
     case MX of
       17 .. 62:
         case MY of
           11:
-            Key := TK_A;
+            AKey := TK_A;
           12:
-            Key := TK_D;
+            AKey := TK_D;
           13:
-            Key := TK_S;
+            AKey := TK_S;
           14:
-            Key := TK_L;
+            AKey := TK_L;
           17:
-            Key := TK_G;
+            AKey := TK_G;
         end;
     end;
   end;
-  case Key of
+  case AKey of
     TK_ESCAPE:
       Scenes.SetScene(scTown);
     TK_A:
@@ -135,8 +136,8 @@ begin
       end;
     TK_G:
       begin
-        if FTown.HQ.CanBuild and (Game.Map.CurrentIndustry = Game.Company.TownIndex)
-        then
+        if FTown.HQ.CanBuild and
+          (Game.Map.CurrentIndustry = Game.Company.TownIndex) then
         begin
           FTown.HQ.Build;
           Scenes.SetScene(scCompany, scTown);
