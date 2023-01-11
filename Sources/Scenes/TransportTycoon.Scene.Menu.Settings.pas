@@ -16,7 +16,7 @@ type
   public
     property IsGame: Boolean read FIsGame write FIsGame;
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
     property IsShowBar: Boolean read FIsShowBar write FIsShowBar;
   end;
 
@@ -45,33 +45,33 @@ begin
   // Fullscreen
   DrawButton(27, 15, 27, True, terminal_check(TK_FULLSCREEN), 'ALT+ENTER',
     'Fullscreen', TPalette.Unused);
-  //DrawText(39, 15, 'FULLSCREEN', False);
+  // DrawText(39, 15, 'FULLSCREEN', False);
   AddButton(17, 'Esc', 'Close');
 
   if IsShowBar then
     DrawGameBar;
 end;
 
-procedure TSceneSettingsMenu.Update(var Key: Word);
+procedure TSceneSettingsMenu.Update(var AKey: Word);
 begin
-  if (Key = TK_MOUSE_LEFT) then
+  if (AKey = TK_MOUSE_LEFT) then
   begin
     if (GetButtonsY = MY) then
     begin
       case MX of
         35 .. 45:
-          Key := TK_ESCAPE;
+          AKey := TK_ESCAPE;
       end;
     end;
     case MX of
       27 .. 52:
         case MY of
           13:
-            Key := TK_S;
+            AKey := TK_S;
         end;
     end;
   end;
-  if (Key = TK_MOUSE_RIGHT) then
+  if (AKey = TK_MOUSE_RIGHT) then
   begin
     case MX of
       27 .. 52:
@@ -81,7 +81,7 @@ begin
         end;
     end;
   end;
-  case Key of
+  case AKey of
     TK_ESCAPE:
       Scenes.Back;
     TK_S:

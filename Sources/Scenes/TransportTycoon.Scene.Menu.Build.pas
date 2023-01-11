@@ -12,10 +12,10 @@ type
   TSceneBuildMenu = class(TScene)
   private
     FX, FY: Integer;
-    procedure DrawLine(const Button, Text: string; const AMoney: Integer);
+    procedure DrawLine(const AButton, AText: string; const AMoney: Integer);
   public
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
   end;
 
 implementation
@@ -30,10 +30,10 @@ uses
 
 { TSceneBuildMenu }
 
-procedure TSceneBuildMenu.DrawLine(const Button, Text: string;
+procedure TSceneBuildMenu.DrawLine(const AButton, AText: string;
   const AMoney: Integer);
 begin
-  DrawButton(FX, FY, Button, Text);
+  DrawButton(FX, FY, AButton, AText);
   terminal_print(FX + 31, FY, TK_ALIGN_RIGHT, Format('[c=%s]$%d[/c]',
     [TPalette.Unused, AMoney]));
   Inc(FX, 34);
@@ -68,37 +68,37 @@ begin
   DrawGameBar;
 end;
 
-procedure TSceneBuildMenu.Update(var Key: Word);
+procedure TSceneBuildMenu.Update(var AKey: Word);
 begin
-  if (Key = TK_MOUSE_LEFT) then
+  if (AKey = TK_MOUSE_LEFT) then
   begin
     if (GetButtonsY = MY) then
     begin
       case MX of
         35 .. 45:
-          Key := TK_ESCAPE;
+          AKey := TK_ESCAPE;
       end;
     end;
     case MX of
       7 .. 38:
         case MY of
           12:
-            Key := TK_C;
+            AKey := TK_C;
           13:
-            Key := TK_B;
+            AKey := TK_B;
           { 14:
             Key := TK_;
             15:
             Key := TK_; }
           16:
-            Key := TK_X;
+            AKey := TK_X;
         end;
       41 .. 72:
         case MY of
           12:
-            Key := TK_R;
+            AKey := TK_R;
           13:
-            Key := TK_T;
+            AKey := TK_T;
           { 14:
             Key := TK_;
             15:
@@ -108,7 +108,7 @@ begin
         end;
     end;
   end;
-  case Key of
+  case AKey of
     TK_ESCAPE:
       Scenes.Back;
     TK_C:

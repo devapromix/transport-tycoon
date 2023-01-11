@@ -11,7 +11,7 @@ type
 
   public
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
   end;
 
 implementation
@@ -45,7 +45,7 @@ begin
   AddButton(18, 'Esc', 'Back');
 end;
 
-procedure TSceneGenMenu.Update(var Key: Word);
+procedure TSceneGenMenu.Update(var AKey: Word);
 var
   LIsPrev: Boolean;
 
@@ -76,24 +76,24 @@ var
   end;
 
 begin
-  LIsPrev := (Key = TK_MOUSE_RIGHT) or terminal_check(TK_SHIFT);
-  if (Key = TK_MOUSE_LEFT) then
+  LIsPrev := (AKey = TK_MOUSE_RIGHT) or terminal_check(TK_SHIFT);
+  if (AKey = TK_MOUSE_LEFT) then
   begin
     if (GetButtonsY = MY) then
     begin
       case MX of
         26 .. 41:
-          Key := TK_ENTER;
+          AKey := TK_ENTER;
         45 .. 54:
-          Key := TK_ESCAPE;
+          AKey := TK_ESCAPE;
       end;
     end;
-    UpdateKey(Key);
+    UpdateKey(AKey);
   end
-  else if (Key = TK_MOUSE_RIGHT) then
-    UpdateKey(Key);
+  else if (AKey = TK_MOUSE_RIGHT) then
+    UpdateKey(AKey);
 
-  case Key of
+  case AKey of
     TK_ESCAPE:
       Scenes.SetScene(scMainMenu);
     TK_A:

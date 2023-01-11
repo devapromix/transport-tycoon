@@ -11,7 +11,7 @@ type
 
   public
     procedure Render; override;
-    procedure Update(var Key: word); override;
+    procedure Update(var AKey: word); override;
   end;
 
 implementation
@@ -59,55 +59,55 @@ begin
   DrawGameBar;
 end;
 
-procedure TSceneGameMenu.Update(var Key: word);
+procedure TSceneGameMenu.Update(var AKey: word);
 begin
-  if (Key = TK_MOUSE_LEFT) then
+  if (AKey = TK_MOUSE_LEFT) then
   begin
     case MX of
       12 .. 38:
         case MY of
           11:
-            Key := TK_F;
+            AKey := TK_F;
           12:
-            Key := TK_N;
+            AKey := TK_N;
           14:
-            Key := TK_R;
+            AKey := TK_R;
           15:
-            Key := TK_T;
+            AKey := TK_T;
           16:
-            Key := TK_S;
+            AKey := TK_S;
           17:
-            Key := TK_A;
+            AKey := TK_A;
         end;
       42 .. 68:
         case MY of
           11:
-            Key := TK_G;
+            AKey := TK_G;
           12:
-            Key := TK_I;
+            AKey := TK_I;
           13:
-            Key := TK_U;
+            AKey := TK_U;
           14:
-            Key := TK_D;
+            AKey := TK_D;
           15:
-            Key := TK_B;
+            AKey := TK_B;
           16:
-            Key := TK_P;
+            AKey := TK_P;
           17:
-            Key := TK_X;
+            AKey := TK_X;
         end;
     end;
     if (GetButtonsY = MY) then
     begin
       case MX of
         29 .. 36:
-          Key := TK_Q;
+          AKey := TK_Q;
         40 .. 50:
-          Key := TK_ESCAPE;
+          AKey := TK_ESCAPE;
       end;
     end;
   end;
-  case Key of
+  case AKey of
     TK_ESCAPE:
       begin
         Scenes.SetScene(scWorld);
@@ -118,7 +118,7 @@ begin
         Scenes.SetScene(scMainMenu);
       end;
   end;
-  TSceneWorld.GlobalKeys(Key);
+  TSceneWorld.GlobalKeys(AKey);
 end;
 
 end.
