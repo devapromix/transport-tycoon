@@ -14,7 +14,7 @@ type
 
   public
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
   end;
 
 implementation
@@ -29,7 +29,7 @@ uses
 
 procedure TSceneIndustries.Render;
 var
-  I, LY: Integer;
+  LIndustry, LY: Integer;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
@@ -38,10 +38,11 @@ begin
   DrawTitle(6, 'INDUSTRIES');
 
   LY := 0;
-  for I := 0 to Length(Game.Map.Industry) - 1 do
-    if (Game.Map.Industry[I].IndustryType <> inTown) then
+  for LIndustry := 0 to Length(Game.Map.Industry) - 1 do
+    if (Game.Map.Industry[LIndustry].IndustryType <> inTown) then
     begin
-      DrawButton(27, LY + 8, Chr(Ord('A') + LY), Game.Map.Industry[I].Name);
+      DrawButton(27, LY + 8, Chr(Ord('A') + LY),
+        Game.Map.Industry[LIndustry].Name);
       Inc(LY);
     end;
 
@@ -50,35 +51,35 @@ begin
   DrawGameBar;
 end;
 
-procedure TSceneIndustries.Update(var Key: Word);
+procedure TSceneIndustries.Update(var AKey: Word);
 var
-  I: Integer;
+  LIndustry: Integer;
 begin
-  if (Key = TK_MOUSE_LEFT) then
+  if (AKey = TK_MOUSE_LEFT) then
   begin
     case MX of
       27 .. 51:
         case MY of
           8 .. 18:
-            Key := TK_A + (MY - 8);
+            AKey := TK_A + (MY - 8);
         end;
     end;
     if (GetButtonsY = MY) then
       case MX of
         35 .. 45:
-          Key := TK_ESCAPE;
+          AKey := TK_ESCAPE;
       end;
   end;
-  case Key of
+  case AKey of
     TK_ESCAPE:
       Scenes.SetScene(scWorld);
     TK_A .. TK_K:
       with Game.Map do
       begin
-        I := Key - TK_A;
-        if (I < Length(Industry) - TownCount) then
+        LIndustry := AKey - TK_A;
+        if (LIndustry < Length(Industry) - TownCount) then
         begin
-          CurrentIndustry := TownCount + I;
+          CurrentIndustry := TownCount + LIndustry;
           ScrollTo(Industry[CurrentIndustry].X, Industry[CurrentIndustry].Y);
           Scenes.SetScene(scIndustry);
         end;

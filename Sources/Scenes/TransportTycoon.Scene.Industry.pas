@@ -15,7 +15,7 @@ type
     FIndustry: TIndustry;
   public
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
     procedure IndustryInfo(const AIndustry: TIndustry; const AX, AY: Integer);
   end;
 
@@ -31,16 +31,16 @@ uses
 procedure TSceneIndustry.IndustryInfo(const AIndustry: TIndustry;
   const AX, AY: Integer);
 var
-  I: Integer;
+  LY: Integer;
 begin
-  I := AY;
+  LY := AY;
   if AIndustry.Produces <> [] then
   begin
-    DrawText(AX, I, 'Produces: ' + AIndustry.GetCargoStr(AIndustry.Produces));
-    Dec(I);
+    DrawText(AX, LY, 'Produces: ' + AIndustry.GetCargoStr(AIndustry.Produces));
+    Dec(LY);
   end;
   if AIndustry.Accepts <> [] then
-    DrawText(AX, I, 'Accepts: ' + AIndustry.GetCargoStr(AIndustry.Accepts));
+    DrawText(AX, LY, 'Accepts: ' + AIndustry.GetCargoStr(AIndustry.Accepts));
 end;
 
 procedure TSceneIndustry.Render;
@@ -68,30 +68,30 @@ begin
   DrawGameBar;
 end;
 
-procedure TSceneIndustry.Update(var Key: Word);
+procedure TSceneIndustry.Update(var AKey: Word);
 begin
-  if (Key = TK_MOUSE_LEFT) then
+  if (AKey = TK_MOUSE_LEFT) then
   begin
     if (GetButtonsY = MY) then
     begin
       case MX of
         29 .. 37:
-          Key := TK_B;
+          AKey := TK_B;
         41 .. 51:
-          Key := TK_ESCAPE;
+          AKey := TK_ESCAPE;
       end;
     end;
     case MX of
       34 .. 56:
         case MY of
           12:
-            Key := TK_D;
+            AKey := TK_D;
           13:
-            Key := TK_L;
+            AKey := TK_L;
         end;
     end;
   end;
-  case Key of
+  case AKey of
     TK_ESCAPE:
       Scenes.SetScene(scWorld);
     TK_B:
