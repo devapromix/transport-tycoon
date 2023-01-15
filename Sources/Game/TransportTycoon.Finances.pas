@@ -80,11 +80,11 @@ end;
 
 function TFinanceYear.Values(const AValuesEnum: array of TValueEnum): Integer;
 var
-  I: Integer;
+  LValueEnum: Integer;
 begin
   Result := 0;
-  for I := 0 to Length(AValuesEnum) - 1 do
-    Result := Result + FValue[AValuesEnum[I]];
+  for LValueEnum := 0 to Length(AValuesEnum) - 1 do
+    Result := Result + FValue[AValuesEnum[LValueEnum]];
 end;
 
 { TFinances }
