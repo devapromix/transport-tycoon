@@ -13,7 +13,7 @@ type
     FIndustry: TIndustry;
   public
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
   end;
 
 implementation
@@ -29,17 +29,17 @@ uses
 
 procedure TSceneRoadVehicleDepot.Render;
 var
-  LSelVehicle: Integer;
+  LVehicle: Integer;
 begin
   inherited Render;
 
   FIndustry := Game.Map.Industry[Game.Map.CurrentIndustry];
   DrawTitle(8, FIndustry.Name + ' Road Vehicle Depot');
 
-  LSelVehicle := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
+  LVehicle := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
     Length(RoadVehicleBase) - 1);
-  DrawVehiclesList(RoadVehicleBase, LSelVehicle);
-  DrawVehicleInfo(RoadVehicleBase, LSelVehicle);
+  DrawVehiclesList(RoadVehicleBase, LVehicle);
+  DrawVehicleInfo(RoadVehicleBase, LVehicle);
 
   AddButton(20, Game.Vehicles.IsBuyRoadVehicleAllowed, 'Enter',
     'Buy Road Vehicle');
@@ -48,47 +48,49 @@ begin
   DrawGameBar;
 end;
 
-procedure TSceneRoadVehicleDepot.Update(var Key: Word);
+procedure TSceneRoadVehicleDepot.Update(var AKey: Word);
 var
-  I: Integer;
+  LVehicle: Integer;
   LTitle: string;
 begin
-  inherited Update(Key);
-  if (Key = TK_MOUSE_LEFT) then
+  inherited Update(AKey);
+  if (AKey = TK_MOUSE_LEFT) then
   begin
     if (GetButtonsY = MY) then
     begin
       case MX of
         21 .. 44:
-          Key := TK_ENTER;
+          AKey := TK_ENTER;
         48 .. 58:
-          Key := TK_ESCAPE;
+          AKey := TK_ESCAPE;
       end;
     end;
   end;
-  case Key of
+  case AKey of
     TK_ESCAPE:
       Scenes.Back;
     TK_A .. TK_I:
       begin
-        I := Key - TK_A;
-        if I > Length(RoadVehicleBase) - 1 then
+        LVehicle := AKey - TK_A;
+        if LVehicle > Length(RoadVehicleBase) - 1 then
           Exit;
-        if RoadVehicleBase[I].Since > Game.Calendar.Year then
+        if RoadVehicleBase[LVehicle].Since > Game.Calendar.Year then
           Exit;
-        Game.Vehicles.CurrentVehicle := I;
+        Game.Vehicles.CurrentVehicle := LVehicle;
         Scenes.Render;
       end;
     TK_ENTER:
       begin
         if Game.Vehicles.IsBuyRoadVehicleAllowed then
         begin
-          I := Game.Vehicles.CurrentVehicle;
-          if (Game.Money >= RoadVehicleBase[I].Cost) then
+          LVehicle := Game.Vehicles.CurrentVehicle;
+          if (Game.Money >= RoadVehicleBase[LVehicle].Cost) then
           begin
             LTitle := Format('Road Vehicle #%d (%s)',
-              [Game.Vehicles.RoadVehicleCount + 1, RoadVehicleBase[I].Name]);
-            Game.Vehicles.AddRoadVehicle(LTitle, Game.Map.CurrentIndustry, I);
+              [Game.Vehicles.RoadVehicleCount + 1,
+              RoadVehicleBase[LVehicle].Name]);
+            Game.Vehicles.AddRoadVehicle(LTitle, Game.Map.CurrentIndustry,
+              LVehicle);
             Scenes.Back;
           end;
         end;

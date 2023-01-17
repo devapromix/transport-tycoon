@@ -28,17 +28,17 @@ uses
 
 procedure TSceneAircraftHangar.Render;
 var
-  LSelVehicle: Integer;
+  LVehicle: Integer;
 begin
   inherited Render;
 
   FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
   DrawTitle(8, FTown.Name + ' Airport Hangar');
 
-  LSelVehicle := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
+  LVehicle := Math.EnsureRange(Game.Vehicles.CurrentVehicle, 0,
     Length(AircraftBase) - 1);
-  DrawVehiclesList(AircraftBase, LSelVehicle);
-  DrawVehicleInfo(AircraftBase, LSelVehicle);
+  DrawVehiclesList(AircraftBase, LVehicle);
+  DrawVehicleInfo(AircraftBase, LVehicle);
 
   AddButton(20, Game.Vehicles.IsBuyAircraftAllowed, 'Enter', 'Buy Aircraft');
   AddButton(20, 'Esc', 'Close');
@@ -48,7 +48,7 @@ end;
 
 procedure TSceneAircraftHangar.Update(var AKey: Word);
 var
-  LCurrentVehicle: Integer;
+  LVehicle: Integer;
   LTitle: string;
 begin
   inherited Update(AKey);
@@ -67,26 +67,25 @@ begin
       Scenes.SetScene(scAirport);
     TK_A .. TK_I:
       begin
-        LCurrentVehicle := AKey - TK_A;
-        if LCurrentVehicle > Length(AircraftBase) - 1 then
+        LVehicle := AKey - TK_A;
+        if LVehicle > Length(AircraftBase) - 1 then
           Exit;
-        if AircraftBase[LCurrentVehicle].Since > Game.Calendar.Year then
+        if AircraftBase[LVehicle].Since > Game.Calendar.Year then
           Exit;
-        Game.Vehicles.CurrentVehicle := LCurrentVehicle;
+        Game.Vehicles.CurrentVehicle := LVehicle;
         Scenes.Render;
       end;
     TK_ENTER:
       begin
         if Game.Vehicles.IsBuyAircraftAllowed then
         begin
-          LCurrentVehicle := Game.Vehicles.CurrentVehicle;
-          if (Game.Money >= AircraftBase[LCurrentVehicle].Cost) then
+          LVehicle := Game.Vehicles.CurrentVehicle;
+          if (Game.Money >= AircraftBase[LVehicle].Cost) then
           begin
             LTitle := Format('Aircraft #%d (%s)',
-              [Game.Vehicles.AircraftCount + 1,
-              AircraftBase[LCurrentVehicle].Name]);
+              [Game.Vehicles.AircraftCount + 1, AircraftBase[LVehicle].Name]);
             Game.Vehicles.AddAircraft(LTitle, Game.Map.CurrentIndustry,
-              LCurrentVehicle);
+              LVehicle);
             Scenes.SetScene(scAirport);
           end;
         end;
