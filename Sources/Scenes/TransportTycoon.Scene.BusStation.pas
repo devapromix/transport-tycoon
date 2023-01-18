@@ -32,7 +32,7 @@ uses
 
 procedure TSceneBusStation.Render;
 var
-  LRoadVehicle, LY: Integer;
+  LVehicle, LY: Integer;
   LCargo: TCargo;
 begin
   inherited Render;
@@ -53,10 +53,10 @@ begin
     end;
   end;
 
-  for LRoadVehicle := 0 to Game.Vehicles.RoadVehicleCount - 1 do
-    DrawButton(37, LRoadVehicle + 11, Game.Vehicles.RoadVehicle[LRoadVehicle]
-      .InLocation(FIndustry.X, FIndustry.Y), Chr(Ord('A') + LRoadVehicle),
-      StrLim(Game.Vehicles.RoadVehicle[LRoadVehicle].Name, 30));
+  for LVehicle := 0 to Game.Vehicles.RoadVehicleCount - 1 do
+    DrawButton(37, LVehicle + 11, Game.Vehicles.RoadVehicle[LVehicle]
+      .InLocation(FIndustry.X, FIndustry.Y), Chr(Ord('A') + LVehicle),
+      StrLim(Game.Vehicles.RoadVehicle[LVehicle].Name, 30));
 
   AddButton(19, 'V', 'Road Vehicle Depot');
   AddButton(19, 'Esc', 'Close');
@@ -66,7 +66,7 @@ end;
 
 procedure TSceneBusStation.Update(var AKey: Word);
 var
-  LCurrentVehicle: Integer;
+  LVehicle: Integer;
 begin
   inherited Update(AKey);
   if (AKey = TK_MOUSE_LEFT) then
@@ -86,11 +86,11 @@ begin
       Scenes.Back;
     TK_A .. TK_G:
       begin
-        LCurrentVehicle := AKey - TK_A;
-        if Game.Vehicles.RoadVehicle[LCurrentVehicle].InLocation(FIndustry.X,
+        LVehicle := AKey - TK_A;
+        if Game.Vehicles.RoadVehicle[LVehicle].InLocation(FIndustry.X,
           FIndustry.Y) then
         begin
-          Game.Vehicles.CurrentVehicle := LCurrentVehicle;
+          Game.Vehicles.CurrentVehicle := LVehicle;
           Scenes.SetScene(scRoadVehicle, scBusStation);
         end;
       end;

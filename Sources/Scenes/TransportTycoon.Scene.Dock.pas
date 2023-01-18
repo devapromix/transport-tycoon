@@ -32,7 +32,7 @@ uses
 
 procedure TSceneDock.Render;
 var
-  I, LY: Integer;
+  LVehicle, LY: Integer;
   LCargo: TCargo;
 begin
   inherited Render;
@@ -53,9 +53,10 @@ begin
     end;
   end;
 
-  for I := 0 to Game.Vehicles.ShipCount - 1 do
-    DrawButton(37, I + 11, Game.Vehicles.Ship[I].InLocation(FIndustry.X,
-      FIndustry.Y), Chr(Ord('A') + I), StrLim(Game.Vehicles.Ship[I].Name, 30));
+  for LVehicle := 0 to Game.Vehicles.ShipCount - 1 do
+    DrawButton(37, LVehicle + 11, Game.Vehicles.Ship[LVehicle]
+      .InLocation(FIndustry.X, FIndustry.Y), Chr(Ord('A') + LVehicle),
+      StrLim(Game.Vehicles.Ship[LVehicle].Name, 30));
 
   AddButton(19, 'V', 'Ship Depot');
   AddButton(19, 'Esc', 'Close');
@@ -65,7 +66,7 @@ end;
 
 procedure TSceneDock.Update(var AKey: Word);
 var
-  I: Integer;
+  LVehicle: Integer;
 begin
   inherited Update(AKey);
   if (AKey = TK_MOUSE_LEFT) then
@@ -85,10 +86,11 @@ begin
       Scenes.Back;
     TK_A .. TK_G:
       begin
-        I := AKey - TK_A;
-        if Game.Vehicles.Ship[I].InLocation(FIndustry.X, FIndustry.Y) then
+        LVehicle := AKey - TK_A;
+        if Game.Vehicles.Ship[LVehicle].InLocation(FIndustry.X, FIndustry.Y)
+        then
         begin
-          Game.Vehicles.CurrentVehicle := I;
+          Game.Vehicles.CurrentVehicle := LVehicle;
           Scenes.SetScene(scShip, scDock);
         end;
       end;
