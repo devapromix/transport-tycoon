@@ -29,27 +29,28 @@ uses
 
 procedure TSceneShips.Render;
 var
-  I: Integer;
+  LVehicle: Integer;
 begin
   inherited Render;
   DrawTitle(Game.Company.Name + ' SHIPS');
-  for I := 0 to Game.Vehicles.ShipCount - 1 do
-    DrawButton(12, I + 11, Chr(Ord('A') + I), Game.Vehicles.Ship[I].Name);
+  for LVehicle := 0 to Game.Vehicles.ShipCount - 1 do
+    DrawButton(12, LVehicle + 11, Chr(Ord('A') + LVehicle),
+      Game.Vehicles.Ship[LVehicle].Name);
 end;
 
 procedure TSceneShips.Update(var AKey: Word);
 var
-  I: Integer;
+  LVehicle: Integer;
 begin
   inherited Update(AKey);
   case AKey of
     TK_A .. TK_G:
       begin
-        I := AKey - TK_A;
-        if I > Game.Vehicles.ShipCount - 1 then
+        LVehicle := AKey - TK_A;
+        if LVehicle > Game.Vehicles.ShipCount - 1 then
           Exit;
-        Game.Vehicles.CurrentVehicle := I;
-        with Game.Vehicles.Ship[I] do
+        Game.Vehicles.CurrentVehicle := LVehicle;
+        with Game.Vehicles.Ship[LVehicle] do
           ScrollTo(X, Y);
         Scenes.SetScene(scShip, scShips);
       end;

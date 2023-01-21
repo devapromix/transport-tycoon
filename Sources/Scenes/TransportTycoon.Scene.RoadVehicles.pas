@@ -29,28 +29,28 @@ uses
 
 procedure TSceneRoadVehicles.Render;
 var
-  LVehicleIndex: Integer;
+  LVehicle: Integer;
 begin
   inherited Render;
   DrawTitle(Game.Company.Name + ' Road Vehicles');
-  for LVehicleIndex := 0 to Game.Vehicles.RoadVehicleCount - 1 do
-    DrawButton(12, LVehicleIndex + 11, Chr(Ord('A') + LVehicleIndex),
-      Game.Vehicles.RoadVehicle[LVehicleIndex].Name);
+  for LVehicle := 0 to Game.Vehicles.RoadVehicleCount - 1 do
+    DrawButton(12, LVehicle + 11, Chr(Ord('A') + LVehicle),
+      Game.Vehicles.RoadVehicle[LVehicle].Name);
 end;
 
 procedure TSceneRoadVehicles.Update(var AKey: Word);
 var
-  LVehicleIndex: Integer;
+  LVehicle: Integer;
 begin
   inherited Update(AKey);
   case AKey of
     TK_A .. TK_G:
       begin
-        LVehicleIndex := AKey - TK_A;
-        if LVehicleIndex > Game.Vehicles.RoadVehicleCount - 1 then
+        LVehicle := AKey - TK_A;
+        if LVehicle > Game.Vehicles.RoadVehicleCount - 1 then
           Exit;
-        Game.Vehicles.CurrentVehicle := LVehicleIndex;
-        with Game.Vehicles.RoadVehicle[LVehicleIndex] do
+        Game.Vehicles.CurrentVehicle := LVehicle;
+        with Game.Vehicles.RoadVehicle[LVehicle] do
           ScrollTo(X, Y);
         Scenes.SetScene(scRoadVehicle, scRoadVehicles);
       end;
