@@ -35,7 +35,7 @@ begin
   DrawButton(16, 'D', 'SETTINGS');
   DrawButton(17, 'Q', 'QUIT');
 
-  DrawText(20, 'Created by DevApromix (C) 2022');
+  DrawText(20, 'By Apromix 2022-2023');
 end;
 
 procedure TSceneMainMenu.Update(var Key: word);
