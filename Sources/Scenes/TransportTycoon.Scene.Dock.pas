@@ -16,7 +16,7 @@ type
     FIndustry: TIndustry;
   public
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
   end;
 
 implementation
@@ -63,29 +63,29 @@ begin
   DrawBar;
 end;
 
-procedure TSceneDock.Update(var Key: Word);
+procedure TSceneDock.Update(var AKey: Word);
 var
   I: Integer;
 begin
-  inherited Update(Key);
-  if (Key = TK_MOUSE_LEFT) then
+  inherited Update(AKey);
+  if (AKey = TK_MOUSE_LEFT) then
   begin
     if (GetButtonsY = MY) then
     begin
       case MX of
         26 .. 39:
-          Key := TK_V;
+          AKey := TK_V;
         43 .. 53:
-          Key := TK_ESCAPE;
+          AKey := TK_ESCAPE;
       end;
     end;
   end;
-  case Key of
+  case AKey of
     TK_ESCAPE:
       Scenes.Back;
     TK_A .. TK_G:
       begin
-        I := Key - TK_A;
+        I := AKey - TK_A;
         if Game.Vehicles.Ship[I].InLocation(FIndustry.X, FIndustry.Y) then
         begin
           Game.Vehicles.CurrentVehicle := I;
