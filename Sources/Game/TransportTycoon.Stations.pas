@@ -76,8 +76,8 @@ end;
 function TDock.CanBuild(const X, Y: Integer): Boolean;
 begin
   Result := (FLevel < FMaxLevel) and (Game.Money >= Cost) and
-    ((Game.Map.IsNearTile(X, Y, tlWater)
-    or (Game.Map.IsNearTile(X, Y, tlCanal))))
+    ((Game.Map.IsNearTile(X, Y, tlWater) or (Game.Map.IsNearTile(X, Y,
+    tlCanal))))
 end;
 
 end.
