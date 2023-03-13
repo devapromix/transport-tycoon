@@ -18,8 +18,8 @@ type
     procedure DrawTileBkColor(const ABkColor: string = 'gray');
   public
     procedure Render; override;
-    procedure Update(var Key: Word); override;
-    class procedure GlobalKeys(var Key: Word);
+    procedure Update(var AKey: Word); override;
+    class procedure GlobalKeys(var AKey: Word);
   end;
 
 implementation
@@ -116,10 +116,10 @@ begin
   terminal_put(MX, MY, $2588);
 end;
 
-class procedure TSceneWorld.GlobalKeys(var Key: Word);
+class procedure TSceneWorld.GlobalKeys(var AKey: Word);
 begin
   try
-    case Key of
+    case AKey of
       TK_A:
         if Game.Vehicles.GotAircrafts then
           Scenes.SetScene(scAircrafts);
@@ -252,7 +252,7 @@ begin
   end;
 end;
 
-procedure TSceneWorld.Update(var Key: Word);
+procedure TSceneWorld.Update(var AKey: Word);
 var
   I: Integer;
   LIsFlag: Boolean;
@@ -260,17 +260,17 @@ var
   LConstruct: TConstructEnum;
 begin
   try
-    if (Key = TK_MOUSE_LEFT) then
+    if (AKey = TK_MOUSE_LEFT) then
     begin
       if (MY = Self.ScreenHeight - 1) then
       begin
         case MX of
           70 .. 79:
-            Key := TK_ESCAPE;
+            AKey := TK_ESCAPE;
           0 .. 10:
-            Key := TK_F;
+            AKey := TK_F;
           25 .. 34:
-            Key := TK_P;
+            AKey := TK_P;
         end;
       end
       else
@@ -430,7 +430,7 @@ begin
           end;
       end;
     end;
-    if (Key = TK_MOUSE_RIGHT) then
+    if (AKey = TK_MOUSE_RIGHT) then
     begin
       if Game.Construct.IsConstruct then
       begin
@@ -441,7 +441,7 @@ begin
       else if Game.IsOrder then
         Game.IsOrder := False;
     end;
-    case Key of
+    case AKey of
       TK_ESCAPE:
         begin
           if Game.Construct.IsConstruct then
@@ -466,7 +466,7 @@ begin
       TK_DOWN:
         Scroll(drSouth);
     end;
-    GlobalKeys(Key);
+    GlobalKeys(AKey);
   except
     on E: Exception do
       Log.Add('TSceneWorld.Update', E.Message);
