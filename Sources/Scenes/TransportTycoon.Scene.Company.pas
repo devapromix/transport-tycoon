@@ -12,7 +12,7 @@ type
   private
     FX: Integer;
     FY: Integer;
-    procedure AddStatLine(const I: TConstructEnum);
+    procedure AddStatLine(const AConstructEnum: TConstructEnum);
   public
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -26,14 +26,15 @@ uses
   TransportTycoon.Game,
   TransportTycoon.Industries;
 
-procedure TSceneCompany.AddStatLine(const I: TConstructEnum);
+procedure TSceneCompany.AddStatLine(const AConstructEnum: TConstructEnum);
 const
   StatStr: array [TConstructEnum] of string = ('', 'Canals', 'Roads', 'Tunnels',
     'Road Bridges');
 begin
-  if Game.Company.Stat.GetStat(I) = 0 then
+  if Game.Company.Stat.GetStat(AConstructEnum) = 0 then
     Exit;
-  DrawText(FX, FY, StatStr[I] + ': ' + IntToStr(Game.Company.Stat.GetStat(I)));
+  DrawText(FX, FY, StatStr[AConstructEnum] + ': ' +
+    IntToStr(Game.Company.Stat.GetStat(AConstructEnum)));
   if FX = 40 then
   begin
     FX := 22;
