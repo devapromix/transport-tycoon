@@ -9,14 +9,14 @@ uses
 
 type
   TTileEnum = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlRock, tlSand,
-    tlWater, tlCanal, tlRoad, tlRoadTunnel, tlRoadBridge, tlTownIndustry,
-    tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
+    tlWater, tlCanal, tlDeepWater, tlRoad, tlRoadTunnel, tlRoadBridge,
+    tlTownIndustry, tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
     tlPowerPlantIndustry);
 
 const
   LandTiles = [tlGrass, tlDirt, tlSand];
   MountainTiles = [tlRock];
-  WaterTiles = [tlWater, tlCanal];
+  WaterTiles = [tlWater, tlCanal, tlDeepWater];
   TreeTiles = [tlTree, tlSmallTree, tlBush];
   IndustryTiles = [tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
     tlPowerPlantIndustry];
@@ -53,6 +53,9 @@ const
     (Name: 'Water'; Glyph: '='; Color: 'blue'; BkColor: 'darkest blue'),
     //
     (Name: 'Canal'; Glyph: '='; Color: 'light blue'; BkColor: 'darkest blue'),
+    //
+    (Name: 'Deep Water'; Glyph: '='; Color: 'dark blue';
+    BkColor: 'darkest blue'),
     //
     (Name: 'Road'; Glyph: '*'; Color: 'light gray'; BkColor: 'darkest gray'),
     //
@@ -275,7 +278,7 @@ begin
   Result := True;
   try
     Result := FTileEnum[AX][AY] in [tlTownIndustry, tlWater, tlCanal,
-      tlRoadBridge] + IndustryTiles;
+      tlDeepWater, tlRoadBridge] + IndustryTiles;
   except
     on E: Exception do
       Log.Add('TMap.IsShipPath', E.Message);
@@ -622,10 +625,16 @@ begin
       begin
         J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + LCoef;
         for LX := 0 to J do
-          FTileEnum[LX][LY] := tlWater;
+          if LX < J div 2 then
+            FTileEnum[LX][LY] := tlDeepWater
+          else
+            FTileEnum[LX][LY] := tlWater;
         J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + LCoef;
         for LX := FWidth - 1 downto FWidth - J - 1 do
-          FTileEnum[LX][LY] := tlWater;
+          if LX > FWidth - (J div 2) then
+            FTileEnum[LX][LY] := tlDeepWater
+          else
+            FTileEnum[LX][LY] := tlWater;
       end;
     end;
     for I := 0 to 14 do
@@ -649,10 +658,16 @@ begin
       begin
         J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + LCoef;
         for LY := 0 to J do
-          FTileEnum[LX][LY] := tlWater;
+          if LY < J div 2 then
+            FTileEnum[LX][LY] := tlDeepWater
+          else
+            FTileEnum[LX][LY] := tlWater;
         J := Math.RandomRange(0, 4) + Math.RandomRange(0, 2) + LCoef;
         for LY := FHeight - 1 downto FHeight - J - 1 do
-          FTileEnum[LX][LY] := tlWater;
+          if LY > FHeight - (J div 2) then
+            FTileEnum[LX][LY] := tlDeepWater
+          else
+            FTileEnum[LX][LY] := tlWater;
       end;
       LCoef := SizeCoef * 9;
       if (SeaLevel = msHigh) then
@@ -684,8 +699,9 @@ begin
         begin
           if (FTileEnum[LX][LY] <> tlWater) and
             (((FTileEnum[LX + 1][LY] = tlWater) and
-            (FTileEnum[LX - 1][LY] = tlWater) and (FTileEnum[LX][LY + 1] = tlWater)
-            and (FTileEnum[LX][LY - 1] = tlWater))) then
+            (FTileEnum[LX - 1][LY] = tlWater) and
+            (FTileEnum[LX][LY + 1] = tlWater) and
+            (FTileEnum[LX][LY - 1] = tlWater))) then
             FTileEnum[LX][LY] := tlWater;
         end;
       end;
