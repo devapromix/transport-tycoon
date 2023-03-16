@@ -11,7 +11,7 @@ type
 
   public
     procedure Render; override;
-    procedure Update(var Key: word); override;
+    procedure Update(var Key: Word); override;
   end;
 
 implementation
@@ -43,19 +43,12 @@ begin
   AddButton(17, 'Esc', 'Back');
 end;
 
-procedure TSceneGenMenu.Update(var Key: word);
-begin
-  if (Key = TK_MOUSE_LEFT) then
+procedure TSceneGenMenu.Update(var Key: Word);
+var
+  LIsPrev: Boolean;
+
+  procedure UpdateKey(var Key: Word);
   begin
-    if (GetButtonsY = MY) then
-    begin
-      case MX of
-        26 .. 41:
-          Key := TK_ENTER;
-        45 .. 54:
-          Key := TK_ESCAPE;
-      end;
-    end;
     case MX of
       12 .. 36:
         case MY of
@@ -77,19 +70,25 @@ begin
         end;
     end;
   end;
-  if (Key = TK_MOUSE_RIGHT) then
+
+begin
+  LIsPrev := (Key = TK_MOUSE_RIGHT) or terminal_check(TK_SHIFT);
+  if (Key = TK_MOUSE_LEFT) then
   begin
-    case MX of
-      42 .. 66:
-        case MY of
-          15:
-            begin
-              Game.Calendar.PrevYear;
-              Scenes.Render;
-            end;
-        end;
+    if (GetButtonsY = MY) then
+    begin
+      case MX of
+        26 .. 41:
+          Key := TK_ENTER;
+        45 .. 54:
+          Key := TK_ESCAPE;
+      end;
     end;
-  end;
+    UpdateKey(Key);
+  end
+  else if (Key = TK_MOUSE_RIGHT) then
+    UpdateKey(Key);
+
   case Key of
     TK_ESCAPE:
       Scenes.SetScene(scMainMenu);
@@ -105,7 +104,10 @@ begin
       end;
     TK_C:
       begin
-        Game.Calendar.NextYear;
+        if LIsPrev then
+          Game.Calendar.PrevYear
+        else
+          Game.Calendar.NextYear;
         Scenes.Render;
       end;
     TK_F:
