@@ -175,6 +175,7 @@ type
     procedure NextSeaLevel;
     procedure NextRivers;
     procedure NextSize;
+    procedure PrevSize;
     procedure BuildConstruct(const AX, AY: Integer;
       AConstructEnum: TConstructEnum);
     function GetNearTownName(const AX, AY: Integer): string;
@@ -318,6 +319,13 @@ begin
   Inc(FMapSize);
   if (FMapSize > msLarge) then
     FMapSize := msTiny;
+end;
+
+procedure TMap.PrevSize;
+begin
+  Dec(FMapSize);
+  if (FMapSize < msTiny) then
+    FMapSize := msLarge;
 end;
 
 procedure TMap.Resize;

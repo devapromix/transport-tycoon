@@ -112,7 +112,10 @@ begin
       end;
     TK_F:
       begin
-        Game.Map.NextSize;
+        if LIsPrev then
+          Game.Map.PrevSize
+        else
+          Game.Map.NextSize;
         Scenes.Render;
       end;
     TK_H:
