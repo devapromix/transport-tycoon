@@ -316,16 +316,18 @@ end;
 
 procedure TMap.NextSize;
 begin
-  Inc(FMapSize);
-  if (FMapSize > msLarge) then
-    FMapSize := msTiny;
+  if (FMapSize = msLarge) then
+    FMapSize := msTiny
+  else
+    Inc(FMapSize);
 end;
 
 procedure TMap.PrevSize;
 begin
-  Dec(FMapSize);
-  if (FMapSize < msTiny) then
-    FMapSize := msLarge;
+  if (FMapSize = msTiny) then
+    FMapSize := msLarge
+  else
+    Dec(FMapSize);
 end;
 
 procedure TMap.Resize;
