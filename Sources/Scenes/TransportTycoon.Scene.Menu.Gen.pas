@@ -99,9 +99,12 @@ begin
       end;
     TK_B:
       begin
+        if LIsPrev then
+          Game.Map.PrevSeaLevel
+      else
         Game.Map.NextSeaLevel;
-        Scenes.Render;
-      end;
+    Scenes.Render;
+    end;
     TK_C:
       begin
         if LIsPrev then

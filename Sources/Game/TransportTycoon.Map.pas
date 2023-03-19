@@ -173,6 +173,7 @@ type
     procedure NextNoOfInd;
     procedure NextNoOfTowns;
     procedure NextSeaLevel;
+    procedure PrevSeaLevel;
     procedure NextRivers;
     procedure NextSize;
     procedure PrevSize;
@@ -309,9 +310,18 @@ end;
 
 procedure TMap.NextSeaLevel;
 begin
-  Inc(FSeaLevel);
-  if (FSeaLevel > msHigh) then
-    FSeaLevel := msVeryLow;
+  if (FSeaLevel = msHigh) then
+    FSeaLevel := msVeryLow
+  else
+    Inc(FSeaLevel);
+end;
+
+procedure TMap.PrevSeaLevel;
+begin
+  if (FSeaLevel = msVeryLow) then
+    FSeaLevel := msHigh
+  else
+    Dec(FSeaLevel);
 end;
 
 procedure TMap.NextSize;
