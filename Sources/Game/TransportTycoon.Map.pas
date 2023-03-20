@@ -175,6 +175,7 @@ type
     procedure NextSeaLevel;
     procedure PrevSeaLevel;
     procedure NextRivers;
+    procedure PrevRivers;
     procedure NextSize;
     procedure PrevSize;
     procedure BuildConstruct(const AX, AY: Integer;
@@ -303,9 +304,18 @@ end;
 
 procedure TMap.NextRivers;
 begin
-  Inc(FRivers);
-  if (FRivers > mrMany) then
-    FRivers := mrNone;
+  if (FRivers = mrMany) then
+    FRivers := mrNone
+  else
+    Inc(FRivers);
+end;
+
+procedure TMap.PrevRivers;
+begin
+  if (FRivers = mrNone) then
+    FRivers := mrMany
+  else
+    Dec(FRivers);
 end;
 
 procedure TMap.NextSeaLevel;

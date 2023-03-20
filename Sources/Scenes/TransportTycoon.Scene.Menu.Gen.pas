@@ -101,10 +101,10 @@ begin
       begin
         if LIsPrev then
           Game.Map.PrevSeaLevel
-      else
-        Game.Map.NextSeaLevel;
-    Scenes.Render;
-    end;
+        else
+          Game.Map.NextSeaLevel;
+        Scenes.Render;
+      end;
     TK_C:
       begin
         if LIsPrev then
@@ -123,7 +123,10 @@ begin
       end;
     TK_H:
       begin
-        Game.Map.NextRivers;
+        if LIsPrev then
+          Game.Map.PrevRivers
+        else
+          Game.Map.NextRivers;
         Scenes.Render;
       end;
     TK_J:
