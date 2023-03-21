@@ -6,6 +6,7 @@ uses
   Classes,
   SysUtils,
   TransportTycoon.Map,
+  TransportTycoon.Races,
   TransportTycoon.Calendar,
   TransportTycoon.Company,
   TransportTycoon.Vehicles,
@@ -41,6 +42,7 @@ type
     FSpeed: TGameSpeedEnum;
     FLockScreen: Boolean;
     FIsOrder: Boolean;
+    FRace: TRaceEnum;
     procedure ForceDirs;
   public const
     MaxLoan = 200000;
@@ -64,6 +66,7 @@ type
     property IsGame: Boolean read FIsGame write FIsGame;
     property IsOrder: Boolean read FIsOrder write FIsOrder;
     property Speed: TGameSpeedEnum read FSpeed;
+    property Race: TRaceEnum read FRace write FRace;
     procedure Clear;
     procedure Step;
     function GetPath(ASubDir: string): string;
@@ -95,6 +98,7 @@ constructor TGame.Create;
 var
   I: Integer;
 begin
+  FRace := reHuman;
   FIsOrder := False;
   FIsDebug := False;
   for I := 1 to ParamCount do
@@ -292,6 +296,7 @@ begin
   FLoan := StartMoney;
   FFinances.Clear;
   FFinances.SetYear(Calendar.Year);
+  FRace := reHuman;
   FMap.Gen;
   FCompany.Clear;
   FVehicles.Clear;

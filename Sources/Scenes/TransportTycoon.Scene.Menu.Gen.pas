@@ -20,18 +20,20 @@ uses
   SysUtils,
   BearLibTerminal,
   TransportTycoon.Game,
-  TransportTycoon.Map;
+  TransportTycoon.Map,
+  TransportTycoon.Races;
 
 procedure TSceneGenMenu.Render;
 begin
   Game.Map.Draw(Self.ScreenWidth, Self.ScreenHeight);
 
-  DrawFrame(10, 9, 60, 11);
+  DrawFrame(10, 9, 60, 12);
   DrawTitle(11, 'WORLD GENERATION');
 
   DrawButton(12, 13, 'F', 'Map size: ' + MapSizeStr[Game.Map.MapSize]);
   DrawButton(12, 14, 'H', 'Rivers: ' + MapRiversStr[Game.Map.Rivers]);
   DrawButton(12, 15, 'J', 'No. of indust.: ' + MapNoOfIndStr[Game.Map.NoOfInd]);
+  DrawButton(12, 16, 'R', 'Race: ' + GameRaceStr[Game.Race]);
 
   DrawButton(42, 13, 'A', 'No. of towns: ' + MapNoOfTownsStr
     [Game.Map.NoOfTowns]);
@@ -39,8 +41,8 @@ begin
     [MapSeaLevelStr[Game.Map.SeaLevel]]));
   DrawButton(42, 15, 'C', Format('Date: %s', [Game.Calendar.GetDate]));
 
-  AddButton(17, 'Enter', 'Generate');
-  AddButton(17, 'Esc', 'Back');
+  AddButton(18, 'Enter', 'Generate');
+  AddButton(18, 'Esc', 'Back');
 end;
 
 procedure TSceneGenMenu.Update(var Key: Word);
@@ -58,6 +60,8 @@ var
             Key := TK_H;
           15:
             Key := TK_J;
+          16:
+            Key := TK_R;
         end;
       42 .. 66:
         case MY of
