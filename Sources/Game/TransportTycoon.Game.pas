@@ -81,6 +81,8 @@ type
     procedure Borrow;
     procedure NextSpeed;
     procedure PrevSpeed;
+    procedure NextRace;
+    procedure PrevRace;
     procedure Save;
     procedure Load;
   end;
@@ -168,6 +170,22 @@ procedure TGame.ModifyMoney(const AValueEnum: TValueEnum;
 begin
   Finances.ModifyValue(AValueEnum, Abs(AMoney));
   FMoney := FMoney + AMoney;
+end;
+
+procedure TGame.NextRace;
+begin
+  if (FRace = reElf) then
+    FRace := reHuman
+  else
+    Inc(FRace);
+end;
+
+procedure TGame.PrevRace;
+begin
+  if (FRace = reHuman) then
+    FRace := reElf
+  else
+    Dec(FRace);
 end;
 
 procedure TGame.NextSpeed;

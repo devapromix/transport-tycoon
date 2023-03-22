@@ -133,6 +133,14 @@ begin
           Game.Map.NextRivers;
         Scenes.Render;
       end;
+    TK_R:
+      begin
+        if LIsPrev then
+          Game.PrevRace
+        else
+          Game.NextRace;
+        Scenes.Render;
+      end;
     TK_J:
       begin
         Game.Map.NextNoOfInd;
