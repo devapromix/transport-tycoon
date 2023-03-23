@@ -11,3 +11,24 @@ When an item is checkmarked, it means the basic foundation is in place but not n
   - [x] Ships
   - [x] Road Vehicles
   - [ ] Trains
+- [Cargo]
+  - [x] Passengers
+  - [x] Mail
+  - [x] Goods
+  - [x] Coal
+  - [x] Wood
+  - [ ] Copper ore
+  - [ ] Iron ore
+  - [ ] Steel
+  - [ ] Oil
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
