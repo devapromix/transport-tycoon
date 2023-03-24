@@ -11,6 +11,20 @@ When an item is checkmarked, it means the basic foundation is in place but not n
   - [x] Ships
   - [x] Road Vehicles
   - [ ] Trains
+- [Industries]
+  - [x] Town
+  - [x] Coal mine
+  - [x] Power plant
+  - [x] Forest
+  - [x] Sawmill
+  - [ ] Copper ore mine
+  - [ ] Iron ore mine
+  - [ ] Oil refinery
+  - [ ] Oil wells
+  - [ ] Steel mill
+  - [ ] Factory
+  - [ ] Food Processing Plant
+  - [ ] Farm
 - [Cargo]
   - [x] Passengers
   - [x] Mail
@@ -21,6 +35,9 @@ When an item is checkmarked, it means the basic foundation is in place but not n
   - [ ] Iron ore
   - [ ] Steel
   - [ ] Oil
+  - [ ] Fruit
+  - [ ] Wheat
+  - [ ] Food
   
   
   
