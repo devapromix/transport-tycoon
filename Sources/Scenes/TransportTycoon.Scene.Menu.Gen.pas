@@ -143,7 +143,10 @@ begin
       end;
     TK_J:
       begin
-        Game.Map.NextNoOfInd;
+        if LIsPrev then
+          Game.Map.PrevNoOfInd
+        else
+          Game.Map.NextNoOfInd;
         Scenes.Render;
       end;
     TK_ENTER:

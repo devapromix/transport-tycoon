@@ -171,6 +171,7 @@ type
     function WorldPop: Integer;
     function GetDist(const AX1, AY1, AX2, AY2: Integer): Integer;
     procedure NextNoOfInd;
+    procedure PrevNoOfInd;
     procedure NextNoOfTowns;
     procedure NextSeaLevel;
     procedure PrevSeaLevel;
@@ -290,9 +291,18 @@ end;
 
 procedure TMap.NextNoOfInd;
 begin
-  Inc(FNoOfInd);
-  if (FNoOfInd > niHigh) then
-    FNoOfInd := niVeryLow;
+  if (FNoOfInd = niHigh) then
+    FNoOfInd := niVeryLow
+  else
+    Inc(FNoOfInd);
+end;
+
+procedure TMap.PrevNoOfInd;
+begin
+  if (FNoOfInd = niVeryLow) then
+    FNoOfInd := niHigh
+  else
+    Dec(FNoOfInd);
 end;
 
 procedure TMap.NextNoOfTowns;
@@ -542,6 +552,10 @@ procedure TMap.AddRiver(const ADirectionEnum: TDirectionEnum);
 var
   I, LX, LY, LStart, LFinish: Integer;
 begin
+  LX := 0;
+  LY := 0;
+  LStart := 0;
+  LFinish := 0;
   try
     case ADirectionEnum of
       drEast:
