@@ -16,7 +16,7 @@ type
     FIndustry: TIndustry;
   public
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
   end;
 
 implementation
@@ -32,7 +32,7 @@ uses
 
 procedure TSceneBusStation.Render;
 var
-  I, LY: Integer;
+  LRoadVehicle, LY: Integer;
   LCargo: TCargo;
 begin
   inherited Render;
@@ -53,10 +53,10 @@ begin
     end;
   end;
 
-  for I := 0 to Game.Vehicles.RoadVehicleCount - 1 do
-    DrawButton(37, I + 11, Game.Vehicles.RoadVehicle[I].InLocation(FIndustry.X,
-      FIndustry.Y), Chr(Ord('A') + I),
-      StrLim(Game.Vehicles.RoadVehicle[I].Name, 30));
+  for LRoadVehicle := 0 to Game.Vehicles.RoadVehicleCount - 1 do
+    DrawButton(37, LRoadVehicle + 11, Game.Vehicles.RoadVehicle[LRoadVehicle]
+      .InLocation(FIndustry.X, FIndustry.Y), Chr(Ord('A') + LRoadVehicle),
+      StrLim(Game.Vehicles.RoadVehicle[LRoadVehicle].Name, 30));
 
   AddButton(19, 'V', 'Road Vehicle Depot');
   AddButton(19, 'Esc', 'Close');
@@ -64,33 +64,33 @@ begin
   DrawBar;
 end;
 
-procedure TSceneBusStation.Update(var Key: Word);
+procedure TSceneBusStation.Update(var AKey: Word);
 var
-  I: Integer;
+  LCurrentVehicle: Integer;
 begin
-  inherited Update(Key);
-  if (Key = TK_MOUSE_LEFT) then
+  inherited Update(AKey);
+  if (AKey = TK_MOUSE_LEFT) then
   begin
     if (GetButtonsY = MY) then
     begin
       case MX of
         22 .. 43:
-          Key := TK_V;
+          AKey := TK_V;
         47 .. 57:
-          Key := TK_ESCAPE;
+          AKey := TK_ESCAPE;
       end;
     end;
   end;
-  case Key of
+  case AKey of
     TK_ESCAPE:
       Scenes.Back;
     TK_A .. TK_G:
       begin
-        I := Key - TK_A;
-        if Game.Vehicles.RoadVehicle[I].InLocation(FIndustry.X, FIndustry.Y)
-        then
+        LCurrentVehicle := AKey - TK_A;
+        if Game.Vehicles.RoadVehicle[LCurrentVehicle].InLocation(FIndustry.X,
+          FIndustry.Y) then
         begin
-          Game.Vehicles.CurrentVehicle := I;
+          Game.Vehicles.CurrentVehicle := LCurrentVehicle;
           Scenes.SetScene(scRoadVehicle, scBusStation);
         end;
       end;
