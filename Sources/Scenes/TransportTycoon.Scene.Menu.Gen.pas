@@ -98,7 +98,10 @@ begin
       Scenes.SetScene(scMainMenu);
     TK_A:
       begin
-        Game.Map.NextNoOfTowns;
+        if LIsPrev then
+          Game.Map.PrevNoOfTowns
+        else
+          Game.Map.NextNoOfTowns;
         Scenes.Render;
       end;
     TK_B:

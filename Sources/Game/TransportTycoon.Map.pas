@@ -173,6 +173,7 @@ type
     procedure NextNoOfInd;
     procedure PrevNoOfInd;
     procedure NextNoOfTowns;
+    procedure PrevNoOfTowns;
     procedure NextSeaLevel;
     procedure PrevSeaLevel;
     procedure NextRivers;
@@ -310,6 +311,14 @@ begin
   Inc(FNoOfTowns);
   if (FNoOfTowns > 4) then
     FNoOfTowns := 1;
+end;
+
+procedure TMap.PrevNoOfTowns;
+begin
+  if (FNoOfTowns = 1) then
+    FNoOfTowns := 4
+  else
+    Dec(FNoOfTowns);
 end;
 
 procedure TMap.NextRivers;
