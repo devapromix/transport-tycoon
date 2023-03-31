@@ -24,7 +24,8 @@ uses
   BearLibTerminal,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Industries;
+  TransportTycoon.Industries,
+  TransportTycoon.Races;
 
 procedure TSceneCompany.AddStatLine(const AConstructEnum: TConstructEnum);
 const
@@ -53,8 +54,8 @@ begin
 
   DrawFrame(20, 8, 40, 14);
   DrawTitle(10, Game.Company.Name);
-  DrawText(22, 12, 'Inavgurated: ' + IntToStr(Game.Company.Inavgurated));
-
+  DrawText(22, 12, 'Race: ' + GameRaceStr[Game.Race]);
+  DrawText(40, 12, 'Inavgurated: ' + IntToStr(Game.Company.Inavgurated));
   FX := 22;
   FY := 14;
   for LConstructEnum := Succ(Low(TConstructEnum)) to High(TConstructEnum) do
