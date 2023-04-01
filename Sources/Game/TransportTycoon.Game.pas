@@ -160,6 +160,7 @@ begin
       StartYear), StartYear, FinishYear);
     Game.Map.Rivers := TMapRivers(LIniFile.ReadInteger('Main', 'Rivers', 0));
     Game.Map.NoOfInd := TMapNoOfInd(LIniFile.ReadInteger('Main', 'NoOfInd', 0));
+    Game.Race := TRaceEnum(LIniFile.ReadInteger('Main', 'Race', 0));
   finally
     FreeAndNil(LIniFile);
   end;
@@ -270,6 +271,7 @@ begin
     LIniFile.WriteInteger('Main', 'Year', Game.Calendar.Year);
     LIniFile.WriteInteger('Main', 'Rivers', Ord(Game.Map.Rivers));
     LIniFile.WriteInteger('Main', 'NoOfInd', Ord(Game.Map.NoOfInd));
+    LIniFile.WriteInteger('Main', 'Race', Ord(Game.Race));
     LIniFile.UpdateFile;
   finally
     FreeAndNil(LIniFile);
@@ -314,7 +316,6 @@ begin
   FLoan := StartMoney;
   FFinances.Clear;
   FFinances.SetYear(Calendar.Year);
-  FRace := reHuman;
   FMap.Gen;
   FCompany.Clear;
   FVehicles.Clear;
