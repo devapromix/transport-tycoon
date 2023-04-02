@@ -61,7 +61,7 @@ begin
   AddButton(19, 'H', 'Hangar');
   AddButton(19, 'Esc', 'Close');
 
-  DrawBar;
+  DrawGameBar;
 end;
 
 procedure TSceneAirport.Update(var Key: Word);

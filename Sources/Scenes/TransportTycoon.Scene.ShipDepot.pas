@@ -44,7 +44,7 @@ begin
   AddButton(20, Game.Vehicles.IsBuyShipAllowed, 'Enter', 'Buy Ship');
   AddButton(20, 'Esc', 'Close');
 
-  DrawBar;
+  DrawGameBar;
 end;
 
 procedure TSceneShipDepot.Update(var Key: Word);

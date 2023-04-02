@@ -47,7 +47,7 @@ begin
 
   AddButton(22, 'Esc', 'Close');
 
-  DrawBar;
+  DrawGameBar;
 end;
 
 procedure TSceneIndustries.Update(var Key: Word);

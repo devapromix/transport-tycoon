@@ -225,7 +225,7 @@ begin
     terminal_color('black');
     terminal_put(MX, MY, Tile[Game.Map.GetTileEnum].Glyph);
 
-    DrawBar;
+    DrawGameBar;
 
     if (MY < Self.ScreenHeight - 1) then
     begin

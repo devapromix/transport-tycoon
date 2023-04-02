@@ -65,7 +65,7 @@ begin
 
   AddButton(18, 'Esc', 'Close');
 
-  DrawBar;
+  DrawGameBar;
 end;
 
 procedure TSceneBuildMenu.Update(var Key: Word);

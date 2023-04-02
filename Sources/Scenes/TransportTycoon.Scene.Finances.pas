@@ -119,7 +119,7 @@ begin
   AddButton(26, Game.CanRepay, 'R', 'REPAY');
   AddButton(26, 'ESC', 'CLOSE');
 
-  DrawBar;
+  DrawGameBar;
 end;
 
 procedure TSceneFinances.Update(var Key: Word);

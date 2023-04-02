@@ -70,7 +70,7 @@ begin
 
   AddButton(19, 'Esc', 'Close');
 
-  DrawBar;
+  DrawGameBar;
 end;
 
 procedure TSceneBuildInTown.Update(var Key: Word);

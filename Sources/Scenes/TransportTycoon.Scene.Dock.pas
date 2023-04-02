@@ -60,7 +60,7 @@ begin
   AddButton(19, 'V', 'Ship Depot');
   AddButton(19, 'Esc', 'Close');
 
-  DrawBar;
+  DrawGameBar;
 end;
 
 procedure TSceneDock.Update(var AKey: Word);

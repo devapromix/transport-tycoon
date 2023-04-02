@@ -68,7 +68,7 @@ begin
   AddButton(20, 'B', 'Build');
   AddButton(20, 'ESC', 'Close');
 
-  DrawBar;
+  DrawGameBar;
 end;
 
 procedure TSceneTown.Update(var Key: word);

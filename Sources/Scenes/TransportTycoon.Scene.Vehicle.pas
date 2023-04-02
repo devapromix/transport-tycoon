@@ -34,7 +34,7 @@ begin
   AddButton(19, 'O', 'Add Order');
   AddButton(19, 'Esc', 'Close');
 
-  DrawBar;
+  DrawGameBar;
 end;
 
 procedure TSceneVehicle.Update(var Key: Word);

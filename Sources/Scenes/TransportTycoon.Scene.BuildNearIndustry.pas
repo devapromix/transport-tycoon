@@ -52,7 +52,7 @@ begin
 
   AddButton(19, 'Esc', 'Close');
 
-  DrawBar;
+  DrawGameBar;
 end;
 
 procedure TSceneBuildNearIndustry.Update(var Key: Word);

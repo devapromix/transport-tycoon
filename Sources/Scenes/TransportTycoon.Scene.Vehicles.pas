@@ -29,7 +29,7 @@ begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
   DrawFrame(10, 7, 60, 15);
   AddButton(19, 'Esc', 'Close');
-  DrawBar;
+  DrawGameBar;
 end;
 
 procedure TSceneVehicles.Update(var Key: Word);

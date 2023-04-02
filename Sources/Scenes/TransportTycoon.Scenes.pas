@@ -67,7 +67,7 @@ type
     function GetButton(const AIndex: Integer): TButtonRec;
     function GetButtonsY: Integer;
     procedure RenderButtons;
-    procedure DrawBar;
+    procedure DrawGameBar;
     function ScreenWidth: Integer;
     function ScreenHeight: Integer;
     property MX: Integer read FMX write FMX;
@@ -229,7 +229,7 @@ begin
   end;
 end;
 
-procedure TScene.DrawBar;
+procedure TScene.DrawGameBar;
 var
   Y: Integer;   
 begin

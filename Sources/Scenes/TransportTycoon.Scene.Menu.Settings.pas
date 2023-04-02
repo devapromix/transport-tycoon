@@ -47,7 +47,7 @@ begin
   AddButton(17, 'Esc', 'Close');
 
   if IsShowBar then
-    DrawBar;
+    DrawGameBar;
 end;
 
 procedure TSceneSettingsMenu.Update(var Key: Word);

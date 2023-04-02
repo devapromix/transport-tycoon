@@ -45,7 +45,7 @@ begin
     'Buy Road Vehicle');
   AddButton(20, 'Esc', 'Close');
 
-  DrawBar;
+  DrawGameBar;
 end;
 
 procedure TSceneRoadVehicleDepot.Update(var Key: Word);

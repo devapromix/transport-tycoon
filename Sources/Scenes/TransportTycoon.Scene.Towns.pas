@@ -50,7 +50,7 @@ begin
 
   AddButton(22, 'Esc', 'Close');
 
-  DrawBar;
+  DrawGameBar;
 end;
 
 procedure TSceneTowns.Update(var Key: Word);

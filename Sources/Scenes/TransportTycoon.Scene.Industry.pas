@@ -65,7 +65,7 @@ begin
   AddButton(18, 'B', 'Build');
   AddButton(18, 'ESC', 'Close');
 
-  DrawBar;
+  DrawGameBar;
 end;
 
 procedure TSceneIndustry.Update(var Key: Word);

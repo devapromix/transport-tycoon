@@ -56,7 +56,7 @@ begin
   AddButton(19, 'Q', 'Quit');
   AddButton(19, 'ESC', 'Close');
 
-  DrawBar;
+  DrawGameBar;
 end;
 
 procedure TSceneGameMenu.Update(var Key: word);

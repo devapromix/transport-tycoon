@@ -43,7 +43,7 @@ begin
   AddButton(20, Game.Vehicles.IsBuyAircraftAllowed, 'Enter', 'Buy Aircraft');
   AddButton(20, 'Esc', 'Close');
 
-  DrawBar;
+  DrawGameBar;
 end;
 
 procedure TSceneAircraftHangar.Update(var Key: Word);

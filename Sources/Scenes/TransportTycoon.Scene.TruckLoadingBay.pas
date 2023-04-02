@@ -62,7 +62,7 @@ begin
   AddButton(19, 'V', 'Road Vehicle Depot');
   AddButton(19, 'Esc', 'Close');
 
-  DrawBar;
+  DrawGameBar;
 end;
 
 procedure TSceneTruckLoadingBay.Update(var Key: Word);
