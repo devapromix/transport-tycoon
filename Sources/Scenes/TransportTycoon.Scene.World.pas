@@ -242,7 +242,9 @@ begin
     end;
     if (MY = Self.ScreenHeight - 2) then
       Scroll(drSouth);
-    if (MY = 0) then
+    if (MY = 0) and not Game.Construct.IsConstruct then
+      Scroll(drNorth);
+    if (MY = 1) and Game.Construct.IsConstruct then
       Scroll(drNorth);
     if (MX = Self.ScreenWidth - 1) then
       Scroll(drEast);
