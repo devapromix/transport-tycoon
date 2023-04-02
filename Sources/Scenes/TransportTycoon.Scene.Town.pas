@@ -26,13 +26,15 @@ uses
   BearLibTerminal,
   TransportTycoon.Game,
   TransportTycoon.Scene.Industry,
-  TransportTycoon.Palette;
+  TransportTycoon.Palette,
+  TransportTycoon.Races;
 
 { TSceneTown }
 
 procedure TSceneTown.Render;
 var
   LAirportLevel: Integer;
+  LRace: TRaceEnum;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
@@ -43,7 +45,10 @@ begin
   DrawTitle(8, FTown.Name);
   terminal_color(TPalette.Default);
   DrawText(12, 10, 'Population: ' + IntToStr(FTown.Population));
-  DrawText(12, 11, 'Houses: ' + IntToStr(FTown.Houses));
+  for LRace := Low(TRaceEnum) to High(TRaceEnum) do
+    DrawText(12, Ord(LRace) + 11, GameRaceStr[LRace] + ': ' +
+      IntToStr(FTown.GetRacePop(LRace)) + '%');
+  DrawText(12, 14, 'Houses: ' + IntToStr(FTown.Houses));
   // Airport
   LAirportLevel := Math.EnsureRange(FTown.Airport.Level, 1, 5);
   DrawButton(34, 10, 35, FTown.Airport.IsBuilding, FTown.Airport.IsBuilding,

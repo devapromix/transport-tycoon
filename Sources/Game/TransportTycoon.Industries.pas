@@ -5,6 +5,7 @@ interface
 uses
   TransportTycoon.MapObject,
   TransportTycoon.Stations,
+  TransportTycoon.Races,
   TransportTycoon.Cargo;
 
 const
@@ -72,6 +73,7 @@ type
   private
     FHouses: Word;
     FPopulation: Integer;
+    FRacePop: array [TRaceEnum] of Byte;
     FAirport: TStation;
     FHQ: TStation;
     FBusStation: TStation;
@@ -88,6 +90,7 @@ type
     class function GenName: string;
     procedure Grows; override;
     function MaxCargo: Integer; override;
+    function GetRacePop(const ARaceEnum: TRaceEnum): Byte;
   end;
 
 type
@@ -251,12 +254,21 @@ end;
 { TTownIndustry }
 
 constructor TTownIndustry.Create(const AName: string; const AX, AY: Integer);
+var
+  LRace: TRaceEnum;
 begin
   inherited Create(AName, AX, AY);
+  for LRace := Low(TRaceEnum) to High(TRaceEnum) do
+    FRacePop[LRace] := 0;
   FIndustryType := inTown;
   Accepts := [cgPassengers, cgMail, cgGoods];
   Produces := [cgPassengers, cgMail];
   FPopulation := 0;
+  //
+  FRacePop[reHuman] := Math.RandomRange(3, 10) * 5;
+  FRacePop[reDwarf] := Math.RandomRange(2, 9) * 5;
+  FRacePop[reElf] := 100 - (FRacePop[reHuman] + FRacePop[reDwarf]);
+  //
   ModifyPopulation(Math.RandomRange(250, 1500));
   FAirport := TStation.Create(8000, 5);
   FBusStation := TStation.Create(250);
@@ -290,6 +302,11 @@ begin
     Result := Result + LStringList[I][Random(LStringList[I].Count - 1)];
     FreeAndNil(LStringList[I]);
   end;
+end;
+
+function TTownIndustry.GetRacePop(const ARaceEnum: TRaceEnum): Byte;
+begin
+  Result := FRacePop[ARaceEnum];
 end;
 
 procedure TTownIndustry.Grows;
