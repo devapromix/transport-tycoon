@@ -497,6 +497,8 @@ var
 begin
   try
     LPlan := BuildPlans[AConstructEnum];
+    if AY = 0 then
+      Exit;
     if not(FTileEnum[AX][AY] in LPlan.AffectedTiles) then
       Exit;
     LMoney := ConstructCost[AConstructEnum];
