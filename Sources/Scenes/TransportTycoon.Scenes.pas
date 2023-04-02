@@ -67,6 +67,7 @@ type
     function GetButton(const AIndex: Integer): TButtonRec;
     function GetButtonsY: Integer;
     procedure RenderButtons;
+    procedure DrawBuildBar;
     procedure DrawGameBar;
     function ScreenWidth: Integer;
     function ScreenHeight: Integer;
@@ -142,7 +143,8 @@ uses
   TransportTycoon.Scene.TruckLoadingBay,
   TransportTycoon.Scene.RoadVehicleDepot,
   TransportTycoon.Scene.RoadVehicles,
-  TransportTycoon.Palette;
+  TransportTycoon.Palette,
+  TransportTycoon.Construct;
 
 procedure TScene.DrawText(const AX, AY: Integer; AText: string;
   const ATextAlign: Integer = TK_ALIGN_LEFT);
@@ -231,7 +233,7 @@ end;
 
 procedure TScene.DrawGameBar;
 var
-  Y: Integer;   
+  Y: Integer;
 begin
   try
     Y := Self.ScreenHeight - 1;
@@ -243,7 +245,12 @@ begin
     DrawButton(25, Y, 'B', 'Build');
     DrawText(56, Y, Game.Calendar.GetDate);
     if (Scenes.FSceneEnum <> scWorld) then
-      DrawButton(70, Y, False, 'ESC', 'MENU')
+      if Game.Construct.IsConstruct then
+        DrawButton(70, Y, False, 'ESC', 'EXIT')
+      else
+        DrawButton(70, Y, False, 'ESC', 'MENU')
+    else if Game.Construct.IsConstruct then
+      DrawButton(70, Y, 'ESC', 'EXIT')
     else
       DrawButton(70, Y, 'ESC', 'MENU');
     if (Scenes.FSceneEnum <> scWorld) and (Scenes.FSceneEnum <> scGameMenu) then
@@ -264,7 +271,23 @@ begin
     end;
   except
     on E: Exception do
-      Log.Add('TScene.DrawBar', E.Message);
+      Log.Add('TScene.DrawGameBar', E.Message);
+  end;
+end;
+
+procedure TScene.DrawBuildBar;
+var
+  Y: Integer;
+begin
+  try
+    Y := 0;
+    terminal_color(TPalette.Default);
+    terminal_bkcolor(TPalette.Background);
+    terminal_clear_area(0, Y, 80, 1);
+    DrawText(Y, Game.Construct.GetConstructStr);
+  except
+    on E: Exception do
+      Log.Add('TScene.DrawBuildBar', E.Message);
   end;
 end;
 

@@ -6,6 +6,10 @@ type
   TConstructEnum = (ceClearLand, ceBuildCanal, ceBuildRoad, ceBuildRoadTunnel,
     ceBuildRoadBridge);
 
+const
+  ConstructStr: array [TConstructEnum] of string = ('Clear Land', 'Build Canal',
+    'Build Road', 'Build Road Tunnel', 'Build Road Bridge');
+
 type
 
   { TConstruct }
@@ -19,6 +23,7 @@ type
     function IsConstruct: Boolean;
     function IsBuild(const AConstructEnum: TConstructEnum): Boolean;
     procedure Build(const AConstructEnum: TConstructEnum);
+    function GetConstructStr: string;
   end;
 
 implementation
@@ -42,6 +47,16 @@ end;
 constructor TConstruct.Create;
 begin
   Clear;
+end;
+
+function TConstruct.GetConstructStr: string;
+var
+  LConstructEnum: TConstructEnum;
+begin
+  Result := '';
+  for LConstructEnum := Low(TConstructEnum) to High(TConstructEnum) do
+    if FConstruct[LConstructEnum] then
+      Exit(ConstructStr[LConstructEnum]);
 end;
 
 function TConstruct.IsBuild(const AConstructEnum: TConstructEnum): Boolean;

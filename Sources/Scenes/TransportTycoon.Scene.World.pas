@@ -226,6 +226,8 @@ begin
     terminal_put(MX, MY, Tile[Game.Map.GetTileEnum].Glyph);
 
     DrawGameBar;
+    if Game.Construct.IsConstruct then
+      DrawBuildBar;
 
     if (MY < Self.ScreenHeight - 1) then
     begin
