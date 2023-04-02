@@ -231,7 +231,7 @@ end;
 
 procedure TScene.DrawBar;
 var
-  Y: Integer;
+  Y: Integer;   
 begin
   try
     Y := Self.ScreenHeight - 1;
@@ -240,6 +240,7 @@ begin
     terminal_clear_area(0, Y, 80, 1);
     DrawMoney(0, Y, Game.Money, TK_ALIGN_LEFT, True);
     DrawText(12, Y, Format('Turn:%d', [Game.Turn]));
+    DrawButton(25, Y, 'B', 'Build');
     DrawText(56, Y, Game.Calendar.GetDate);
     if (Scenes.FSceneEnum <> scWorld) then
       DrawButton(70, Y, False, 'ESC', 'MENU')
@@ -247,18 +248,19 @@ begin
       DrawButton(70, Y, 'ESC', 'MENU');
     if (Scenes.FSceneEnum <> scWorld) and (Scenes.FSceneEnum <> scGameMenu) then
     begin
+      DrawButton(25, Y, False, 'B', 'Build');
       if Game.IsPause then
-        DrawButton(25, Y, False, 'P', 'Paused')
+        DrawButton(35, Y, False, 'P', 'Paused')
       else
-        DrawButton(25, Y, False, 'P', 'Pause');
+        DrawButton(35, Y, False, 'P', 'Pause');
     end
     else
     begin
       if Game.IsPause then
-        DrawText(25, ScreenHeight - 1, '[c=' + TPalette.ButtonKey +
+        DrawText(35, ScreenHeight - 1, '[c=' + TPalette.ButtonKey +
           '][[P]][/c] [c=red]PAUSED[/c]')
       else
-        DrawButton(25, Y, 'P', 'Pause');
+        DrawButton(35, Y, 'P', 'Pause');
     end;
   except
     on E: Exception do

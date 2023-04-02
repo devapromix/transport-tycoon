@@ -44,7 +44,7 @@ uses
 procedure TSceneWorld.TileInfo(const ATileName: string);
 begin
   try
-    DrawText(45, ScreenHeight - 1, StrLim(ATileName, 18), TK_ALIGN_CENTER);
+    DrawText(50, ScreenHeight - 1, StrLim(ATileName, 10), TK_ALIGN_CENTER);
   except
     on E: Exception do
       Log.Add('TSceneWorld.TileInfo', E.Message);
@@ -269,7 +269,9 @@ begin
             AKey := TK_ESCAPE;
           0 .. 10:
             AKey := TK_F;
-          25 .. 34:
+          25 .. 33:
+            AKey := TK_B;
+          35 .. 44:
             AKey := TK_P;
         end;
       end
