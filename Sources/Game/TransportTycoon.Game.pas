@@ -317,8 +317,8 @@ begin
   FFinances.Clear;
   FFinances.SetYear(Calendar.Year);
   FMap.Gen;
-  FCompany.Clear;
   FVehicles.Clear;
+  FCompany.Clear;
 end;
 
 end.

@@ -776,7 +776,15 @@ begin
     SetLength(Industry, 0);
     for I := 0 to MapTownCount - 1 do
     begin
-      LTownRace := TRaceEnum(Math.RandomRange(0, Ord(High(TRaceEnum)) + 1));
+      if Game = nil then
+        LTownRace := reHuman
+      else
+      begin
+        if I = 0 then
+          LTownRace := Game.Race
+        else
+          LTownRace := TRaceEnum(Math.RandomRange(0, Ord(High(TRaceEnum)) + 1));
+      end;
       repeat
         LTownName := TTownIndustry.GenName(LTownRace);
 

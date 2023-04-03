@@ -74,6 +74,7 @@ type
     FHouses: Word;
     FPopulation: Integer;
     FRacePop: array [TRaceEnum] of Byte;
+    FTownRace: TRaceEnum;
     FAirport: TStation;
     FHQ: TStation;
     FBusStation: TStation;
@@ -85,6 +86,7 @@ type
     destructor Destroy; override;
     property Population: Integer read FPopulation;
     property Houses: Word read FHouses;
+    property TownRace: TRaceEnum read FTownRace;
     procedure ModifyPopulation(const APopulation: Integer);
     property Airport: TStation read FAirport;
     property BusStation: TStation read FBusStation;
@@ -261,6 +263,7 @@ constructor TTownIndustry.Create(const ATownName: string;
 begin
   inherited Create(ATownName, AX, AY);
   GenRacePop(ATownRace);
+  FTownRace := ATownRace;
   FIndustryType := inTown;
   Accepts := [cgPassengers, cgMail, cgGoods];
   Produces := [cgPassengers, cgMail];

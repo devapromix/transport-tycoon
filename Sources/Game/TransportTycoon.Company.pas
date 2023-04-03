@@ -45,7 +45,8 @@ uses
   Math,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Map;
+  TransportTycoon.Map,
+  TransportTycoon.Industries;
 
 { TStat }
 
@@ -73,7 +74,9 @@ end;
 procedure TCompany.Clear;
 begin
   FStat.Clear;
-  FTownID := RandomRange(0, MapNoOfTownsInt[Game.Map.NoOfTowns]);
+  repeat
+    FTownID := RandomRange(0, MapNoOfTownsInt[Game.Map.NoOfTowns]);
+  until TTownIndustry(Game.Map.Industry[FTownID]).TownRace = Game.Race;
   FInavgurated := Game.Calendar.Year;
 end;
 

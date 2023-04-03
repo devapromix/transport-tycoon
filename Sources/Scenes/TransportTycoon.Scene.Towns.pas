@@ -55,7 +55,7 @@ end;
 
 procedure TSceneTowns.Update(var Key: Word);
 var
-  I: Integer;
+  LSelectedIndustry: Integer;
 begin
   if (Key = TK_MOUSE_LEFT) then
   begin
@@ -78,11 +78,11 @@ begin
     TK_A .. TK_K:
       with Game.Map do
       begin
-        I := Key - TK_A;
-        if (I < TownCount) then
+        LSelectedIndustry := Key - TK_A;
+        if (LSelectedIndustry < TownCount) then
         begin
-          CurrentIndustry := I;
-          ScrollTo(Industry[I].X, Industry[I].Y);
+          CurrentIndustry := LSelectedIndustry;
+          ScrollTo(Industry[CurrentIndustry].X, Industry[CurrentIndustry].Y);
           Scenes.SetScene(scTown);
         end;
       end;
