@@ -78,9 +78,9 @@ type
     FHQ: TStation;
     FBusStation: TStation;
     function GrowModif: Integer;
-    procedure GenRacePop;
+    procedure GenRacePop(const ATownRace: TRaceEnum);
   public
-    constructor Create(const AName: string; const AX, AY: Integer);
+    constructor Create(const ATownRace: TRaceEnum; const AX, AY: Integer);
     destructor Destroy; override;
     property Population: Integer read FPopulation;
     property Houses: Word read FHouses;
@@ -88,7 +88,7 @@ type
     property Airport: TStation read FAirport;
     property BusStation: TStation read FBusStation;
     property HQ: TStation read FHQ;
-    class function GenName: string;
+    class function GenName(const ATownRace: TRaceEnum): string;
     procedure Grows; override;
     function MaxCargo: Integer; override;
     function GetRacePop(const ARaceEnum: TRaceEnum): Byte;
@@ -139,7 +139,8 @@ implementation
 uses
   Math,
   Classes,
-  SysUtils;
+  SysUtils,
+  TransportTycoon.Game;
 
 { TIndustry }
 
@@ -254,18 +255,18 @@ end;
 
 { TTownIndustry }
 
-constructor TTownIndustry.Create(const AName: string; const AX, AY: Integer);
+constructor TTownIndustry.Create(const ATownRace: TRaceEnum;
+  const AX, AY: Integer);
 var
-  LRace: TRaceEnum;
+  LTownName: string;
 begin
-  inherited Create(AName, AX, AY);
-  for LRace := Low(TRaceEnum) to High(TRaceEnum) do
-    FRacePop[LRace] := 0;
+  GenRacePop(ATownRace);
+  LTownName := Self.GenName(ATownRace);
+  inherited Create(LTownName, AX, AY);
   FIndustryType := inTown;
   Accepts := [cgPassengers, cgMail, cgGoods];
   Produces := [cgPassengers, cgMail];
   FPopulation := 0;
-  GenRacePop;
   //
   ModifyPopulation(Math.RandomRange(250, 1500));
   FAirport := TStation.Create(8000, 5);
@@ -281,7 +282,7 @@ begin
   inherited;
 end;
 
-class function TTownIndustry.GenName: string;
+class function TTownIndustry.GenName(const ATownRace: TRaceEnum): string;
 var
   LStringList: array [0 .. 1] of TStringList;
   I: Integer;
@@ -307,22 +308,28 @@ begin
   Result := FRacePop[ARaceEnum];
 end;
 
-procedure TTownIndustry.GenRacePop;
-var
-  LTownRace: TRaceEnum;
+procedure TTownIndustry.GenRacePop(const ATownRace: TRaceEnum);
 begin
-  LTownRace := TRaceEnum(Math.RandomRange(0, Ord(High(TRaceEnum)) + 1));
   repeat
-    FRacePop[reHuman] := Math.RandomRange(3, 10) * 5;
-    FRacePop[reDwarf] := Math.RandomRange(3, 10) * 5;
-    FRacePop[reElf] := Math.RandomRange(3, 10) * 5;
-    case LTownRace of
+    case ATownRace of
       reHuman:
-        FRacePop[reHuman] := 100 - (FRacePop[reDwarf] + FRacePop[reElf]);
+        begin
+          FRacePop[reHuman] := (Math.RandomRange(1, 5) * 5) + 50;
+          FRacePop[reDwarf] := Math.RandomRange(2, 5) * 5;
+          FRacePop[reElf] := 100 - (FRacePop[reHuman] + FRacePop[reDwarf]);
+        end;
       reDwarf:
-        FRacePop[reDwarf] := 100 - (FRacePop[reHuman] + FRacePop[reElf]);
+        begin
+          FRacePop[reDwarf] := (Math.RandomRange(1, 5) * 5) + 50;
+          FRacePop[reHuman] := Math.RandomRange(2, 5) * 5;
+          FRacePop[reElf] := 100 - (FRacePop[reDwarf] + FRacePop[reHuman]);
+        end;
       reElf:
-        FRacePop[reElf] := 100 - (FRacePop[reHuman] + FRacePop[reDwarf]);
+        begin
+          FRacePop[reElf] := (Math.RandomRange(1, 5) * 5) + 50;
+          FRacePop[reHuman] := Math.RandomRange(2, 5) * 5;
+          FRacePop[reDwarf] := 100 - (FRacePop[reElf] + FRacePop[reHuman]);
+        end;
     end;
   until ((FRacePop[reHuman] <> FRacePop[reDwarf]) and
     (FRacePop[reDwarf] <> FRacePop[reElf]) and

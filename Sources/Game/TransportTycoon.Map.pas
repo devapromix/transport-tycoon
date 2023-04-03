@@ -201,7 +201,8 @@ uses
   TransportTycoon.Log,
   TransportTycoon.Game,
   TransportTycoon.Finances,
-  TransportTycoon.Palette;
+  TransportTycoon.Palette,
+  TransportTycoon.Races;
 
 type
   TBuildPlan = record
@@ -647,7 +648,8 @@ end;
 procedure TMap.Gen(const AMapType: TMapType = mtNormal);
 var
   LX, LY, I, J, N, LCoef: Integer;
-  LTownName, S: string;
+  S: string;
+  LTownRace: TRaceEnum;
   LIndustryType: TIndustryType;
 begin
   try
@@ -779,7 +781,6 @@ begin
           (Math.RandomRange(0, 10) - 5);
         LY := (Math.RandomRange(1, FHeight div 10) * 10) +
           (Math.RandomRange(0, 10) - 5);
-        LTownName := TTownIndustry.GenName;
 
         for N := 2 to 5 do
         begin
@@ -805,11 +806,11 @@ begin
           end;
         end;
 
-      until not IsTownName(LTownName) and not IsTownLocation(LX, LY) and
-        IsLandTile(LX, LY);
+      until not IsTownLocation(LX, LY) and IsLandTile(LX, LY);
       SetLength(Industry, I + 1);
       FTileEnum[LX][LY] := tlTownIndustry;
-      Industry[I] := TTownIndustry.Create(LTownName, LX, LY);
+      LTownRace := TRaceEnum(Math.RandomRange(0, Ord(High(TRaceEnum)) + 1));
+      Industry[I] := TTownIndustry.Create(LTownRace, LX, LY);
     end;
     // Industries
     I := TownCount;
