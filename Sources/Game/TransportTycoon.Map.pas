@@ -648,7 +648,7 @@ end;
 procedure TMap.Gen(const AMapType: TMapType = mtNormal);
 var
   LX, LY, I, J, N, LCoef: Integer;
-  S: string;
+  LTownName, S: string;
   LTownRace: TRaceEnum;
   LIndustryType: TIndustryType;
 begin
@@ -776,7 +776,10 @@ begin
     SetLength(Industry, 0);
     for I := 0 to MapTownCount - 1 do
     begin
+      LTownRace := TRaceEnum(Math.RandomRange(0, Ord(High(TRaceEnum)) + 1));
       repeat
+        LTownName := TTownIndustry.GenName(LTownRace);
+
         LX := (Math.RandomRange(1, FWidth div 10) * 10) +
           (Math.RandomRange(0, 10) - 5);
         LY := (Math.RandomRange(1, FHeight div 10) * 10) +
@@ -806,11 +809,11 @@ begin
           end;
         end;
 
-      until not IsTownLocation(LX, LY) and IsLandTile(LX, LY);
+      until not IsTownName(LTownName) and not IsTownLocation(LX, LY) and
+        IsLandTile(LX, LY);
       SetLength(Industry, I + 1);
       FTileEnum[LX][LY] := tlTownIndustry;
-      LTownRace := TRaceEnum(Math.RandomRange(0, Ord(High(TRaceEnum)) + 1));
-      Industry[I] := TTownIndustry.Create(LTownRace, LX, LY);
+      Industry[I] := TTownIndustry.Create(LTownName, LTownRace, LX, LY);
     end;
     // Industries
     I := TownCount;

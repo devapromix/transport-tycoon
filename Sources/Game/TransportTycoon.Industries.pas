@@ -80,7 +80,8 @@ type
     function GrowModif: Integer;
     procedure GenRacePop(const ATownRace: TRaceEnum);
   public
-    constructor Create(const ATownRace: TRaceEnum; const AX, AY: Integer);
+    constructor Create(const ATownName: string; const ATownRace: TRaceEnum;
+      const AX, AY: Integer);
     destructor Destroy; override;
     property Population: Integer read FPopulation;
     property Houses: Word read FHouses;
@@ -255,19 +256,15 @@ end;
 
 { TTownIndustry }
 
-constructor TTownIndustry.Create(const ATownRace: TRaceEnum;
-  const AX, AY: Integer);
-var
-  LTownName: string;
+constructor TTownIndustry.Create(const ATownName: string;
+  const ATownRace: TRaceEnum; const AX, AY: Integer);
 begin
+  inherited Create(ATownName, AX, AY);
   GenRacePop(ATownRace);
-  LTownName := Self.GenName(ATownRace);
-  inherited Create(LTownName, AX, AY);
   FIndustryType := inTown;
   Accepts := [cgPassengers, cgMail, cgGoods];
   Produces := [cgPassengers, cgMail];
   FPopulation := 0;
-  //
   ModifyPopulation(Math.RandomRange(250, 1500));
   FAirport := TStation.Create(8000, 5);
   FBusStation := TStation.Create(250);
@@ -289,12 +286,39 @@ var
 begin
   for I := 0 to 1 do
     LStringList[I] := TStringList.Create;
-  LStringList[0].DelimitedText :=
-    '"Eding","Graning","Vorg","Tra","Nording","Agring","Gran","Funt","Grufing",'
-    + '"Trening","Chend","Drinning","Long","Tor","Mar","Fin"';
-  LStringList[1].DelimitedText :=
-    '"ville","burg","ley","ly","field","town","well","bell","bridge","ton",' +
-    '"stone","hattan"';
+  case ATownRace of
+    reHuman:
+      begin
+        LStringList[0].DelimitedText :=
+          '"Eding","Graning","Vorg","Tra","Nording","Agring","Gran","Funt",' +
+          '"Grufing","Trening","Chend","Drinning","Long","Tor","Mar","Fin",' +
+          '"Storm"';
+        LStringList[1].DelimitedText :=
+          '"ville","burg","ley","ly","field","town","well","bell","bridge",' +
+          '"ton","stone","hattan","mor"';
+      end;
+    reDwarf:
+      begin
+        LStringList[0].DelimitedText :=
+          '"Zoar","Nard","Well","Quar","Lind","Moor","Zoar","Torm",' +
+          '"Horm","Quir","Quer","Yar","Tre","Soran","Tom","Kaz","Un",' +
+          '"Quaz","Kud","Kaz"';
+        LStringList[1].DelimitedText :=
+          '"ang","ank","orn","ong","ud","um","un","uk","anh","okn","ing",' +
+          '"itan","otin","orun"';
+      end;
+    reElf:
+      begin
+        LStringList[0].DelimitedText :=
+          '"Elvi","Kilim","Kalim","Vali","Elle","Eli","Tole","Filli",' +
+          '"Enne","Ere","Moli","Revi","Na","Tal","Tel","Nar","Da","Tul",' +
+          '"Tar","Ella","Tre","Elimi"';
+        LStringList[1].DelimitedText :=
+          '"nar","nor","laar","maar","tor","dor","daar","saar","naar",' +
+          '"noor","lor","taar","toor","tiir","nir","niir","door","bor",' +
+          '"ran","sor","sar","dar"';
+      end;
+  end;
   Result := '';
   for I := 0 to 1 do
   begin
