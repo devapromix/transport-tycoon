@@ -70,6 +70,7 @@ begin
 
   TSceneIndustry(Scenes.GetScene(scIndustry)).IndustryInfo(FTown, 12, 18);
 
+  AddButton(20, 'N', 'Towns');
   AddButton(20, 'B', 'Build');
   AddButton(20, 'ESC', 'Close');
 
@@ -83,9 +84,11 @@ begin
     if (GetButtonsY = MY) then
     begin
       case MX of
-        29 .. 37:
+        23 .. 31:
+          Key := TK_N;
+        35 .. 43:
           Key := TK_B;
-        41 .. 51:
+        47 .. 57:
           Key := TK_ESCAPE;
       end;
     end;
@@ -125,6 +128,8 @@ begin
     TK_G:
       if Game.Company.IsTownHQ and FTown.HQ.IsBuilding then
         Scenes.SetScene(scCompany, scTown);
+    TK_N:
+      Scenes.SetScene(scTowns);
   end;
 end;
 
