@@ -13,9 +13,11 @@ type
   TSceneTown = class(TScene)
   private
     FTown: TTownIndustry;
+    procedure PrevTown;
+    procedure NextTown;
   public
     procedure Render; override;
-    procedure Update(var Key: word); override;
+    procedure Update(var AKey: word); override;
   end;
 
 implementation
@@ -27,9 +29,46 @@ uses
   TransportTycoon.Game,
   TransportTycoon.Scene.Industry,
   TransportTycoon.Palette,
-  TransportTycoon.Races;
+  TransportTycoon.Races,
+  TransportTycoon.Log;
 
 { TSceneTown }
+
+procedure TSceneTown.NextTown;
+begin
+  try
+    with Game.Map do
+    begin
+      repeat
+        CurrentIndustry := CurrentIndustry + 1;
+        if CurrentIndustry > MapTownCount() then
+          CurrentIndustry := 0;
+      until (Industry[CurrentIndustry].IndustryType = inTown);
+      ScrollTo(Industry[CurrentIndustry].X, Industry[CurrentIndustry].Y);
+    end;
+  except
+    on E: Exception do
+      Log.Add('TSceneTown.NextTown', E.Message);
+  end;
+end;
+
+procedure TSceneTown.PrevTown;
+begin
+  try
+    with Game.Map do
+    begin
+      repeat
+        CurrentIndustry := CurrentIndustry - 1;
+        if CurrentIndustry < 0 then
+          CurrentIndustry := MapTownCount();
+      until (Industry[CurrentIndustry].IndustryType = inTown);
+      ScrollTo(Industry[CurrentIndustry].X, Industry[CurrentIndustry].Y);
+    end;
+  except
+    on E: Exception do
+      Log.Add('TSceneTown.PrevTown', E.Message);
+  end;
+end;
 
 procedure TSceneTown.Render;
 var
@@ -38,77 +77,83 @@ var
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
-  DrawFrame(10, 6, 60, 17);
+  DrawFrame(8, 6, 64, 17);
 
   FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
 
   DrawTitle(8, FTown.Name);
   terminal_color(TPalette.Default);
-  DrawText(12, 10, 'Population: ' + IntToStr(FTown.Population));
-  DrawText(12, 11, 'Houses: ' + IntToStr(FTown.Houses));
+  DrawText(10, 10, 'Population: ' + IntToStr(FTown.Population));
+  DrawText(10, 11, 'Houses: ' + IntToStr(FTown.Houses));
   for LRace := Low(TRaceEnum) to High(TRaceEnum) do
-    DrawText(12, Ord(LRace) + 13, GameRaceStr[LRace] + ': ' +
+    DrawText(10, Ord(LRace) + 13, GameRaceStr[LRace] + ': ' +
       IntToStr(FTown.GetRacePop(LRace)) + '%');
   // Airport
   LAirportLevel := Math.EnsureRange(FTown.Airport.Level, 1, 5);
-  DrawButton(34, 10, 35, FTown.Airport.IsBuilding, FTown.Airport.IsBuilding,
+  DrawButton(34, 10, 37, FTown.Airport.IsBuilding, FTown.Airport.IsBuilding,
     'A', AirportSizeStr[LAirportLevel]);
   // Dock
-  DrawButton(34, 11, 35, FTown.Dock.IsBuilding, FTown.Dock.IsBuilding,
+  DrawButton(34, 11, 37, FTown.Dock.IsBuilding, FTown.Dock.IsBuilding,
     'D', 'Dock');
   // Bus Station
-  DrawButton(34, 12, 35, FTown.BusStation.IsBuilding,
+  DrawButton(34, 12, 37, FTown.BusStation.IsBuilding,
     FTown.BusStation.IsBuilding, 'S', 'Bus Station');
   // Truck Loading Bay
-  DrawButton(34, 13, 35, FTown.TruckLoadingBay.IsBuilding,
+  DrawButton(34, 13, 37, FTown.TruckLoadingBay.IsBuilding,
     FTown.TruckLoadingBay.IsBuilding, 'L', 'Truck Loading Bay');
   // Company Headquarters
   if Game.Company.IsTownHQ then
-    DrawButton(34, 15, 35, FTown.HQ.IsBuilding, FTown.HQ.IsBuilding, 'G',
+    DrawButton(34, 15, 37, FTown.HQ.IsBuilding, FTown.HQ.IsBuilding, 'G',
       'Company Headquarters');
   terminal_color(TPalette.Default);
 
-  TSceneIndustry(Scenes.GetScene(scIndustry)).IndustryInfo(FTown, 12, 18);
+  TSceneIndustry(Scenes.GetScene(scIndustry)).IndustryInfo(FTown, 10, 18);
 
+  AddButton(20, '<', 'Prev');
   AddButton(20, 'N', 'Towns');
   AddButton(20, 'B', 'Build');
   AddButton(20, 'ESC', 'Close');
+  AddButton(20, '>', 'Next');
 
   DrawGameBar;
 end;
 
-procedure TSceneTown.Update(var Key: word);
+procedure TSceneTown.Update(var AKey: word);
 begin
-  if (Key = TK_MOUSE_LEFT) then
+  if (AKey = TK_MOUSE_LEFT) then
   begin
     if (GetButtonsY = MY) then
     begin
       case MX of
+        12 .. 19:
+          AKey := TK_LEFT;
         23 .. 31:
-          Key := TK_N;
+          AKey := TK_N;
         35 .. 43:
-          Key := TK_B;
+          AKey := TK_B;
         47 .. 57:
-          Key := TK_ESCAPE;
+          AKey := TK_ESCAPE;
+        61 .. 68:
+          AKey := TK_RIGHT;
       end;
     end;
     case MX of
       34 .. 69:
         case MY of
           10:
-            Key := TK_A;
+            AKey := TK_A;
           11:
-            Key := TK_D;
+            AKey := TK_D;
           12:
-            Key := TK_S;
+            AKey := TK_S;
           13:
-            Key := TK_L;
+            AKey := TK_L;
           15:
-            Key := TK_G;
+            AKey := TK_G;
         end;
     end;
   end;
-  case Key of
+  case AKey of
     TK_ESCAPE:
       Scenes.SetScene(scWorld);
     TK_A:
@@ -130,6 +175,10 @@ begin
         Scenes.SetScene(scCompany, scTown);
     TK_N:
       Scenes.SetScene(scTowns);
+    TK_LEFT:
+      PrevTown;
+    TK_RIGHT:
+      NextTown;
   end;
 end;
 

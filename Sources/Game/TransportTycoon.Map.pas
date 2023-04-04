@@ -143,7 +143,6 @@ type
     procedure Resize;
     function SizeCoef: Integer;
     function MapIndCount: Integer;
-    function MapTownCount: Integer;
     procedure DrawTile(const AX, AY: Integer);
     procedure AddRiver(const ADirectionEnum: TDirectionEnum);
   public
@@ -180,6 +179,7 @@ type
     procedure PrevRivers;
     procedure NextSize;
     procedure PrevSize;
+    function MapTownCount: Integer;
     procedure BuildConstruct(const AX, AY: Integer;
       AConstructEnum: TConstructEnum);
     function GetNearTownName(const AX, AY: Integer): string;
