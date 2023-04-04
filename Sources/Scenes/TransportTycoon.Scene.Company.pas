@@ -61,9 +61,9 @@ begin
   for LConstructEnum := Succ(Low(TConstructEnum)) to High(TConstructEnum) do
     AddStatLine(LConstructEnum);
 
-  if TTownIndustry(Game.Map.Industry[Game.Company.TownID]).HQ.IsBuilding then
+  if TTownIndustry(Game.Map.Industry[Game.Company.TownIndex]).HQ.IsBuilding then
     DrawText(22, 17, 'Company headquarters in ' + Game.Map.Industry
-      [Game.Company.TownID].Name);
+      [Game.Company.TownIndex].Name);
 
   AddButton(19, 'Esc', 'Close');
 

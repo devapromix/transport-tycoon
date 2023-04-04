@@ -64,7 +64,7 @@ begin
   DrawButton(17, 14, FTown.TruckLoadingBay.CanBuild, 'L',
     'Build Truck Loading Bay' + S);
   // Company Headquarters
-  if (Game.Map.CurrentIndustry = Game.Company.TownID) then
+  if (Game.Map.CurrentIndustry = Game.Company.TownIndex) then
     DrawButton(17, 17, FTown.HQ.CanBuild, 'G', 'Build Company Headquarters ($' +
       IntToStr(FTown.HQ.Cost) + ')');
 
@@ -135,7 +135,7 @@ begin
       end;
     TK_G:
       begin
-        if FTown.HQ.CanBuild and (Game.Map.CurrentIndustry = Game.Company.TownID)
+        if FTown.HQ.CanBuild and (Game.Map.CurrentIndustry = Game.Company.TownIndex)
         then
         begin
           FTown.HQ.Build;

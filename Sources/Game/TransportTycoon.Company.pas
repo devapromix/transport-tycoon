@@ -32,7 +32,7 @@ type
     constructor Create;
     destructor Destroy; override;
     property Inavgurated: Integer read FInavgurated;
-    property TownID: Integer read FTownID;
+    property TownIndex: Integer read FTownID;
     property Stat: TStat read FStat write FStat;
     procedure Clear;
     function Name: string;
@@ -98,7 +98,7 @@ end;
 
 function TCompany.Name: string;
 begin
-  Result := Game.Map.Industry[Game.Company.TownID].Name + ' TRANSPORT';
+  Result := Game.Map.Industry[Game.Company.TownIndex].Name + ' TRANSPORT';
 end;
 
 end.
