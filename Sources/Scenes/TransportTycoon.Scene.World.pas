@@ -12,7 +12,7 @@ type
   TSceneWorld = class(TScene)
   private
     procedure TownInfo(const ATownID: Integer);
-    procedure IndustryInfo(const AIndustryID: Integer);
+    procedure IndustryInfo(const AIndustryIndex: Integer);
     procedure VehicleInfo(const AVehicleName: string);
     procedure TileInfo(const ATileName: string);
     procedure DrawTileBkColor(const ABkColor: string = 'gray');
@@ -163,15 +163,15 @@ begin
   end;
 end;
 
-procedure TSceneWorld.IndustryInfo(const AIndustryID: Integer);
+procedure TSceneWorld.IndustryInfo(const AIndustryIndex: Integer);
 var
   LX, LY, LNameLength: Integer;
   LIndustryName: string;
 begin
   try
-    if AIndustryID < 0 then
+    if AIndustryIndex < 0 then
       Exit;
-    LIndustryName := Game.Map.Industry[AIndustryID].Name;
+    LIndustryName := Game.Map.Industry[AIndustryIndex].Name;
     LNameLength := Length(LIndustryName) + 8;
     TileInfo(LIndustryName);
     if (MY < ScreenHeight - 10) then
@@ -258,7 +258,8 @@ end;
 
 procedure TSceneWorld.Update(var AKey: Word);
 var
-  I: Integer;
+  LCurrentVehicle: Integer;
+  LCurrentIndustry: Integer;
   LIsFlag: Boolean;
   LStation: TStation;
   LConstruct: TConstructEnum;
@@ -290,20 +291,23 @@ begin
               begin
                 with Game.Vehicles do
                 begin
-                  I := Game.Map.GetCurrentIndustry(RX, RY);
+                  LCurrentIndustry := Game.Map.GetCurrentIndustry(RX, RY);
                   case Scenes.CurrentVehicleScene of
                     scAircraft:
                       begin
-                        LStation := TTownIndustry(Game.Map.Industry[I]).Airport;
+                        LStation :=
+                          TTownIndustry
+                          (Game.Map.Industry[LCurrentIndustry]).Airport;
                         LIsFlag :=
-                          not(Aircraft[CurrentVehicle].Orders.IsOrder(I) or
-                          not LStation.IsBuilding);
+                          not(Aircraft[CurrentVehicle].Orders.IsOrder
+                          (LCurrentIndustry) or not LStation.IsBuilding);
                         if LIsFlag then
                           with Game.Vehicles do
                           begin
                             if LStation.IsBuilding then
                             begin
-                              Aircraft[CurrentVehicle].AddOrder(I);
+                              Aircraft[CurrentVehicle]
+                                .AddOrder(LCurrentIndustry);
                               Game.IsOrder := False;
                             end;
                           end;
@@ -311,15 +315,18 @@ begin
                       end;
                     scShip:
                       begin
-                        LStation := TTownIndustry(Game.Map.Industry[I]).Dock;
-                        LIsFlag := not(Ship[CurrentVehicle].Orders.IsOrder(I) or
-                          not LStation.IsBuilding);
+                        LStation :=
+                          TTownIndustry
+                          (Game.Map.Industry[LCurrentIndustry]).Dock;
+                        LIsFlag :=
+                          not(Ship[CurrentVehicle].Orders.IsOrder
+                          (LCurrentIndustry) or not LStation.IsBuilding);
                         if LIsFlag then
                           with Game.Vehicles do
                           begin
                             if LStation.IsBuilding then
                             begin
-                              Ship[CurrentVehicle].AddOrder(I);
+                              Ship[CurrentVehicle].AddOrder(LCurrentIndustry);
                               Game.IsOrder := False;
                             end;
                           end;
@@ -330,20 +337,23 @@ begin
                         if RoadVehicleBase
                           [RoadVehicle[CurrentVehicle].VehicleID].VehicleType = vtBus
                         then
-                          LStation := TTownIndustry(Game.Map.Industry[I])
+                          LStation :=
+                            TTownIndustry(Game.Map.Industry[LCurrentIndustry])
                             .BusStation
                         else
-                          LStation := TTownIndustry(Game.Map.Industry[I])
+                          LStation :=
+                            TTownIndustry(Game.Map.Industry[LCurrentIndustry])
                             .TruckLoadingBay;
                         LIsFlag :=
-                          not(RoadVehicle[CurrentVehicle].Orders.IsOrder(I) or
-                          not LStation.IsBuilding);
+                          not(RoadVehicle[CurrentVehicle].Orders.IsOrder
+                          (LCurrentIndustry) or not LStation.IsBuilding);
                         if LIsFlag then
                           with Game.Vehicles do
                           begin
                             if LStation.IsBuilding then
                             begin
-                              RoadVehicle[CurrentVehicle].AddOrder(I);
+                              RoadVehicle[CurrentVehicle]
+                                .AddOrder(LCurrentIndustry);
                               Game.IsOrder := False;
                             end;
                           end;
@@ -363,19 +373,20 @@ begin
               begin
                 with Game.Vehicles do
                 begin
-                  I := Game.Map.GetCurrentIndustry(RX, RY);
+                  LCurrentIndustry := Game.Map.GetCurrentIndustry(RX, RY);
                   case Scenes.CurrentVehicleScene of
                     scShip:
                       begin
-                        LStation := Game.Map.Industry[I].Dock;
-                        LIsFlag := not(Ship[CurrentVehicle].Orders.IsOrder(I) or
-                          not LStation.IsBuilding);
+                        LStation := Game.Map.Industry[LCurrentIndustry].Dock;
+                        LIsFlag :=
+                          not(Ship[CurrentVehicle].Orders.IsOrder
+                          (LCurrentIndustry) or not LStation.IsBuilding);
                         if LIsFlag then
                           with Game.Vehicles do
                           begin
                             if LStation.IsBuilding then
                             begin
-                              Ship[CurrentVehicle].AddOrder(I);
+                              Ship[CurrentVehicle].AddOrder(LCurrentIndustry);
                               Game.IsOrder := False;
                             end;
                           end;
@@ -383,16 +394,18 @@ begin
                       end;
                     scRoadVehicle:
                       begin
-                        LStation := Game.Map.Industry[I].TruckLoadingBay;
+                        LStation := Game.Map.Industry[LCurrentIndustry]
+                          .TruckLoadingBay;
                         LIsFlag :=
-                          not(RoadVehicle[CurrentVehicle].Orders.IsOrder(I) or
-                          not LStation.IsBuilding);
+                          not(RoadVehicle[CurrentVehicle].Orders.IsOrder
+                          (LCurrentIndustry) or not LStation.IsBuilding);
                         if LIsFlag then
                           with Game.Vehicles do
                           begin
                             if LStation.IsBuilding then
                             begin
-                              RoadVehicle[CurrentVehicle].AddOrder(I);
+                              RoadVehicle[CurrentVehicle]
+                                .AddOrder(LCurrentIndustry);
                               Game.IsOrder := False;
                             end;
                           end;
@@ -405,24 +418,24 @@ begin
                 Scenes.SetScene(scIndustry);
             Exit;
           end;
-          I := Game.Vehicles.GetCurrentAircraft(RX, RY);
-          if I >= 0 then
+          LCurrentVehicle := Game.Vehicles.GetCurrentAircraft(RX, RY);
+          if LCurrentVehicle >= 0 then
           begin
-            Game.Vehicles.CurrentVehicle := I;
+            Game.Vehicles.CurrentVehicle := LCurrentVehicle;
             Scenes.SetScene(scAircraft, scWorld);
             Exit;
           end;
-          I := Game.Vehicles.GetCurrentShip(RX, RY);
-          if I >= 0 then
+          LCurrentVehicle := Game.Vehicles.GetCurrentShip(RX, RY);
+          if LCurrentVehicle >= 0 then
           begin
-            Game.Vehicles.CurrentVehicle := I;
+            Game.Vehicles.CurrentVehicle := LCurrentVehicle;
             Scenes.SetScene(scShip, scWorld);
             Exit;
           end;
-          I := Game.Vehicles.GetCurrentRoadVehicle(RX, RY);
-          if I >= 0 then
+          LCurrentVehicle := Game.Vehicles.GetCurrentRoadVehicle(RX, RY);
+          if LCurrentVehicle >= 0 then
           begin
-            Game.Vehicles.CurrentVehicle := I;
+            Game.Vehicles.CurrentVehicle := LCurrentVehicle;
             Scenes.SetScene(scRoadVehicle, scWorld);
             Exit;
           end;

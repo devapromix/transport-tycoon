@@ -11,7 +11,7 @@ type
 
   public
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
   end;
 
 implementation
@@ -25,7 +25,7 @@ uses
 
 procedure TSceneTowns.Render;
 var
-  I: Integer;
+  LIndustryIndex: Integer;
   LTown: TTownIndustry;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
@@ -34,15 +34,15 @@ begin
 
   DrawTitle(6, 'TOWNS');
 
-  for I := 0 to Length(Game.Map.Industry) - 1 do
-    if (Game.Map.Industry[I].IndustryType = inTown) then
+  for LIndustryIndex := 0 to Length(Game.Map.Industry) - 1 do
+    if (Game.Map.Industry[LIndustryIndex].IndustryType = inTown) then
     begin
-      LTown := TTownIndustry(Game.Map.Industry[I]);
-      if (Game.Company.TownID = I) then
-        DrawButton(27, I + 8, Chr(Ord('A') + I),
+      LTown := TTownIndustry(Game.Map.Industry[LIndustryIndex]);
+      if (Game.Company.TownIndex = LIndustryIndex) then
+        DrawButton(27, LIndustryIndex + 8, Chr(Ord('A') + LIndustryIndex),
           Format('%s (%d)', [LTown.Name, LTown.Population]), 'yellow')
       else
-        DrawButton(27, I + 8, Chr(Ord('A') + I),
+        DrawButton(27, LIndustryIndex + 8, Chr(Ord('A') + LIndustryIndex),
           Format('%s (%d)', [LTown.Name, LTown.Population]));
     end;
 
@@ -53,32 +53,32 @@ begin
   DrawGameBar;
 end;
 
-procedure TSceneTowns.Update(var Key: Word);
+procedure TSceneTowns.Update(var AKey: Word);
 var
   LSelectedIndustry: Integer;
 begin
-  if (Key = TK_MOUSE_LEFT) then
+  if (AKey = TK_MOUSE_LEFT) then
   begin
     case MX of
       27 .. 51:
         case MY of
           8 .. 18:
-            Key := TK_A + (MY - 8);
+            AKey := TK_A + (MY - 8);
         end;
     end;
     if (GetButtonsY = MY) then
       case MX of
         35 .. 45:
-          Key := TK_ESCAPE;
+          AKey := TK_ESCAPE;
       end;
   end;
-  case Key of
+  case AKey of
     TK_ESCAPE:
       Scenes.SetScene(scWorld);
     TK_A .. TK_K:
       with Game.Map do
       begin
-        LSelectedIndustry := Key - TK_A;
+        LSelectedIndustry := AKey - TK_A;
         if (LSelectedIndustry < TownCount) then
         begin
           CurrentIndustry := LSelectedIndustry;
