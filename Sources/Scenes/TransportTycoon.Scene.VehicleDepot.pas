@@ -13,9 +13,9 @@ type
   TSceneVehicleDepot = class(TScene)
   public
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
     procedure DrawVehicleInfo(const AVehicleBase: array of TVehicleBase;
-      const ASelVehicle: Integer);
+      const AVehicleIndex: Integer);
     procedure DrawVehiclesList(const AVehicleBase: array of TVehicleBase;
       const ASelVehicle: Integer);
   end;
@@ -32,39 +32,41 @@ uses
   TransportTycoon.Palette;
 
 procedure TSceneVehicleDepot.DrawVehicleInfo(const AVehicleBase
-  : array of TVehicleBase; const ASelVehicle: Integer);
+  : array of TVehicleBase; const AVehicleIndex: Integer);
 var
   LCargo: TCargo;
 begin
   terminal_color(TPalette.Selected);
   terminal_composition(TK_ON);
-  DrawText(42, 10, AVehicleBase[ASelVehicle].Name);
-  DrawText(42, 10, StringOfChar('_', Length(AVehicleBase[ASelVehicle].Name)));
+  DrawText(42, 10, AVehicleBase[AVehicleIndex].Name);
+  DrawText(42, 10, StringOfChar('_', Length(AVehicleBase[AVehicleIndex].Name)));
   terminal_composition(TK_OFF);
   terminal_color(TPalette.Default);
   TextLineY := 11;
   for LCargo := Succ(Low(TCargo)) to High(TCargo) do
-    if (LCargo in AVehicleBase[ASelVehicle].CargoSet) then
+    if (LCargo in AVehicleBase[AVehicleIndex].CargoSet) then
       DrawTextLine(42, Format('%s: %d', [CargoStr[LCargo],
-        AVehicleBase[ASelVehicle].Amount]));
-  DrawTextLine(42, Format('Speed: %d km/h', [AVehicleBase[ASelVehicle].Speed]));
-  DrawTextLine(42, Format('Cost: $%d', [AVehicleBase[ASelVehicle].Cost]));
+        AVehicleBase[AVehicleIndex].Amount]));
+  DrawTextLine(42, Format('Speed: %d km/h',
+    [AVehicleBase[AVehicleIndex].Speed]));
+  DrawTextLine(42, Format('Cost: $%d', [AVehicleBase[AVehicleIndex].Cost]));
   DrawTextLine(42, Format('Running Cost: $%d/y',
-    [AVehicleBase[ASelVehicle].RunningCost]));
+    [AVehicleBase[AVehicleIndex].RunningCost]));
 end;
 
 procedure TSceneVehicleDepot.DrawVehiclesList(const AVehicleBase
   : array of TVehicleBase; const ASelVehicle: Integer);
 var
-  I: Integer;
+  LVehicleIndex: Integer;
 begin
-  for I := 0 to Length(AVehicleBase) - 1 do
-    if AVehicleBase[I].Since <= Game.Calendar.Year then
-      if I = ASelVehicle then
-        DrawButton(12, I + 10, Chr(Ord('A') + I),
-          AVehicleBase[I].Name, 'yellow')
+  for LVehicleIndex := 0 to Length(AVehicleBase) - 1 do
+    if AVehicleBase[LVehicleIndex].Since <= Game.Calendar.Year then
+      if LVehicleIndex = ASelVehicle then
+        DrawButton(12, LVehicleIndex + 10, Chr(Ord('A') + LVehicleIndex),
+          AVehicleBase[LVehicleIndex].Name, 'yellow')
       else
-        DrawButton(12, I + 10, Chr(Ord('A') + I), AVehicleBase[I].Name);
+        DrawButton(12, LVehicleIndex + 10, Chr(Ord('A') + LVehicleIndex),
+          AVehicleBase[LVehicleIndex].Name);
 end;
 
 procedure TSceneVehicleDepot.Render;
@@ -73,15 +75,15 @@ begin
   DrawFrame(10, 6, 60, 17);
 end;
 
-procedure TSceneVehicleDepot.Update(var Key: Word);
+procedure TSceneVehicleDepot.Update(var AKey: Word);
 begin
-  if (Key = TK_MOUSE_LEFT) then
+  if (AKey = TK_MOUSE_LEFT) then
   begin
     case MX of
       12 .. 38:
         case MY of
           10 .. 18:
-            Key := TK_A + (MY - 10);
+            AKey := TK_A + (MY - 10);
         end;
     end;
   end;

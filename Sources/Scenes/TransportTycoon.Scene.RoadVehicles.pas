@@ -15,7 +15,7 @@ type
 
   public
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
   end;
 
 implementation
@@ -29,28 +29,28 @@ uses
 
 procedure TSceneRoadVehicles.Render;
 var
-  I: Integer;
+  LVehicleIndex: Integer;
 begin
   inherited Render;
   DrawTitle(Game.Company.Name + ' Road Vehicles');
-  for I := 0 to Game.Vehicles.RoadVehicleCount - 1 do
-    DrawButton(12, I + 11, Chr(Ord('A') + I),
-      Game.Vehicles.RoadVehicle[I].Name);
+  for LVehicleIndex := 0 to Game.Vehicles.RoadVehicleCount - 1 do
+    DrawButton(12, LVehicleIndex + 11, Chr(Ord('A') + LVehicleIndex),
+      Game.Vehicles.RoadVehicle[LVehicleIndex].Name);
 end;
 
-procedure TSceneRoadVehicles.Update(var Key: Word);
+procedure TSceneRoadVehicles.Update(var AKey: Word);
 var
-  I: Integer;
+  LVehicleIndex: Integer;
 begin
-  inherited Update(Key);
-  case Key of
+  inherited Update(AKey);
+  case AKey of
     TK_A .. TK_G:
       begin
-        I := Key - TK_A;
-        if I > Game.Vehicles.RoadVehicleCount - 1 then
+        LVehicleIndex := AKey - TK_A;
+        if LVehicleIndex > Game.Vehicles.RoadVehicleCount - 1 then
           Exit;
-        Game.Vehicles.CurrentVehicle := I;
-        with Game.Vehicles.RoadVehicle[I] do
+        Game.Vehicles.CurrentVehicle := LVehicleIndex;
+        with Game.Vehicles.RoadVehicle[LVehicleIndex] do
           ScrollTo(X, Y);
         Scenes.SetScene(scRoadVehicle, scRoadVehicles);
       end;

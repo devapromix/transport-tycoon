@@ -32,7 +32,7 @@ uses
 
 procedure TSceneAirport.Render;
 var
-  LCurrentAircraft, LY: Integer;
+  LAircraftIndex, LY: Integer;
   LCargo: TCargo;
 begin
   inherited Render;
@@ -54,11 +54,10 @@ begin
     end;
   end;
 
-  for LCurrentAircraft := 0 to Game.Vehicles.AircraftCount - 1 do
-    DrawButton(37, LCurrentAircraft + 11,
-      Game.Vehicles.Aircraft[LCurrentAircraft].InLocation(FTown.X, FTown.Y),
-      Chr(Ord('A') + LCurrentAircraft),
-      StrLim(Game.Vehicles.Aircraft[LCurrentAircraft].Name, 30));
+  for LAircraftIndex := 0 to Game.Vehicles.AircraftCount - 1 do
+    DrawButton(37, LAircraftIndex + 11, Game.Vehicles.Aircraft[LAircraftIndex]
+      .InLocation(FTown.X, FTown.Y), Chr(Ord('A') + LAircraftIndex),
+      StrLim(Game.Vehicles.Aircraft[LAircraftIndex].Name, 30));
 
   AddButton(19, 'H', 'Hangar');
   AddButton(19, 'Esc', 'Close');
@@ -68,7 +67,7 @@ end;
 
 procedure TSceneAirport.Update(var AKey: Word);
 var
-  LCurrentAircraft: Integer;
+  LAircraftIndex: Integer;
 begin
   inherited Update(AKey);
   if (AKey = TK_MOUSE_LEFT) then
@@ -86,11 +85,11 @@ begin
       Scenes.Back;
     TK_A .. TK_G:
       begin
-        LCurrentAircraft := AKey - TK_A;
-        if Game.Vehicles.Aircraft[LCurrentAircraft].InLocation(FTown.X, FTown.Y)
+        LAircraftIndex := AKey - TK_A;
+        if Game.Vehicles.Aircraft[LAircraftIndex].InLocation(FTown.X, FTown.Y)
         then
         begin
-          Game.Vehicles.CurrentVehicle := LCurrentAircraft;
+          Game.Vehicles.CurrentVehicle := LAircraftIndex;
           Scenes.SetScene(scAircraft, scAirport);
         end;
       end;
