@@ -15,7 +15,7 @@ type
     procedure AddStatLine(const AConstructEnum: TConstructEnum);
   public
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
   end;
 
 implementation
@@ -70,19 +70,19 @@ begin
   DrawGameBar;
 end;
 
-procedure TSceneCompany.Update(var Key: Word);
+procedure TSceneCompany.Update(var AKey: Word);
 begin
-  if (Key = TK_MOUSE_LEFT) then
+  if (AKey = TK_MOUSE_LEFT) then
   begin
     if (GetButtonsY = MY) then
     begin
       case MX of
         35 .. 45:
-          Key := TK_ESCAPE;
+          AKey := TK_ESCAPE;
       end;
     end;
   end;
-  case Key of
+  case AKey of
     TK_ESCAPE:
       Scenes.Back;
   end;

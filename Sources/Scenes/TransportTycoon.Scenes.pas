@@ -33,7 +33,7 @@ type
     FTextLineY: Integer;
   public
     procedure Render; virtual; abstract;
-    procedure Update(var Key: Word); virtual; abstract;
+    procedure Update(var AKey: Word); virtual; abstract;
     procedure DrawText(const AX, AY: Integer;
       AText, AColor, ABkColor: string); overload;
     procedure DrawText(const AX, AY: Integer; AText: string;
@@ -93,7 +93,7 @@ type
     constructor Create;
     destructor Destroy; override;
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
     property Scene: TSceneEnum read FSceneEnum write FSceneEnum;
     function GetScene(ASceneEnum: TSceneEnum): TScene;
     procedure SetScene(ASceneEnum: TSceneEnum); overload;
@@ -513,7 +513,7 @@ begin
   FScene[scRoadVehicleDepot] := TSceneRoadVehicleDepot.Create;
 end;
 
-procedure TScenes.Update(var Key: Word);
+procedure TScenes.Update(var AKey: Word);
 begin
   try
     if (FScene[Scene] <> nil) then
@@ -525,7 +525,7 @@ begin
           MapSizeInt[Game.Map.MapSize]);
         RX := EnsureRange(Game.Map.Left + MX, 0, MapSizeInt[Game.Map.MapSize]);
         RY := EnsureRange(Game.Map.Top + MY, 0, MapSizeInt[Game.Map.MapSize]);
-        Update(Key);
+        Update(AKey);
       end;
   except
     on E: Exception do

@@ -11,7 +11,7 @@ type
 
   public
     procedure Render; override;
-    procedure Update(var Key: word); override;
+    procedure Update(var AKey: word); override;
   end;
 
 implementation
@@ -38,22 +38,22 @@ begin
   DrawText(20, 'By Apromix 2022-2023');
 end;
 
-procedure TSceneMainMenu.Update(var Key: word);
+procedure TSceneMainMenu.Update(var AKey: word);
 begin
-  if (Key = TK_MOUSE_LEFT) then
+  if (AKey = TK_MOUSE_LEFT) then
     case MY of
       13:
-        Key := TK_ENTER;
+        AKey := TK_ENTER;
       14:
-        Key := TK_ESCAPE;
+        AKey := TK_ESCAPE;
       15:
-        Key := TK_L;
+        AKey := TK_L;
       16:
-        Key := TK_D;
+        AKey := TK_D;
       17:
-        Key := TK_Q;
+        AKey := TK_Q;
     end;
-  case Key of
+  case AKey of
     TK_ESCAPE:
       if Game.IsGame then
       begin

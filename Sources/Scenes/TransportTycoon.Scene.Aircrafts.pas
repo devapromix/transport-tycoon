@@ -15,7 +15,7 @@ type
 
   public
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
   end;
 
 implementation
@@ -29,27 +29,28 @@ uses
 
 procedure TSceneAircrafts.Render;
 var
-  I: Integer;
+  LCurrentAircraft: Integer;
 begin
   inherited Render;
   DrawTitle(Game.Company.Name + ' AIRCRAFTS');
-  for I := 0 to Game.Vehicles.AircraftCount - 1 do
-    DrawButton(12, I + 11, Chr(Ord('A') + I), Game.Vehicles.Aircraft[I].Name);
+  for LCurrentAircraft := 0 to Game.Vehicles.AircraftCount - 1 do
+    DrawButton(12, LCurrentAircraft + 11, Chr(Ord('A') + LCurrentAircraft),
+      Game.Vehicles.Aircraft[LCurrentAircraft].Name);
 end;
 
-procedure TSceneAircrafts.Update(var Key: Word);
+procedure TSceneAircrafts.Update(var AKey: Word);
 var
-  I: Integer;
+  LCurrentAircraft: Integer;
 begin
-  inherited Update(Key);
-  case Key of
+  inherited Update(AKey);
+  case AKey of
     TK_A .. TK_G:
       begin
-        I := Key - TK_A;
-        if I > Game.Vehicles.AircraftCount - 1 then
+        LCurrentAircraft := AKey - TK_A;
+        if LCurrentAircraft > Game.Vehicles.AircraftCount - 1 then
           Exit;
-        Game.Vehicles.CurrentVehicle := I;
-        with Game.Vehicles.Aircraft[I] do
+        Game.Vehicles.CurrentVehicle := LCurrentAircraft;
+        with Game.Vehicles.Aircraft[LCurrentAircraft] do
           ScrollTo(X, Y);
         Scenes.SetScene(scAircraft, scAircrafts);
       end;
