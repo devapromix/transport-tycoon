@@ -16,8 +16,8 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    procedure Add(S: string); overload;
-    procedure Add(S, V: string); overload;
+    procedure Add(const AMessage: string); overload;
+    procedure Add(const AMessage, AValue: string); overload;
   end;
 
 var
@@ -27,14 +27,14 @@ implementation
 
 { TLog }
 
-procedure TLog.Add(S: string);
+procedure TLog.Add(const AMessage: string);
 begin
-  FLog.Append(Trim(S));
+  FLog.Append(Trim(AMessage));
 end;
 
-procedure TLog.Add(S, V: string);
+procedure TLog.Add(const AMessage, AValue: string);
 begin
-  Add(S + ': ' + V);
+  Add(AMessage + ': ' + AValue);
 end;
 
 constructor TLog.Create;
