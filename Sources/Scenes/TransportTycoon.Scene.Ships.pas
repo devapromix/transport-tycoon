@@ -15,7 +15,7 @@ type
 
   public
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
   end;
 
 implementation
@@ -37,15 +37,15 @@ begin
     DrawButton(12, I + 11, Chr(Ord('A') + I), Game.Vehicles.Ship[I].Name);
 end;
 
-procedure TSceneShips.Update(var Key: Word);
+procedure TSceneShips.Update(var AKey: Word);
 var
   I: Integer;
 begin
-  inherited Update(Key);
-  case Key of
+  inherited Update(AKey);
+  case AKey of
     TK_A .. TK_G:
       begin
-        I := Key - TK_A;
+        I := AKey - TK_A;
         if I > Game.Vehicles.ShipCount - 1 then
           Exit;
         Game.Vehicles.CurrentVehicle := I;

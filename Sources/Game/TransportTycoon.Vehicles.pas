@@ -23,9 +23,9 @@ type
     function GetGotAircrafts: Boolean;
     function GetGotShips: Boolean;
     function GetGotRoadVehicles: Boolean;
-    function GetAircraft(AID: Integer): TAircraft;
-    function GetShip(AID: Integer): TShip;
-    function GetRoadVehicle(AID: Integer): TRoadVehicle;
+    function GetAircraft(AVehicle: Integer): TAircraft;
+    function GetShip(AVehicle: Integer): TShip;
+    function GetRoadVehicle(AVehicle: Integer): TRoadVehicle;
     function GetVehicle(AX, AY: Integer; AVehicles: TArray<TVehicle>): Integer;
   public
     constructor Create;
@@ -33,6 +33,7 @@ type
     property CurrentVehicle: Integer read FCurrentVehicle write FCurrentVehicle;
     procedure Draw;
     procedure Step;
+    procedure Clear;
     procedure AddAircraft(const AName: string;
       const AIndex, AAircraftID: Integer);
     procedure AddShip(const AName: string; const AIndex, AShipID: Integer);
@@ -47,16 +48,16 @@ type
     function IsBuyShipAllowed(): Boolean;
     function IsBuyAircraftAllowed(): Boolean;
     function IsBuyRoadVehicleAllowed(): Boolean;
-    procedure Clear;
     property ShipCount: Integer read GetShipCount;
     property AircraftCount: Integer read GetAircraftCount;
     property RoadVehicleCount: Integer read GetRoadVehicleCount;
     property GotShips: Boolean read GetGotShips;
     property GotAircrafts: Boolean read GetGotAircrafts;
     property GotRoadVehicles: Boolean read GetGotRoadVehicles;
-    property Aircraft[AID: Integer]: TAircraft read GetAircraft;
-    property Ship[AID: Integer]: TShip read GetShip;
-    property RoadVehicle[AID: Integer]: TRoadVehicle read GetRoadVehicle;
+    property Aircraft[AVehicleIdent: Integer]: TAircraft read GetAircraft;
+    property Ship[AVehicleIdent: Integer]: TShip read GetShip;
+    property RoadVehicle[AVehicleIdent: Integer]: TRoadVehicle
+      read GetRoadVehicle;
     procedure ClearProfit;
   end;
 
@@ -136,64 +137,64 @@ end;
 
 procedure TVehicles.RunningCosts;
 var
-  I, LID, LMoney: Integer;
+  LVehicle, LVehicleIdent, LMoney: Integer;
 begin
-  for I := 0 to AircraftCount - 1 do
+  for LVehicle := 0 to AircraftCount - 1 do
   begin
-    LID := Aircraft[I].VehicleID;
-    LMoney := AircraftBase[LID].RunningCost div 12;
+    LVehicleIdent := Aircraft[LVehicle].VehicleID;
+    LMoney := AircraftBase[LVehicleIdent].RunningCost div 12;
     Game.ModifyMoney(ttAircraftRunningCosts, -LMoney);
-    Aircraft[I].Profit := Aircraft[I].Profit - LMoney;
+    Aircraft[LVehicle].Profit := Aircraft[LVehicle].Profit - LMoney;
   end;
-  for I := 0 to ShipCount - 1 do
+  for LVehicle := 0 to ShipCount - 1 do
   begin
-    LID := Ship[I].VehicleID;
-    LMoney := ShipBase[LID].RunningCost div 12;
+    LVehicleIdent := Ship[LVehicle].VehicleID;
+    LMoney := ShipBase[LVehicleIdent].RunningCost div 12;
     Game.ModifyMoney(ttShipRunningCosts, -LMoney);
-    Ship[I].Profit := Ship[I].Profit - LMoney;
+    Ship[LVehicle].Profit := Ship[LVehicle].Profit - LMoney;
   end;
-  for I := 0 to RoadVehicleCount - 1 do
+  for LVehicle := 0 to RoadVehicleCount - 1 do
   begin
-    LID := RoadVehicle[I].VehicleID;
-    LMoney := RoadVehicleBase[LID].RunningCost div 12;
+    LVehicleIdent := RoadVehicle[LVehicle].VehicleID;
+    LMoney := RoadVehicleBase[LVehicleIdent].RunningCost div 12;
     Game.ModifyMoney(ttRoadVehicleRunningCosts, -LMoney);
-    RoadVehicle[I].Profit := RoadVehicle[I].Profit - LMoney;
+    RoadVehicle[LVehicle].Profit := RoadVehicle[LVehicle].Profit - LMoney;
   end;
 end;
 
 procedure TVehicles.Clear;
 var
-  I: Integer;
+  LVehicle: Integer;
 begin
-  for I := 0 to AircraftCount - 1 do
-    FreeAndNil(FAircraft[I]);
+  for LVehicle := 0 to AircraftCount - 1 do
+    FreeAndNil(FAircraft[LVehicle]);
   SetLength(FAircraft, 0);
-  for I := 0 to ShipCount - 1 do
-    FreeAndNil(FShip[I]);
+  for LVehicle := 0 to ShipCount - 1 do
+    FreeAndNil(FShip[LVehicle]);
   SetLength(FShip, 0);
-  for I := 0 to RoadVehicleCount - 1 do
-    FreeAndNil(FRoadVehicle[I]);
+  for LVehicle := 0 to RoadVehicleCount - 1 do
+    FreeAndNil(FRoadVehicle[LVehicle]);
   SetLength(FRoadVehicle, 0);
 end;
 
 procedure TVehicles.ClearProfit;
 var
-  I: Integer;
+  LVehicle: Integer;
 begin
-  for I := 0 to AircraftCount - 1 do
-    with Aircraft[I] do
+  for LVehicle := 0 to AircraftCount - 1 do
+    with Aircraft[LVehicle] do
     begin
       LastProfit := Profit;
       Profit := 0;
     end;
-  for I := 0 to ShipCount - 1 do
-    with Ship[I] do
+  for LVehicle := 0 to ShipCount - 1 do
+    with Ship[LVehicle] do
     begin
       LastProfit := Profit;
       Profit := 0;
     end;
-  for I := 0 to RoadVehicleCount - 1 do
-    with RoadVehicle[I] do
+  for LVehicle := 0 to RoadVehicleCount - 1 do
+    with RoadVehicle[LVehicle] do
     begin
       LastProfit := Profit;
       Profit := 0;
@@ -213,27 +214,27 @@ end;
 
 procedure TVehicles.Draw;
 var
-  I: Integer;
+  LVehicle: Integer;
 begin
   // Aircrafts
   terminal_color(TAircraft.Color);
-  for I := 0 to AircraftCount - 1 do
-    Aircraft[I].Draw;
+  for LVehicle := 0 to AircraftCount - 1 do
+    Aircraft[LVehicle].Draw;
   // Ships
   terminal_color(TShip.Color);
-  for I := 0 to ShipCount - 1 do
-    Ship[I].Draw;
+  for LVehicle := 0 to ShipCount - 1 do
+    Ship[LVehicle].Draw;
   // Road Vehicles
   terminal_color(TRoadVehicle.Color);
-  for I := 0 to RoadVehicleCount - 1 do
-    RoadVehicle[I].Draw;
+  for LVehicle := 0 to RoadVehicleCount - 1 do
+    RoadVehicle[LVehicle].Draw;
   //
   terminal_color(TPalette.Default);
 end;
 
-function TVehicles.GetAircraft(AID: Integer): TAircraft;
+function TVehicles.GetAircraft(AVehicle: Integer): TAircraft;
 begin
-  Exit(FAircraft[AID]);
+  Exit(FAircraft[AVehicle]);
 end;
 
 function TVehicles.GetAircraftCount: Integer;
@@ -259,12 +260,12 @@ end;
 function TVehicles.GetVehicle(AX, AY: Integer;
   AVehicles: TArray<TVehicle>): Integer;
 var
-  I: Integer;
+  LVehicle: Integer;
 begin
   Result := -1;
-  for I := 0 to Length(AVehicles) - 1 do
-    if ((AVehicles[I].X = AX) and (AVehicles[I].Y = AY)) then
-      Exit(I);
+  for LVehicle := 0 to Length(AVehicles) - 1 do
+    if ((AVehicles[LVehicle].X = AX) and (AVehicles[LVehicle].Y = AY)) then
+      Exit(LVehicle);
 end;
 
 function TVehicles.IsBuyAircraftAllowed: Boolean;
@@ -288,12 +289,12 @@ function TVehicles.IsVehicleOnMap(const AX, AY: Integer;
   function GetVehicle(AFunc: TGetVehicleFunc;
     AVehicles: TArray<TVehicle>): Boolean;
   var
-    LID: Integer;
+    LVehicle: Integer;
   begin
-    LID := AFunc(AX, AY);
-    Result := LID >= 0;
+    LVehicle := AFunc(AX, AY);
+    Result := LVehicle >= 0;
     if Result then
-      AVehicleName := AVehicles[LID].Name;
+      AVehicleName := AVehicles[LVehicle].Name;
   end;
 
 begin
@@ -320,9 +321,9 @@ begin
   Exit(ShipCount > 0);
 end;
 
-function TVehicles.GetRoadVehicle(AID: Integer): TRoadVehicle;
+function TVehicles.GetRoadVehicle(AVehicle: Integer): TRoadVehicle;
 begin
-  Exit(FRoadVehicle[AID]);
+  Exit(FRoadVehicle[AVehicle]);
 end;
 
 function TVehicles.GetRoadVehicleCount: Integer;
@@ -330,9 +331,9 @@ begin
   Exit(Length(FRoadVehicle));
 end;
 
-function TVehicles.GetShip(AID: Integer): TShip;
+function TVehicles.GetShip(AVehicle: Integer): TShip;
 begin
-  Exit(FShip[AID]);
+  Exit(FShip[AVehicle]);
 end;
 
 function TVehicles.GetShipCount: Integer;
@@ -342,13 +343,13 @@ end;
 
 procedure TVehicles.Step;
 var
-  I, J: Integer;
+  LVehicle, LTick: Integer;
 begin
   try
-    for J := 0 to 200 - 1 do
+    for LTick := 0 to 200 - 1 do
     begin
-      for I := 0 to AircraftCount - 1 do
-        with Aircraft[I] do
+      for LVehicle := 0 to AircraftCount - 1 do
+        with Aircraft[LVehicle] do
           if AP <= 0 then
           begin
             Step;
@@ -356,8 +357,8 @@ begin
           end
           else
             AP := AP - 1;
-      for I := 0 to ShipCount - 1 do
-        with Ship[I] do
+      for LVehicle := 0 to ShipCount - 1 do
+        with Ship[LVehicle] do
           if AP <= 0 then
           begin
             Step;
@@ -365,8 +366,8 @@ begin
           end
           else
             AP := AP - 1;
-      for I := 0 to RoadVehicleCount - 1 do
-        with RoadVehicle[I] do
+      for LVehicle := 0 to RoadVehicleCount - 1 do
+        with RoadVehicle[LVehicle] do
           if AP <= 0 then
           begin
             Step;

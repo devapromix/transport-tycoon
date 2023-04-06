@@ -16,7 +16,7 @@ type
     FIndustry: TIndustry;
   public
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
   end;
 
 implementation
@@ -32,7 +32,7 @@ uses
 
 procedure TSceneTruckLoadingBay.Render;
 var
-  I, LY: Integer;
+  LVehicleIndex, LY: Integer;
   LCargo: TCargo;
 begin
   inherited Render;
@@ -54,10 +54,10 @@ begin
       end;
     end;
 
-  for I := 0 to Game.Vehicles.RoadVehicleCount - 1 do
-    DrawButton(37, I + 11, Game.Vehicles.RoadVehicle[I].InLocation(FIndustry.X,
-      FIndustry.Y), Chr(Ord('A') + I),
-      StrLim(Game.Vehicles.RoadVehicle[I].Name, 30));
+  for LVehicleIndex := 0 to Game.Vehicles.RoadVehicleCount - 1 do
+    DrawButton(37, LVehicleIndex + 11, Game.Vehicles.RoadVehicle[LVehicleIndex]
+      .InLocation(FIndustry.X, FIndustry.Y), Chr(Ord('A') + LVehicleIndex),
+      StrLim(Game.Vehicles.RoadVehicle[LVehicleIndex].Name, 30));
 
   AddButton(19, 'V', 'Road Vehicle Depot');
   AddButton(19, 'Esc', 'Close');
@@ -65,33 +65,33 @@ begin
   DrawGameBar;
 end;
 
-procedure TSceneTruckLoadingBay.Update(var Key: Word);
+procedure TSceneTruckLoadingBay.Update(var AKey: Word);
 var
-  I: Integer;
+  LVehicleIndex: Integer;
 begin
-  inherited Update(Key);
-  if (Key = TK_MOUSE_LEFT) then
+  inherited Update(AKey);
+  if (AKey = TK_MOUSE_LEFT) then
   begin
     if (GetButtonsY = MY) then
     begin
       case MX of
         22 .. 43:
-          Key := TK_V;
+          AKey := TK_V;
         47 .. 57:
-          Key := TK_ESCAPE;
+          AKey := TK_ESCAPE;
       end;
     end;
   end;
-  case Key of
+  case AKey of
     TK_ESCAPE:
       Scenes.Back;
     TK_A .. TK_G:
       begin
-        I := Key - TK_A;
-        if Game.Vehicles.RoadVehicle[I].InLocation(FIndustry.X, FIndustry.Y)
-        then
+        LVehicleIndex := AKey - TK_A;
+        if Game.Vehicles.RoadVehicle[LVehicleIndex].InLocation(FIndustry.X,
+          FIndustry.Y) then
         begin
-          Game.Vehicles.CurrentVehicle := I;
+          Game.Vehicles.CurrentVehicle := LVehicleIndex;
           Scenes.SetScene(scRoadVehicle, scTruckLoadingBay);
         end;
       end;
