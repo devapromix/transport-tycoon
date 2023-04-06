@@ -14,7 +14,7 @@ type
     FIsDetails: Boolean;
   public
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
     property IsDetails: Boolean read FIsDetails write FIsDetails;
   end;
 
@@ -37,39 +37,39 @@ begin
   DrawGameBar;
 end;
 
-procedure TSceneVehicle.Update(var Key: Word);
+procedure TSceneVehicle.Update(var AKey: Word);
 begin
-  if (Key = TK_MOUSE_LEFT) then
+  if (AKey = TK_MOUSE_LEFT) then
   begin
     case MX of
       29 .. 71:
         case MY of
           11 .. 17:
-            Key := TK_A + (MY - 11);
+            AKey := TK_A + (MY - 11);
         end;
     end;
     case MX of
       27 .. 39:
         case MY of
           19:
-            Key := TK_O;
+            AKey := TK_O;
         end;
       43 .. 53:
         case MY of
           19:
-            Key := TK_ESCAPE;
+            AKey := TK_ESCAPE;
         end;
     end;
     case MX of
       7 .. 23:
         case MY of
           19:
-            Key := TK_L;
+            AKey := TK_L;
         end;
       57 .. 72:
         case MY of
           19:
-            Key := TK_V;
+            AKey := TK_V;
         end;
     end;
   end;
