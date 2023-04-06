@@ -81,7 +81,8 @@ begin
     Orders.AddOrder(AIndex, Name, X, Y);
 end;
 
-constructor TAircraft.Create(const AName: string; const AX, AY, AIndex: Integer);
+constructor TAircraft.Create(const AName: string;
+  const AX, AY, AIndex: Integer);
 begin
   inherited Create(AName, AX, AY, AircraftBase, AIndex);
   FTimer := 0;
@@ -98,8 +99,8 @@ begin
       (LCargo in CargoSet) then
     begin
       SetCargoType(LCargo);
-      while (Game.Map.Industry[CurOrder.IndustryIndex].ProducesAmount[LCargo] > 0) and
-        (CargoAmount < CargoMaxAmount) do
+      while (Game.Map.Industry[CurOrder.IndustryIndex].ProducesAmount[LCargo] >
+        0) and (CargoAmount < CargoMaxAmount) do
       begin
         Game.Map.Industry[CurOrder.IndustryIndex].DecCargoAmount(LCargo);
         IncCargoAmount;
@@ -110,16 +111,16 @@ end;
 
 function TAircraft.Move(const AX, AY: Integer): Boolean;
 var
-  LNX, LNY: Integer;
+  LX, LY: Integer;
 begin
   Result := False;
   FState := 'Fly';
-  LNX := 0;
-  LNY := 0;
-  if not IsMove(Game.Map.Width, Game.Map.Height, X, Y, AX, AY, @IsPath, LNX, LNY)
+  LX := 0;
+  LY := 0;
+  if not IsMove(Game.Map.Width, Game.Map.Height, X, Y, AX, AY, @IsPath, LX, LY)
   then
     Exit;
-  SetLocation(LNX, LNY);
+  SetLocation(LX, LY);
   Result := (X <> AX) or (Y <> AY);
 end;
 
@@ -143,8 +144,8 @@ begin
         Load;
         if FullLoad then
           for LCargo := Succ(Low(TCargo)) to High(TCargo) do
-            if (LCargo in Game.Map.Industry[CurOrder.IndustryIndex].Produces) and
-              (LCargo in CargoSet) then
+            if (LCargo in Game.Map.Industry[CurOrder.IndustryIndex].Produces)
+              and (LCargo in CargoSet) then
             begin
               SetCargoType(LCargo);
               if (CargoAmount < CargoMaxAmount) then

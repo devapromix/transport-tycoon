@@ -12,7 +12,7 @@ type
 
   public
     procedure Render; override;
-    procedure Update(var Key: Word); override;
+    procedure Update(var AKey: Word); override;
   end;
 
 implementation
@@ -27,7 +27,7 @@ uses
 
 procedure TSceneShip.Render;
 var
-  I: Integer;
+  LOrder: Integer;
 begin
   inherited Render;
 
@@ -63,33 +63,33 @@ begin
       end
       else
       begin
-        for I := 0 to Orders.Count - 1 do
+        for LOrder := 0 to Orders.Count - 1 do
         begin
-          if (Orders.OrderIndex = I) then
-            DrawText(27, I + 11, '>');
-          DrawButton(29, I + 11, Orders.Count > 1, Chr(Ord('A') + I),
-            StrLim('Go to ' + Orders.Order[I].Name + ' Dock', 40));
+          if (Orders.OrderIndex = LOrder) then
+            DrawText(27, LOrder + 11, '>');
+          DrawButton(29, LOrder + 11, Orders.Count > 1, Chr(Ord('A') + LOrder),
+            StrLim('Go to ' + Orders.Order[LOrder].Name + ' Dock', 40));
         end;
       end;
     end;
   end;
 end;
 
-procedure TSceneShip.Update(var Key: Word);
+procedure TSceneShip.Update(var AKey: Word);
 var
-  I: Integer;
+  LOrder: Integer;
 begin
-  inherited Update(Key);
-  case Key of
+  inherited Update(AKey);
+  case AKey of
     TK_A .. TK_G:
       with Game.Vehicles do
       begin
-        I := Key - TK_A;
+        LOrder := AKey - TK_A;
         with Ship[CurrentVehicle] do
         begin
-          if (I > Orders.Count - 1) then
+          if (LOrder > Orders.Count - 1) then
             Exit;
-          Orders.DelOrder(I);
+          Orders.DelOrder(LOrder);
           Scenes.Render;
         end;
       end;

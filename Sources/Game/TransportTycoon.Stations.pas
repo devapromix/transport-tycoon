@@ -26,7 +26,7 @@ type
   { TDock }
 
   TDock = class(TStation)
-    function CanBuild(const X, Y: Integer): Boolean;
+    function CanBuild(const AX, AY: Integer): Boolean;
   end;
 
 implementation
@@ -73,10 +73,10 @@ end;
 
 { TDock }
 
-function TDock.CanBuild(const X, Y: Integer): Boolean;
+function TDock.CanBuild(const AX, AY: Integer): Boolean;
 begin
   Result := (FLevel < FMaxLevel) and (Game.Money >= Cost) and
-    ((Game.Map.IsNearTile(X, Y, tlWater) or (Game.Map.IsNearTile(X, Y,
+    ((Game.Map.IsNearTile(AX, AY, tlWater) or (Game.Map.IsNearTile(AX, AY,
     tlCanal))))
 end;
 
