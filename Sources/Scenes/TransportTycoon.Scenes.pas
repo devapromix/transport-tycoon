@@ -39,6 +39,8 @@ type
     procedure DrawText(const AX, AY: Integer; AText: string;
       const ATextAlign: Integer = TK_ALIGN_LEFT); overload;
     procedure DrawText(const AY: Integer; AText: string); overload;
+    procedure DrawText(const AX, AY: Integer; const AText: string;
+      const AIsActive: Boolean); overload;
     procedure DrawTextLine(const AX: Integer; const AText: string);
     procedure DrawMoney(const AX, AY, AMoney: Integer;
       const ATextAlign: Integer = TK_ALIGN_RIGHT; AIsFlag: Boolean = False);
@@ -174,6 +176,16 @@ procedure TScene.DrawText(const AX, AY: Integer;
 begin
   terminal_color(AColor);
   terminal_bkcolor(ABkColor);
+  terminal_print(AX, AY, AText);
+end;
+
+procedure TScene.DrawText(const AX, AY: Integer; const AText: string;
+  const AIsActive: Boolean);
+begin
+  if AIsActive then
+    terminal_color(TPalette.Default)
+  else
+    terminal_color(TPalette.Unused);
   terminal_print(AX, AY, AText);
 end;
 

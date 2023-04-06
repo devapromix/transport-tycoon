@@ -44,6 +44,7 @@ begin
   // Fullscreen
   DrawButton(27, 15, 27, True, terminal_check(TK_FULLSCREEN), 'ALT+ENTER',
     'Fullscreen');
+  DrawText(39, 15, 'FULLSCREEN', False);
   AddButton(17, 'Esc', 'Close');
 
   if IsShowBar then
