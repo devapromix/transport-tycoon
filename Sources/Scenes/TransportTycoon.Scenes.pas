@@ -48,6 +48,8 @@ type
       AButton, AText: string); overload;
     procedure DrawButton(const AX, AY, AWidth: Integer;
       AIsActive, AIsFlag: Boolean; AButton, AText: string); overload;
+    procedure DrawButton(const AX, AY, AWidth: Integer;
+      AIsActive, AIsFlag: Boolean; AButton, AText, AColor: string); overload;
     procedure DrawButton(const AY: Integer; AIsActive: Boolean;
       AButton, AText: string); overload;
     procedure DrawButton(const AX, AY: Integer;
@@ -314,6 +316,14 @@ procedure TScene.DrawButton(const AX, AY, AWidth: Integer;
   AIsActive, AIsFlag: Boolean; AButton, AText: string);
 begin
   DrawButton(AX, AY, AIsActive, AButton, AText);
+  DrawText(AX + AWidth - 4, AY, '[c=' + TPalette.Default + '][[' +
+    Check(AIsFlag) + ']][/c]');
+end;
+
+procedure TScene.DrawButton(const AX, AY, AWidth: Integer;
+  AIsActive, AIsFlag: Boolean; AButton, AText, AColor: string);
+begin
+  DrawButton(AX, AY, AButton, AText, AColor);
   DrawText(AX + AWidth - 4, AY, '[c=' + TPalette.Default + '][[' +
     Check(AIsFlag) + ']][/c]');
 end;

@@ -25,7 +25,8 @@ implementation
 uses
   SysUtils,
   BearLibTerminal,
-  TransportTycoon.Game;
+  TransportTycoon.Game,
+  TransportTycoon.Palette;
 
 { TSceneSettingsMenu }
 
@@ -43,8 +44,8 @@ begin
   DrawButton(27, 13, 'S', Format('Game Speed: %s', [GameSpeedStr[Game.Speed]]));
   // Fullscreen
   DrawButton(27, 15, 27, True, terminal_check(TK_FULLSCREEN), 'ALT+ENTER',
-    'Fullscreen');
-  DrawText(39, 15, 'FULLSCREEN', False);
+    'Fullscreen', TPalette.Unused);
+  //DrawText(39, 15, 'FULLSCREEN', False);
   AddButton(17, 'Esc', 'Close');
 
   if IsShowBar then
