@@ -93,7 +93,7 @@ type
     function GetSlotStr(const ASlot: Byte): string;
     function GetFileName(const ASlot: Byte): string;
     function GetSlotName(const ASlot: Byte): string;
-    function SlotFileExists(const ASlot: Byte): Boolean;
+    function IsSlotFileExists(const ASlot: Byte): Boolean;
   end;
 
 var
@@ -339,13 +339,13 @@ var
   LSlot: TSlot;
 begin
   for LSlot := Low(TSlot) to High(TSlot) do
-    if Game.SlotFileExists(LSlot) then
+    if Game.IsSlotFileExists(LSlot) then
       FSlotStr[LSlot] := GetSlotName(LSlot)
     else
       FSlotStr[LSlot] := 'EMPTY SLOT';
 end;
 
-function TGame.SlotFileExists(const ASlot: Byte): Boolean;
+function TGame.IsSlotFileExists(const ASlot: Byte): Boolean;
 begin
   Result := SysUtils.FileExists(GetFileName(ASlot));
 end;
