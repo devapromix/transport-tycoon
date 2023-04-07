@@ -61,7 +61,8 @@ type
       const AButton, AText: string): string;
     procedure DrawTitle(const AY: Integer; const ATitle: string); overload;
     procedure DrawTitle(const ATitle: string); overload;
-    procedure DrawFrame(const AX, AY, AWidth, AHeight: Integer);
+    procedure DrawFrame(const AX, AY, AWidth, AHeight: Integer); overload;
+    procedure DrawFrame(const AWidth, AHeight: Integer); overload;
     procedure DrawMap(const AWidth, AHeight: Integer);
     procedure ClearButtons;
     procedure AddButton(const AY: Integer;
@@ -367,6 +368,15 @@ begin
   terminal_put(AX + AWidth - 1, AY, $2557);
   terminal_put(AX, AY + AHeight - 1, $255A);
   terminal_put(AX + AWidth - 1, AY + AHeight - 1, $255D);
+end;
+
+procedure TScene.DrawFrame(const AWidth, AHeight: Integer);
+var
+  LX, LY: Integer;
+begin
+  LX := (Self.ScreenWidth div 2) - (AWidth div 2);
+  LY := (Self.ScreenHeight div 2) - (AHeight div 2) - 1;
+  DrawFrame(LX, LY, AWidth, AHeight)
 end;
 
 procedure TScene.DrawMap(const AWidth, AHeight: Integer);

@@ -28,21 +28,23 @@ uses
 
 procedure TSceneOpenGameMenu.Render;
 var
-  LSlot: Integer;
+  LSlot: TSlot;
 begin
   Game.Map.Draw(Self.ScreenWidth, Self.ScreenHeight);
 
   DrawFrame(10, 6, 60, 18);
   DrawTitle(8, 'OPEN SAVED GAME');
 
-  for LSlot := 0 to 9 do
-    DrawButton(12, LSlot + 10, False, Chr(Ord('A') + LSlot),
-      'DRINNINGBRIDGETOWN TRANSPORT / 1965 / 23.07.2022');
+  for LSlot := Low(TSlot) to High(TSlot) do
+    DrawButton(12, LSlot + 10, (Game.GetSlotStr(LSlot) <> 'EMPTY SLOT'),
+      Chr(Ord('A') + LSlot), Game.GetSlotStr(LSlot));
 
   AddButton(21, 'Esc', 'Close');
 end;
 
 procedure TSceneOpenGameMenu.Update(var AKey: Word);
+var
+  LSlot: Integer;
 begin
   if (AKey = TK_MOUSE_LEFT) then
   begin
@@ -57,6 +59,12 @@ begin
   case AKey of
     TK_ESCAPE:
       Scenes.SetScene(scMainMenu);
+    TK_A .. TK_J:
+      begin
+        LSlot := AKey - TK_A;
+        if (LSlot >= 0) and (LSlot <= 9) then
+          Game.Load(LSlot);
+      end;
   end;
 end;
 

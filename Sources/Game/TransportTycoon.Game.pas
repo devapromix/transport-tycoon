@@ -16,6 +16,9 @@ uses
 type
   TGameSpeedEnum = (spSlow, spNormal, spFast, spDebug);
 
+type
+  TSlot = 0 .. 9;
+
 const
   GameSpeedStr: array [TGameSpeedEnum] of string = ('Slow', 'Normal',
     'Fast', 'Debug');
@@ -43,6 +46,7 @@ type
     FLockScreen: Boolean;
     FIsOrder: Boolean;
     FRace: TRaceEnum;
+    FSlotStr: array [TSlot] of string;
     procedure ForceDirs;
   public const
     MaxLoan = 200000;
@@ -83,8 +87,13 @@ type
     procedure PrevSpeed;
     procedure NextRace;
     procedure PrevRace;
-    procedure Save;
-    procedure Load;
+    procedure ScanSaveDir;
+    procedure Save(const ASlot: Byte);
+    procedure Load(const ASlot: Byte);
+    function GetSlotStr(const ASlot: Byte): string;
+    function GetFileName(const ASlot: Byte): string;
+    function GetSlotName(const ASlot: Byte): string;
+    function SlotFileExists(const ASlot: Byte): Boolean;
   end;
 
 var
@@ -93,7 +102,7 @@ var
 implementation
 
 uses
-  Math,
+  Math, dialogs,
   IniFiles;
 
 constructor TGame.Create;
@@ -140,10 +149,39 @@ begin
   inherited Destroy;
 end;
 
+function TGame.GetFileName(const ASlot: Byte): string;
+begin
+  Result := GetPath(Format('Saves\%d', [ASlot])) + 'game.sav';
+end;
+
 function TGame.GetPath(ASubDir: string): string;
 begin
   Result := ExtractFilePath(ParamStr(0));
   Result := IncludeTrailingPathDelimiter(Result + ASubDir);
+end;
+
+function TGame.GetSlotName(const ASlot: Byte): string;
+var
+  LIniFile: TMemIniFile;
+  LYear: Integer;
+  LCompanyName, LDate: string;
+begin
+  Result := '';
+  LIniFile := TMemIniFile.Create(GetFileName(ASlot), TEncoding.UTF8);
+  try
+    LDate := LIniFile.ReadString('Game', 'Date', DateTimeToStr(Date));
+    LYear := LIniFile.ReadInteger('Calendar', 'Year', StartYear);
+    LCompanyName := LIniFile.ReadString('Company', 'Name', '');
+    Result := Format('%s / %d / %s', [LCompanyName, LYear, LDate]);
+  finally
+    FreeAndNil(LIniFile);
+  end;
+
+end;
+
+function TGame.GetSlotStr(const ASlot: Byte): string;
+begin
+  Result := FSlotStr[ASlot];
 end;
 
 procedure TGame.LoadSettings;
@@ -240,9 +278,32 @@ begin
   FMoney := FMoney + AMoney;
 end;
 
-procedure TGame.Load;
+procedure TGame.Load(const ASlot: Byte);
 begin
 
+end;
+
+procedure TGame.Save(const ASlot: Byte);
+var
+  LIniFile: TMemIniFile;
+begin
+  LIniFile := TMemIniFile.Create(GetFileName(ASlot), TEncoding.UTF8);
+  try
+    LIniFile.WriteString('Game', 'Date', DateTimeToStr(Date));
+    LIniFile.WriteInteger('Game', 'Turn', Game.Turn);
+    LIniFile.WriteInteger('Game', 'Loan', Game.Loan);
+    LIniFile.WriteInteger('Game', 'Money', Game.Money);
+    // Calendar
+    LIniFile.WriteInteger('Calendar', 'Day', Game.Calendar.Day);
+    LIniFile.WriteInteger('Calendar', 'Month', Game.Calendar.Month);
+    LIniFile.WriteInteger('Calendar', 'Year', Game.Calendar.Year);
+    // Company
+    LIniFile.WriteString('Company', 'Name', UpperCase(Game.Company.Name));
+    //
+    LIniFile.UpdateFile;
+  finally
+    FreeAndNil(LIniFile);
+  end;
 end;
 
 procedure TGame.ForceDirs;
@@ -252,11 +313,6 @@ begin
   ForceDirectories(GetPath('Saves'));
   for LSlot := 0 to 9 do
     ForceDirectories(GetPath(Format('Saves/%d', [LSlot])));
-end;
-
-procedure TGame.Save;
-begin
-
 end;
 
 procedure TGame.SaveSettings;
@@ -276,6 +332,22 @@ begin
   finally
     FreeAndNil(LIniFile);
   end;
+end;
+
+procedure TGame.ScanSaveDir;
+var
+  LSlot: TSlot;
+begin
+  for LSlot := Low(TSlot) to High(TSlot) do
+    if Game.SlotFileExists(LSlot) then
+      FSlotStr[LSlot] := GetSlotName(LSlot)
+    else
+      FSlotStr[LSlot] := 'EMPTY SLOT';
+end;
+
+function TGame.SlotFileExists(const ASlot: Byte): Boolean;
+begin
+  Result := SysUtils.FileExists(GetFileName(ASlot));
 end;
 
 procedure TGame.Step;

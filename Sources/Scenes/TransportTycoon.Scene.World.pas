@@ -139,7 +139,10 @@ begin
       TK_N:
         Scenes.SetScene(scTowns);
       TK_U:
-        Scenes.SetScene(scSaveGameMenu);
+        begin
+          Game.ScanSaveDir;
+          Scenes.SetScene(scSaveGameMenu);
+        end;
       TK_P:
         begin
           Game.IsPause := not Game.IsPause;
