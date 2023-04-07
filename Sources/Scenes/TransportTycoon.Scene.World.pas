@@ -140,6 +140,7 @@ begin
         Scenes.SetScene(scTowns);
       TK_U:
         begin
+          Game.IsPause := True;
           Game.ScanSaveDir;
           Scenes.SetScene(scSaveGameMenu);
         end;

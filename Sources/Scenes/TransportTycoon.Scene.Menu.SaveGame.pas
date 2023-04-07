@@ -41,12 +41,15 @@ procedure TSceneSaveGameMenu.Render;
 var
   LSlot: TSlot;
 begin
-  Game.Map.Draw(Self.ScreenWidth, Self.ScreenHeight - 1);
+  DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
+
   DrawFrame(10, 6, 60, 18);
+
   DrawTitle(8, 'SAVE CURRENT GAME');
   for LSlot := Low(TSlot) to High(TSlot) do
     DrawButton(12, LSlot + 10, True, Chr(Ord('A') + LSlot),
       Game.GetSlotStr(LSlot));
+
   case FSubScene of
     sscDefault:
       begin
@@ -57,7 +60,7 @@ begin
         DrawFrame(20, 10, 40, 9);
         DrawTitle(12, 'SAVE CURRENT GAME');
         DrawText(14, 'Replace saved game?');
-        AddButton(16, 'Enter', 'Save');
+        AddButton(16, 'Enter', 'Replace');
         AddButton(16, 'Esc', 'Cancel');
         DrawText(35, 21, '[[ESC]] CLOSE', False);
       end;
@@ -70,6 +73,7 @@ begin
         DrawText(35, 21, '[[ESC]] CLOSE', False);
       end;
   end;
+  DrawGameBar;
 end;
 
 procedure TSceneSaveGameMenu.Save;
@@ -92,16 +96,20 @@ begin
           end;
         end;
       sscPrompt:
+        if (GetButtonsY = MY) then
         begin
-
+          case MX of
+            35 .. 45:
+              AKey := TK_ESCAPE;
+          end;
         end;
       sscSaved:
-        case MY of
-          16:
-            case MX of
-              35 .. 45:
-                AKey := TK_ESCAPE;
-            end;
+        if (GetButtonsY = MY) then
+        begin
+          case MX of
+            34 .. 46:
+              AKey := TK_ESCAPE;
+          end;
         end;
     end;
   end;
@@ -109,7 +117,10 @@ begin
     sscDefault:
       case AKey of
         TK_ESCAPE:
-          Scenes.SetScene(scWorld);
+          begin
+            Game.IsPause := False;
+            Scenes.SetScene(scWorld);
+          end;
         TK_A .. TK_J:
           begin
             FCurrentSlot := AKey - TK_A;
@@ -131,6 +142,7 @@ begin
       case AKey of
         TK_ENTER:
           begin
+            Game.IsPause := False;
             FSubScene := sscDefault;
             Scenes.SetScene(scWorld);
           end;
