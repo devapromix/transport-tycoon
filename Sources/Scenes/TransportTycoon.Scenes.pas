@@ -83,7 +83,7 @@ type
     procedure Scroll(const ADirectionEnum: TDirectionEnum);
     function Check(const AIsCheck: Boolean): string;
     property TextLineY: Integer read FTextLineY write FTextLineY;
-    function StrLim(const S: string; const N: Integer): string;
+    function StrLim(const AStr: string; const ALength: Integer): string;
   end;
 
 type
@@ -221,59 +221,59 @@ end;
 procedure TScene.AddButton(const AY: Integer; const AIsActive: Boolean;
   const AButton, AText: string);
 var
-  I: Integer;
+  LButton: Integer;
 begin
   FButtonsY := AY;
-  for I := Low(FButtons) to High(FButtons) do
-    if (FButtons[I].ButtonKey = '') then
+  for LButton := Low(FButtons) to High(FButtons) do
+    if (FButtons[LButton].ButtonKey = '') then
     begin
-      FButtons[I].ButtonIsActive := AIsActive;
-      FButtons[I].ButtonKey := AButton;
-      FButtons[I].ButtonLabel := AText;
+      FButtons[LButton].ButtonIsActive := AIsActive;
+      FButtons[LButton].ButtonKey := AButton;
+      FButtons[LButton].ButtonLabel := AText;
       Exit;
     end;
 end;
 
 procedure TScene.ClearButtons;
 var
-  I: Integer;
+  LButton: Integer;
 begin
-  for I := Low(FButtons) to High(FButtons) do
+  for LButton := Low(FButtons) to High(FButtons) do
   begin
-    FButtons[I].ButtonKey := '';
-    FButtons[I].ButtonLabel := '';
+    FButtons[LButton].ButtonKey := '';
+    FButtons[LButton].ButtonLabel := '';
   end;
 end;
 
 procedure TScene.DrawGameBar;
 var
-  Y: Integer;
+  LY: Integer;
 begin
   try
-    Y := Self.ScreenHeight - 1;
+    LY := Self.ScreenHeight - 1;
     terminal_color(TPalette.Default);
     terminal_bkcolor(TPalette.Background);
-    terminal_clear_area(0, Y, 80, 1);
-    DrawMoney(0, Y, Game.Money, TK_ALIGN_LEFT, True);
-    DrawText(12, Y, Format('Turn:%d', [Game.Turn]));
-    DrawButton(25, Y, 'B', 'Build');
-    DrawText(56, Y, Game.Calendar.GetDate);
+    terminal_clear_area(0, LY, 80, 1);
+    DrawMoney(0, LY, Game.Money, TK_ALIGN_LEFT, True);
+    DrawText(12, LY, Format('Turn:%d', [Game.Turn]));
+    DrawButton(25, LY, 'B', 'Build');
+    DrawText(56, LY, Game.Calendar.GetDate);
     if (Scenes.FSceneEnum <> scWorld) then
       if Game.Construct.IsConstruct then
-        DrawButton(70, Y, False, 'ESC', 'EXIT')
+        DrawButton(70, LY, False, 'ESC', 'EXIT')
       else
-        DrawButton(70, Y, False, 'ESC', 'MENU')
+        DrawButton(70, LY, False, 'ESC', 'MENU')
     else if Game.Construct.IsConstruct then
-      DrawButton(70, Y, 'ESC', 'EXIT')
+      DrawButton(70, LY, 'ESC', 'EXIT')
     else
-      DrawButton(70, Y, 'ESC', 'MENU');
+      DrawButton(70, LY, 'ESC', 'MENU');
     if (Scenes.FSceneEnum <> scWorld) and (Scenes.FSceneEnum <> scGameMenu) then
     begin
-      DrawButton(25, Y, False, 'B', 'Build');
+      DrawButton(25, LY, False, 'B', 'Build');
       if Game.IsPause then
-        DrawButton(35, Y, False, 'P', 'Paused')
+        DrawButton(35, LY, False, 'P', 'Paused')
       else
-        DrawButton(35, Y, False, 'P', 'Pause');
+        DrawButton(35, LY, False, 'P', 'Pause');
     end
     else
     begin
@@ -281,7 +281,7 @@ begin
         DrawText(35, ScreenHeight - 1, '[c=' + TPalette.ButtonKey +
           '][[P]][/c] [c=red]PAUSED[/c]')
       else
-        DrawButton(35, Y, 'P', 'Pause');
+        DrawButton(35, LY, 'P', 'Pause');
     end;
   except
     on E: Exception do
@@ -291,14 +291,14 @@ end;
 
 procedure TScene.DrawBuildBar;
 var
-  Y: Integer;
+  LY: Integer;
 begin
   try
-    Y := 0;
+    LY := 0;
     terminal_color(TPalette.Default);
     terminal_bkcolor(TPalette.Background);
-    terminal_clear_area(0, Y, 80, 1);
-    DrawText(Y, Game.Construct.GetConstructStr);
+    terminal_clear_area(0, LY, 80, 1);
+    DrawText(LY, Game.Construct.GetConstructStr);
   except
     on E: Exception do
       Log.Add('TScene.DrawBuildBar', E.Message);
@@ -419,14 +419,14 @@ begin
   end;
 end;
 
-function TScene.StrLim(const S: string; const N: Integer): string;
+function TScene.StrLim(const AStr: string; const ALength: Integer): string;
 begin
-  if Length(S) > N then
+  if Length(AStr) > ALength then
   begin
-    Result := Trim(Copy(S, 1, N - 3)) + '...';
+    Result := Trim(Copy(AStr, 1, ALength - 3)) + '...';
   end
   else
-    Result := S;
+    Result := AStr;
 end;
 
 function TScene.Check(const AIsCheck: Boolean): string;
@@ -439,21 +439,21 @@ end;
 
 procedure TScene.Scroll(const ADirectionEnum: TDirectionEnum);
 var
-  F: Boolean;
+  LF: Boolean;
 begin
-  F := False;
+  LF := False;
   try
     case ADirectionEnum of
       drEast:
-        F := (Game.Map.Left < Game.Map.Width - Self.ScreenWidth);
+        LF := (Game.Map.Left < Game.Map.Width - Self.ScreenWidth);
       drWest:
-        F := (Game.Map.Left > 0);
+        LF := (Game.Map.Left > 0);
       drSouth:
-        F := (Game.Map.Top <= Game.Map.Height - Self.ScreenHeight);
+        LF := (Game.Map.Top <= Game.Map.Height - Self.ScreenHeight);
       drNorth:
-        F := (Game.Map.Top > 0);
+        LF := (Game.Map.Top > 0);
     end;
-    if F then
+    if LF then
     begin
       Game.Map.Top := Game.Map.Top + Direction[ADirectionEnum].Y;
       Game.Map.Left := Game.Map.Left + Direction[ADirectionEnum].X;
@@ -485,19 +485,20 @@ end;
 
 procedure TScene.RenderButtons;
 var
-  I: Integer;
-  S: string;
+  LButton: Integer;
+  LLine: string;
 begin
-  S := '';
-  for I := Low(FButtons) to High(FButtons) do
-    if (FButtons[I].ButtonKey <> '') then
+  LLine := '';
+  for LButton := Low(FButtons) to High(FButtons) do
+    if (FButtons[LButton].ButtonKey <> '') then
     begin
-      S := S + MakeButton(FButtons[I].ButtonIsActive, FButtons[I].ButtonKey,
-        FButtons[I].ButtonLabel);
-      if (I < High(FButtons)) and (FButtons[I + 1].ButtonKey <> '') then
-        S := S + ' | ';
+      LLine := LLine + MakeButton(FButtons[LButton].ButtonIsActive,
+        FButtons[LButton].ButtonKey, FButtons[LButton].ButtonLabel);
+      if (LButton < High(FButtons)) and (FButtons[LButton + 1].ButtonKey <> '')
+      then
+        LLine := LLine + ' | ';
     end;
-  terminal_print(ScreenWidth div 2, FButtonsY, TK_ALIGN_CENTER, S);
+  terminal_print(ScreenWidth div 2, FButtonsY, TK_ALIGN_CENTER, LLine);
 end;
 
 constructor TScenes.Create;
@@ -580,13 +581,13 @@ end;
 
 procedure TScenes.SetScene(ASceneEnum, ABackSceneEnum: TSceneEnum);
 var
-  I: Integer;
+  LSceneEnum: Integer;
 begin
   try
-    for I := 0 to High(FBackSceneEnum) do
-      if FBackSceneEnum[I] = scWorld then
+    for LSceneEnum := 0 to High(FBackSceneEnum) do
+      if FBackSceneEnum[LSceneEnum] = scWorld then
       begin
-        FBackSceneEnum[I] := ABackSceneEnum;
+        FBackSceneEnum[LSceneEnum] := ABackSceneEnum;
         Break;
       end;
     SetScene(ASceneEnum);
@@ -623,15 +624,15 @@ end;
 
 procedure TScenes.Back;
 var
-  I: Integer;
+  LSceneEnum: Integer;
 begin
   try
-    for I := High(FBackSceneEnum) downto 0 do
-      if FBackSceneEnum[I] <> scWorld then
+    for LSceneEnum := High(FBackSceneEnum) downto 0 do
+      if FBackSceneEnum[LSceneEnum] <> scWorld then
       begin
-        Self.Scene := FBackSceneEnum[I];
+        Self.Scene := FBackSceneEnum[LSceneEnum];
         Self.Render;
-        FBackSceneEnum[I] := scWorld;
+        FBackSceneEnum[LSceneEnum] := scWorld;
         Exit;
       end;
     if FBackSceneEnum[0] = scWorld then
@@ -644,11 +645,11 @@ end;
 
 procedure TScenes.ClearQScenes;
 var
-  I: Integer;
+  LSceneEnum: Integer;
 begin
   try
-    for I := 0 to High(FBackSceneEnum) do
-      FBackSceneEnum[I] := scWorld;
+    for LSceneEnum := 0 to High(FBackSceneEnum) do
+      FBackSceneEnum[LSceneEnum] := scWorld;
   except
     on E: Exception do
       Log.Add('TScenes.ClearQScenes', E.Message);
