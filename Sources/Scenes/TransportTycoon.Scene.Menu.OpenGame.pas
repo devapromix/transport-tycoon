@@ -44,7 +44,7 @@ end;
 
 procedure TSceneOpenGameMenu.Update(var AKey: Word);
 var
-  LSlot: Integer;
+  LSlot: TSlot;
 begin
   if (AKey = TK_MOUSE_LEFT) then
   begin
@@ -62,8 +62,7 @@ begin
     TK_A .. TK_J:
       begin
         LSlot := AKey - TK_A;
-        if (LSlot >= 0) and (LSlot <= 9) then
-          Game.Load(LSlot);
+        Game.Load(LSlot);
       end;
   end;
 end;

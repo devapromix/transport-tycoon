@@ -88,18 +88,29 @@ begin
   begin
     case FSubScene of
       sscDefault:
-        if (GetButtonsY = MY) then
         begin
           case MX of
-            35 .. 45:
-              AKey := TK_ESCAPE;
+            12 .. 66:
+              case MY of
+                10 .. 19:
+                  AKey := TK_A + (MY - 10);
+              end;
+          end;
+          if (GetButtonsY = MY) then
+          begin
+            case MX of
+              35 .. 45:
+                AKey := TK_ESCAPE;
+            end;
           end;
         end;
       sscPrompt:
         if (GetButtonsY = MY) then
         begin
           case MX of
-            35 .. 45:
+            25 .. 39:
+              AKey := TK_ENTER;
+            43 .. 54:
               AKey := TK_ESCAPE;
           end;
         end;
@@ -108,7 +119,7 @@ begin
         begin
           case MX of
             34 .. 46:
-              AKey := TK_ESCAPE;
+              AKey := TK_ENTER;
           end;
         end;
     end;
