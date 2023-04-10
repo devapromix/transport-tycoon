@@ -49,28 +49,28 @@ procedure TSceneGenMenu.Update(var AKey: Word);
 var
   LIsPrev: Boolean;
 
-  procedure UpdateKey(var Key: Word);
+  procedure UpdateKey(var AKey: Word);
   begin
     case MX of
       12 .. 36:
         case MY of
           13:
-            Key := TK_F;
+            AKey := TK_F;
           14:
-            Key := TK_H;
+            AKey := TK_H;
           15:
-            Key := TK_J;
+            AKey := TK_J;
           16:
-            Key := TK_R;
+            AKey := TK_R;
         end;
       42 .. 66:
         case MY of
           13:
-            Key := TK_A;
+            AKey := TK_A;
           14:
-            Key := TK_B;
+            AKey := TK_B;
           15:
-            Key := TK_C;
+            AKey := TK_C;
         end;
     end;
   end;

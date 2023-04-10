@@ -59,8 +59,8 @@ uses
   TransportTycoon.Scene.Menu.Game in 'Scenes\TransportTycoon.Scene.Menu.Game.pas';
 
 var
-  Key: Word = 0;
-  Tmp: Word = 0;
+  LKey: Word = 0;
+  LTick: Word = 0;
 
 begin
 {$IFDEF DEBUG}
@@ -82,22 +82,22 @@ begin
     terminal_refresh();
     repeat
       Scenes.Render;
-      Key := 0;
+      LKey := 0;
       if terminal_has_input() then
       begin
-        Key := terminal_read();
-        Scenes.Update(Key);
+        LKey := terminal_read();
+        Scenes.Update(LKey);
         Continue;
       end;
       terminal_refresh();
       terminal_delay(25);
-      Inc(Tmp);
-      if (Tmp > GameSpeedValue[Game.Speed]) then
+      Inc(LTick);
+      if (LTick > GameSpeedValue[Game.Speed]) then
       begin
-        Tmp := 0;
+        LTick := 0;
         Game.Step;
       end;
-    until (Key = TK_CLOSE);
+    until (LKey = TK_CLOSE);
     terminal_close();
   finally
     FreeAndNil(Scenes);

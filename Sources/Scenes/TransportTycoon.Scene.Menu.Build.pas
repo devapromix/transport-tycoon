@@ -87,9 +87,9 @@ begin
           13:
             AKey := TK_B;
           { 14:
-            Key := TK_;
+            AKey := TK_;
             15:
-            Key := TK_; }
+            AKey := TK_; }
           16:
             AKey := TK_X;
         end;
@@ -100,11 +100,11 @@ begin
           13:
             AKey := TK_T;
           { 14:
-            Key := TK_;
+            AKey := TK_;
             15:
-            Key := TK_;
+            AKey := TK_;
             16:
-            Key := TK_; }
+            AKey := TK_; }
         end;
     end;
   end;
