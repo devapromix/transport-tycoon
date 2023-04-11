@@ -53,6 +53,7 @@ type
     LoanMoney = 10000;
     StartMoney = MaxLoan div 2;
     Version = '0.4';
+    EmptySlotStr = 'EMPTY SLOT';
   public
     constructor Create;
     destructor Destroy; override;
