@@ -27,7 +27,7 @@ type
 implementation
 
 uses
-  SysUtils, dialogs,
+  SysUtils,
   BearLibTerminal;
 
 { TSceneOpenGameMenu }
@@ -40,7 +40,7 @@ end;
 procedure TSceneOpenGameMenu.Load(const ASlot: TSlot);
 begin
   FSubScene := oscDefault;
-  ShowMessage(IntToStr(ASlot));
+  Game.Save(ASlot);
 end;
 
 procedure TSceneOpenGameMenu.Render;
@@ -87,19 +87,18 @@ begin
           end;
         end;
     end;
-    case FSubScene of
-      oscDefault:
-        case AKey of
-          TK_ESCAPE:
-            Scenes.SetScene(scMainMenu);
-          TK_A .. TK_J:
-            begin
-              LSlot := AKey - TK_A;
-              Game.Load(LSlot);
-            end;
-        end;
-
-    end;
+  end;
+  case FSubScene of
+    oscDefault:
+      case AKey of
+        TK_ESCAPE:
+          Scenes.SetScene(scMainMenu);
+        TK_A .. TK_J:
+          begin
+            LSlot := AKey - TK_A;
+            Load(LSlot);
+          end;
+      end;
   end;
 end;
 
