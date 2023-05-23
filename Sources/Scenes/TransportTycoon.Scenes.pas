@@ -353,6 +353,16 @@ procedure TScene.DrawFrame(const AX, AY, AWidth, AHeight: Integer);
 var
   LX, LY: Integer;
 begin
+  terminal_bkcolor(TPalette.FrameBackground);
+  terminal_clear_area(AX + 1, AY + 1, AWidth, AHeight);
+
+  for LX := AX + 1 to AX + AWidth - 1 do
+    Game.Map.DrawTile(LX, AY + AHeight, False);
+  for LY := AY + 1 to AY + AHeight do
+    Game.Map.DrawTile(AX + AWidth, LY, False);
+
+  terminal_color(TPalette.Default);
+  terminal_bkcolor(TPalette.Background);
   terminal_clear_area(AX, AY, AWidth, AHeight);
   for LX := AX + 1 to AX + AWidth - 2 do
   begin

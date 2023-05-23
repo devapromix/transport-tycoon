@@ -143,7 +143,6 @@ type
     procedure Resize;
     function SizeCoef: Integer;
     function MapIndCount: Integer;
-    procedure DrawTile(const AX, AY: Integer);
     procedure AddRiver(const ADirectionEnum: TDirectionEnum);
     procedure AddIndustries();
   public
@@ -191,6 +190,7 @@ type
     function IsShipPath(const AX, AY: Integer): Boolean;
     function IsRoadVehiclePath(const AX, AY: Integer): Boolean;
     function GetTileEnum: TTileEnum;
+    procedure DrawTile(const AX, AY: Integer; const AFlag: Boolean = True);
   end;
 
 implementation
@@ -536,7 +536,7 @@ begin
   end;
 end;
 
-procedure TMap.DrawTile(const AX, AY: Integer);
+procedure TMap.DrawTile(const AX, AY: Integer; const AFlag: Boolean = True);
 var
   LX, LY: Integer;
   LIsFlag: Boolean;
@@ -545,15 +545,22 @@ begin
     LX := EnsureRange(Left + AX, 0, MapSizeInt[Game.Map.MapSize]);
     LY := EnsureRange(Top + AY, 0, MapSizeInt[Game.Map.MapSize]);
     LIsFlag := (AX = 0) and (AY = 0);
-    if LIsFlag or (Tile[FTileEnum[LX][LY]].BkColor <> FLastBkColor) then
+    if not AFlag then
     begin
-      terminal_bkcolor(Tile[FTileEnum[LX][LY]].BkColor);
-      FLastBkColor := Tile[FTileEnum[LX][LY]].BkColor;
-    end;
-    if LIsFlag or (Tile[FTileEnum[LX][LY]].Color <> FLastColor) then
+      terminal_color(TPalette.Background);
+    end
+    else
     begin
-      terminal_color(Tile[FTileEnum[LX][LY]].Color);
-      FLastColor := Tile[FTileEnum[LX][LY]].Color;
+      if LIsFlag or (Tile[FTileEnum[LX][LY]].BkColor <> FLastBkColor) then
+      begin
+        terminal_bkcolor(Tile[FTileEnum[LX][LY]].BkColor);
+        FLastBkColor := Tile[FTileEnum[LX][LY]].BkColor;
+      end;
+      if LIsFlag or (Tile[FTileEnum[LX][LY]].Color <> FLastColor) then
+      begin
+        terminal_color(Tile[FTileEnum[LX][LY]].Color);
+        FLastColor := Tile[FTileEnum[LX][LY]].Color;
+      end;
     end;
     terminal_put(AX, AY, Tile[FTileEnum[LX][LY]].Glyph);
   except
