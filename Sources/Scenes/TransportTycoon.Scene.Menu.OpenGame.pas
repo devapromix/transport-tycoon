@@ -7,7 +7,7 @@ uses
   TransportTycoon.Game;
 
 type
-  TOpenMenuSubScene = (oscDefault);
+  TOpenMenuSubScene = (oscDefault, oscPrompt);
 
 type
 
@@ -17,7 +17,7 @@ type
   private
     FSubScene: TOpenMenuSubScene;
     FCurrentSlot: TSlot;
-    procedure Load(const ASlot: TSlot);
+    procedure Load;
   public
     constructor Create;
     procedure Render; override;
@@ -37,10 +37,17 @@ begin
   FSubScene := oscDefault;
 end;
 
-procedure TSceneOpenGameMenu.Load(const ASlot: TSlot);
+procedure TSceneOpenGameMenu.Load;
 begin
-  FSubScene := oscDefault;
-  Game.Save(ASlot);
+  if Game.IsGame then
+  begin
+    FSubScene := oscPrompt;
+  end
+  else
+  begin
+    FSubScene := oscDefault;
+    Game.Load(FCurrentSlot);
+  end;
 end;
 
 procedure TSceneOpenGameMenu.Render;
@@ -59,12 +66,19 @@ begin
   case FSubScene of
     oscDefault:
       AddButton(21, 'Esc', 'Close');
+    oscPrompt:
+      begin
+        DrawFrame(20, 10, 40, 9);
+        DrawTitle(12, 'OPEN SAVED GAME');
+        DrawText(14, 'Continue?');
+        AddButton(16, 'Enter', 'Open');
+        AddButton(16, 'Esc', 'Cancel');
+        DrawText(35, 21, '[[ESC]] CLOSE', False);
+      end;
   end;
 end;
 
 procedure TSceneOpenGameMenu.Update(var AKey: Word);
-var
-  LSlot: TSlot;
 begin
   if (AKey = TK_MOUSE_LEFT) then
   begin
@@ -86,6 +100,16 @@ begin
             end;
           end;
         end;
+      oscPrompt:
+        if (GetButtonsY = MY) then
+        begin
+          case MX of
+            27 .. 38:
+              AKey := TK_ENTER;
+            42 .. 53:
+              AKey := TK_ESCAPE;
+          end;
+        end;
     end;
   end;
   case FSubScene of
@@ -95,8 +119,20 @@ begin
           Scenes.SetScene(scMainMenu);
         TK_A .. TK_J:
           begin
-            LSlot := AKey - TK_A;
-            Load(LSlot);
+            FCurrentSlot := AKey - TK_A;
+            if (FCurrentSlot >= 0) and (FCurrentSlot <= 9) then
+              if Game.IsSlotFileExists(FCurrentSlot) then
+                Load;
+          end;
+      end;
+    oscPrompt:
+      case AKey of
+        TK_ESCAPE:
+          FSubScene := oscDefault;
+        TK_ENTER:
+          begin
+            Game.IsGame := False;
+            Load;
           end;
       end;
   end;

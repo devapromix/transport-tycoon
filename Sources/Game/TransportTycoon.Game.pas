@@ -103,7 +103,8 @@ var
 implementation
 
 uses
-  Math, dialogs,
+  Math,
+  Dialogs,
   IniFiles;
 
 constructor TGame.Create;
@@ -280,8 +281,17 @@ begin
 end;
 
 procedure TGame.Load(const ASlot: Byte);
+var
+  LIniFile: TMemIniFile;
+  LCompanyName: string;
 begin
-
+  LIniFile := TMemIniFile.Create(GetFileName(ASlot), TEncoding.UTF8);
+  try
+    LCompanyName := LIniFile.ReadString('Company', 'Name', 'NONAME');
+    ShowMessage(LCompanyName);
+  finally
+    FreeAndNil(LIniFile);
+  end;
 end;
 
 procedure TGame.Save(const ASlot: Byte);
