@@ -158,6 +158,7 @@
         <DCCReference Include="Scenes\TransportTycoon.Scene.Vehicle.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Station.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.Game.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.OpenGame.Prompt.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

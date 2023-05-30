@@ -56,7 +56,8 @@ uses
   TransportTycoon.Scene.VehicleDepot in 'Scenes\TransportTycoon.Scene.VehicleDepot.pas',
   TransportTycoon.Scene.Vehicle in 'Scenes\TransportTycoon.Scene.Vehicle.pas',
   TransportTycoon.Scene.Station in 'Scenes\TransportTycoon.Scene.Station.pas',
-  TransportTycoon.Scene.Menu.Game in 'Scenes\TransportTycoon.Scene.Menu.Game.pas';
+  TransportTycoon.Scene.Menu.Game in 'Scenes\TransportTycoon.Scene.Menu.Game.pas',
+  TransportTycoon.Scene.Menu.OpenGame.Prompt in 'Scenes\TransportTycoon.Scene.Menu.OpenGame.Prompt.pas';
 
 var
   LKey: Word = 0;
