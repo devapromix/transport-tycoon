@@ -29,10 +29,10 @@ uses
   TransportTycoon.Scene.Airport in 'Scenes\TransportTycoon.Scene.Airport.pas',
   TransportTycoon.Scene.Menu.Main in 'Scenes\TransportTycoon.Scene.Menu.Main.pas',
   TransportTycoon.Scene.Menu.Build in 'Scenes\TransportTycoon.Scene.Menu.Build.pas',
-  TransportTycoon.Scene.Menu.SaveGame in 'Scenes\TransportTycoon.Scene.Menu.SaveGame.pas',
   TransportTycoon.Scene.Menu.Gen in 'Scenes\TransportTycoon.Scene.Menu.Gen.pas',
   TransportTycoon.Scene.Menu.Settings in 'Scenes\TransportTycoon.Scene.Menu.Settings.pas',
   TransportTycoon.Scene.Menu.OpenGame in 'Scenes\TransportTycoon.Scene.Menu.OpenGame.pas',
+  TransportTycoon.Scene.Menu.SaveGame in 'Scenes\TransportTycoon.Scene.Menu.SaveGame.pas',
   TransportTycoon.Scene.AircraftHangar in 'Scenes\TransportTycoon.Scene.AircraftHangar.pas',
   TransportTycoon.Scene.Aircraft in 'Scenes\TransportTycoon.Scene.Aircraft.pas',
   TransportTycoon.Scene.Aircrafts in 'Scenes\TransportTycoon.Scene.Aircrafts.pas',
@@ -57,7 +57,9 @@ uses
   TransportTycoon.Scene.Vehicle in 'Scenes\TransportTycoon.Scene.Vehicle.pas',
   TransportTycoon.Scene.Station in 'Scenes\TransportTycoon.Scene.Station.pas',
   TransportTycoon.Scene.Menu.Game in 'Scenes\TransportTycoon.Scene.Menu.Game.pas',
-  TransportTycoon.Scene.Menu.OpenGame.Prompt in 'Scenes\TransportTycoon.Scene.Menu.OpenGame.Prompt.pas';
+  TransportTycoon.Scene.Menu.OpenGame.Prompt in 'Scenes\TransportTycoon.Scene.Menu.OpenGame.Prompt.pas',
+  TransportTycoon.Scene.Menu.SaveGame.Prompt in 'Scenes\TransportTycoon.Scene.Menu.SaveGame.Prompt.pas',
+  TransportTycoon.Scene.Menu.SaveGame.Saved in 'Scenes\TransportTycoon.Scene.Menu.SaveGame.Saved.pas';
 
 var
   LKey: Word = 0;

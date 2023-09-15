@@ -11,8 +11,9 @@ type
     scBuildInTown, scAirport, scAircraftHangar, scAircraft, scAircrafts,
     scFinances, scTowns, scCompany, scIndustry, scBuildNearIndustry, scDock,
     scShip, scShips, scShipDepot, scIndustries, scBuildMenu, scSettingsMenu,
-    scOpenGameMenu, scOpenGamePromptMenu, scSaveGameMenu, scRoadVehicle,
-    scRoadVehicles, scTruckLoadingBay, scBusStation, scRoadVehicleDepot);
+    scOpenGameMenu, scOpenGamePromptMenu, scSaveGameMenu, scSaveGamePromptMenu,
+    scSaveGameSavedMenu, scRoadVehicle, scRoadVehicles, scTruckLoadingBay,
+    scBusStation, scRoadVehicleDepot);
 
 type
   TButtonRec = record
@@ -144,6 +145,8 @@ uses
   TransportTycoon.Scene.Menu.OpenGame,
   TransportTycoon.Scene.Menu.OpenGame.Prompt,
   TransportTycoon.Scene.Menu.SaveGame,
+  TransportTycoon.Scene.Menu.SaveGame.Prompt,
+  TransportTycoon.Scene.Menu.SaveGame.Saved,
   TransportTycoon.Scene.RoadVehicle,
   TransportTycoon.Scene.BusStation,
   TransportTycoon.Scene.TruckLoadingBay,
@@ -551,6 +554,8 @@ begin
   FScene[scOpenGameMenu] := TSceneOpenGameMenu.Create;
   FScene[scOpenGamePromptMenu] := TSceneOpenGamePromptMenu.Create;
   FScene[scSaveGameMenu] := TSceneSaveGameMenu.Create;
+  FScene[scSaveGamePromptMenu] := TSceneSaveGamePromptMenu.Create;
+  FScene[scSaveGameSavedMenu] := TSceneSaveGameSavedMenu.Create;
   FScene[scRoadVehicle] := TSceneRoadVehicle.Create;
   FScene[scRoadVehicles] := TSceneRoadVehicles.Create;
   FScene[scBusStation] := TSceneBusStation.Create;

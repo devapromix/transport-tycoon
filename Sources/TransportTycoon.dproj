@@ -130,10 +130,10 @@
         <DCCReference Include="Scenes\TransportTycoon.Scene.Airport.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.Main.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.Build.pas"/>
-        <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.SaveGame.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.Gen.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.Settings.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.OpenGame.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.SaveGame.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.AircraftHangar.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Aircraft.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Aircrafts.pas"/>
@@ -159,6 +159,8 @@
         <DCCReference Include="Scenes\TransportTycoon.Scene.Station.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.Game.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.OpenGame.Prompt.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.SaveGame.Prompt.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.SaveGame.Saved.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
