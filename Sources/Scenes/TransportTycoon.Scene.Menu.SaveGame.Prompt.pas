@@ -22,7 +22,8 @@ implementation
 
 uses
   SysUtils,
-  BearLibTerminal;
+  BearLibTerminal,
+  TransportTycoon.Scene.Menu.SaveGame;
 
 { TSceneSaveGameMenu }
 
@@ -31,13 +32,6 @@ var
   LSlot: TSlot;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
-
-  DrawFrame(10, 6, 60, 18);
-
-  DrawTitle(8, 'SAVE CURRENT GAME');
-  for LSlot := Low(TSlot) to High(TSlot) do
-    DrawButton(12, LSlot + 10, True, Chr(Ord('A') + LSlot),
-      Game.GetSlotStr(LSlot));
 
   DrawFrame(20, 10, 40, 9);
   DrawTitle(12, 'SAVE CURRENT GAME');
@@ -63,12 +57,12 @@ begin
       end;
     end;
   end;
-  //case AKey of
-    //TK_ESCAPE:
-      //FSubScene := sscDefault;
-    //TK_ENTER:
-      //Save;
-  //end;
+  case AKey of
+    TK_ESCAPE:
+      Scenes.SetScene(scSaveGameMenu);
+    TK_ENTER:
+      TSceneSaveGameMenu.Save;
+  end;
 end;
 
 end.

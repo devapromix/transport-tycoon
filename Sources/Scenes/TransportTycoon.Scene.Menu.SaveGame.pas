@@ -12,10 +12,11 @@ type
 
   TSceneSaveGameMenu = class(TScene)
   private
-    procedure Save;
+
   public
     procedure Render; override;
     procedure Update(var AKey: Word); override;
+    class procedure Save;
   end;
 
 implementation
@@ -47,9 +48,9 @@ begin
   DrawGameBar;
 end;
 
-procedure TSceneSaveGameMenu.Save;
+class procedure TSceneSaveGameMenu.Save;
 begin
-  // FSubScene := sscSaved;
+  Scenes.SetScene(scSaveGameSavedMenu);
   Game.Save(FCurrentSlot);
 end;
 
@@ -82,10 +83,10 @@ begin
       begin
         FCurrentSlot := AKey - TK_A;
         if (FCurrentSlot >= 0) and (FCurrentSlot <= 9) then
-          // if Game.IsSlotFileExists(FCurrentSlot) then
-          // FSubScene := sscPrompt
-          // else
-          // Save;
+          if Game.IsSlotFileExists(FCurrentSlot) then
+            Scenes.SetScene(scSaveGamePromptMenu)
+          else
+            Save;
       end;
   end;
 end;
