@@ -17,6 +17,7 @@ const
   LandTiles = [tlGrass, tlDirt, tlSand];
   MountainTiles = [tlRock];
   WaterTiles = [tlWater, tlCanal, tlDeepWater];
+  RoadTiles = [tlRoad];
   TreeTiles = [tlTree, tlSmallTree, tlBush];
   IndustryTiles = [tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
     tlPowerPlantIndustry];
@@ -62,8 +63,8 @@ const
     (Name: 'Road Tunnel'; Glyph: '~'; Color: 'dark gray';
     BkColor: 'darkest gray'),
     //
-    (Name: 'Road Bridge'; Glyph: '='; Color: 'light gray';
-    BkColor: 'darkest blue'),
+    (Name: 'Road Bridge'; Glyph: '-'; Color: 'light gray';
+    BkColor: 'darkest gray'),
     //
     (Name: 'Town'; Glyph: '#'; Color: 'light yellow';
     BkColor: 'darkest yellow'),
@@ -222,7 +223,7 @@ const
     // ceBuildRoadTunnel
     (AffectedTiles: MountainTiles; ResultTile: tlRoadTunnel),
     // ceBuildRoadBridge
-    (AffectedTiles: WaterTiles; ResultTile: tlRoadBridge));
+    (AffectedTiles: WaterTiles + RoadTiles; ResultTile: tlRoadBridge));
 
   { TMap }
 
