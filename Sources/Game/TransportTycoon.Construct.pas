@@ -3,12 +3,12 @@
 interface
 
 type
-  TConstructEnum = (ceClearLand, ceBuildCanal, ceBuildRoad, ceBuildRoadTunnel,
-    ceBuildRoadBridge);
+  TConstructEnum = (ceClearLand, ceBuildCanal, ceBuildAqueduct, ceBuildRoad,
+    ceBuildRoadTunnel, ceBuildRoadBridge);
 
 const
   ConstructStr: array [TConstructEnum] of string = ('Clear Land', 'Build Canal',
-    'Build Road', 'Build Road Tunnel', 'Build Road Bridge');
+    'Build Aqueduct', 'Build Road', 'Build Road Tunnel', 'Build Road Bridge');
 
 type
 

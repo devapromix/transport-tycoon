@@ -9,14 +9,14 @@ uses
 
 type
   TTileEnum = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlRock, tlSand,
-    tlWater, tlCanal, tlDeepWater, tlRoad, tlRoadTunnel, tlRoadBridge,
-    tlTownIndustry, tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
-    tlPowerPlantIndustry);
+    tlWater, tlCanal, tlAqueduct, tlDeepWater, tlRoad, tlRoadTunnel,
+    tlRoadBridge, tlTownIndustry, tlForestIndustry, tlSawmillIndustry,
+    tlCoalMineIndustry, tlPowerPlantIndustry);
 
 const
   LandTiles = [tlGrass, tlDirt, tlSand];
   MountainTiles = [tlRock];
-  WaterTiles = [tlWater, tlCanal, tlDeepWater];
+  WaterTiles = [tlWater, tlCanal, tlDeepWater, tlAqueduct];
   RoadTiles = [tlRoad];
   TreeTiles = [tlTree, tlSmallTree, tlBush];
   IndustryTiles = [tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
@@ -54,6 +54,9 @@ const
     (Name: 'Water'; Glyph: '='; Color: 'blue'; BkColor: 'darkest blue'),
     //
     (Name: 'Canal'; Glyph: '='; Color: 'light blue'; BkColor: 'darkest blue'),
+    //
+    (Name: 'Aqueduct'; Glyph: '='; Color: 'lighter blue';
+    BkColor: 'darkest blue'),
     //
     (Name: 'Deep Water'; Glyph: '='; Color: 'dark blue';
     BkColor: 'darkest blue'),
@@ -115,7 +118,7 @@ const
     Y: - 1), (X: - 1; Y: - 1), (X: 0; Y: 0));
 
 const
-  ConstructCost: array [TConstructEnum] of Word = (100, 2000, 250, 5000, 1500);
+  ConstructCost: array [TConstructEnum] of Word = (100, 2000, 4000, 250, 5000, 1500);
 
 type
 
@@ -218,6 +221,8 @@ const
     (AffectedTiles: TreeTiles; ResultTile: tlDirt),
     // ceBuildCanal
     (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlCanal),
+    // ceBuildAqueduct
+    (AffectedTiles: TreeTiles + LandTiles + RoadTiles; ResultTile: tlAqueduct),
     // ceBuildRoad
     (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlRoad),
     // ceBuildRoadTunnel
@@ -274,7 +279,7 @@ begin
   Result := True;
   try
     Result := FTileEnum[AX][AY] in [tlTownIndustry, tlRoad, tlRoadTunnel,
-      tlRoadBridge] + IndustryTiles;
+      tlRoadBridge, tlAqueduct] + IndustryTiles;
   except
     on E: Exception do
       Log.Add('TMap.IsRoadVehiclePath', E.Message);
@@ -286,7 +291,7 @@ begin
   Result := True;
   try
     Result := FTileEnum[AX][AY] in [tlTownIndustry, tlWater, tlCanal,
-      tlDeepWater, tlRoadBridge] + IndustryTiles;
+      tlDeepWater, tlRoadBridge, tlAqueduct] + IndustryTiles;
   except
     on E: Exception do
       Log.Add('TMap.IsShipPath', E.Message);

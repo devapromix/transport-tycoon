@@ -55,6 +55,7 @@ begin
   FY := 12;
 
   DrawLine('C', 'Build Canal', ConstructCost[ceBuildCanal]);
+  DrawLine('A', 'Build Aqueduct', ConstructCost[ceBuildAqueduct]);
   DrawLine('R', 'Build Road', ConstructCost[ceBuildRoad]);
   DrawLine('B', 'Build Road Bridge', ConstructCost[ceBuildRoadBridge]);
   DrawLine('T', 'Build Road Tunnel', ConstructCost[ceBuildRoadTunnel]);
@@ -85,10 +86,10 @@ begin
           12:
             AKey := TK_C;
           13:
-            AKey := TK_B;
-          { 14:
-            AKey := TK_;
-            15:
+            AKey := TK_R;
+          14:
+            AKey := TK_T;
+          { 15:
             AKey := TK_; }
           16:
             AKey := TK_X;
@@ -96,9 +97,9 @@ begin
       41 .. 72:
         case MY of
           12:
-            AKey := TK_R;
+            AKey := TK_A;
           13:
-            AKey := TK_T;
+            AKey := TK_B;
           { 14:
             AKey := TK_;
             15:
@@ -111,6 +112,11 @@ begin
   case AKey of
     TK_ESCAPE:
       Scenes.Back;
+    TK_A:
+      begin
+        Game.Construct.Build(ceBuildAqueduct);
+        Scenes.SetScene(scWorld);
+      end;
     TK_C:
       begin
         Game.Construct.Build(ceBuildCanal);
