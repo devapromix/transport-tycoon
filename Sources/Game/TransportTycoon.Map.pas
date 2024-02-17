@@ -150,6 +150,7 @@ type
     function MapIndCount: Integer;
     procedure AddRiver(const ADirectionEnum: TDirectionEnum);
     procedure AddIndustries();
+    function GetRandomTreeEnum(): TTileEnum;
   public
     Industry: array of TIndustry;
     constructor Create;
@@ -232,6 +233,14 @@ const
     (AffectedTiles: WaterTiles + RoadTiles; ResultTile: tlRoadBridge));
 
   { TMap }
+
+function TMap.GetRandomTreeEnum(): TTileEnum;
+begin
+  if Math.RandomRange(0, 2) = 0 then
+    Result := tlOakTree
+  else
+    Result := tlPineTree;
+end;
 
 function TMap.IsTownName(const ATownName: string): Boolean;
 var
@@ -886,11 +895,9 @@ end;
 procedure TMap.AddTree(const AX, AY: Integer);
 begin
   try
-    case RandomRange(0, 4) of
+    case RandomRange(0, 3) of
       0:
-        FTileEnum[AX][AY] := tlOakTree;
-      1:
-        FTileEnum[AX][AY] := tlPineTree;
+        FTileEnum[AX][AY] := GetRandomTreeEnum();
     else
       FTileEnum[AX][AY] := tlBush;
     end;
@@ -1023,6 +1030,7 @@ begin
       case LIndustryType of
         inCoalMine:
           begin
+            Self.AddSpot(LX, LY, tlRock);
             LTownName := GetNearTownName(LX, LY);
             SetLength(Industry, LIndustryCounter + 1);
             FTileEnum[LX][LY] := tlCoalMineIndustry;
@@ -1041,6 +1049,7 @@ begin
           end;
         inForest:
           begin
+            Self.AddSpot(LX, LY, GetRandomTreeEnum());
             LTownName := GetNearTownName(LX, LY);
             SetLength(Industry, LIndustryCounter + 1);
             FTileEnum[LX][LY] := tlForestIndustry;
