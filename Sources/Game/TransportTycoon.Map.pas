@@ -8,7 +8,7 @@ uses
   TransportTycoon.Construct;
 
 type
-  TTileEnum = (tlGrass, tlDirt, tlTree, tlSmallTree, tlBush, tlRock, tlSand,
+  TTileEnum = (tlGrass, tlDirt, tlOakTree, tlPineTree, tlBush, tlRock, tlSand,
     tlWater, tlCanal, tlAqueduct, tlDeepWater, tlRoad, tlRoadTunnel,
     tlRoadBridge, tlTownIndustry, tlForestIndustry, tlSawmillIndustry,
     tlCoalMineIndustry, tlPowerPlantIndustry);
@@ -18,7 +18,7 @@ const
   MountainTiles = [tlRock];
   WaterTiles = [tlWater, tlCanal, tlDeepWater, tlAqueduct];
   RoadTiles = [tlRoad];
-  TreeTiles = [tlTree, tlSmallTree, tlBush];
+  TreeTiles = [tlOakTree, tlPineTree, tlBush];
   IndustryTiles = [tlForestIndustry, tlSawmillIndustry, tlCoalMineIndustry,
     tlPowerPlantIndustry];
 
@@ -40,9 +40,9 @@ const
     //
     (Name: 'Dirt'; Glyph: ':'; Color: 'dark yellow'; BkColor: 'darkest yellow'),
     //
-    (Name: 'Oak'; Glyph: 'f'; Color: 'green'; BkColor: 'darkest green'),
+    (Name: 'Oak'; Glyph: 't'; Color: 'green'; BkColor: 'darkest green'),
     //
-    (Name: 'Pine'; Glyph: 't'; Color: 'dark green'; BkColor: 'darkest green'),
+    (Name: 'Pine'; Glyph: 'f'; Color: 'dark green'; BkColor: 'darkest green'),
     //
     (Name: 'Bush'; Glyph: 'b'; Color: 'dark green'; BkColor: 'darkest green'),
     //
@@ -118,7 +118,8 @@ const
     Y: - 1), (X: - 1; Y: - 1), (X: 0; Y: 0));
 
 const
-  ConstructCost: array [TConstructEnum] of Word = (100, 2000, 4000, 250, 5000, 1500);
+  ConstructCost: array [TConstructEnum] of Word = (100, 2000, 4000, 250,
+    5000, 1500);
 
 type
 
@@ -887,9 +888,9 @@ begin
   try
     case RandomRange(0, 4) of
       0:
-        FTileEnum[AX][AY] := tlTree;
+        FTileEnum[AX][AY] := tlOakTree;
       1:
-        FTileEnum[AX][AY] := tlSmallTree;
+        FTileEnum[AX][AY] := tlPineTree;
     else
       FTileEnum[AX][AY] := tlBush;
     end;
