@@ -55,7 +55,9 @@ begin
   case AKey of
     TK_ENTER:
       begin
+        Game.IsGame := True;
         Game.IsPause := False;
+        Game.IsOrder := False;
         Scenes.SetScene(scWorld);
       end;
   end;

@@ -198,17 +198,49 @@ var
 begin
   LIniFile := TMemIniFile.Create(GetPath('') + 'Settings.ini', TEncoding.UTF8);
   try
+    // Window
     Game.Fullscreen := LIniFile.ReadBool('Window', 'Fullscreen', False);
+    // Calendar
+    Game.Calendar.Day := EnsureRange(LIniFile.ReadInteger('Calendar', 'Day',
+      1), 1, 31);
+    Game.Calendar.Month := EnsureRange(LIniFile.ReadInteger('Calendar', 'Month',
+      1), 1, 12);
+    Game.Calendar.Year := EnsureRange(LIniFile.ReadInteger('Calendar', 'Year',
+      StartYear), StartYear, FinishYear);
+    // Main
     Game.Map.MapSize := TMapSize(LIniFile.ReadInteger('Main', 'MapSize', 0));
     Game.Map.SeaLevel := TMapSeaLevel(LIniFile.ReadInteger('Main',
       'SeaLevel', 0));
     Game.Map.NoOfTowns := LIniFile.ReadInteger('Main', 'NoOfTowns', 1);
-    Game.Calendar.Year := EnsureRange(LIniFile.ReadInteger('Main', 'Year',
-      StartYear), StartYear, FinishYear);
     Game.Map.Rivers := TMapRivers(LIniFile.ReadInteger('Main', 'Rivers', 0));
     Game.Map.NoOfInd := TMapNoOfInd(LIniFile.ReadInteger('Main', 'NoOfInd', 0));
     Game.Race := TRaceEnum(LIniFile.ReadInteger('Main', 'Race', 0));
     Game.Refresh;
+  finally
+    FreeAndNil(LIniFile);
+  end;
+end;
+
+procedure TGame.SaveSettings;
+var
+  LIniFile: TMemIniFile;
+begin
+  LIniFile := TMemIniFile.Create(GetPath('') + 'Settings.ini', TEncoding.UTF8);
+  try
+    // Window
+    LIniFile.WriteBool('Window', 'Fullscreen', Fullscreen);
+    // Calendar
+    LIniFile.WriteInteger('Calendar', 'Day', Game.Calendar.Day);
+    LIniFile.WriteInteger('Calendar', 'Month', Game.Calendar.Month);
+    LIniFile.WriteInteger('Calendar', 'Year', Game.Calendar.Year);
+    // Main
+    LIniFile.WriteInteger('Main', 'MapSize', Ord(Game.Map.MapSize));
+    LIniFile.WriteInteger('Main', 'SeaLevel', Ord(Game.Map.SeaLevel));
+    LIniFile.WriteInteger('Main', 'NoOfTowns', Game.Map.NoOfTowns);
+    LIniFile.WriteInteger('Main', 'Rivers', Ord(Game.Map.Rivers));
+    LIniFile.WriteInteger('Main', 'NoOfInd', Ord(Game.Map.NoOfInd));
+    LIniFile.WriteInteger('Main', 'Race', Ord(Game.Race));
+    LIniFile.UpdateFile;
   finally
     FreeAndNil(LIniFile);
   end;
@@ -311,8 +343,10 @@ begin
     FCalendar.Year := LIniFile.ReadInteger('Calendar', 'Year', StartYear);
     // Game
     FTurn := LIniFile.ReadInteger('Game', 'Turn', 0);
+    FLoan := LIniFile.ReadInteger('Game', 'Loan', StartMoney);
+    FMoney := LIniFile.ReadInteger('Game', 'Money', StartMoney);
     //
-    Scenes.SetScene(scOpenGameDoneMenu)
+    Scenes.SetScene(scOpenGameDoneMenu);
   finally
     FreeAndNil(LIniFile);
   end;
@@ -351,27 +385,6 @@ begin
   ForceDirectories(GetPath('Saves'));
   for LSlot := 0 to 9 do
     ForceDirectories(GetPath(Format('Saves/%d', [LSlot])));
-end;
-
-procedure TGame.SaveSettings;
-var
-  LIniFile: TMemIniFile;
-begin
-  LIniFile := TMemIniFile.Create(GetPath('') + 'Settings.ini', TEncoding.UTF8);
-  try
-    // Window
-    LIniFile.WriteBool('Window', 'Fullscreen', Fullscreen);
-    LIniFile.WriteInteger('Main', 'MapSize', Ord(Game.Map.MapSize));
-    LIniFile.WriteInteger('Main', 'SeaLevel', Ord(Game.Map.SeaLevel));
-    LIniFile.WriteInteger('Main', 'NoOfTowns', Game.Map.NoOfTowns);
-    LIniFile.WriteInteger('Main', 'Year', Game.Calendar.Year);
-    LIniFile.WriteInteger('Main', 'Rivers', Ord(Game.Map.Rivers));
-    LIniFile.WriteInteger('Main', 'NoOfInd', Ord(Game.Map.NoOfInd));
-    LIniFile.WriteInteger('Main', 'Race', Ord(Game.Race));
-    LIniFile.UpdateFile;
-  finally
-    FreeAndNil(LIniFile);
-  end;
 end;
 
 procedure TGame.ScanSaveDir;
