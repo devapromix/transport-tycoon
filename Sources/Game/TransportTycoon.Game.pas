@@ -302,7 +302,16 @@ var
 begin
   LIniFile := TMemIniFile.Create(GetFileName(ASlot), TEncoding.UTF8);
   try
+    // Company
     FCompany.TownIndex := LIniFile.ReadInteger('Company', 'TownIndex', 0);
+    // Calendar
+    FCalendar.Day := LIniFile.ReadInteger('Calendar', 'Day', 1);
+    FCalendar.WeekDay := LIniFile.ReadInteger('Calendar', 'WeekDay', 1);
+    FCalendar.Month := LIniFile.ReadInteger('Calendar', 'Month', 1);
+    FCalendar.Year := LIniFile.ReadInteger('Calendar', 'Year', StartYear);
+    // Game
+    FTurn := LIniFile.ReadInteger('Game', 'Turn', 0);
+    //
     Scenes.SetScene(scOpenGameDoneMenu)
   finally
     FreeAndNil(LIniFile);
@@ -322,6 +331,7 @@ begin
     LIniFile.WriteInteger('Game', 'Money', Game.Money);
     // Calendar
     LIniFile.WriteInteger('Calendar', 'Day', Game.Calendar.Day);
+    LIniFile.WriteInteger('Calendar', 'WeekDay', Game.Calendar.WeekDay);
     LIniFile.WriteInteger('Calendar', 'Month', Game.Calendar.Month);
     LIniFile.WriteInteger('Calendar', 'Year', Game.Calendar.Year);
     // Company

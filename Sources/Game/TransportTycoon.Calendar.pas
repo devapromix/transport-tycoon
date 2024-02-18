@@ -23,6 +23,7 @@ type
     procedure Clear;
     procedure Step;
     property Day: Word read FDay write FDay;
+    property WeekDay: Word read FWeekDay write FWeekDay;
     property Month: Word read FMonth write FMonth;
     property Year: Word read FYear write FYear;
     function GetDate: string;
