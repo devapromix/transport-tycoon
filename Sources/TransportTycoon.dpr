@@ -78,6 +78,7 @@ begin
     Game.Version + '";');
   terminal_set('input: filter={keyboard, mouse+}');
   Game := TGame.Create;
+  Game.LoadSettings;
   Scenes := TScenes.Create;
   Scenes.SetScene(scMainMenu);
   try

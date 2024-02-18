@@ -37,16 +37,14 @@ begin
   else
     Game.Map.Draw(Self.ScreenWidth, Self.ScreenHeight);
 
-  DrawFrame(25, 9, 30, 11);
+  DrawFrame(25, 9, 30, 10);
   DrawTitle(11, 'GAME SETTINGS');
 
   // Game Speed
   DrawButton(27, 13, 'S', Format('Game Speed: %s', [GameSpeedStr[Game.Speed]]));
   // Fullscreen
-  DrawButton(27, 15, 27, True, terminal_check(TK_FULLSCREEN), 'ALT+ENTER',
-    'Fullscreen', TPalette.Unused);
-  // DrawText(39, 15, 'FULLSCREEN', False);
-  AddButton(17, 'Esc', 'Close');
+  DrawButton(27, 14, 27, True, Game.Fullscreen, 'F', 'Fullscreen');
+  AddButton(16, 'Esc', 'Close');
 
   if IsShowBar then
     DrawGameBar;
@@ -68,6 +66,8 @@ begin
         case MY of
           13:
             AKey := TK_S;
+          14:
+            AKey := TK_F;
         end;
     end;
   end;
@@ -83,9 +83,17 @@ begin
   end;
   case AKey of
     TK_ESCAPE:
-      Scenes.Back;
+      begin
+        Game.SaveSettings;
+        Scenes.Back;
+      end;
     TK_S:
       Game.NextSpeed;
+    TK_F:
+      begin
+        Game.Fullscreen := not Game.Fullscreen;
+        Game.Refresh;
+      end;
   end;
 end;
 

@@ -35,7 +35,7 @@ begin
   DrawButton(16, 'D', 'SETTINGS');
   DrawButton(17, 'Q', 'QUIT');
 
-  DrawText(19, 'By Apromix 2022-2023');
+  DrawText(19, 'By Apromix 2022-2024');
 end;
 
 procedure TSceneMainMenu.Update(var AKey: Word);

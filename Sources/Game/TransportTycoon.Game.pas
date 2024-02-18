@@ -47,6 +47,7 @@ type
     FIsOrder: Boolean;
     FRace: TRaceEnum;
     FSlotStr: array [TSlot] of string;
+    FFullscreen: Boolean;
     procedure ForceDirs;
   public const
     MaxLoan = 200000;
@@ -72,6 +73,7 @@ type
     property IsOrder: Boolean read FIsOrder write FIsOrder;
     property Speed: TGameSpeedEnum read FSpeed;
     property Race: TRaceEnum read FRace write FRace;
+    property Fullscreen: Boolean read FFullscreen write FFullscreen;
     procedure Clear;
     procedure Step;
     function GetPath(ASubDir: string): string;
@@ -95,6 +97,7 @@ type
     function GetFileName(const ASlot: Byte): string;
     function GetSlotName(const ASlot: Byte): string;
     function IsSlotFileExists(const ASlot: Byte): Boolean;
+    procedure Refresh;
   end;
 
 var
@@ -105,7 +108,8 @@ implementation
 uses
   Math,
   Dialogs,
-  IniFiles;
+  IniFiles,
+  BearLibTerminal;
 
 constructor TGame.Create;
 var
@@ -114,6 +118,7 @@ begin
   FRace := reHuman;
   FIsOrder := False;
   FIsDebug := False;
+  Fullscreen := False;
   for LParam := 1 to ParamCount do
   begin
     if (LowerCase(ParamStr(LParam)) = '-debug')
@@ -192,6 +197,7 @@ var
 begin
   LIniFile := TMemIniFile.Create(GetPath('') + 'Settings.ini', TEncoding.UTF8);
   try
+    Game.Fullscreen := LIniFile.ReadBool('Window', 'Fullscreen', False);
     Game.Map.MapSize := TMapSize(LIniFile.ReadInteger('Main', 'MapSize', 0));
     Game.Map.SeaLevel := TMapSeaLevel(LIniFile.ReadInteger('Main',
       'SeaLevel', 0));
@@ -201,6 +207,7 @@ begin
     Game.Map.Rivers := TMapRivers(LIniFile.ReadInteger('Main', 'Rivers', 0));
     Game.Map.NoOfInd := TMapNoOfInd(LIniFile.ReadInteger('Main', 'NoOfInd', 0));
     Game.Race := TRaceEnum(LIniFile.ReadInteger('Main', 'Race', 0));
+    Game.Refresh;
   finally
     FreeAndNil(LIniFile);
   end;
@@ -266,6 +273,14 @@ begin
   Result := (FLoan >= LoanMoney) and (FMoney >= LoanMoney);
 end;
 
+procedure TGame.Refresh;
+begin
+  if Self.Fullscreen then
+    terminal_set('window: fullscreen=true')
+  else
+    terminal_set('window: fullscreen=false');
+end;
+
 procedure TGame.Repay;
 begin
   if CanRepay then
@@ -300,6 +315,7 @@ var
 begin
   LIniFile := TMemIniFile.Create(GetFileName(ASlot), TEncoding.UTF8);
   try
+    // Game
     LIniFile.WriteString('Game', 'Date', DateTimeToStr(Date));
     LIniFile.WriteInteger('Game', 'Turn', Game.Turn);
     LIniFile.WriteInteger('Game', 'Loan', Game.Loan);
@@ -332,6 +348,8 @@ var
 begin
   LIniFile := TMemIniFile.Create(GetPath('') + 'Settings.ini', TEncoding.UTF8);
   try
+    // Window
+    LIniFile.WriteBool('Window', 'Fullscreen', Fullscreen);
     LIniFile.WriteInteger('Main', 'MapSize', Ord(Game.Map.MapSize));
     LIniFile.WriteInteger('Main', 'SeaLevel', Ord(Game.Map.SeaLevel));
     LIniFile.WriteInteger('Main', 'NoOfTowns', Game.Map.NoOfTowns);
