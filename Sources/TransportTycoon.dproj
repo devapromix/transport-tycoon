@@ -159,6 +159,7 @@
         <DCCReference Include="Scenes\TransportTycoon.Scene.Station.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.Game.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.OpenGame.Prompt.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.OpenGame.Done.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.SaveGame.Prompt.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.SaveGame.Saved.pas"/>
         <BuildConfiguration Include="Release">

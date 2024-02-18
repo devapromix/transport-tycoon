@@ -58,6 +58,7 @@ uses
   TransportTycoon.Scene.Station in 'Scenes\TransportTycoon.Scene.Station.pas',
   TransportTycoon.Scene.Menu.Game in 'Scenes\TransportTycoon.Scene.Menu.Game.pas',
   TransportTycoon.Scene.Menu.OpenGame.Prompt in 'Scenes\TransportTycoon.Scene.Menu.OpenGame.Prompt.pas',
+  TransportTycoon.Scene.Menu.OpenGame.Done in 'Scenes\TransportTycoon.Scene.Menu.OpenGame.Done.pas',
   TransportTycoon.Scene.Menu.SaveGame.Prompt in 'Scenes\TransportTycoon.Scene.Menu.SaveGame.Prompt.pas',
   TransportTycoon.Scene.Menu.SaveGame.Saved in 'Scenes\TransportTycoon.Scene.Menu.SaveGame.Saved.pas';
 

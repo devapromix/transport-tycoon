@@ -109,7 +109,8 @@ uses
   Math,
   Dialogs,
   IniFiles,
-  BearLibTerminal;
+  BearLibTerminal,
+  TransportTycoon.Scenes;
 
 constructor TGame.Create;
 var
@@ -298,12 +299,11 @@ end;
 procedure TGame.Load(const ASlot: Byte);
 var
   LIniFile: TMemIniFile;
-  LCompanyName: string;
 begin
   LIniFile := TMemIniFile.Create(GetFileName(ASlot), TEncoding.UTF8);
   try
-    LCompanyName := LIniFile.ReadString('Company', 'Name', 'NONAME');
-    ShowMessage(LCompanyName);
+    FCompany.TownIndex := LIniFile.ReadInteger('Company', 'TownIndex', 0);
+    Scenes.SetScene(scOpenGameDoneMenu)
   finally
     FreeAndNil(LIniFile);
   end;
@@ -326,6 +326,7 @@ begin
     LIniFile.WriteInteger('Calendar', 'Year', Game.Calendar.Year);
     // Company
     LIniFile.WriteString('Company', 'Name', UpperCase(Game.Company.Name));
+    LIniFile.WriteInteger('Company', 'TownIndex', Game.Company.TownIndex);
     //
     LIniFile.UpdateFile;
   finally

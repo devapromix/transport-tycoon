@@ -32,7 +32,7 @@ type
     constructor Create;
     destructor Destroy; override;
     property Inavgurated: Integer read FInavgurated;
-    property TownIndex: Integer read FTownID;
+    property TownIndex: Integer read FTownID write FTownID;
     property Stat: TStat read FStat write FStat;
     procedure Clear;
     function Name: string;
