@@ -54,15 +54,15 @@ begin
   FX := 7;
   FY := 12;
 
-  DrawLine('C', 'Build Canal', ConstructCost[ceBuildCanal]);
-  DrawLine('A', 'Build Aqueduct', ConstructCost[ceBuildAqueduct]);
-  DrawLine('R', 'Build Road', ConstructCost[ceBuildRoad]);
-  DrawLine('B', 'Build Road Bridge', ConstructCost[ceBuildRoadBridge]);
-  DrawLine('T', 'Build Road Tunnel', ConstructCost[ceBuildRoadTunnel]);
+  DrawLine('C', 'Build Canal', Construct[ceBuildCanal].Cost);
+  DrawLine('A', 'Build Aqueduct', Construct[ceBuildAqueduct].Cost);
+  DrawLine('R', 'Build Road', Construct[ceBuildRoad].Cost);
+  DrawLine('B', 'Build Road Bridge', Construct[ceBuildRoadBridge].Cost);
+  DrawLine('T', 'Build Road Tunnel', Construct[ceBuildRoadTunnel].Cost);
 
   FX := 7;
   FY := 16;
-  DrawLine('X', 'Clear land', ConstructCost[ceClearLand]);
+  DrawLine('X', 'Clear land', Construct[ceClearLand].Cost);
 
   AddButton(18, 'Esc', 'Close');
 

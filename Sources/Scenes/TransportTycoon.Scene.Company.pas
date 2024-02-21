@@ -25,16 +25,15 @@ uses
   SysUtils,
   TransportTycoon.Game,
   TransportTycoon.Industries,
-  TransportTycoon.Races;
+  TransportTycoon.Races,
+  TransportTycoon.Map;
 
 procedure TSceneCompany.AddStatLine(const AConstructEnum: TConstructEnum);
-const
-  StatStr: array [TConstructEnum] of string = ('', '', 'Canals',
-    'Aqueducts', 'Roads', 'Tunnels', 'Road Bridges');
 begin
-  if Game.Company.Stat.GetStat(AConstructEnum) = 0 then
+  if (Game.Company.Stat.GetStat(AConstructEnum) = 0) or
+    (Construct[AConstructEnum].StatName = '') then
     Exit;
-  DrawText(FX, FY, StatStr[AConstructEnum] + ': ' +
+  DrawText(FX, FY, Construct[AConstructEnum].StatName + ': ' +
     IntToStr(Game.Company.Stat.GetStat(AConstructEnum)));
   if FX = 40 then
   begin

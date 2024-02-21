@@ -112,14 +112,52 @@ type
   TDirectionEnum = (drEast, drWest, drSouth, drNorth, drSouthEast, drSouthWest,
     drNorthEast, drNorthWest, drOrigin);
 
+type
+  TBuildPlan = record
+    AffectedTiles: set of TTileEnum;
+    ResultTile: TTileEnum;
+  end;
+
+type
+  TConstructRec = record
+    Name: string;
+    StatName: string;
+    Cost: Word;
+    BuildPlan: TBuildPlan;
+  end;
+
+const
+  Construct: array [TConstructEnum] of TConstructRec = (
+    // Clear Land
+    (Name: 'Clear Land'; StatName: ''; Cost: 100;
+    BuildPlan: (AffectedTiles: TreeTiles; ResultTile: tlDirt)),
+    // Lowering Land
+    (Name: 'Lowering Land'; StatName: ''; Cost: 3000;
+    BuildPlan: (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlWater)),
+    // Build Canal
+    (Name: 'Build Canal'; StatName: 'Canals'; Cost: 2000;
+    BuildPlan: (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlCanal)),
+    // Build Aqueduct
+    (Name: 'Build Aqueduct'; StatName: 'Aqueducts'; Cost: 4000;
+    BuildPlan: (AffectedTiles: TreeTiles + LandTiles + RoadTiles;
+    ResultTile: tlAqueduct)),
+    // Build Road
+    (Name: 'Build Road'; StatName: 'Roads'; Cost: 250;
+    BuildPlan: (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlRoad)),
+    // Build Road Tunnel
+    (Name: 'Build Road Tunnel'; StatName: 'Tunnels'; Cost: 5000;
+    BuildPlan: (AffectedTiles: MountainTiles; ResultTile: tlRoadTunnel)),
+    // Build Road Bridge
+    (Name: 'Build Road Bridge'; StatName: 'Road Bridges'; Cost: 1500;
+    BuildPlan: (AffectedTiles: WaterTiles + RoadTiles;
+    ResultTile: tlRoadBridge))
+    //
+    );
+
 const
   Direction: array [TDirectionEnum] of TLocation = ((X: 1; Y: 0), (X: - 1;
     Y: 0), (X: 0; Y: 1), (X: 0; Y: - 1), (X: 1; Y: 1), (X: - 1; Y: 1), (X: 1;
     Y: - 1), (X: - 1; Y: - 1), (X: 0; Y: 0));
-
-const
-  ConstructCost: array [TConstructEnum] of Word = (100, 3000, 2000, 4000,
-    250, 5000, 1500);
 
 type
 
@@ -211,30 +249,7 @@ uses
   TransportTycoon.Palette,
   TransportTycoon.Races;
 
-type
-  TBuildPlan = record
-    AffectedTiles: set of TTileEnum;
-    ResultTile: TTileEnum;
-  end;
-
-const
-  BuildPlans: array [TConstructEnum] of TBuildPlan = (
-    // ceClearLand
-    (AffectedTiles: TreeTiles; ResultTile: tlDirt),
-    // ceLoweringLand
-    (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlWater),
-    // ceBuildCanal
-    (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlCanal),
-    // ceBuildAqueduct
-    (AffectedTiles: TreeTiles + LandTiles + RoadTiles; ResultTile: tlAqueduct),
-    // ceBuildRoad
-    (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlRoad),
-    // ceBuildRoadTunnel
-    (AffectedTiles: MountainTiles; ResultTile: tlRoadTunnel),
-    // ceBuildRoadBridge
-    (AffectedTiles: WaterTiles + RoadTiles; ResultTile: tlRoadBridge));
-
-  { TMap }
+{ TMap }
 
 function TMap.GetRandomTreeEnum(): TTileEnum;
 begin
@@ -514,21 +529,21 @@ procedure TMap.BuildConstruct(const AX, AY: Integer;
   AConstructEnum: TConstructEnum);
 var
   LMoney: Word;
-  LPlan: TBuildPlan;
+  LBuildPlan: TBuildPlan;
 begin
   try
-    LPlan := BuildPlans[AConstructEnum];
+    LBuildPlan := Construct[AConstructEnum].BuildPlan;
     if AY = 0 then
       Exit;
-    if not(FTileEnum[AX][AY] in LPlan.AffectedTiles) then
+    if not(FTileEnum[AX][AY] in LBuildPlan.AffectedTiles) then
       Exit;
-    LMoney := ConstructCost[AConstructEnum];
+    LMoney := Construct[AConstructEnum].Cost;
     if not(AConstructEnum in [ceClearLand]) and (FTileEnum[AX][AY] in TreeTiles)
     then
-      Inc(LMoney, ConstructCost[ceClearLand]);
+      Inc(LMoney, Construct[ceClearLand].Cost);
     if (Game.Money >= LMoney) then
     begin
-      FTileEnum[AX][AY] := LPlan.ResultTile;
+      FTileEnum[AX][AY] := LBuildPlan.ResultTile;
       Game.ModifyMoney(ttConstruction, -LMoney);
       Game.Company.Stat.IncStat(AConstructEnum);
     end;

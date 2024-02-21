@@ -6,11 +6,6 @@ type
   TConstructEnum = (ceClearLand, ceLoweringLand, ceBuildCanal, ceBuildAqueduct,
     ceBuildRoad, ceBuildRoadTunnel, ceBuildRoadBridge);
 
-const
-  ConstructStr: array [TConstructEnum] of string = ('Clear Land',
-    'Lowering Land', 'Build Canal', 'Build Aqueduct', 'Build Road',
-    'Build Road Tunnel', 'Build Road Bridge');
-
 type
 
   { TConstruct }
@@ -30,6 +25,9 @@ type
 implementation
 
 { TConstruct }
+
+uses
+  TransportTycoon.Map;
 
 procedure TConstruct.Build(const AConstructEnum: TConstructEnum);
 begin
@@ -57,7 +55,7 @@ begin
   Result := '';
   for LConstructEnum := Low(TConstructEnum) to High(TConstructEnum) do
     if FConstruct[LConstructEnum] then
-      Exit(ConstructStr[LConstructEnum]);
+      Exit(Construct[LConstructEnum].Name);
 end;
 
 function TConstruct.IsBuild(const AConstructEnum: TConstructEnum): Boolean;
