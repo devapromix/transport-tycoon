@@ -118,8 +118,8 @@ const
     Y: - 1), (X: - 1; Y: - 1), (X: 0; Y: 0));
 
 const
-  ConstructCost: array [TConstructEnum] of Word = (100, 2000, 4000, 250,
-    5000, 1500);
+  ConstructCost: array [TConstructEnum] of Word = (100, 3000, 2000, 4000,
+    250, 5000, 1500);
 
 type
 
@@ -221,6 +221,8 @@ const
   BuildPlans: array [TConstructEnum] of TBuildPlan = (
     // ceClearLand
     (AffectedTiles: TreeTiles; ResultTile: tlDirt),
+    // ceLoweringLand
+    (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlWater),
     // ceBuildCanal
     (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlCanal),
     // ceBuildAqueduct

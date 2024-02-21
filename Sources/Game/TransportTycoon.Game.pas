@@ -119,7 +119,7 @@ begin
   FRace := reHuman;
   FIsOrder := False;
   FIsDebug := False;
-  Fullscreen := False;
+  FFullscreen := False;
   for LParam := 1 to ParamCount do
   begin
     if (LowerCase(ParamStr(LParam)) = '-debug')

@@ -112,6 +112,14 @@ begin
   case AKey of
     TK_ESCAPE:
       Scenes.Back;
+    TK_L:
+      begin
+        Game.Construct.Build(ceLoweringLand);
+        Scenes.SetScene(scWorld);
+      end;
+    TK_U:
+      begin
+      end;
     TK_A:
       begin
         Game.Construct.Build(ceBuildAqueduct);

@@ -28,8 +28,6 @@ uses
 { TSceneOpenGamePromptMenu }
 
 procedure TSceneOpenGamePromptMenu.Render;
-var
-  LSlot: TSlot;
 begin
   Game.Map.Draw(Self.ScreenWidth, Self.ScreenHeight);
 

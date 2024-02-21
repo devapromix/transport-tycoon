@@ -29,8 +29,8 @@ uses
 
 procedure TSceneCompany.AddStatLine(const AConstructEnum: TConstructEnum);
 const
-  StatStr: array [TConstructEnum] of string = ('', 'Canals', 'Aqueducts',
-    'Roads', 'Tunnels', 'Road Bridges');
+  StatStr: array [TConstructEnum] of string = ('', '', 'Canals',
+    'Aqueducts', 'Roads', 'Tunnels', 'Road Bridges');
 begin
   if Game.Company.Stat.GetStat(AConstructEnum) = 0 then
     Exit;
