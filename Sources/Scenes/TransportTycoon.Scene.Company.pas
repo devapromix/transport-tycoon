@@ -21,8 +21,8 @@ type
 implementation
 
 uses
-  BearLibTerminal,
   SysUtils,
+  BearLibTerminal,
   TransportTycoon.Game,
   TransportTycoon.Industries,
   TransportTycoon.Races,

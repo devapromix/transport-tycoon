@@ -122,6 +122,7 @@ type
   TConstructRec = record
     Name: string;
     StatName: string;
+    HotKey: string;
     Cost: Word;
     BuildPlan: TBuildPlan;
   end;
@@ -129,27 +130,27 @@ type
 const
   Construct: array [TConstructEnum] of TConstructRec = (
     // Clear Land
-    (Name: 'Clear Land'; StatName: ''; Cost: 100;
+    (Name: 'Clear Land'; StatName: ''; HotKey: 'X'; Cost: 100;
     BuildPlan: (AffectedTiles: TreeTiles; ResultTile: tlDirt)),
     // Lowering Land
-    (Name: 'Lowering Land'; StatName: ''; Cost: 3000;
+    (Name: 'Lowering Land'; StatName: ''; HotKey: 'L'; Cost: 3000;
     BuildPlan: (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlWater)),
     // Build Canal
-    (Name: 'Build Canal'; StatName: 'Canals'; Cost: 2000;
+    (Name: 'Build Canal'; StatName: 'Canals'; HotKey: 'C'; Cost: 2000;
     BuildPlan: (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlCanal)),
     // Build Aqueduct
-    (Name: 'Build Aqueduct'; StatName: 'Aqueducts'; Cost: 4000;
+    (Name: 'Build Aqueduct'; StatName: 'Aqueducts'; HotKey: 'A'; Cost: 4000;
     BuildPlan: (AffectedTiles: TreeTiles + LandTiles + RoadTiles;
     ResultTile: tlAqueduct)),
     // Build Road
-    (Name: 'Build Road'; StatName: 'Roads'; Cost: 250;
+    (Name: 'Build Road'; StatName: 'Roads'; HotKey: 'R'; Cost: 250;
     BuildPlan: (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlRoad)),
     // Build Road Tunnel
-    (Name: 'Build Road Tunnel'; StatName: 'Tunnels'; Cost: 5000;
+    (Name: 'Build Road Tunnel'; StatName: 'Tunnels'; HotKey: 'T'; Cost: 5000;
     BuildPlan: (AffectedTiles: MountainTiles; ResultTile: tlRoadTunnel)),
     // Build Road Bridge
-    (Name: 'Build Road Bridge'; StatName: 'Road Bridges'; Cost: 1500;
-    BuildPlan: (AffectedTiles: WaterTiles + RoadTiles;
+    (Name: 'Build Road Bridge'; StatName: 'Road Bridges'; HotKey: 'B';
+    Cost: 1500; BuildPlan: (AffectedTiles: WaterTiles + RoadTiles;
     ResultTile: tlRoadBridge))
     //
     );

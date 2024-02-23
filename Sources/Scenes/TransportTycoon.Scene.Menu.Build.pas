@@ -45,6 +45,8 @@ begin
 end;
 
 procedure TSceneBuildMenu.Render;
+var
+  LConstructEnum: TConstructEnum;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
@@ -54,11 +56,9 @@ begin
   FX := 7;
   FY := 12;
 
-  DrawLine('C', 'Build Canal', Construct[ceBuildCanal].Cost);
-  DrawLine('A', 'Build Aqueduct', Construct[ceBuildAqueduct].Cost);
-  DrawLine('R', 'Build Road', Construct[ceBuildRoad].Cost);
-  DrawLine('B', 'Build Road Bridge', Construct[ceBuildRoadBridge].Cost);
-  DrawLine('T', 'Build Road Tunnel', Construct[ceBuildRoadTunnel].Cost);
+  for LConstructEnum := Succ(Low(TConstructEnum)) to High(TConstructEnum) do
+    DrawLine(Construct[LConstructEnum].HotKey, Construct[LConstructEnum].Name,
+      Construct[LConstructEnum].Cost);
 
   FX := 7;
   FY := 16;
