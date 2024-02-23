@@ -50,21 +50,17 @@ var
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
-  DrawFrame(5, 8, 70, 13);
-  DrawTitle(10, Game.Company.Name);
+  DrawFrame(5, 7, 70, 15);
+  DrawTitle(9, Game.Company.Name);
 
   FX := 7;
-  FY := 12;
+  FY := 11;
 
-  for LConstructEnum := Succ(Low(TConstructEnum)) to High(TConstructEnum) do
+  for LConstructEnum := Low(TConstructEnum) to High(TConstructEnum) do
     DrawLine(Construct[LConstructEnum].HotKey, Construct[LConstructEnum].Name,
       Construct[LConstructEnum].Cost);
 
-  FX := 7;
-  FY := 16;
-  DrawLine('X', 'Clear land', Construct[ceClearLand].Cost);
-
-  AddButton(18, 'Esc', 'Close');
+  AddButton(19, 'Esc', 'Close');
 
   DrawGameBar;
 end;
@@ -83,28 +79,36 @@ begin
     case MX of
       7 .. 38:
         case MY of
+          11:
+            AKey := TK_X;
           12:
             AKey := TK_C;
           13:
             AKey := TK_R;
           14:
-            AKey := TK_T;
+            AKey := TK_B;
           { 15:
-            AKey := TK_; }
-          16:
+            AKey := TK_;
+            16:
             AKey := TK_X;
+            17:
+            AKey := TK_X; }
         end;
       41 .. 72:
         case MY of
+          11:
+            AKey := TK_L;
           12:
             AKey := TK_A;
           13:
-            AKey := TK_B;
+            AKey := TK_T;
           { 14:
             AKey := TK_;
             15:
             AKey := TK_;
             16:
+            AKey := TK_;
+            17:
             AKey := TK_; }
         end;
     end;
