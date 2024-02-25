@@ -3,6 +3,7 @@
 interface
 
 uses
+  TransportTycoon.Map,
   TransportTycoon.Scenes;
 
 type
@@ -12,7 +13,7 @@ type
   TSceneBuildMenu = class(TScene)
   private
     FX, FY: Integer;
-    procedure DrawLine(const AButton, AText: string; const AMoney: Integer);
+    procedure DrawLine(const AConstruct: TConstructRec);
   public
     procedure Render; override;
     procedure Update(var AKey: Word); override;
@@ -24,18 +25,16 @@ uses
   SysUtils,
   BearLibTerminal,
   TransportTycoon.Game,
-  TransportTycoon.Construct,
   TransportTycoon.Palette,
-  TransportTycoon.Map;
+  TransportTycoon.Construct;
 
 { TSceneBuildMenu }
 
-procedure TSceneBuildMenu.DrawLine(const AButton, AText: string;
-  const AMoney: Integer);
+procedure TSceneBuildMenu.DrawLine(const AConstruct: TConstructRec);
 begin
-  DrawButton(FX, FY, AButton, AText);
+  DrawButton(FX, FY, AConstruct.HotKey, AConstruct.Name);
   terminal_print(FX + 31, FY, TK_ALIGN_RIGHT, Format('[c=%s]$%d[/c]',
-    [TPalette.Unused, AMoney]));
+    [TPalette.Unused, AConstruct.Cost]));
   Inc(FX, 34);
   if (FX > 66) then
   begin
@@ -57,8 +56,7 @@ begin
   FY := 11;
 
   for LConstructEnum := Low(TConstructEnum) to High(TConstructEnum) do
-    DrawLine(Construct[LConstructEnum].HotKey, Construct[LConstructEnum].Name,
-      Construct[LConstructEnum].Cost);
+    DrawLine(Construct[LConstructEnum]);
 
   AddButton(19, 'Esc', 'Close');
 
