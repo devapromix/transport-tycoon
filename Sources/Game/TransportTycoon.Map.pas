@@ -113,45 +113,38 @@ type
     drNorthEast, drNorthWest, drOrigin);
 
 type
-  TBuildPlan = record
-    AffectedTiles: set of TTileEnum;
-    ResultTile: TTileEnum;
-  end;
-
-type
   TConstructRec = record
     Name: string;
     StatName: string;
     HotKey: string;
     Cost: Word;
-    BuildPlan: TBuildPlan;
+    AffectedTiles: set of TTileEnum;
+    ResultTile: TTileEnum;
   end;
 
 const
   Construct: array [TConstructEnum] of TConstructRec = (
     // Clear Land
     (Name: 'Clear Land'; StatName: ''; HotKey: 'X'; Cost: 100;
-    BuildPlan: (AffectedTiles: TreeTiles; ResultTile: tlDirt)),
+    AffectedTiles: TreeTiles; ResultTile: tlDirt),
     // Lowering Land
     (Name: 'Lowering Land'; StatName: ''; HotKey: 'L'; Cost: 3000;
-    BuildPlan: (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlWater)),
+    AffectedTiles: TreeTiles + LandTiles; ResultTile: tlWater),
     // Build Canal
     (Name: 'Build Canal'; StatName: 'Canals'; HotKey: 'C'; Cost: 2000;
-    BuildPlan: (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlCanal)),
+    AffectedTiles: TreeTiles + LandTiles; ResultTile: tlCanal),
     // Build Aqueduct
     (Name: 'Build Aqueduct'; StatName: 'Aqueducts'; HotKey: 'A'; Cost: 4000;
-    BuildPlan: (AffectedTiles: TreeTiles + LandTiles + RoadTiles;
-    ResultTile: tlAqueduct)),
+    AffectedTiles: TreeTiles + LandTiles + RoadTiles; ResultTile: tlAqueduct),
     // Build Road
     (Name: 'Build Road'; StatName: 'Roads'; HotKey: 'R'; Cost: 250;
-    BuildPlan: (AffectedTiles: TreeTiles + LandTiles; ResultTile: tlRoad)),
+    AffectedTiles: TreeTiles + LandTiles; ResultTile: tlRoad),
     // Build Road Tunnel
     (Name: 'Build Road Tunnel'; StatName: 'Tunnels'; HotKey: 'T'; Cost: 5000;
-    BuildPlan: (AffectedTiles: MountainTiles; ResultTile: tlRoadTunnel)),
+    AffectedTiles: MountainTiles; ResultTile: tlRoadTunnel),
     // Build Road Bridge
     (Name: 'Build Road Bridge'; StatName: 'Road Bridges'; HotKey: 'B';
-    Cost: 1500; BuildPlan: (AffectedTiles: WaterTiles + RoadTiles;
-    ResultTile: tlRoadBridge))
+    Cost: 1500; AffectedTiles: WaterTiles + RoadTiles; ResultTile: tlRoadBridge)
     //
     );
 
@@ -530,13 +523,11 @@ procedure TMap.BuildConstruct(const AX, AY: Integer;
   AConstructEnum: TConstructEnum);
 var
   LMoney: Word;
-  LBuildPlan: TBuildPlan;
 begin
   try
-    LBuildPlan := Construct[AConstructEnum].BuildPlan;
     if AY = 0 then
       Exit;
-    if not(FTileEnum[AX][AY] in LBuildPlan.AffectedTiles) then
+    if not(FTileEnum[AX][AY] in Construct[AConstructEnum].AffectedTiles) then
       Exit;
     LMoney := Construct[AConstructEnum].Cost;
     if not(AConstructEnum in [ceClearLand]) and (FTileEnum[AX][AY] in TreeTiles)
@@ -544,7 +535,7 @@ begin
       Inc(LMoney, Construct[ceClearLand].Cost);
     if (Game.Money >= LMoney) then
     begin
-      FTileEnum[AX][AY] := LBuildPlan.ResultTile;
+      FTileEnum[AX][AY] := Construct[AConstructEnum].ResultTile;
       Game.ModifyMoney(ttConstruction, -LMoney);
       Game.Company.Stat.IncStat(AConstructEnum);
     end;
