@@ -42,7 +42,7 @@ begin
     if (Game.Map.Industry[LIndustry].IndustryType <> inTown) then
     begin
       DrawButton(27, LY + 8, Chr(Ord('A') + LY),
-        Game.Map.Industry[LIndustry].Name);
+        StrLim(Game.Map.Industry[LIndustry].Name, 22));
       Inc(LY);
     end;
 
