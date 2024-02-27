@@ -27,6 +27,7 @@ procedure TSceneTowns.Render;
 var
   LIndustryIndex: Integer;
   LTown: TTownIndustry;
+  LTownName: string;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
@@ -38,12 +39,13 @@ begin
     if (Game.Map.Industry[LIndustryIndex].IndustryType = inTown) then
     begin
       LTown := TTownIndustry(Game.Map.Industry[LIndustryIndex]);
+      LTownName := StrLim(LTown.Name, 15);
       if (Game.Company.TownIndex = LIndustryIndex) then
         DrawButton(27, LIndustryIndex + 8, Chr(Ord('A') + LIndustryIndex),
-          Format('%s (%d)', [LTown.Name, LTown.Population]), 'yellow')
+          Format('%s (%d)', [LTownName, LTown.Population]), 'yellow')
       else
         DrawButton(27, LIndustryIndex + 8, Chr(Ord('A') + LIndustryIndex),
-          Format('%s (%d)', [LTown.Name, LTown.Population]));
+          Format('%s (%d)', [LTownName, LTown.Population]));
     end;
 
   DrawText(20, Format('World population: %d', [Game.Map.WorldPop]));
