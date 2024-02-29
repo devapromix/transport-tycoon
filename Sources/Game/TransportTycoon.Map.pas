@@ -120,31 +120,39 @@ type
     Cost: Word;
     AffectedTiles: set of TTileEnum;
     ResultTile: TTileEnum;
+    InfrastructureCategory: TInfrastructureCategory;
   end;
 
 const
   Construct: array [TConstructEnum] of TConstructRec = (
     // Clear Land
     (Name: 'Clear Land'; StatName: ''; HotKey: 'X'; Cost: 100;
-    AffectedTiles: TreeTiles; ResultTile: tlDirt),
+    AffectedTiles: TreeTiles; ResultTile: tlDirt;
+    InfrastructureCategory: icLandscaping),
     // Lowering Land
     (Name: 'Lowering Land'; StatName: ''; HotKey: 'L'; Cost: 3000;
-    AffectedTiles: TreeTiles + LandTiles; ResultTile: tlWater),
+    AffectedTiles: TreeTiles + LandTiles; ResultTile: tlWater;
+    InfrastructureCategory: icLandscaping),
     // Build Canal
     (Name: 'Build Canal'; StatName: 'Canals'; HotKey: 'C'; Cost: 2000;
-    AffectedTiles: TreeTiles + LandTiles; ResultTile: tlCanal),
+    AffectedTiles: TreeTiles + LandTiles; ResultTile: tlCanal;
+    InfrastructureCategory: icWaterways),
     // Build Aqueduct
     (Name: 'Build Aqueduct'; StatName: 'Aqueducts'; HotKey: 'A'; Cost: 4000;
-    AffectedTiles: TreeTiles + LandTiles + RoadTiles; ResultTile: tlAqueduct),
+    AffectedTiles: TreeTiles + LandTiles + RoadTiles; ResultTile: tlAqueduct;
+    InfrastructureCategory: icWaterways),
     // Build Road
     (Name: 'Build Road'; StatName: 'Roads'; HotKey: 'R'; Cost: 250;
-    AffectedTiles: TreeTiles + LandTiles; ResultTile: tlRoad),
+    AffectedTiles: TreeTiles + LandTiles; ResultTile: tlRoad;
+    InfrastructureCategory: icRoadways),
     // Build Road Tunnel
     (Name: 'Build Road Tunnel'; StatName: 'Tunnels'; HotKey: 'T'; Cost: 5000;
-    AffectedTiles: MountainTiles; ResultTile: tlRoadTunnel),
+    AffectedTiles: MountainTiles; ResultTile: tlRoadTunnel;
+    InfrastructureCategory: icRoadways),
     // Build Road Bridge
     (Name: 'Build Road Bridge'; StatName: 'Road Bridges'; HotKey: 'B';
-    Cost: 1500; AffectedTiles: WaterTiles + RoadTiles; ResultTile: tlRoadBridge)
+    Cost: 1500; AffectedTiles: WaterTiles + RoadTiles; ResultTile: tlRoadBridge;
+    InfrastructureCategory: icRoadways)
     //
     );
 

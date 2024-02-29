@@ -4,7 +4,8 @@ interface
 
 uses
   TransportTycoon.Map,
-  TransportTycoon.Scenes;
+  TransportTycoon.Scenes,
+  TransportTycoon.Construct;
 
 type
 
@@ -13,6 +14,8 @@ type
   TSceneBuildMenu = class(TScene)
   private
     FX, FY: Integer;
+    procedure DrawCategory(const AInfrastructureCategory
+      : TInfrastructureCategory);
     procedure DrawLine(const AConstruct: TConstructRec);
   public
     procedure Render; override;
@@ -25,10 +28,26 @@ uses
   SysUtils,
   BearLibTerminal,
   TransportTycoon.Game,
-  TransportTycoon.Palette,
-  TransportTycoon.Construct;
+  TransportTycoon.Palette;
 
 { TSceneBuildMenu }
+
+procedure TSceneBuildMenu.DrawCategory(const AInfrastructureCategory
+  : TInfrastructureCategory);
+begin
+  FX := 7;
+  if (AInfrastructureCategory <> icNone) and
+    (AInfrastructureCategory <> icLandscaping) then
+    Inc(FY);
+  terminal_color(TPalette.Selected);
+  terminal_composition(TK_ON);
+  DrawText(FX, FY, InfrastructureCategotyName[AInfrastructureCategory] + ':');
+  DrawText(FX, FY, StringOfChar('_',
+    Length(InfrastructureCategotyName[AInfrastructureCategory] + ':')));
+  terminal_composition(TK_OFF);
+  terminal_color(TPalette.Default);
+  Inc(FY);
+end;
 
 procedure TSceneBuildMenu.DrawLine(const AConstruct: TConstructRec);
 begin
@@ -46,19 +65,31 @@ end;
 procedure TSceneBuildMenu.Render;
 var
   LConstructEnum: TConstructEnum;
+  LInfrastructureCategory: TInfrastructureCategory;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
-  DrawFrame(5, 7, 70, 15);
-  DrawTitle(9, Game.Company.Name);
+  DrawFrame(5, 3, 70, 23);
+  DrawTitle(5, Game.Company.Name);
 
   FX := 7;
-  FY := 11;
+  FY := 7;
+
+  LInfrastructureCategory := icNone;
 
   for LConstructEnum := Low(TConstructEnum) to High(TConstructEnum) do
+  begin
+    if LInfrastructureCategory <> Construct[LConstructEnum].InfrastructureCategory
+    then
+    begin
+      LInfrastructureCategory := Construct[LConstructEnum]
+        .InfrastructureCategory;
+      DrawCategory(LInfrastructureCategory);
+    end;
     DrawLine(Construct[LConstructEnum]);
+  end;
 
-  AddButton(19, 'Esc', 'Close');
+  AddButton(23, 'Esc', 'Close');
 
   DrawGameBar;
 end;
@@ -77,13 +108,13 @@ begin
     case MX of
       7 .. 38:
         case MY of
-          11:
+          8:
             AKey := TK_X;
-          12:
+          11:
             AKey := TK_C;
-          13:
-            AKey := TK_R;
           14:
+            AKey := TK_R;
+          15:
             AKey := TK_B;
           { 15:
             AKey := TK_;
@@ -94,11 +125,11 @@ begin
         end;
       41 .. 72:
         case MY of
-          11:
+          8:
             AKey := TK_L;
-          12:
+          11:
             AKey := TK_A;
-          13:
+          14:
             AKey := TK_T;
           { 14:
             AKey := TK_;

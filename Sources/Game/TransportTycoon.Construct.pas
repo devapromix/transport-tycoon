@@ -7,6 +7,14 @@ type
     ceBuildRoad, ceBuildRoadTunnel, ceBuildRoadBridge);
 
 type
+  TInfrastructureCategory = (icNone, icLandscaping, icWaterways, icRoadways,
+    icRailways);
+
+const
+  InfrastructureCategotyName: array [TInfrastructureCategory] of string = ('',
+    'Landscaping', 'Waterways', 'Roadways', 'Railways');
+
+type
 
   { TConstruct }
 
