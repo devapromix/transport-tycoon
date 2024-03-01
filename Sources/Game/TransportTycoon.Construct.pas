@@ -11,7 +11,7 @@ type
     icRailways);
 
 const
-  InfrastructureCategotyName: array [TInfrastructureCategory] of string = ('',
+  InfrastructureCategoryName: array [TInfrastructureCategory] of string = ('',
     'Landscaping', 'Waterways', 'Roadways', 'Railways');
 
 type

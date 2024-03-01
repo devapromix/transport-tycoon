@@ -41,9 +41,9 @@ begin
     Inc(FY);
   terminal_color(TPalette.Selected);
   terminal_composition(TK_ON);
-  DrawText(FX, FY, InfrastructureCategotyName[AInfrastructureCategory] + ':');
+  DrawText(FX, FY, InfrastructureCategoryName[AInfrastructureCategory] + ':');
   DrawText(FX, FY, StringOfChar('_',
-    Length(InfrastructureCategotyName[AInfrastructureCategory] + ':')));
+    Length(InfrastructureCategoryName[AInfrastructureCategory] + ':')));
   terminal_composition(TK_OFF);
   terminal_color(TPalette.Default);
   Inc(FY);
