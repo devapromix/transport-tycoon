@@ -27,8 +27,7 @@ procedure TSceneGenMenu.Render;
 begin
   Game.Map.Draw(Self.ScreenWidth, Self.ScreenHeight);
 
-  DrawFrame(10, 9, 60, 12);
-  DrawTitle(11, 'WORLD GENERATION');
+  DrawFrame('WORLD GENERATION', 60, 12);
 
   DrawButton(12, 13, 'F', 'Map size: ' + MapSizeStr[Game.Map.MapSize]);
   DrawButton(12, 14, 'H', 'Rivers: ' + MapRiversStr[Game.Map.Rivers]);

@@ -62,8 +62,12 @@ type
       const AButton, AText: string): string;
     procedure DrawTitle(const AY: Integer; const ATitle: string); overload;
     procedure DrawTitle(const ATitle: string); overload;
+    procedure DrawFrame(const ATitle: string;
+      const AX, AY, AWidth, AHeight: Integer); overload;
     procedure DrawFrame(const AX, AY, AWidth, AHeight: Integer); overload;
-    procedure DrawFrame(const AWidth, AHeight: Integer); overload;
+    procedure DrawFrame(const ATitle: string;
+      const AWidth, AHeight: Integer); overload;
+    function DrawFrame(const AWidth, AHeight: Integer): Integer; overload;
     procedure DrawMap(const AWidth, AHeight: Integer);
     procedure ClearButtons;
     procedure AddButton(const AY: Integer;
@@ -385,13 +389,30 @@ begin
   terminal_put(AX + AWidth - 1, AY + AHeight - 1, $255D);
 end;
 
-procedure TScene.DrawFrame(const AWidth, AHeight: Integer);
+function TScene.DrawFrame(const AWidth, AHeight: Integer): Integer;
 var
   LX, LY: Integer;
 begin
   LX := (Self.ScreenWidth div 2) - (AWidth div 2);
-  LY := (Self.ScreenHeight div 2) - (AHeight div 2) - 1;
-  DrawFrame(LX, LY, AWidth, AHeight)
+  LY := (Self.ScreenHeight div 2) - (AHeight div 2);
+  DrawFrame(LX, LY, AWidth, AHeight);
+  Result := LY;
+end;
+
+procedure TScene.DrawFrame(const ATitle: string;
+  const AX, AY, AWidth, AHeight: Integer);
+begin
+  DrawFrame(AX, AY, AWidth, AHeight);
+  DrawTitle(AY + 2, ATitle);
+end;
+
+procedure TScene.DrawFrame(const ATitle: string;
+  const AWidth, AHeight: Integer);
+var
+  LY: Integer;
+begin
+  LY := DrawFrame(AWidth, AHeight);
+  DrawTitle(LY + 2, ATitle);
 end;
 
 procedure TScene.DrawMap(const AWidth, AHeight: Integer);
