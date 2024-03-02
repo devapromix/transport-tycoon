@@ -51,8 +51,7 @@ var
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
-  DrawFrame(20, 8, 40, 14);
-  DrawTitle(10, Game.Company.Name);
+  DrawFrame(Game.Company.Name, 40, 14, True);
   DrawText(22, 12, 'Race: ' + GameRaceStr[Game.Race]);
   DrawText(40, 12, 'Inavgurated: ' + IntToStr(Game.Company.Inavgurated));
   FX := 22;
@@ -63,8 +62,6 @@ begin
   if TTownIndustry(Game.Map.Industry[Game.Company.TownIndex]).HQ.IsBuilding then
     DrawText(22, 17, 'Company headquarters in ' + Game.Map.Industry
       [Game.Company.TownIndex].Name);
-
-  AddButton(19, 'Esc', 'Close');
 
   DrawGameBar;
 end;

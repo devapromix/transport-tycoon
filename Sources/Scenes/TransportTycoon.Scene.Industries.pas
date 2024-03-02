@@ -33,9 +33,7 @@ var
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
-  DrawFrame(25, 4, 30, 21);
-
-  DrawTitle(6, 'INDUSTRIES');
+  DrawFrame('INDUSTRIES', 30, 22, True);
 
   LY := 0;
   for LIndustry := 0 to Length(Game.Map.Industry) - 1 do
@@ -45,8 +43,6 @@ begin
         StrLim(Game.Map.Industry[LIndustry].Name, 22));
       Inc(LY);
     end;
-
-  AddButton(22, 'Esc', 'Close');
 
   DrawGameBar;
 end;
