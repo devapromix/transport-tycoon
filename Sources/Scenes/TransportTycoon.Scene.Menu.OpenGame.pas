@@ -44,14 +44,11 @@ var
 begin
   Game.Map.Draw(Self.ScreenWidth, Self.ScreenHeight);
 
-  DrawFrame(10, 6, 60, 18);
+  DrawFrame('OPEN SAVED GAME', 60, 18, True);
 
-  DrawTitle(8, 'OPEN SAVED GAME');
   for LSlot := Low(TSlot) to High(TSlot) do
     DrawButton(12, LSlot + 10, (Game.GetSlotStr(LSlot) <> Game.EmptySlotStr),
       Chr(Ord('A') + LSlot), Game.GetSlotStr(LSlot));
-
-  AddButton(21, 'Esc', 'Close');
 end;
 
 procedure TSceneOpenGameMenu.Update(var AKey: Word);

@@ -65,8 +65,8 @@ type
     procedure DrawFrame(const ATitle: string;
       const AX, AY, AWidth, AHeight: Integer); overload;
     procedure DrawFrame(const AX, AY, AWidth, AHeight: Integer); overload;
-    procedure DrawFrame(const ATitle: string;
-      const AWidth, AHeight: Integer); overload;
+    procedure DrawFrame(const ATitle: string; const AWidth, AHeight: Integer;
+      const IsCloseButton: Boolean = False); overload;
     function DrawFrame(const AWidth, AHeight: Integer): Integer; overload;
     procedure DrawMap(const AWidth, AHeight: Integer);
     procedure ClearButtons;
@@ -406,13 +406,15 @@ begin
   DrawTitle(AY + 2, ATitle);
 end;
 
-procedure TScene.DrawFrame(const ATitle: string;
-  const AWidth, AHeight: Integer);
+procedure TScene.DrawFrame(const ATitle: string; const AWidth, AHeight: Integer;
+  const IsCloseButton: Boolean = False);
 var
   LY: Integer;
 begin
   LY := DrawFrame(AWidth, AHeight);
   DrawTitle(LY + 2, ATitle);
+  if IsCloseButton then
+    AddButton(LY + AHeight - 3, 'Esc', 'Close');
 end;
 
 procedure TScene.DrawMap(const AWidth, AHeight: Integer);

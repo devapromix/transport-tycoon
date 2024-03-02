@@ -37,14 +37,12 @@ begin
   else
     Game.Map.Draw(Self.ScreenWidth, Self.ScreenHeight);
 
-  DrawFrame(25, 9, 30, 10);
-  DrawTitle(11, 'GAME SETTINGS');
+  DrawFrame('GAME SETTINGS', 30, 10, True);
 
   // Game Speed
-  DrawButton(27, 13, 'S', Format('Game Speed: %s', [GameSpeedStr[Game.Speed]]));
+  DrawButton(27, 14, 'S', Format('Game Speed: %s', [GameSpeedStr[Game.Speed]]));
   // Fullscreen
-  DrawButton(27, 14, 27, True, Game.Fullscreen, 'F', 'Fullscreen');
-  AddButton(16, 'Esc', 'Close');
+  DrawButton(27, 15, 27, True, Game.Fullscreen, 'F', 'Fullscreen');
 
   if IsShowBar then
     DrawGameBar;
@@ -64,9 +62,9 @@ begin
     case MX of
       27 .. 52:
         case MY of
-          13:
-            AKey := TK_S;
           14:
+            AKey := TK_S;
+          15:
             AKey := TK_F;
         end;
     end;
@@ -76,7 +74,7 @@ begin
     case MX of
       27 .. 52:
         case MY of
-          13:
+          14:
             Game.PrevSpeed;
         end;
     end;
