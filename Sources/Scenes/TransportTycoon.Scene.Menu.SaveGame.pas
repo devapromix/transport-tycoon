@@ -36,14 +36,11 @@ var
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
-  DrawFrame(10, 6, 60, 18);
+  DrawFrame('SAVE CURRENT GAME', 60, 18, True);
 
-  DrawTitle(8, 'SAVE CURRENT GAME');
   for LSlot := Low(TSlot) to High(TSlot) do
     DrawButton(12, LSlot + 10, True, Chr(Ord('A') + LSlot),
       Game.GetSlotStr(LSlot));
-
-  AddButton(21, 'Esc', 'Close');
 
   DrawGameBar;
 end;

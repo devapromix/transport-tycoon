@@ -30,12 +30,8 @@ procedure TSceneSaveGameSavedMenu.Render;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
-  DrawFrame(25, 10, 30, 9);
-
-  DrawTitle(12, 'SAVE CURRENT GAME');
-  DrawText(14, 'Game saved!');
-  AddButton(16, 'Enter', 'Close');
-  DrawText(35, 21, '[[ESC]] CLOSE', False);
+  DrawFrame('SAVE CURRENT GAME', 30, 9, True);
+  DrawText(15, 'Game saved!');
 
   DrawGameBar;
 end;

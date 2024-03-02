@@ -39,13 +39,8 @@ begin
   if (AInfrastructureCategory <> icNone) and
     (AInfrastructureCategory <> icLandscaping) then
     Inc(FY);
-  terminal_color(TPalette.Selected);
-  terminal_composition(TK_ON);
-  DrawText(FX, FY, InfrastructureCategoryName[AInfrastructureCategory] + ':');
-  DrawText(FX, FY, StringOfChar('_',
-    Length(InfrastructureCategoryName[AInfrastructureCategory] + ':')));
-  terminal_composition(TK_OFF);
-  terminal_color(TPalette.Default);
+  DrawText(FX, FY, UpperCase(InfrastructureCategoryName
+    [AInfrastructureCategory] + ':'));
   Inc(FY);
 end;
 
@@ -69,11 +64,8 @@ var
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
-  DrawFrame(5, 3, 70, 23);
-  DrawTitle(5, Game.Company.Name);
-
   FX := 7;
-  FY := 7;
+  FY := DrawFrame(Game.Company.Name, 70, 23, True) + 4;
 
   LInfrastructureCategory := icNone;
 
@@ -88,8 +80,6 @@ begin
     end;
     DrawLine(Construct[LConstructEnum]);
   end;
-
-  AddButton(23, 'Esc', 'Close');
 
   DrawGameBar;
 end;
@@ -108,13 +98,13 @@ begin
     case MX of
       7 .. 38:
         case MY of
-          8:
+          9:
             AKey := TK_X;
-          11:
+          12:
             AKey := TK_C;
-          14:
-            AKey := TK_R;
           15:
+            AKey := TK_R;
+          16:
             AKey := TK_B;
           { 15:
             AKey := TK_;
@@ -125,11 +115,11 @@ begin
         end;
       41 .. 72:
         case MY of
-          8:
+          9:
             AKey := TK_L;
-          11:
+          12:
             AKey := TK_A;
-          14:
+          15:
             AKey := TK_T;
           { 14:
             AKey := TK_;

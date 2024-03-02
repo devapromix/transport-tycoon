@@ -28,17 +28,13 @@ uses
 { TSceneSaveGameMenu }
 
 procedure TSceneSaveGamePromptMenu.Render;
-var
-  LSlot: TSlot;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
-  DrawFrame(20, 10, 40, 9);
-  DrawTitle(12, 'SAVE CURRENT GAME');
-  DrawText(14, 'Replace saved game?');
-  AddButton(16, 'Enter', 'Replace');
-  AddButton(16, 'Esc', 'Cancel');
-  DrawText(35, 21, '[[ESC]] CLOSE', False);
+  DrawFrame('SAVE CURRENT GAME', 40, 9);
+  DrawText(15, 'Replace saved game?');
+  AddButton(17, 'Enter', 'Replace');
+  AddButton(17, 'Esc', 'Cancel');
 
   DrawGameBar;
 end;

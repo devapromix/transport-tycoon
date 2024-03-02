@@ -31,9 +31,7 @@ var
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
-  DrawFrame(25, 4, 30, 21);
-
-  DrawTitle(6, 'TOWNS');
+  DrawFrame('TOWNS', 30, 22, True);
 
   for LIndustryIndex := 0 to Length(Game.Map.Industry) - 1 do
     if (Game.Map.Industry[LIndustryIndex].IndustryType = inTown) then
@@ -48,9 +46,7 @@ begin
           Format('%s (%d)', [LTownName, LTown.Population]));
     end;
 
-  DrawText(20, Format('World population: %d', [Game.Map.WorldPop]));
-
-  AddButton(22, 'Esc', 'Close');
+  DrawText(21, Format('World population: %d', [Game.Map.WorldPop]));
 
   DrawGameBar;
 end;

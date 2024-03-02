@@ -31,12 +31,10 @@ procedure TSceneOpenGamePromptMenu.Render;
 begin
   Game.Map.Draw(Self.ScreenWidth, Self.ScreenHeight);
 
-  DrawFrame(20, 10, 40, 9);
-  DrawTitle(12, 'OPEN SAVED GAME');
-  DrawText(14, 'Continue?');
-  AddButton(16, 'Enter', 'Open');
-  AddButton(16, 'Esc', 'Cancel');
-  DrawText(35, 21, '[[ESC]] CLOSE', False);
+  DrawFrame('OPEN SAVED GAME', 40, 9);
+  DrawText(15, 'Continue?');
+  AddButton(17, 'Enter', 'Open');
+  AddButton(17, 'Esc', 'Cancel');
 end;
 
 procedure TSceneOpenGamePromptMenu.Update(var AKey: Word);

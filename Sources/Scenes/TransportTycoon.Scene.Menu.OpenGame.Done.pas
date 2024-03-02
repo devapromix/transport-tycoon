@@ -30,12 +30,8 @@ procedure TSceneOpenGameDoneMenu.Render;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
-  DrawFrame(25, 10, 30, 9);
-
-  DrawTitle(12, Game.Company.Name);
-  DrawText(14, 'Game opened!');
-  AddButton(16, 'Enter', 'Close');
-  DrawText(35, 21, '[[ESC]] CLOSE', False);
+  DrawFrame(Game.Company.Name, 30, 9, True);
+  DrawText(15, 'Game opened!');
 
   DrawGameBar;
 end;
