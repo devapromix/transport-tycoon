@@ -17,8 +17,8 @@ type
 implementation
 
 uses
-  BearLibTerminal,
   SysUtils,
+  BearLibTerminal,
   TransportTycoon.Game,
   TransportTycoon.Scene.Menu.Settings,
   TransportTycoon.Scene.Dialog;
@@ -85,8 +85,7 @@ begin
         Scenes.SetScene(scSettingsMenu, scMainMenu);
       end;
     TK_Q:
-      TSceneDialogPrompt.Ask('Quit', 'Leave the game?', scMainMenu, nil);
-      // @Close);
+      TSceneDialog.Ask('Quit', 'Leave the game?', False, scMainMenu, @Close);
   end;
 end;
 

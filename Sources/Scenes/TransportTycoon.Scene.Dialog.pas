@@ -6,19 +6,20 @@ uses
   TransportTycoon.Scenes;
 
 type
-  TVoidMethod = procedure of object;
+  TVoidMethod = procedure;
 
 type
 
   { TSceneDialog }
 
-  TSceneDialogPrompt = class(TScene)
+  TSceneDialog = class(TScene)
   private
   public
     procedure Render; override;
     procedure Update(var AKey: Word); override;
     class function Ask(const ACaption, AMessage: string;
-      const ASceneBack: TSceneEnum; AHandler: TVoidMethod = nil): Boolean;
+      const AIsDrawBar: Boolean; const ASceneBack: TSceneEnum;
+      AHandler: TVoidMethod = nil): Boolean;
   end;
 
 implementation
@@ -29,24 +30,27 @@ uses
 
 var
   LHandler: TVoidMethod = nil;
+  LIsDrawBar: Boolean = False;
   LSceneBack: TSceneEnum;
   LCaption: string;
   LMessage: string;
 
   { TSceneDialog }
 
-class function TSceneDialogPrompt.Ask(const ACaption, AMessage: string;
-  const ASceneBack: TSceneEnum; AHandler: TVoidMethod = nil): Boolean;
+class function TSceneDialog.Ask(const ACaption, AMessage: string;
+  const AIsDrawBar: Boolean; const ASceneBack: TSceneEnum;
+  AHandler: TVoidMethod = nil): Boolean;
 begin
   LCaption := ACaption;
   LSceneBack := ASceneBack;
   LMessage := AMessage;
   Result := True;
   LHandler := AHandler;
+  LIsDrawBar := AIsDrawBar;
   Scenes.SetScene(scDialog);
 end;
 
-procedure TSceneDialogPrompt.Render;
+procedure TSceneDialog.Render;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight);
 
@@ -55,10 +59,11 @@ begin
   AddButton(17, 'ENTER', 'Yes');
   AddButton(17, 'ESC', 'Cancel');
 
-  DrawGameBar;
+  if LIsDrawBar then
+    DrawGameBar;
 end;
 
-procedure TSceneDialogPrompt.Update(var AKey: Word);
+procedure TSceneDialog.Update(var AKey: Word);
 begin
   if (AKey = TK_MOUSE_LEFT) then
   begin

@@ -588,7 +588,7 @@ begin
   FScene[scBusStation] := TSceneBusStation.Create;
   FScene[scTruckLoadingBay] := TSceneTruckLoadingBay.Create;
   FScene[scRoadVehicleDepot] := TSceneRoadVehicleDepot.Create;
-  FScene[scDialog] := TSceneDialogPrompt.Create;
+  FScene[scDialog] := TSceneDialog.Create;
 end;
 
 procedure TScenes.Update(var AKey: Word);
