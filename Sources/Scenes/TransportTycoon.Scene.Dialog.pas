@@ -54,9 +54,9 @@ procedure TSceneDialog.Render;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight);
 
-  DrawFrame(LCaption, 40, 10);
-  DrawText(14, LMessage);
-  AddButton(17, 'ENTER', 'Yes');
+  DrawFrame(LCaption, 40, 9);
+  DrawText(15, LMessage);
+  AddButton(17, 'ENTER', 'Leave');
   AddButton(17, 'ESC', 'Cancel');
 
   if LIsDrawBar then
@@ -70,9 +70,9 @@ begin
     if (GetButtonsY = MY) then
     begin
       case MX of
-        27 .. 37:
+        26 .. 38:
           AKey := TK_ENTER;
-        41 .. 52:
+        42 .. 53:
           AKey := TK_ESCAPE;
       end;
     end;

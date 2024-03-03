@@ -48,6 +48,7 @@ type
     FRace: TRaceEnum;
     FSlotStr: array [TSlot] of string;
     FFullscreen: Boolean;
+    FCanClose: Boolean;
     procedure ForceDirs;
   public const
     MaxLoan = 200000;
@@ -74,6 +75,7 @@ type
     property Speed: TGameSpeedEnum read FSpeed;
     property Race: TRaceEnum read FRace write FRace;
     property Fullscreen: Boolean read FFullscreen write FFullscreen;
+    property CanClose: Boolean read FCanClose write FCanClose;
     procedure Clear;
     procedure Step;
     function GetPath(ASubDir: string): string;
@@ -116,6 +118,7 @@ constructor TGame.Create;
 var
   LParam: Integer;
 begin
+  FCanClose := False;
   FRace := reHuman;
   FIsOrder := False;
   FIsDebug := False;

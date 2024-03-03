@@ -103,7 +103,7 @@ begin
         LTick := 0;
         Game.Step;
       end;
-    until (LKey = TK_CLOSE);
+    until Game.CanClose;
     terminal_close();
   finally
     FreeAndNil(Scenes);

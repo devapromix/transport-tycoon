@@ -25,6 +25,7 @@ uses
 
 procedure Close();
 begin
+  Game.CanClose := True;
   terminal_close();
 end;
 
