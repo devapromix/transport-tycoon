@@ -26,13 +26,13 @@ type
   TCompany = class(TObject)
   private
     FInavgurated: Integer;
-    FTownID: Integer;
+    FTownIndex: Integer;
     FStat: TStat;
   public
     constructor Create;
     destructor Destroy; override;
     property Inavgurated: Integer read FInavgurated;
-    property TownIndex: Integer read FTownID write FTownID;
+    property TownIndex: Integer read FTownIndex write FTownIndex;
     property Stat: TStat read FStat write FStat;
     procedure Clear;
     function Name: string;
@@ -73,10 +73,8 @@ end;
 
 procedure TCompany.Clear;
 begin
+  FTownIndex := 0;
   FStat.Clear;
-  repeat
-    FTownID := RandomRange(0, MapNoOfTownsInt[Game.Map.NoOfTowns]);
-  until TTownIndustry(Game.Map.Industry[FTownID]).TownRace = Game.Race;
   FInavgurated := Game.Calendar.Year;
 end;
 
@@ -93,7 +91,7 @@ end;
 
 function TCompany.IsTownHQ: Boolean;
 begin
-  Result := Game.Map.CurrentIndustry = FTownID
+  Result := Game.Map.CurrentIndustry = FTownIndex
 end;
 
 function TCompany.Name: string;

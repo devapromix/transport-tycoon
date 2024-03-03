@@ -825,6 +825,9 @@ begin
           LTownRace := Game.Race
         else
           LTownRace := TRaceEnum(Math.RandomRange(0, Ord(High(TRaceEnum)) + 1));
+        if (Math.RandomRange(1, 3) = 1) and (LTownRace = Game.Race) and
+          (Game <> nil) then
+          Game.Company.TownIndex := I;
       end;
       repeat
         LTownName := TTownIndustry.GenName(LTownRace);

@@ -441,9 +441,9 @@ begin
   FLoan := StartMoney;
   FFinances.Clear;
   FFinances.SetYear(Calendar.Year);
+  FCompany.Clear;
   FMap.Gen;
   FVehicles.Clear;
-  FCompany.Clear;
 end;
 
 end.
