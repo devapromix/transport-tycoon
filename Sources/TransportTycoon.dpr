@@ -24,6 +24,7 @@ uses
   TransportTycoon.Log in 'Game\TransportTycoon.Log.pas',
   TransportTycoon.Races in 'Game\TransportTycoon.Races.pas',
   TransportTycoon.Scenes in 'Scenes\TransportTycoon.Scenes.pas',
+  TransportTycoon.Scene.Dialog in 'Scenes\TransportTycoon.Scene.Dialog.pas',
   TransportTycoon.Scene.BuildInTown in 'Scenes\TransportTycoon.Scene.BuildInTown.pas',
   TransportTycoon.Scene.World in 'Scenes\TransportTycoon.Scene.World.pas',
   TransportTycoon.Scene.Airport in 'Scenes\TransportTycoon.Scene.Airport.pas',

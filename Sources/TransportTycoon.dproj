@@ -125,6 +125,7 @@
         <DCCReference Include="Game\TransportTycoon.Log.pas"/>
         <DCCReference Include="Game\TransportTycoon.Races.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scenes.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.Dialog.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.BuildInTown.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.World.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Airport.pas"/>

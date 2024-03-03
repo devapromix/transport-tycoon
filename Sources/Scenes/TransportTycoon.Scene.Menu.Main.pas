@@ -20,7 +20,13 @@ uses
   BearLibTerminal,
   SysUtils,
   TransportTycoon.Game,
-  TransportTycoon.Scene.Menu.Settings;
+  TransportTycoon.Scene.Menu.Settings,
+  TransportTycoon.Scene.Dialog;
+
+procedure Close();
+begin
+  terminal_close();
+end;
 
 procedure TSceneMainMenu.Render;
 begin
@@ -79,7 +85,8 @@ begin
         Scenes.SetScene(scSettingsMenu, scMainMenu);
       end;
     TK_Q:
-      terminal_close();
+      TSceneDialogPrompt.Ask('Quit', 'Leave the game?', scMainMenu, nil);
+      // @Close);
   end;
 end;
 
