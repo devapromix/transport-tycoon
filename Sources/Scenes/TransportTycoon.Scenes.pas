@@ -161,6 +161,12 @@ uses
   TransportTycoon.Construct,
   TransportTycoon.Scene.Dialog;
 
+procedure CloseGame;
+begin
+  Game.CanClose := True;
+  terminal_close();
+end;
+
 procedure TScene.DrawText(const AX, AY: Integer; AText: string;
   const ATextAlign: Integer = TK_ALIGN_LEFT);
 begin
@@ -603,6 +609,11 @@ begin
           MapSizeInt[Game.Map.MapSize]);
         RX := EnsureRange(Game.Map.Left + MX, 0, MapSizeInt[Game.Map.MapSize]);
         RY := EnsureRange(Game.Map.Top + MY, 0, MapSizeInt[Game.Map.MapSize]);
+        if AKey = TK_CLOSE then
+        begin
+          TSceneDialog.Ask('Quit', 'Leave the game?', False, scMainMenu,
+            @CloseGame);
+        end;
         Update(AKey);
       end;
   except
