@@ -31,7 +31,6 @@ uses
 var
   LHandler: TVoidMethod = nil;
   LIsDrawBar: Boolean = False;
-  LSceneBack: TSceneEnum;
   LCaption: string;
   LMessage: string;
 
@@ -42,12 +41,11 @@ class function TSceneDialog.Ask(const ACaption, AMessage: string;
   AHandler: TVoidMethod = nil): Boolean;
 begin
   LCaption := ACaption;
-  LSceneBack := ASceneBack;
   LMessage := AMessage;
   Result := True;
   LHandler := AHandler;
   LIsDrawBar := AIsDrawBar;
-  Scenes.SetScene(scDialog);
+  Scenes.SetScene(scDialog, ASceneBack);
 end;
 
 procedure TSceneDialog.Render;
@@ -85,7 +83,7 @@ begin
         LHandler := nil;
       end;
     TK_ESCAPE:
-      Scenes.SetScene(LSceneBack);
+      Scenes.Back;
   end;
 end;
 

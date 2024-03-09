@@ -611,8 +611,7 @@ begin
         RY := EnsureRange(Game.Map.Top + MY, 0, MapSizeInt[Game.Map.MapSize]);
         if AKey = TK_CLOSE then
         begin
-          TSceneDialog.Ask('Quit', 'Leave the game?', False, scMainMenu,
-            @CloseGame);
+          TSceneDialog.Ask('Quit', 'Leave the game?', False, Scene, @CloseGame);
         end;
         Update(AKey);
       end;
