@@ -39,7 +39,8 @@ When an item is checkmarked, it means the basic foundation is in place but not n
   - [ ] Wheat
   - [ ] Food
   
-  
+## Screenshot
+![screenshot](https://github.com/devapromix/transport-tycoon/blob/master/screenshot.png)
   
   
   
