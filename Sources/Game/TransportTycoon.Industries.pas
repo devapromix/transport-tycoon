@@ -295,27 +295,27 @@ begin
         LStringList[0].DelimitedText :=
           '"Eding","Graning","Vorg","Tra","Nording","Agring","Gran","Funt",' +
           '"Grufing","Trening","Chend","Drinning","Long","Tor","Mar","Fin",' +
-          '"Storm"';
+          '"Storm","Raven","River","Far"';
         LStringList[1].DelimitedText :=
           '"ville","burg","ley","ly","field","town","well","bell","bridge",' +
-          '"ton","stone","hattan","mor"';
+          '"ton","stone","hattan","mor","dale"';
       end;
     reDwarf:
       begin
         LStringList[0].DelimitedText :=
           '"Zoar","Nard","Well","Quar","Lind","Moor","Zoar","Torm",' +
-          '"Horm","Quir","Quer","Yar","Tre","Soran","Tom","Kaz","Un",' +
-          '"Quaz","Kud","Kaz"';
+          '"Horm","Quir","Quer","Yar","Tre","Soran","Tom","Kuuz","Un",' +
+          '"Quaz","Kud","Kaz","For"';
         LStringList[1].DelimitedText :=
           '"ang","ank","orn","ong","ud","um","un","uk","anh","okn","ing",' +
-          '"itan","otin","orun"';
+          '"itan","otin","orun","run"';
       end;
     reElf:
       begin
         LStringList[0].DelimitedText :=
           '"Elvi","Kilim","Kalim","Vali","Elle","Eli","Tole","Filli",' +
           '"Enne","Ere","Moli","Revi","Na","Tal","Tel","Nar","Da","Tul",' +
-          '"Tar","Ella","Tre","Elimi"';
+          '"Tar","Ella","Tre","Elimi","Reli","Fir"';
         LStringList[1].DelimitedText :=
           '"nar","nor","laar","maar","tor","dor","daar","saar","naar",' +
           '"noor","lor","taar","toor","tiir","nir","niir","door","bor",' +
