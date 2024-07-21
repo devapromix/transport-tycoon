@@ -334,6 +334,8 @@ end;
 procedure TGame.Load(const ASlot: Byte);
 var
   LIniFile: TMemIniFile;
+  LConstructEnum: TConstructEnum;
+  LValue: Integer;
 begin
   LIniFile := TMemIniFile.Create(GetFileName(ASlot), TEncoding.UTF8);
   try
@@ -348,6 +350,17 @@ begin
     FTurn := LIniFile.ReadInteger('Game', 'Turn', 0);
     FLoan := LIniFile.ReadInteger('Game', 'Loan', StartMoney);
     FMoney := LIniFile.ReadInteger('Game', 'Money', StartMoney);
+    // Statistics
+    for LConstructEnum := Succ(Low(TConstructEnum)) to High(TConstructEnum) do
+    begin
+      if (TransportTycoon.Map.Construct[LConstructEnum].StatName <> '') then
+      begin
+        LValue := LIniFile.ReadInteger('Statistics',
+          TransportTycoon.Map.Construct[LConstructEnum].StatName, 0);
+        Game.Company.Stat.SetStat(LConstructEnum, LValue);
+      end;
+    end;
+
     //
     Scenes.SetScene(scOpenGameDoneMenu);
   finally
@@ -378,7 +391,6 @@ begin
     // Statistics
     for LConstructEnum := Succ(Low(TConstructEnum)) to High(TConstructEnum) do
     begin
-
       if (Game.Company.Stat.GetStat(LConstructEnum) <> 0) and
         (TransportTycoon.Map.Construct[LConstructEnum].StatName <> '') then
       begin

@@ -17,6 +17,8 @@ type
     function GetStat(const AConstructEnum: TConstructEnum): Integer;
     procedure IncStat(const AConstructEnum: TConstructEnum;
       const AValue: Integer = 1);
+    procedure SetStat(const AConstructEnum: TConstructEnum;
+      const AValue: Integer);
   end;
 
 type
@@ -67,6 +69,14 @@ procedure TStat.IncStat(const AConstructEnum: TConstructEnum;
   const AValue: Integer = 1);
 begin
   Inc(FStat[AConstructEnum], AValue);
+end;
+
+procedure TStat.SetStat(const AConstructEnum: TConstructEnum;
+  const AValue: Integer);
+begin
+  if AValue <= 0 then
+    Exit;
+  FStat[AConstructEnum] := AValue;
 end;
 
 { TCompany }
