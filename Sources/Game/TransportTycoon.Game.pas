@@ -358,6 +358,7 @@ end;
 procedure TGame.Save(const ASlot: Byte);
 var
   LIniFile: TMemIniFile;
+  LConstructEnum: TConstructEnum;
 begin
   LIniFile := TMemIniFile.Create(GetFileName(ASlot), TEncoding.UTF8);
   try
@@ -374,6 +375,17 @@ begin
     // Company
     LIniFile.WriteString('Company', 'Name', UpperCase(Game.Company.Name));
     LIniFile.WriteInteger('Company', 'TownIndex', Game.Company.TownIndex);
+    // Statistics
+    for LConstructEnum := Succ(Low(TConstructEnum)) to High(TConstructEnum) do
+    begin
+
+      if (Game.Company.Stat.GetStat(LConstructEnum) <> 0) and
+        (TransportTycoon.Map.Construct[LConstructEnum].StatName <> '') then
+      begin
+        LIniFile.WriteInteger('Statistics', TransportTycoon.Map.Construct
+          [LConstructEnum].StatName, Game.Company.Stat.GetStat(LConstructEnum));
+      end;
+    end;
     //
     LIniFile.UpdateFile;
   finally
