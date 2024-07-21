@@ -112,7 +112,8 @@ uses
   Dialogs,
   IniFiles,
   BearLibTerminal,
-  TransportTycoon.Scenes;
+  TransportTycoon.Scenes,
+  TransportTycoon.Industries;
 
 constructor TGame.Create;
 var
@@ -360,7 +361,10 @@ begin
         Game.Company.Stat.SetStat(LConstructEnum, LValue);
       end;
     end;
+    // Industries
 
+    //
+    //
     //
     Scenes.SetScene(scOpenGameDoneMenu);
   finally
@@ -372,6 +376,7 @@ procedure TGame.Save(const ASlot: Byte);
 var
   LIniFile: TMemIniFile;
   LConstructEnum: TConstructEnum;
+  LIndCount, LIndustry: Integer;
 begin
   LIniFile := TMemIniFile.Create(GetFileName(ASlot), TEncoding.UTF8);
   try
@@ -398,6 +403,21 @@ begin
           [LConstructEnum].StatName, Game.Company.Stat.GetStat(LConstructEnum));
       end;
     end;
+    // Industries
+    LIndCount := Length(Game.Map.Industry);
+    LIniFile.WriteInteger('Industries', 'IndustriesCount', LIndCount);
+    for LIndustry := 0 to Length(Game.Map.Industry) - 1 do
+    begin
+      LIniFile.WriteString('Industry' + IntToStr(LIndustry + 1), 'Name',
+        Game.Map.Industry[LIndustry].Name);
+      LIniFile.WriteString('Industry' + IntToStr(LIndustry + 1), 'Type',
+        IndustryTypeStr[Game.Map.Industry[LIndustry].IndustryType]);
+    end;
+    // if ( = inTown) then
+    // Result := Result + 1;
+
+    //
+    //
     //
     LIniFile.UpdateFile;
   finally

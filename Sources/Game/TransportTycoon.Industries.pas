@@ -17,6 +17,10 @@ type
   TIndustryType = (inNone, inTown, inCoalMine, inPowerPlant, inForest,
     inSawmill);
 
+const
+  IndustryTypeStr: array [TIndustryType] of string = ('None', 'Town',
+    'Coal Mine', 'Power Plant', 'Forest', 'Sawmill');
+
 type
 
   { TIndustry }
