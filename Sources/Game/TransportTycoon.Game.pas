@@ -377,6 +377,8 @@ var
   LIniFile: TMemIniFile;
   LConstructEnum: TConstructEnum;
   LIndCount, LIndustry: Integer;
+  LIndustryName: string;
+  LRace: TRaceEnum;
 begin
   LIniFile := TMemIniFile.Create(GetFileName(ASlot), TEncoding.UTF8);
   try
@@ -408,14 +410,28 @@ begin
     LIniFile.WriteInteger('Industries', 'IndustriesCount', LIndCount);
     for LIndustry := 0 to Length(Game.Map.Industry) - 1 do
     begin
-      LIniFile.WriteString('Industry' + IntToStr(LIndustry + 1), 'Name',
+      LIndustryName := 'Industry' + IntToStr(LIndustry + 1);
+      LIniFile.WriteString(LIndustryName, 'Name',
         Game.Map.Industry[LIndustry].Name);
-      LIniFile.WriteString('Industry' + IntToStr(LIndustry + 1), 'Type',
+      LIniFile.WriteInteger(LIndustryName, 'X', Game.Map.Industry[LIndustry].X);
+      LIniFile.WriteInteger(LIndustryName, 'Y', Game.Map.Industry[LIndustry].Y);
+      LIniFile.WriteString(LIndustryName, 'Type',
         IndustryTypeStr[Game.Map.Industry[LIndustry].IndustryType]);
+      if Game.Map.Industry[LIndustry].IndustryType = inTown then
+      begin
+        LIniFile.WriteInteger(LIndustryName, 'Houses',
+          TTownIndustry(Game.Map.Industry[LIndustry]).Houses);
+        LIniFile.WriteInteger(LIndustryName, 'Population',
+          TTownIndustry(Game.Map.Industry[LIndustry]).Population);
+        LIniFile.WriteString(LIndustryName, 'TownRace',
+          GameRaceStr[TTownIndustry(Game.Map.Industry[LIndustry]).TownRace]);
+        for LRace := Low(TRaceEnum) to High(TRaceEnum) do
+        begin
+          LIniFile.WriteInteger(LIndustryName, GameRaceStr[LRace],
+            TTownIndustry(Game.Map.Industry[LIndustry]).GetRacePop(LRace));
+        end;
+      end;
     end;
-    // if ( = inTown) then
-    // Result := Result + 1;
-
     //
     //
     //
