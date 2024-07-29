@@ -408,7 +408,7 @@ begin
     // Industries
     LIndCount := Length(Game.Map.Industry);
     LIniFile.WriteInteger('Industries', 'IndustriesCount', LIndCount);
-    for LIndustry := 0 to Length(Game.Map.Industry) - 1 do
+    for LIndustry := 0 to LIndCount - 1 do
     begin
       LIndustryName := 'Industry' + IntToStr(LIndustry + 1);
       LIniFile.WriteString(LIndustryName, 'Name',
