@@ -26,6 +26,9 @@ type
   { TDock }
 
   TDock = class(TStation)
+  private
+    function IsNearWaterTile(const AX, AY: Integer): Boolean;
+  public
     function CanBuild(const AX, AY: Integer): Boolean;
   end;
 
@@ -73,11 +76,20 @@ end;
 
 { TDock }
 
+function TDock.IsNearWaterTile(const AX, AY: Integer): Boolean;
+var
+  LTile: TTileEnum;
+begin
+  Result := False;
+  for LTile := tlWater to tlDeepWater do
+    if Game.Map.IsNearTile(AX, AY, LTile) then
+      Exit(True);
+end;
+
 function TDock.CanBuild(const AX, AY: Integer): Boolean;
 begin
   Result := (FLevel < FMaxLevel) and (Game.Money >= Cost) and
-    ((Game.Map.IsNearTile(AX, AY, tlWater) or (Game.Map.IsNearTile(AX, AY,
-    tlCanal))))
+    IsNearWaterTile(AX, AY);
 end;
 
 end.
