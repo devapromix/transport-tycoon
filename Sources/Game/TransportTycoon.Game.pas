@@ -430,6 +430,8 @@ begin
           LIniFile.WriteInteger(LIndustryName, GameRaceStr[LRace],
             TTownIndustry(Game.Map.Industry[LIndustry]).GetRacePop(LRace));
         end;
+        LIniFile.WriteInteger(LIndustryName, 'Airport',
+          TTownIndustry(Game.Map.Industry[LIndustry]).Airport.Level);
       end;
     end;
     //
