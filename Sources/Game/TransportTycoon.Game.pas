@@ -432,6 +432,8 @@ begin
         end;
         LIniFile.WriteInteger(LIndustryName, 'Airport',
           TTownIndustry(Game.Map.Industry[LIndustry]).Airport.Level);
+        LIniFile.WriteInteger(LIndustryName, 'Dock',
+          TTownIndustry(Game.Map.Industry[LIndustry]).Dock.Level);
       end;
     end;
     //
