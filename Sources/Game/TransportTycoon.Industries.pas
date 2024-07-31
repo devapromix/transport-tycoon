@@ -389,7 +389,7 @@ end;
 function TTownIndustry.GrowModif: Integer;
 begin
   Result := Airport.Level + Dock.Level +
-    BusStation.Level { + Trainstation } + 5;
+    BusStation.Level { + TrainStation.Level } + 5;
 end;
 
 procedure TTownIndustry.ModifyPopulation(const APopulation: Integer);

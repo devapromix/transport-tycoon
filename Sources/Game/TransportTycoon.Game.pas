@@ -423,7 +423,7 @@ begin
           TTownIndustry(Game.Map.Industry[LIndustry]).Houses);
         LIniFile.WriteInteger(LIndustryName, 'Population',
           TTownIndustry(Game.Map.Industry[LIndustry]).Population);
-        LIniFile.WriteString(LIndustryName, 'TownRace',
+        LIniFile.WriteString(LIndustryName, 'Race',
           GameRaceStr[TTownIndustry(Game.Map.Industry[LIndustry]).TownRace]);
         for LRace := Low(TRaceEnum) to High(TRaceEnum) do
         begin
@@ -434,6 +434,12 @@ begin
           TTownIndustry(Game.Map.Industry[LIndustry]).Airport.Level);
         LIniFile.WriteInteger(LIndustryName, 'Dock',
           TTownIndustry(Game.Map.Industry[LIndustry]).Dock.Level);
+        LIniFile.WriteInteger(LIndustryName, 'BS',
+          TTownIndustry(Game.Map.Industry[LIndustry]).BusStation.Level);
+        LIniFile.WriteInteger(LIndustryName, 'TLB',
+          TTownIndustry(Game.Map.Industry[LIndustry]).TruckLoadingBay.Level);
+        LIniFile.WriteInteger(LIndustryName, 'HQ',
+          TTownIndustry(Game.Map.Industry[LIndustry]).HQ.Level);
       end;
     end;
     //
