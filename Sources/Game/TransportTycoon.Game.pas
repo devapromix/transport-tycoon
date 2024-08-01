@@ -49,6 +49,7 @@ type
     FSlotStr: array [TSlot] of string;
     FFullscreen: Boolean;
     FCanClose: Boolean;
+    FYear: Word;
     procedure ForceDirs;
   public const
     MaxLoan = 200000;
@@ -65,6 +66,7 @@ type
     property Finances: TFinances read FFinances write FFinances;
     property Vehicles: TVehicles read FVehicles;
     property Calendar: TCalendar read FCalendar;
+    property Year: Word read FYear write FYear;
     property Map: TMap read FMap;
     property IsDebug: Boolean read FIsDebug;
     property Turn: Integer read FTurn;
@@ -337,6 +339,7 @@ var
   LIniFile: TMemIniFile;
   LConstructEnum: TConstructEnum;
   LValue: Integer;
+  LYear: Word;
 begin
   LIniFile := TMemIniFile.Create(GetFileName(ASlot), TEncoding.UTF8);
   try
@@ -351,6 +354,7 @@ begin
     FTurn := LIniFile.ReadInteger('Game', 'Turn', 0);
     FLoan := LIniFile.ReadInteger('Game', 'Loan', StartMoney);
     FMoney := LIniFile.ReadInteger('Game', 'Money', StartMoney);
+    FYear := LIniFile.ReadInteger('Game', 'Year', StartYear);
     // Statistics
     for LConstructEnum := Succ(Low(TConstructEnum)) to High(TConstructEnum) do
     begin
@@ -360,6 +364,14 @@ begin
           TransportTycoon.Map.Construct[LConstructEnum].StatName, 0);
         Game.Company.Stat.SetStat(LConstructEnum, LValue);
       end;
+    end;
+    // Finances
+    Finances.Clear;
+    for LYear := StartYear to FinishYear do
+    begin
+      Game.Finances.SetValue(ttRoadVehicleIncome, LYear,
+        LIniFile.ReadInteger(LYear.ToString, 'RoadVehicleIncome', 0));
+
     end;
     // Industries
 
@@ -388,6 +400,7 @@ begin
     LIniFile.WriteInteger('Game', 'Turn', Game.Turn);
     LIniFile.WriteInteger('Game', 'Loan', Game.Loan);
     LIniFile.WriteInteger('Game', 'Money', Game.Money);
+    LIniFile.WriteInteger('Game', 'Year', StartYear);
     // Calendar
     LIniFile.WriteInteger('Calendar', 'Day', Game.Calendar.Day);
     LIniFile.WriteInteger('Calendar', 'WeekDay', Game.Calendar.WeekDay);
@@ -544,6 +557,7 @@ begin
   FLoan := StartMoney;
   FFinances.Clear;
   FFinances.SetYear(Calendar.Year);
+  FYear := Calendar.Year;
   FCompany.Clear;
   FMap.Gen;
   FVehicles.Clear;

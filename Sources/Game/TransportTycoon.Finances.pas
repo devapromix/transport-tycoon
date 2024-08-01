@@ -24,6 +24,7 @@ type
     function Value(const AValueEnum: TValueEnum): Integer;
     function Values(const AValuesEnum: array of TValueEnum): Integer;
     procedure ModifyValue(const AValueEnum: TValueEnum; const AValue: Integer);
+    procedure SetValue(const AValueEnum: TValueEnum; const AValue: Integer);
   end;
 
 type
@@ -44,6 +45,8 @@ type
       const AYear: Word): Integer;
     procedure ModifyValue(const AValueEnum: TValueEnum; const AValue: Integer);
     procedure SetYear(const AYear: Word);
+    procedure SetValue(const AValueEnum: TValueEnum; const AYear: Word;
+      const AValue: Integer);
   end;
 
 implementation
@@ -71,6 +74,12 @@ procedure TFinanceYear.ModifyValue(const AValueEnum: TValueEnum;
   const AValue: Integer);
 begin
   FValue[AValueEnum] := FValue[AValueEnum] + AValue;
+end;
+
+procedure TFinanceYear.SetValue(const AValueEnum: TValueEnum;
+  const AValue: Integer);
+begin
+  FValue[AValueEnum] := AValue;
 end;
 
 function TFinanceYear.Value(const AValueEnum: TValueEnum): Integer;
@@ -132,6 +141,12 @@ procedure TFinances.ModifyValue(const AValueEnum: TValueEnum;
   const AValue: Integer);
 begin
   FFinanceYear[Game.Calendar.Year].ModifyValue(AValueEnum, AValue);
+end;
+
+procedure TFinances.SetValue(const AValueEnum: TValueEnum; const AYear: Word;
+  const AValue: Integer);
+begin
+  FFinanceYear[AYear].SetValue(AValueEnum, AValue);
 end;
 
 procedure TFinances.SetYear(const AYear: Word);
