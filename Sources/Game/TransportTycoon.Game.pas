@@ -378,6 +378,7 @@ var
   LConstructEnum: TConstructEnum;
   LIndCount, LIndustry: Integer;
   LIndustryName: string;
+  LYear: Word;
   LRace: TRaceEnum;
 begin
   LIniFile := TMemIniFile.Create(GetFileName(ASlot), TEncoding.UTF8);
@@ -404,6 +405,35 @@ begin
         LIniFile.WriteInteger('Statistics', TransportTycoon.Map.Construct
           [LConstructEnum].StatName, Game.Company.Stat.GetStat(LConstructEnum));
       end;
+    end;
+    // Finances
+    for LYear := StartYear to FinishYear do
+    begin
+      // Income
+      LIniFile.WriteInteger(LYear.ToString, 'RoadVehicleIncome',
+        Game.Finances.Value(ttRoadVehicleIncome, LYear));
+      LIniFile.WriteInteger(LYear.ToString, 'TrainIncome',
+        Game.Finances.Value(ttTrainIncome, LYear));
+      LIniFile.WriteInteger(LYear.ToString, 'ShipIncome',
+        Game.Finances.Value(ttShipIncome, LYear));
+      LIniFile.WriteInteger(LYear.ToString, 'AircraftIncome',
+        Game.Finances.Value(ttAircraftIncome, LYear));
+      // Running Costs
+      LIniFile.WriteInteger(LYear.ToString, 'RoadVehicleRunningCosts',
+        Game.Finances.Value(ttRoadVehicleRunningCosts, LYear));
+      LIniFile.WriteInteger(LYear.ToString, 'TrainRunningCosts',
+        Game.Finances.Value(ttTrainRunningCosts, LYear));
+      LIniFile.WriteInteger(LYear.ToString, 'ShipRunningCosts',
+        Game.Finances.Value(ttShipRunningCosts, LYear));
+      LIniFile.WriteInteger(LYear.ToString, 'AircraftRunningCosts',
+        Game.Finances.Value(ttAircraftRunningCosts, LYear));
+      // Loan Interest
+      LIniFile.WriteInteger(LYear.ToString, 'LoanInterest',
+        Game.Finances.Value(ttLoanInterest, LYear));
+      LIniFile.WriteInteger(LYear.ToString, 'Construction',
+        Game.Finances.Value(ttConstruction, LYear));
+      LIniFile.WriteInteger(LYear.ToString, 'NewVehicles',
+        Game.Finances.Value(ttNewVehicles, LYear));
     end;
     // Industries
     LIndCount := Length(Game.Map.Industry);
