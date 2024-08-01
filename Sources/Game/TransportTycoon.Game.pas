@@ -369,9 +369,31 @@ begin
     Finances.Clear;
     for LYear := StartYear to FinishYear do
     begin
+      // Income
       Game.Finances.SetValue(ttRoadVehicleIncome, LYear,
         LIniFile.ReadInteger(LYear.ToString, 'RoadVehicleIncome', 0));
-
+      Game.Finances.SetValue(ttTrainIncome, LYear,
+        LIniFile.ReadInteger(LYear.ToString, 'TrainIncome', 0));
+      Game.Finances.SetValue(ttShipIncome, LYear,
+        LIniFile.ReadInteger(LYear.ToString, 'ShipIncome', 0));
+      Game.Finances.SetValue(ttAircraftIncome, LYear,
+        LIniFile.ReadInteger(LYear.ToString, 'AircraftIncome', 0));
+      // Running Costs
+      Game.Finances.SetValue(ttRoadVehicleRunningCosts, LYear,
+        LIniFile.ReadInteger(LYear.ToString, 'RoadVehicleRunningCosts', 0));
+      Game.Finances.SetValue(ttTrainRunningCosts, LYear,
+        LIniFile.ReadInteger(LYear.ToString, 'TrainRunningCosts', 0));
+      Game.Finances.SetValue(ttShipRunningCosts, LYear,
+        LIniFile.ReadInteger(LYear.ToString, 'ShipRunningCosts', 0));
+      Game.Finances.SetValue(ttAircraftRunningCosts, LYear,
+        LIniFile.ReadInteger(LYear.ToString, 'AircraftRunningCosts', 0));
+      // Loan Interest
+      Game.Finances.SetValue(ttLoanInterest, LYear,
+        LIniFile.ReadInteger(LYear.ToString, 'LoanInterest', 0));
+      Game.Finances.SetValue(ttConstruction, LYear,
+        LIniFile.ReadInteger(LYear.ToString, 'Construction', 0));
+      Game.Finances.SetValue(ttNewVehicles, LYear,
+        LIniFile.ReadInteger(LYear.ToString, 'NewVehicles', 0));
     end;
     for LYear := FYear to FCalendar.Year do
       FFinances.SetYear(LYear);
