@@ -373,6 +373,8 @@ begin
         LIniFile.ReadInteger(LYear.ToString, 'RoadVehicleIncome', 0));
 
     end;
+    for LYear := FYear to FCalendar.Year do
+      FFinances.SetYear(LYear);
     // Industries
 
     //
