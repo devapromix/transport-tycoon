@@ -28,8 +28,6 @@ uses
 { TSceneBuildNearIndustry }
 
 procedure TSceneBuildNearIndustry.Render;
-var
-  LHint: string;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
@@ -38,17 +36,12 @@ begin
   FIndustry := Game.Map.Industry[Game.Map.CurrentIndustry];
   DrawTitle('BUILD IN ' + FIndustry.Name);
   // Dock
-  LHint := '';
-  if FIndustry.Dock.Level = 0 then
-    LHint := ' ($' + IntToStr(FIndustry.Dock.Cost) + ')';
-  DrawButton(17, 11, FIndustry.Dock.CanBuild(FIndustry.X, FIndustry.Y), 'D',
-    'Build Dock' + LHint);
+  DrawBuildingTitle('Dock', 'D', 11, FIndustry.Dock.CanBuild(FIndustry.X,
+    FIndustry.Y), FIndustry.Dock.Cost, FIndustry.Dock.Level = 0);
   // Truck Loading Bay
-  LHint := '';
-  if FIndustry.TruckLoadingBay.Level = 0 then
-    LHint := ' ($' + IntToStr(FIndustry.TruckLoadingBay.Cost) + ')';
-  DrawButton(17, 12, FIndustry.TruckLoadingBay.CanBuild, 'L',
-    'Build Truck Loading Bay' + LHint);
+  DrawBuildingTitle('Truck Loading Bay', 'L', 12,
+    FIndustry.TruckLoadingBay.CanBuild, FIndustry.TruckLoadingBay.Cost,
+    FIndustry.TruckLoadingBay.Level = 0);
 
   AddButton(19, 'Esc', 'Close');
 

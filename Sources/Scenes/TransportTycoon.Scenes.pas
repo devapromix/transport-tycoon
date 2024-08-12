@@ -60,6 +60,9 @@ type
     procedure DrawButton(const AY: Integer; AButton, AText: string); overload;
     function MakeButton(const AIsActive: Boolean;
       const AButton, AText: string): string;
+    procedure DrawBuildingTitle(const ABuildingName, AHotKey: string;
+      const AY: Integer; const ACanBuild: Boolean; ACost: Integer;
+      ACanShowHint: Boolean);
     procedure DrawTitle(const AY: Integer; const ATitle: string); overload;
     procedure DrawTitle(const ATitle: string); overload;
     procedure DrawFrame(const ATitle: string;
@@ -320,6 +323,19 @@ begin
     on E: Exception do
       Log.Add('TScene.DrawBuildBar', E.Message);
   end;
+end;
+
+procedure TScene.DrawBuildingTitle(const ABuildingName, AHotKey: string;
+  const AY: Integer; const ACanBuild: Boolean; ACost: Integer;
+  ACanShowHint: Boolean);
+var
+  LHint: string;
+begin
+  if ACanShowHint then
+    LHint := ' ($' + IntToStr(ACost) + ')'
+  else
+    LHint := '';
+  DrawButton(17, AY, ACanBuild, AHotKey, 'Build ' + ABuildingName + LHint);
 end;
 
 procedure TScene.DrawButton(const AY: Integer; AButton, AText: string);

@@ -31,7 +31,6 @@ uses
 procedure TSceneBuildInTown.Render;
 var
   LAirportLevel: Integer;
-  LHint: string;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
@@ -40,34 +39,25 @@ begin
   FTown := TTownIndustry(Game.Map.Industry[Game.Map.CurrentIndustry]);
   DrawTitle('BUILD IN ' + FTown.Name);
   // Airport
-  LHint := '';
   LAirportLevel := Math.EnsureRange(FTown.Airport.Level + 1, 0, 5);
-  if FTown.Airport.Level < FTown.Airport.MaxLevel then
-    LHint := ' ($' + IntToStr(FTown.Airport.Cost) + ')';
-  DrawButton(17, 11, FTown.Airport.CanBuild, 'A',
-    'Build ' + AirportSizeStr[LAirportLevel] + LHint);
+  DrawBuildingTitle(AirportSizeStr[LAirportLevel], 'A', 11,
+    FTown.Airport.CanBuild, FTown.Airport.Cost, FTown.Airport.Level <
+    FTown.Airport.MaxLevel);
   // Dock
-  LHint := '';
-  if FTown.Dock.Level = 0 then
-    LHint := ' ($' + IntToStr(FTown.Dock.Cost) + ')';
-  DrawButton(17, 12, FTown.Dock.CanBuild(FTown.X, FTown.Y), 'D',
-    'Build Dock' + LHint);
+  DrawBuildingTitle('Dock', 'D', 12, FTown.Dock.CanBuild(FTown.X, FTown.Y),
+    FTown.Dock.Cost, FTown.Dock.Level = 0);
   // Bus Station
-  LHint := '';
-  if not FTown.BusStation.IsBuilding then
-    LHint := ' ($' + IntToStr(FTown.BusStation.Cost) + ')';
-  DrawButton(17, 13, FTown.BusStation.CanBuild, 'S',
-    'Build Bus Station' + LHint);
+  DrawBuildingTitle('Bus Station', 'S', 13, FTown.BusStation.CanBuild,
+    FTown.BusStation.Cost, not FTown.BusStation.IsBuilding);
   // Truck Loading Bay
-  LHint := '';
-  if not FTown.TruckLoadingBay.IsBuilding then
-    LHint := ' ($' + IntToStr(FTown.TruckLoadingBay.Cost) + ')';
-  DrawButton(17, 14, FTown.TruckLoadingBay.CanBuild, 'L',
-    'Build Truck Loading Bay' + LHint);
+  DrawBuildingTitle('Truck Loading Bay', 'L', 14,
+    FTown.TruckLoadingBay.CanBuild, FTown.TruckLoadingBay.Cost,
+    not FTown.TruckLoadingBay.IsBuilding);
+
   // Company Headquarters
-  if (Game.Map.CurrentIndustry = Game.Company.TownIndex) then
-    DrawButton(17, 17, FTown.HQ.CanBuild, 'G', 'Build Company Headquarters ($' +
-      IntToStr(FTown.HQ.Cost) + ')');
+  DrawBuildingTitle('Company Headquarters', 'G', 17, FTown.HQ.CanBuild and
+    Game.Company.IsTownHQ, FTown.HQ.Cost, Game.Company.IsTownHQ and
+    not FTown.HQ.IsBuilding);
 
   AddButton(19, 'Esc', 'Close');
 
