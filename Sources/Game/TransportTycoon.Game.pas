@@ -480,6 +480,20 @@ begin
         LIniFile.WriteString(LVehicleName, 'Name', Aircraft[LVehicle].Name);
         LIniFile.WriteInteger(LVehicleName, 'X', Aircraft[LVehicle].X);
         LIniFile.WriteInteger(LVehicleName, 'Y', Aircraft[LVehicle].Y);
+        LIniFile.WriteInteger(LVehicleName, 'AP', Aircraft[LVehicle].AP);
+        LIniFile.WriteInteger(LVehicleName, 'MaxAP', Aircraft[LVehicle].MaxAP);
+        LIniFile.WriteInteger(LVehicleName, 'Station',
+          Aircraft[LVehicle].LastStationId);
+        LIniFile.WriteInteger(LVehicleName, 'Vehicle',
+          Aircraft[LVehicle].VehicleID);
+        LIniFile.WriteInteger(LVehicleName, 'Profit',
+          Aircraft[LVehicle].Profit);
+        LIniFile.WriteInteger(LVehicleName, 'LastProfit',
+          Aircraft[LVehicle].LastProfit);
+        LIniFile.WriteInteger(LVehicleName, 'Cargo',
+          Aircraft[LVehicle].CargoAmount);
+        LIniFile.WriteInteger(LVehicleName, 'MaxCargo',
+          Aircraft[LVehicle].MaxCargoAmount);
       end;
     // Industries
     LIndCount := Length(Game.Map.Industry);
