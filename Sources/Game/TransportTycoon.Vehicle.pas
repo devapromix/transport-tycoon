@@ -64,7 +64,7 @@ type
     property CargoSet: TCargoSet read FCargoSet;
     property CargoType: TCargo read FCargoType;
     property CargoAmount: Integer read FCargoAmount;
-    property CargoMaxAmount: Integer read FCargoMaxAmount;
+    property MaxCargoAmount: Integer read FCargoMaxAmount;
     procedure IncDistance;
     procedure SetLastStation;
     property FullLoad: Boolean read FFullLoad write FFullLoad;

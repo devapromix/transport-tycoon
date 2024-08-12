@@ -100,7 +100,7 @@ begin
     begin
       SetCargoType(LCargo);
       while (Game.Map.Industry[CurOrder.IndustryIndex].ProducesAmount[LCargo] >
-        0) and (CargoAmount < CargoMaxAmount) do
+        0) and (CargoAmount < MaxCargoAmount) do
       begin
         Game.Map.Industry[CurOrder.IndustryIndex].DecCargoAmount(LCargo);
         IncCargoAmount;
@@ -148,7 +148,7 @@ begin
               and (LCargo in CargoSet) then
             begin
               SetCargoType(LCargo);
-              if (CargoAmount < CargoMaxAmount) then
+              if (CargoAmount < MaxCargoAmount) then
                 Exit;
             end;
         Orders.IncOrder;

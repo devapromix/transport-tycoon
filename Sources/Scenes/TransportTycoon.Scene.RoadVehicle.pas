@@ -48,7 +48,7 @@ begin
 
       if (CargoType <> cgNone) then
         DrawText(7, 12, Format('%s: %d/%d', [CargoStr[CargoType], CargoAmount,
-          CargoMaxAmount]));
+          MaxCargoAmount]));
 
       DrawText(7, 15, Format('State: %s', [State]));
       DrawText(25, 19, '|');
