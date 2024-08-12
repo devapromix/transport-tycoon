@@ -7,18 +7,21 @@ uses
   TransportTycoon.Cargo;
 
 const
-  ShipBase: array [0 .. 2] of TVehicleBase = (
+  ShipBase: array [0 .. 3] of TVehicleBase = (
     // #1
-    (Name: 'TM-22'; CargoSet: [cgPassengers]; Amount: 90; Cost: 25000;
-    RunningCost: 90 * 12; Speed: 50; Since: 1950; VehicleType: vtShip;),
+    (Name: 'TM-22'; CargoSet: [cgPassengers]; Amount: 120; Cost: 25000;
+    RunningCost: 90 * 12; Speed: 45; Since: 1950; VehicleType: vtShip;),
     // #2
     (Name: 'MF Cargo Ship'; CargoSet: [cgCoal, cgWood]; Amount: 120;
-    Cost: 27000; RunningCost: 95 * 12; Speed: 50; Since: 1950;
+    Cost: 27000; RunningCost: 95 * 12; Speed: 45; Since: 1950;
     VehicleType: vtShip;),
     // #3
     (Name: 'TD-4 Cargo Ship'; CargoSet: [cgGoods]; Amount: 110; Cost: 28000;
-    RunningCost: 97 * 12; Speed: 60; Since: 1952; VehicleType: vtShip;)
-    //
+    RunningCost: 97 * 12; Speed: 45; Since: 1952; VehicleType: vtShip;),
+    // #4
+    (Name: 'VMT-5 Ocean'; CargoSet: [cgPassengers]; Amount: 250; Cost: 40000;
+    RunningCost: 110 * 12; Speed: 50; Since: 1955; VehicleType: vtShip;)
+//
     );
 
 type
