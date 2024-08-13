@@ -412,8 +412,8 @@ procedure TGame.Save(const ASlot: Byte);
 var
   LIniFile: TMemIniFile;
   LConstructEnum: TConstructEnum;
-  LIndCount, LIndustry, LVehicle: Integer;
-  LIndustryName, LVehicleName: string;
+  LIndCount, LIndustry, LVehicle, LOrder: Integer;
+  LIndustryName, LVehicleName, LOrderName: string;
   LYear: Word;
   LRace: TRaceEnum;
 begin
@@ -494,6 +494,14 @@ begin
           Aircraft[LVehicle].CargoAmount);
         LIniFile.WriteInteger(LVehicleName, 'MaxCargo',
           Aircraft[LVehicle].MaxCargoAmount);
+        with Aircraft[LVehicle].Orders do
+          for LOrder := 0 to Count - 1 do
+          begin
+            LOrderName := LVehicleName + 'Order' + IntToStr(LOrder + 1);
+            LIniFile.WriteString(LOrderName, 'Name', Order[LOrder].Name);
+            LIniFile.WriteInteger(LOrderName, 'X', Order[LOrder].X);
+            LIniFile.WriteInteger(LOrderName, 'Y', Order[LOrder].Y);
+          end;
       end;
     // Industries
     LIndCount := Length(Game.Map.Industry);

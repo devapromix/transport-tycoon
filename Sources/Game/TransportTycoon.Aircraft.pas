@@ -30,11 +30,11 @@ const
     (Name: 'HeWi C4'; CargoSet: [cgPassengers]; Amount: 100; Cost: 38000;
     RunningCost: 190 * 12; Speed: 850; Since: 1990; VehicleType: vtAircraft;),
     // #8
-    (Name: 'UtBotS FL'; CargoSet: [cgPassengers]; Amount: 125; Cost: 40000;
+    (Name: 'UtBotS FL'; CargoSet: [cgPassengers]; Amount: 140; Cost: 40000;
     RunningCost: 200 * 12; Speed: 900; Since: 2000; VehicleType: vtAircraft;),
     // #9
-    (Name: 'Venus M2'; CargoSet: [cgPassengers]; Amount: 160; Cost: 50000;
-    RunningCost: 210 * 12; Speed: 1000; Since: 2020; VehicleType: vtAircraft;)
+    (Name: 'Venus M2'; CargoSet: [cgPassengers]; Amount: 180; Cost: 50000;
+    RunningCost: 220 * 12; Speed: 1000; Since: 2020; VehicleType: vtAircraft;)
     //
     );
 
