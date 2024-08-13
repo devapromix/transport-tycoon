@@ -477,31 +477,64 @@ begin
       with Vehicles do
       begin
         LVehicleName := 'Aircraft' + IntToStr(LVehicle + 1);
-        LIniFile.WriteString(LVehicleName, 'Name', Aircraft[LVehicle].Name);
-        LIniFile.WriteInteger(LVehicleName, 'X', Aircraft[LVehicle].X);
-        LIniFile.WriteInteger(LVehicleName, 'Y', Aircraft[LVehicle].Y);
-        LIniFile.WriteInteger(LVehicleName, 'AP', Aircraft[LVehicle].AP);
-        LIniFile.WriteInteger(LVehicleName, 'MaxAP', Aircraft[LVehicle].MaxAP);
-        LIniFile.WriteInteger(LVehicleName, 'Station',
-          Aircraft[LVehicle].LastStationId);
-        LIniFile.WriteInteger(LVehicleName, 'Vehicle',
-          Aircraft[LVehicle].VehicleID);
-        LIniFile.WriteInteger(LVehicleName, 'Profit',
-          Aircraft[LVehicle].Profit);
-        LIniFile.WriteInteger(LVehicleName, 'LastProfit',
-          Aircraft[LVehicle].LastProfit);
-        LIniFile.WriteInteger(LVehicleName, 'Cargo',
-          Aircraft[LVehicle].CargoAmount);
-        LIniFile.WriteInteger(LVehicleName, 'MaxCargo',
-          Aircraft[LVehicle].MaxCargoAmount);
-        with Aircraft[LVehicle].Orders do
-          for LOrder := 0 to Count - 1 do
+        with Aircraft[LVehicle] do
+        begin
+          LIniFile.WriteString(LVehicleName, 'Name', Name);
+          LIniFile.WriteInteger(LVehicleName, 'X', X);
+          LIniFile.WriteInteger(LVehicleName, 'Y', Y);
+          LIniFile.WriteInteger(LVehicleName, 'AP', AP);
+          LIniFile.WriteInteger(LVehicleName, 'MaxAP', MaxAP);
+          LIniFile.WriteInteger(LVehicleName, 'Station', LastStationId);
+          LIniFile.WriteInteger(LVehicleName, 'Vehicle', VehicleID);
+          LIniFile.WriteInteger(LVehicleName, 'Profit', Profit);
+          LIniFile.WriteInteger(LVehicleName, 'LastProfit', LastProfit);
+          LIniFile.WriteInteger(LVehicleName, 'Cargo', CargoAmount);
+          LIniFile.WriteInteger(LVehicleName, 'MaxCargo', MaxCargoAmount);
+          with Aircraft[LVehicle].Orders do
           begin
-            LOrderName := LVehicleName + 'Order' + IntToStr(LOrder + 1);
-            LIniFile.WriteString(LOrderName, 'Name', Order[LOrder].Name);
-            LIniFile.WriteInteger(LOrderName, 'X', Order[LOrder].X);
-            LIniFile.WriteInteger(LOrderName, 'Y', Order[LOrder].Y);
+            LIniFile.WriteInteger(LVehicleName, 'OrderIndex', OrderIndex);
+            LIniFile.WriteInteger(LVehicleName, 'OrderCount', Count);
+            for LOrder := 0 to Count - 1 do
+            begin
+              LOrderName := LVehicleName + 'Order' + IntToStr(LOrder + 1);
+              LIniFile.WriteString(LOrderName, 'Name', Order[LOrder].Name);
+              LIniFile.WriteInteger(LOrderName, 'X', Order[LOrder].X);
+              LIniFile.WriteInteger(LOrderName, 'Y', Order[LOrder].Y);
+            end;
           end;
+        end;
+      end;
+    // Ships
+    for LVehicle := 0 to Vehicles.ShipCount - 1 do
+      with Vehicles do
+      begin
+        LVehicleName := 'Ship' + IntToStr(LVehicle + 1);
+        with Ship[LVehicle] do
+        begin
+          LIniFile.WriteString(LVehicleName, 'Name', Name);
+          LIniFile.WriteInteger(LVehicleName, 'X', X);
+          LIniFile.WriteInteger(LVehicleName, 'Y', Y);
+          LIniFile.WriteInteger(LVehicleName, 'AP', AP);
+          LIniFile.WriteInteger(LVehicleName, 'MaxAP', MaxAP);
+          LIniFile.WriteInteger(LVehicleName, 'Station', LastStationId);
+          LIniFile.WriteInteger(LVehicleName, 'Vehicle', VehicleID);
+          LIniFile.WriteInteger(LVehicleName, 'Profit', Profit);
+          LIniFile.WriteInteger(LVehicleName, 'LastProfit', LastProfit);
+          LIniFile.WriteInteger(LVehicleName, 'Cargo', CargoAmount);
+          LIniFile.WriteInteger(LVehicleName, 'MaxCargo', MaxCargoAmount);
+          with Orders do
+          begin
+            LIniFile.WriteInteger(LVehicleName, 'OrderIndex', OrderIndex);
+            LIniFile.WriteInteger(LVehicleName, 'OrderCount', Count);
+            for LOrder := 0 to Count - 1 do
+            begin
+              LOrderName := LVehicleName + 'Order' + IntToStr(LOrder + 1);
+              LIniFile.WriteString(LOrderName, 'Name', Order[LOrder].Name);
+              LIniFile.WriteInteger(LOrderName, 'X', Order[LOrder].X);
+              LIniFile.WriteInteger(LOrderName, 'Y', Order[LOrder].Y);
+            end;
+          end;
+        end;
       end;
     // Industries
     LIndCount := Length(Game.Map.Industry);
