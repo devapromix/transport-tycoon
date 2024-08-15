@@ -113,7 +113,9 @@ uses
   Math,
   Dialogs,
   IniFiles,
+  System.JSON,
   BearLibTerminal,
+  Neon.Core.Persistence.JSON,
   TransportTycoon.Scenes,
   TransportTycoon.Industries;
 
@@ -165,7 +167,7 @@ end;
 
 function TGame.GetFileName(const ASlot: Byte): string;
 begin
-  Result := GetPath(Format('Saves\%d', [ASlot])) + 'game.sav';
+  Result := GetPath(Format('Saves\%d', [ASlot])) + 'game.json';
 end;
 
 function TGame.GetPath(ASubDir: string): string;
@@ -416,7 +418,23 @@ var
   LIndustryName, LVehicleName, LOrderName: string;
   LYear: Word;
   LRace: TRaceEnum;
+  LStringList: TStringList;
+  LJSON: TJSONValue;
 begin
+  LStringList := TStringList.Create;
+  try
+    LJSON := TNeon.ObjectToJSON(Self);
+    try
+      LStringList.Text := TNeon.Print(LJSON, True);
+      LStringList.SaveToFile(GetFileName(ASlot));
+      ShowMessage('Saved!');
+    finally
+      LJSON.Free;
+    end;
+  finally
+    LStringList.Free;
+  end;
+  Exit;
   LIniFile := TMemIniFile.Create(GetFileName(ASlot), TEncoding.UTF8);
   try
     // Game
