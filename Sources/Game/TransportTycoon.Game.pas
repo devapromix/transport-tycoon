@@ -115,6 +115,7 @@ uses
   IniFiles,
   System.JSON,
   BearLibTerminal,
+  Neon.Core.Persistence,
   Neon.Core.Persistence.JSON,
   TransportTycoon.Scenes,
   TransportTycoon.Industries;
@@ -342,7 +343,26 @@ var
   LConstructEnum: TConstructEnum;
   LValue: Integer;
   LYear: Word;
+  LStringList: TStringList;
+  LJSON: TJSONValue;
+  LConfig: INeonConfiguration;
 begin
+  LStringList := TStringList.Create;
+  try
+    LJSON := TJSONObject.ParseJSONValue(LStringList.Text);
+    try
+      LStringList.LoadFromFile(GetFileName(ASlot));
+      LStringList.Text := TNeon.Print(LJSON, True);
+      LConfig := TNeonConfiguration.Default;
+      TNeon.JSONToObject(Self.FCalendar, LJSON, LConfig);
+      ShowMessage('Loaded!');
+    finally
+      LJSON.Free;
+    end;
+  finally
+    LStringList.Free;
+  end;
+  Exit;
   LIniFile := TMemIniFile.Create(GetFileName(ASlot), TEncoding.UTF8);
   try
     // Company
@@ -423,7 +443,7 @@ var
 begin
   LStringList := TStringList.Create;
   try
-    LJSON := TNeon.ObjectToJSON(Self);
+    LJSON := TNeon.ObjectToJSON(Self.FCalendar);
     try
       LStringList.Text := TNeon.Print(LJSON, True);
       LStringList.SaveToFile(GetFileName(ASlot));
