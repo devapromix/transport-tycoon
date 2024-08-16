@@ -30,11 +30,11 @@ uses
 
 procedure TSceneCompany.AddStatLine(const AConstructEnum: TConstructEnum);
 begin
-  if (Game.Company.Stat.GetStat(AConstructEnum) = 0) or
+  if (Game.Company.GetStatistic(AConstructEnum) = 0) or
     (Construct[AConstructEnum].StatName = '') then
     Exit;
   DrawText(FX, FY, Construct[AConstructEnum].StatName + ': ' +
-    IntToStr(Game.Company.Stat.GetStat(AConstructEnum)));
+    IntToStr(Game.Company.GetStatistic(AConstructEnum)));
   if FX = 40 then
   begin
     FX := 22;

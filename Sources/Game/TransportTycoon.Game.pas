@@ -476,11 +476,11 @@ begin
     // Statistics
     for LConstructEnum := Succ(Low(TConstructEnum)) to High(TConstructEnum) do
     begin
-      if (Game.Company.Stat.GetStat(LConstructEnum) <> 0) and
+      if (Game.Company.GetStatistic(LConstructEnum) <> 0) and
         (TransportTycoon.Map.Construct[LConstructEnum].StatName <> '') then
       begin
         LIniFile.WriteInteger('Statistics', TransportTycoon.Map.Construct
-          [LConstructEnum].StatName, Game.Company.Stat.GetStat(LConstructEnum));
+          [LConstructEnum].StatName, Game.Company.GetStatistic(LConstructEnum));
       end;
     end;
     // Finances

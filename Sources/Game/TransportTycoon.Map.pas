@@ -545,7 +545,7 @@ begin
     begin
       FTileEnum[AX][AY] := Construct[AConstructEnum].ResultTile;
       Game.ModifyMoney(ttConstruction, -LMoney);
-      Game.Company.Stat.IncStat(AConstructEnum);
+      Game.Company.IncStatistic(AConstructEnum);
     end;
   except
     on E: Exception do
