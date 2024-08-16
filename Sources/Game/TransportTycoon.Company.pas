@@ -3,6 +3,7 @@
 interface
 
 uses
+  System.Generics.Collections,
   TransportTycoon.Construct;
 
 type
@@ -11,8 +12,10 @@ type
 
   TStat = class(TObject)
   private
-    FStat: array [TConstructEnum] of Integer;
+    FStat: TList<Integer>;
   public
+    constructor Create;
+    destructor Destroy; override;
     procedure Clear;
     function GetStat(const AConstructEnum: TConstructEnum): Integer;
     procedure IncStat(const AConstructEnum: TConstructEnum;
@@ -33,7 +36,7 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    property Inavgurated: Integer read FInavgurated;
+    property Inavgurated: Integer read FInavgurated write FInavgurated;
     property TownIndex: Integer read FTownIndex write FTownIndex;
     property Stat: TStat read FStat write FStat;
     procedure Clear;
@@ -57,18 +60,33 @@ var
   LConstructEnum: TConstructEnum;
 begin
   for LConstructEnum := Low(TConstructEnum) to High(TConstructEnum) do
-    FStat[LConstructEnum] := 0;
+    FStat[Ord(LConstructEnum)] := 0;
+end;
+
+constructor TStat.Create;
+var
+  LConstructEnum: TConstructEnum;
+begin
+  FStat := TList<Integer>.Create;
+  for LConstructEnum := Low(TConstructEnum) to High(TConstructEnum) do
+    FStat.Add(0);
+end;
+
+destructor TStat.Destroy;
+begin
+  FreeAndNil(FStat);
+  inherited;
 end;
 
 function TStat.GetStat(const AConstructEnum: TConstructEnum): Integer;
 begin
-  Result := FStat[AConstructEnum];
+  Result := FStat[Ord(AConstructEnum)];
 end;
 
 procedure TStat.IncStat(const AConstructEnum: TConstructEnum;
   const AValue: Integer = 1);
 begin
-  Inc(FStat[AConstructEnum], AValue);
+  FStat[Ord(AConstructEnum)] := FStat[Ord(AConstructEnum)] + AValue;
 end;
 
 procedure TStat.SetStat(const AConstructEnum: TConstructEnum;
@@ -76,7 +94,7 @@ procedure TStat.SetStat(const AConstructEnum: TConstructEnum;
 begin
   if AValue <= 0 then
     Exit;
-  FStat[AConstructEnum] := AValue;
+  FStat[Ord(AConstructEnum)] := AValue;
 end;
 
 { TCompany }
