@@ -30,7 +30,7 @@ procedure TSceneOpenGameDoneMenu.Render;
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
-  DrawFrame(Game.Company.Name, 30, 9, True);
+  DrawFrame(Game.Company.GetName, 30, 9, True);
   DrawText(15, 'Game opened!');
 
   DrawGameBar;

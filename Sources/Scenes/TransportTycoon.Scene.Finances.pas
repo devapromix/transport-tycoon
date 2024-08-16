@@ -89,7 +89,7 @@ begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
   DrawFrame(8, 0, 64, 29);
-  DrawTitle(2, Game.Company.Name + ' Finances');
+  DrawTitle(2, Game.Company.GetName + ' Finances');
 
   terminal_composition(TK_ON);
 

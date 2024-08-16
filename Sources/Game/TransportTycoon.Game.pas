@@ -61,7 +61,7 @@ type
     constructor Create;
     destructor Destroy; override;
     property Money: Integer read FMoney write FMoney;
-    property Loan: Integer read FLoan;
+    property Loan: Integer read FLoan write FLoan;
     property Company: TCompany read FCompany;
     property Finances: TFinances read FFinances write FFinances;
     property Vehicles: TVehicles read FVehicles;
@@ -448,6 +448,7 @@ begin
     LJSON := TNeon.ObjectToJSON(Self);
     try
       LStringList.Text := TNeon.Print(LJSON, True);
+      LStringList.Insert(1, '  "Date": "' + DateTimeToStr(Date) + '",');
       LStringList.SaveToFile(GetFileName(ASlot), TEncoding.UTF8);
       ShowMessage('Saved!');
     finally
@@ -471,7 +472,7 @@ begin
     LIniFile.WriteInteger('Calendar', 'Month', Game.Calendar.Month);
     LIniFile.WriteInteger('Calendar', 'Year', Game.Calendar.Year);
     // Company
-    LIniFile.WriteString('Company', 'Name', UpperCase(Game.Company.Name));
+    LIniFile.WriteString('Company', 'Name', UpperCase(Game.Company.GetName));
     LIniFile.WriteInteger('Company', 'TownIndex', Game.Company.TownIndex);
     // Statistics
     for LConstructEnum := Succ(Low(TConstructEnum)) to High(TConstructEnum) do

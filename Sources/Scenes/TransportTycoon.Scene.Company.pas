@@ -51,7 +51,7 @@ var
 begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
-  DrawFrame(Game.Company.Name, 40, 14, True);
+  DrawFrame(Game.Company.GetName, 40, 14, True);
   DrawText(22, 12, 'Race: ' + GameRaceStr[Game.Race]);
   DrawText(40, 12, 'Inavgurated: ' + IntToStr(Game.Company.Inavgurated));
   FX := 22;

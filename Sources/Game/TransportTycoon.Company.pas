@@ -22,7 +22,7 @@ type
     property TownIndex: Integer read FTownIndex write FTownIndex;
     property Statistics: TList<Integer> read FStatistics write FStatistics;
     procedure Clear;
-    function Name: string;
+    function GetName: string;
     function IsTownHQ: Boolean;
     procedure IncStatistic(const AConstructEnum: TConstructEnum;
       const AValue: Integer = 1);
@@ -70,7 +70,7 @@ begin
   Result := Game.Map.CurrentIndustry = FTownIndex
 end;
 
-function TCompany.Name: string;
+function TCompany.GetName: string;
 begin
   Result := Game.Map.Industry[Game.Company.TownIndex].Name + ' TRANSPORT';
 end;

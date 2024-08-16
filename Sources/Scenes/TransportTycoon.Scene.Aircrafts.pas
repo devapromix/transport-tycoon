@@ -32,7 +32,7 @@ var
   LVehicle: Integer;
 begin
   inherited Render;
-  DrawTitle(Game.Company.Name + ' AIRCRAFTS');
+  DrawTitle(Game.Company.GetName + ' AIRCRAFTS');
   for LVehicle := 0 to Game.Vehicles.AircraftCount - 1 do
     DrawButton(12, LVehicle + 11, Chr(Ord('A') + LVehicle),
       Game.Vehicles.Aircraft[LVehicle].Name);

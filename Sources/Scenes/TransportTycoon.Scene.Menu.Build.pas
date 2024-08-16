@@ -65,7 +65,7 @@ begin
   DrawMap(Self.ScreenWidth, Self.ScreenHeight - 1);
 
   FX := 7;
-  FY := DrawFrame(Game.Company.Name, 70, 23, True) + 4;
+  FY := DrawFrame(Game.Company.GetName, 70, 23, True) + 4;
 
   LInfrastructureCategory := icNone;
 
