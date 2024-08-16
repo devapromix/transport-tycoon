@@ -12,14 +12,16 @@ type
 
   TCompany = class(TObject)
   private
-    FInavgurated: Integer;
+    FName: string;
     FTownIndex: Integer;
+    FInavgurated: Integer;
     FStatistics: TList<Integer>;
   public
     constructor Create;
     destructor Destroy; override;
-    property Inavgurated: Integer read FInavgurated write FInavgurated;
+    property Name: string read FName write FName;
     property TownIndex: Integer read FTownIndex write FTownIndex;
+    property Inavgurated: Integer read FInavgurated write FInavgurated;
     property Statistics: TList<Integer> read FStatistics write FStatistics;
     procedure Clear;
     function GetName: string;
@@ -73,6 +75,7 @@ end;
 function TCompany.GetName: string;
 begin
   Result := Game.Map.Industry[Game.Company.TownIndex].Name + ' TRANSPORT';
+  FName := UpperCase(Result);
 end;
 
 procedure TCompany.IncStatistic(const AConstructEnum: TConstructEnum;
