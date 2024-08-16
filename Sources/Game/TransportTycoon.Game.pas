@@ -348,13 +348,13 @@ var
   LConfig: INeonConfiguration;
 begin
   LStringList := TStringList.Create;
+  LStringList.WriteBOM := False;
   try
+    LStringList.LoadFromFile(GetFileName(ASlot), TEncoding.UTF8);
     LJSON := TJSONObject.ParseJSONValue(LStringList.Text);
     try
-      LStringList.LoadFromFile(GetFileName(ASlot));
-      LStringList.Text := TNeon.Print(LJSON, True);
       LConfig := TNeonConfiguration.Default;
-      TNeon.JSONToObject(Self.FCalendar, LJSON, LConfig);
+      TNeon.JSONToObject(Self, LJSON, LConfig);
       ShowMessage('Loaded!');
     finally
       LJSON.Free;
@@ -362,9 +362,9 @@ begin
   finally
     LStringList.Free;
   end;
-  Exit;
-  LIniFile := TMemIniFile.Create(GetFileName(ASlot), TEncoding.UTF8);
-  try
+  { Exit;
+    LIniFile := TMemIniFile.Create(GetFileName(ASlot), TEncoding.UTF8);
+    try
     // Company
     FCompany.TownIndex := LIniFile.ReadInteger('Company', 'TownIndex', 0);
     // Calendar
@@ -380,54 +380,55 @@ begin
     // Statistics
     for LConstructEnum := Succ(Low(TConstructEnum)) to High(TConstructEnum) do
     begin
-      if (TransportTycoon.Map.Construct[LConstructEnum].StatName <> '') then
-      begin
-        LValue := LIniFile.ReadInteger('Statistics',
-          TransportTycoon.Map.Construct[LConstructEnum].StatName, 0);
-        Game.Company.Stat.SetStat(LConstructEnum, LValue);
-      end;
+    if (TransportTycoon.Map.Construct[LConstructEnum].StatName <> '') then
+    begin
+    LValue := LIniFile.ReadInteger('Statistics',
+    TransportTycoon.Map.Construct[LConstructEnum].StatName, 0);
+    Game.Company.Stat.SetStat(LConstructEnum, LValue);
+    end;
     end;
     // Finances
     Finances.Clear;
     for LYear := StartYear to FinishYear do
     begin
-      // Income
-      Game.Finances.SetValue(ttRoadVehicleIncome, LYear,
-        LIniFile.ReadInteger(LYear.ToString, 'RoadVehicleIncome', 0));
-      Game.Finances.SetValue(ttTrainIncome, LYear,
-        LIniFile.ReadInteger(LYear.ToString, 'TrainIncome', 0));
-      Game.Finances.SetValue(ttShipIncome, LYear,
-        LIniFile.ReadInteger(LYear.ToString, 'ShipIncome', 0));
-      Game.Finances.SetValue(ttAircraftIncome, LYear,
-        LIniFile.ReadInteger(LYear.ToString, 'AircraftIncome', 0));
-      // Running Costs
-      Game.Finances.SetValue(ttRoadVehicleRunningCosts, LYear,
-        LIniFile.ReadInteger(LYear.ToString, 'RoadVehicleRunningCosts', 0));
-      Game.Finances.SetValue(ttTrainRunningCosts, LYear,
-        LIniFile.ReadInteger(LYear.ToString, 'TrainRunningCosts', 0));
-      Game.Finances.SetValue(ttShipRunningCosts, LYear,
-        LIniFile.ReadInteger(LYear.ToString, 'ShipRunningCosts', 0));
-      Game.Finances.SetValue(ttAircraftRunningCosts, LYear,
-        LIniFile.ReadInteger(LYear.ToString, 'AircraftRunningCosts', 0));
-      // Loan Interest
-      Game.Finances.SetValue(ttLoanInterest, LYear,
-        LIniFile.ReadInteger(LYear.ToString, 'LoanInterest', 0));
-      Game.Finances.SetValue(ttConstruction, LYear,
-        LIniFile.ReadInteger(LYear.ToString, 'Construction', 0));
-      Game.Finances.SetValue(ttNewVehicles, LYear,
-        LIniFile.ReadInteger(LYear.ToString, 'NewVehicles', 0));
+    // Income
+    Game.Finances.SetValue(ttRoadVehicleIncome, LYear,
+    LIniFile.ReadInteger(LYear.ToString, 'RoadVehicleIncome', 0));
+    Game.Finances.SetValue(ttTrainIncome, LYear,
+    LIniFile.ReadInteger(LYear.ToString, 'TrainIncome', 0));
+    Game.Finances.SetValue(ttShipIncome, LYear,
+    LIniFile.ReadInteger(LYear.ToString, 'ShipIncome', 0));
+    Game.Finances.SetValue(ttAircraftIncome, LYear,
+    LIniFile.ReadInteger(LYear.ToString, 'AircraftIncome', 0));
+    // Running Costs
+    Game.Finances.SetValue(ttRoadVehicleRunningCosts, LYear,
+    LIniFile.ReadInteger(LYear.ToString, 'RoadVehicleRunningCosts', 0));
+    Game.Finances.SetValue(ttTrainRunningCosts, LYear,
+    LIniFile.ReadInteger(LYear.ToString, 'TrainRunningCosts', 0));
+    Game.Finances.SetValue(ttShipRunningCosts, LYear,
+    LIniFile.ReadInteger(LYear.ToString, 'ShipRunningCosts', 0));
+    Game.Finances.SetValue(ttAircraftRunningCosts, LYear,
+    LIniFile.ReadInteger(LYear.ToString, 'AircraftRunningCosts', 0));
+    // Loan Interest
+    Game.Finances.SetValue(ttLoanInterest, LYear,
+    LIniFile.ReadInteger(LYear.ToString, 'LoanInterest', 0));
+    Game.Finances.SetValue(ttConstruction, LYear,
+    LIniFile.ReadInteger(LYear.ToString, 'Construction', 0));
+    Game.Finances.SetValue(ttNewVehicles, LYear,
+    LIniFile.ReadInteger(LYear.ToString, 'NewVehicles', 0));
     end;
     for LYear := FYear to FCalendar.Year do
-      FFinances.SetYear(LYear);
+    FFinances.SetYear(LYear);
     // Industries
 
     //
     //
     //
-    Scenes.SetScene(scOpenGameDoneMenu);
-  finally
+  }
+  Scenes.SetScene(scOpenGameDoneMenu);
+  { finally
     FreeAndNil(LIniFile);
-  end;
+    end; }
 end;
 
 procedure TGame.Save(const ASlot: Byte);
@@ -442,11 +443,12 @@ var
   LJSON: TJSONValue;
 begin
   LStringList := TStringList.Create;
+  LStringList.WriteBOM := False;
   try
-    LJSON := TNeon.ObjectToJSON(Self.FCalendar);
+    LJSON := TNeon.ObjectToJSON(Self);
     try
       LStringList.Text := TNeon.Print(LJSON, True);
-      LStringList.SaveToFile(GetFileName(ASlot));
+      LStringList.SaveToFile(GetFileName(ASlot), TEncoding.UTF8);
       ShowMessage('Saved!');
     finally
       LJSON.Free;
