@@ -60,7 +60,7 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    property Money: Integer read FMoney;
+    property Money: Integer read FMoney write FMoney;
     property Loan: Integer read FLoan;
     property Company: TCompany read FCompany;
     property Finances: TFinances read FFinances write FFinances;
