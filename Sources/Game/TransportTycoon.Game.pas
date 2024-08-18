@@ -67,14 +67,14 @@ type
     property Vehicles: TVehicles read FVehicles;
     property Calendar: TCalendar read FCalendar;
     property Year: Word read FYear write FYear;
-    property Map: TMap read FMap;
-    property IsDebug: Boolean read FIsDebug;
-    property Turn: Integer read FTurn;
+    property Map: TMap read FMap write FMap;
+    property IsDebug: Boolean read FIsDebug write FIsDebug;
+    property Turn: Integer read FTurn write FTurn;
     property Construct: TConstruct read FConstruct;
     property IsPause: Boolean read FIsPause write FIsPause;
     property IsGame: Boolean read FIsGame write FIsGame;
     property IsOrder: Boolean read FIsOrder write FIsOrder;
-    property Speed: TGameSpeedEnum read FSpeed;
+    property Speed: TGameSpeedEnum read FSpeed write FSpeed;
     property Race: TRaceEnum read FRace write FRace;
     property Fullscreen: Boolean read FFullscreen write FFullscreen;
     property CanClose: Boolean read FCanClose write FCanClose;
