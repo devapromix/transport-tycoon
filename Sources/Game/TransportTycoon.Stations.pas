@@ -22,6 +22,9 @@ type
   end;
 
 type
+  TAirport = class(TStation);
+
+type
 
   { TDock }
 

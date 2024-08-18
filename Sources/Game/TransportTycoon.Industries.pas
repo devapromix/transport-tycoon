@@ -82,7 +82,7 @@ type
     FPopulation: Integer;
     FRacePop: array [TRaceEnum] of Byte;
     FTownRace: TRaceEnum;
-    FAirport: TStation;
+    FAirport: TAirport;
     FHQ: TStation;
     FBusStation: TStation;
     function GrowModif: Integer;
@@ -95,7 +95,7 @@ type
     property Houses: Word read FHouses;
     property TownRace: TRaceEnum read FTownRace;
     procedure ModifyPopulation(const APopulation: Integer);
-    property Airport: TStation read FAirport;
+    property Airport: TAirport read FAirport;
     property BusStation: TStation read FBusStation;
     property HQ: TStation read FHQ;
     class function GenName(const ATownRace: TRaceEnum): string;
@@ -276,7 +276,7 @@ begin
   Produces := [cgPassengers, cgMail];
   FPopulation := 0;
   ModifyPopulation(Math.RandomRange(250, 1500));
-  FAirport := TStation.Create(8000, 5);
+  FAirport := TAirport.Create(8000, 5);
   FBusStation := TStation.Create(250);
   FHQ := TStation.Create(250);
 end;
