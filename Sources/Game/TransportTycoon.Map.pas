@@ -3,6 +3,7 @@
 interface
 
 uses
+  System.Generics.Collections,
   TransportTycoon.Industries,
   TransportTycoon.MapObject,
   TransportTycoon.Construct;
@@ -179,6 +180,7 @@ type
     FSeaLevel: TMapSeaLevel;
     FMapSize: TMapSize;
     FCurrentIndustry: Integer;
+    FIndustryList: TObjectList<TIndustry>;
     FTileEnum: array of array of TTileEnum;
     function IsIndustryLocation(const AX, AY: Integer): Boolean;
     function IsTownLocation(const AX, AY: Integer): Boolean;
@@ -201,6 +203,8 @@ type
     property Width: Integer read FWidth;
     property CurrentIndustry: Integer read FCurrentIndustry
       write FCurrentIndustry;
+    property IndustryList: TObjectList<TIndustry> read FIndustryList
+      write FIndustryList;
     property MapSize: TMapSize read FMapSize write FMapSize;
     property SeaLevel: TMapSeaLevel read FSeaLevel write FSeaLevel;
     property Rivers: TMapRivers read FRivers write FRivers;
@@ -494,6 +498,8 @@ begin
 end;
 
 constructor TMap.Create;
+var
+  LIndustry: Integer;
 begin
   FMapSize := msTiny;
   FSeaLevel := msVeryLow;
@@ -501,12 +507,14 @@ begin
   FRivers := mrNone;
   FNoOfInd := niVeryLow;
   Resize;
+  FIndustryList := TObjectList<TIndustry>.Create;
 end;
 
 destructor TMap.Destroy;
 var
   LIndustry: Integer;
 begin
+  FIndustryList.Free;
   for LIndustry := 0 to Length(Industry) - 1 do
     FreeAndNil(Industry[LIndustry]);
   inherited;
@@ -866,6 +874,7 @@ begin
       SetLength(Industry, I + 1);
       FTileEnum[LX][LY] := tlTownIndustry;
       Industry[I] := TTownIndustry.Create(LTownName, LTownRace, LX, LY);
+      FIndustryList.Add(TTownIndustry.Create(LTownName, LTownRace, LX, LY));
     end;
     // Industries
     AddIndustries();
