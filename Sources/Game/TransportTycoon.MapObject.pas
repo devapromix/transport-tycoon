@@ -17,13 +17,13 @@ type
     constructor Create(const AName: string; const AX, AY: Integer); overload;
     constructor Create(const AX, AY: Integer); overload;
     constructor Create; overload;
+    property Name: string read FName write FName;
     property Location: TLocation read FLocation write FLocation;
     procedure SetLocation(const AX, AY: Integer);
     function GetLocation: TLocation;
     function InLocation(const AX, AY: Integer): Boolean;
     property X: Integer read FLocation.X;
     property Y: Integer read FLocation.Y;
-    property Name: string read FName;
   end;
 
 implementation

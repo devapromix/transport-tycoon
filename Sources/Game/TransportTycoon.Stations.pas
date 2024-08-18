@@ -13,8 +13,8 @@ type
     FMaxLevel: Integer;
   public
     constructor Create(const ACost: Integer; const AMaxLevel: Integer = 1);
-    property Level: Integer read FLevel;
-    property MaxLevel: Integer read FMaxLevel;
+    property Level: Integer read FLevel write FLevel;
+    property MaxLevel: Integer read FMaxLevel write FMaxLevel;
     function Cost: Integer;
     procedure Build;
     function CanBuild: Boolean;

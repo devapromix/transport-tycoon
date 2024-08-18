@@ -820,6 +820,7 @@ begin
     for I := 0 to J - 1 do
       AddRiver(TDirectionEnum(RandomRange(0, 4)));
     // Towns
+    FIndustryList.Clear;
     for I := 0 to Length(Industry) - 1 do
       FreeAndNil(Industry[I]);
     SetLength(Industry, 0);
@@ -1066,6 +1067,7 @@ begin
             Industry[LIndustryCounter] := TCoalMineIndustry.Create
               (LTownName, LX, LY);
             Inc(LIndustryCounter);
+            FIndustryList.Add(TCoalMineIndustry.Create(LTownName, LX, LY));
           end;
         inPowerPlant:
           begin
@@ -1075,6 +1077,7 @@ begin
             Industry[LIndustryCounter] := TPowerPlantIndustry.Create
               (LTownName, LX, LY);
             Inc(LIndustryCounter);
+            FIndustryList.Add(TPowerPlantIndustry.Create(LTownName, LX, LY));
           end;
         inForest:
           begin
@@ -1085,6 +1088,7 @@ begin
             Industry[LIndustryCounter] :=
               TForestIndustry.Create(LTownName, LX, LY);
             Inc(LIndustryCounter);
+            FIndustryList.Add(TForestIndustry.Create(LTownName, LX, LY));
           end;
         inSawmill:
           begin
@@ -1094,6 +1098,7 @@ begin
             Industry[LIndustryCounter] :=
               TSawmillIndustry.Create(LTownName, LX, LY);
             Inc(LIndustryCounter);
+            FIndustryList.Add(TSawmillIndustry.Create(LTownName, LX, LY));
           end;
       end;
     end;

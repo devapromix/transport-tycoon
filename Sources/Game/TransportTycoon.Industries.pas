@@ -39,15 +39,18 @@ type
     destructor Destroy; override;
     property Accepts: TCargoSet read FAccepts write FAccepts;
     property Produces: TCargoSet read FProduces write FProduces;
-    property AcceptsAmount: TCargoAmount read FAcceptsAmount;
-    property ProducesAmount: TCargoAmount read FProducesAmount;
-    property IndustryType: TIndustryType read FIndustryType;
+    property AcceptsAmount: TCargoAmount read FAcceptsAmount
+      write FAcceptsAmount;
+    property ProducesAmount: TCargoAmount read FProducesAmount
+      write FProducesAmount;
+    property IndustryType: TIndustryType read FIndustryType write FIndustryType;
     procedure SetCargoAmount(const ACargo: TCargo; const AAmount: Integer);
     procedure DecCargoAmount(const ACargo: TCargo);
     procedure IncProducesCargoAmount(const ACargo: TCargo; AValue: Integer = 1);
     procedure IncAcceptsCargoAmount(const ACargo: TCargo; AValue: Integer = 1);
-    property Dock: TDock read FDock;
-    property TruckLoadingBay: TStation read FTruckLoadingBay;
+    property Dock: TDock read FDock write FDock;
+    property TruckLoadingBay: TStation read FTruckLoadingBay
+      write FTruckLoadingBay;
     procedure Grows; virtual;
     function MaxCargo: Integer; virtual;
     function GetCargoStr(const ACargoSet: TCargoSet): string;
