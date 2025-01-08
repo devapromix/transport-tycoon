@@ -1,5 +1,5 @@
 # Transports Tycoon
-Transports Tycoon Game
+Transports Tycoon is an ASCII IDLE economic strategy game where player manage a transport company by building networks of railways, roads, ports, and airports to transport passengers and cargo. The goal is to develop infrastructure, earn profits.
 
 ## ToDo
 
