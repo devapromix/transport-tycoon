@@ -55,7 +55,7 @@ type
     MaxLoan = 200000;
     LoanMoney = 10000;
     StartMoney = MaxLoan div 2;
-    Version = '0.4';
+    Version = '0.5';
     EmptySlotStr = 'EMPTY SLOT';
   public
     constructor Create;

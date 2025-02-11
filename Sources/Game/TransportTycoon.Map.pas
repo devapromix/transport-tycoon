@@ -239,6 +239,7 @@ type
     function IsAircraftPath(const AX, AY: Integer): Boolean;
     function IsShipPath(const AX, AY: Integer): Boolean;
     function IsRoadVehiclePath(const AX, AY: Integer): Boolean;
+    function IsTrainPath(const AX, AY: Integer): Boolean;
     function GetTileEnum: TTileEnum;
     procedure DrawTile(const AX, AY: Integer; const AFlag: Boolean = True);
   end;
@@ -328,6 +329,18 @@ begin
   except
     on E: Exception do
       Log.Add('TMap.IsShipPath', E.Message);
+  end;
+end;
+
+function TMap.IsTrainPath(const AX, AY: Integer): Boolean;
+begin
+  Result := True;
+  try
+    Result := FTileEnum[AX][AY] in [tlTownIndustry, tlRoad, tlRoadTunnel,
+      tlRoadBridge, tlAqueduct] + IndustryTiles;
+  except
+    on E: Exception do
+      Log.Add('TMap.IsTrainPath', E.Message);
   end;
 end;
 
