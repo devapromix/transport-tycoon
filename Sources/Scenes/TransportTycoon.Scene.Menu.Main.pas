@@ -21,6 +21,7 @@ uses
   BearLibTerminal,
   TransportTycoon.Game,
   TransportTycoon.Scene.Menu.Settings,
+  TransportTycoon.Scene.Menu.About,
   TransportTycoon.Scene.Dialog;
 
 procedure Close();
@@ -39,9 +40,8 @@ begin
   DrawButton(14, Game.IsGame, 'ESC', 'CONTINUE');
   DrawButton(15, 'L', 'OPEN GAME');
   DrawButton(16, 'D', 'SETTINGS');
-  DrawButton(17, 'Q', 'QUIT');
-
-  DrawText(19, 'By Apromix 2022-2024');
+  DrawButton(17, 'A', 'ABOUT');
+  DrawButton(18, 'Q', 'QUIT');
 end;
 
 procedure TSceneMainMenu.Update(var AKey: Word);
@@ -59,6 +59,8 @@ begin
           16:
             AKey := TK_D;
           17:
+            AKey := TK_A;
+          18:
             AKey := TK_Q;
         end;
     end;
@@ -85,6 +87,8 @@ begin
         TSceneSettingsMenu(Scenes.GetScene(scSettingsMenu)).IsShowBar := False;
         Scenes.SetScene(scSettingsMenu, scMainMenu);
       end;
+    TK_A:
+        Scenes.SetScene(scAboutMenu, scMainMenu);
     TK_Q:
       TSceneDialog.Ask('Quit', 'Leave the game?', False, scMainMenu, @Close);
   end;
