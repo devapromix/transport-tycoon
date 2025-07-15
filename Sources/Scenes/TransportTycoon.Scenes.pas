@@ -13,7 +13,8 @@ type
     scShip, scShips, scShipDepot, scIndustries, scBuildMenu, scSettingsMenu,
     scOpenGameMenu, scOpenGamePromptMenu, scOpenGameDoneMenu, scSaveGameMenu,
     scSaveGamePromptMenu, scSaveGameSavedMenu, scRoadVehicle, scRoadVehicles,
-    scTruckLoadingBay, scBusStation, scRoadVehicleDepot, scDialog, scAboutMenu);
+    scTruckLoadingBay, scBusStation, scRoadVehicleDepot, scDialog, scAboutMenu,
+    scTrainStation);
 
 type
   TButtonRec = record
@@ -163,7 +164,8 @@ uses
   TransportTycoon.Palette,
   TransportTycoon.Construct,
   TransportTycoon.Scene.Dialog,
-  TransportTycoon.Scene.Menu.About;
+  TransportTycoon.Scene.Menu.About,
+  TransportTycoon.Scene.TrainStation;
 
 procedure CloseGame;
 begin
@@ -613,6 +615,7 @@ begin
   FScene[scRoadVehicleDepot] := TSceneRoadVehicleDepot.Create;
   FScene[scDialog] := TSceneDialog.Create;
   FScene[scAboutMenu] := TSceneAboutMenu.Create;
+  FScene[scTrainStation] := TSceneTrainStation.Create;
 end;
 
 procedure TScenes.Update(var AKey: Word);
