@@ -53,6 +53,10 @@ begin
   DrawBuildingTitle('Truck Loading Bay', 'L', 14,
     FTown.TruckLoadingBay.CanBuild, FTown.TruckLoadingBay.Cost,
     not FTown.TruckLoadingBay.IsBuilding);
+  // Train Station
+  DrawBuildingTitle('Train Station', 'T', 15,
+    FTown.TrainStation.CanBuild, FTown.TrainStation.Cost,
+    not FTown.TrainStation.IsBuilding);
 
   // Company Headquarters
   DrawBuildingTitle('Company Headquarters', 'G', 17, FTown.HQ.CanBuild and
@@ -84,6 +88,8 @@ begin
             AKey := TK_S;
           14:
             AKey := TK_L;
+          15:
+            AKey := TK_T;
           17:
             AKey := TK_G;
         end;
@@ -122,6 +128,14 @@ begin
         begin
           FTown.TruckLoadingBay.Build;
           Scenes.SetScene(scTruckLoadingBay, scTown);
+        end;
+      end;
+    TK_T:
+      begin
+        if FTown.TrainStation.CanBuild then
+        begin
+          FTown.TrainStation.Build;
+          Scenes.SetScene(scTrainStation, scTown);
         end;
       end;
     TK_G:

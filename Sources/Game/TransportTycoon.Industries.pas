@@ -34,6 +34,7 @@ type
     FAccepts: TCargoSet;
     FDock: TDock;
     FTruckLoadingBay: TStation;
+    FTrainStation: TStation;
   public
     constructor Create(const AName: string; const AX, AY: Integer);
     destructor Destroy; override;
@@ -51,6 +52,7 @@ type
     property Dock: TDock read FDock write FDock;
     property TruckLoadingBay: TStation read FTruckLoadingBay
       write FTruckLoadingBay;
+    property TrainStation: TStation read FTrainStation write FTrainStation;
     procedure Grows; virtual;
     function MaxCargo: Integer; virtual;
     function GetCargoStr(const ACargoSet: TCargoSet): string;
@@ -278,12 +280,14 @@ begin
   ModifyPopulation(Math.RandomRange(250, 1500));
   FAirport := TAirport.Create(8000, 5);
   FBusStation := TStation.Create(250);
+  FTrainStation := TStation.Create(5000);
   FHQ := TStation.Create(250);
 end;
 
 destructor TTownIndustry.Destroy;
 begin
   FreeAndNil(FHQ);
+  FreeAndNil(FTrainStation);
   FreeAndNil(FBusStation);
   FreeAndNil(FAirport);
   inherited;
@@ -377,12 +381,14 @@ var
 begin
   if Math.RandomRange(0, 25) <= GrowModif then
     ModifyPopulation(Math.RandomRange(GrowModif * 8, GrowModif * 12));
-  if Airport.IsBuilding or Dock.IsBuilding or BusStation.IsBuilding then
+  if Airport.IsBuilding or Dock.IsBuilding or BusStation.IsBuilding or
+    TrainStation.IsBuilding then
   begin
     LWeekPassengers := FPopulation div Math.RandomRange(10, 12);
     SetCargoAmount(cgPassengers, LWeekPassengers);
   end;
-  if Airport.IsBuilding or Dock.IsBuilding or TruckLoadingBay.IsBuilding then
+  if Airport.IsBuilding or Dock.IsBuilding or TruckLoadingBay.IsBuilding or
+    TrainStation.IsBuilding then
   begin
     LWeekMail := FPopulation div Math.RandomRange(40, 50);
     SetCargoAmount(cgMail, LWeekMail);
@@ -391,8 +397,8 @@ end;
 
 function TTownIndustry.GrowModif: Integer;
 begin
-  Result := Airport.Level + Dock.Level +
-    BusStation.Level { + TrainStation.Level } + 5;
+  Result := Airport.Level + Dock.Level + BusStation.Level +
+    TrainStation.Level + 5;
 end;
 
 procedure TTownIndustry.ModifyPopulation(const APopulation: Integer);

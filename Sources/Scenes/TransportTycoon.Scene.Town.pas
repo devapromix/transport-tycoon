@@ -101,6 +101,9 @@ begin
   // Truck Loading Bay
   DrawButton(33, 13, 40, FTown.TruckLoadingBay.IsBuilding,
     FTown.TruckLoadingBay.IsBuilding, 'L', 'Truck Loading Bay');
+  // Train Station
+  DrawButton(33, 14, 40, FTown.TrainStation.IsBuilding,
+    FTown.TrainStation.IsBuilding, 'T', 'Train Station');
   // Company Headquarters
   if Game.Company.IsTownHQ then
     DrawButton(33, 15, 40, FTown.HQ.IsBuilding, FTown.HQ.IsBuilding, 'G',
@@ -148,6 +151,8 @@ begin
             AKey := TK_S;
           13:
             AKey := TK_L;
+          14:
+            AKey := TK_T;
           15:
             AKey := TK_G;
         end;
@@ -170,6 +175,9 @@ begin
     TK_L:
       if FTown.TruckLoadingBay.IsBuilding then
         Scenes.SetScene(scTruckLoadingBay, scTown);
+    TK_T:
+      if FTown.TrainStation.IsBuilding then
+        Scenes.SetScene(scTrainStation, scTown);
     TK_G:
       if Game.Company.IsTownHQ and FTown.HQ.IsBuilding then
         Scenes.SetScene(scCompany, scTown);
