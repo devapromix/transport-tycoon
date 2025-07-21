@@ -32,7 +32,8 @@ begin
 
   DrawFrame('ABOUT', 30, 10, True);
 
-  DrawText(14, 'Apromix (C) 2022-2025');
+  DrawText(14, 'Version ' + Game.Version);
+  DrawText(15, 'Apromix (C) 2022-2025');
 end;
 
 procedure TSceneAboutMenu.Update(var AKey: Word);
