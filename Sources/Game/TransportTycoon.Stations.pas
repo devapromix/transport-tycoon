@@ -22,6 +22,9 @@ type
   end;
 
 type
+
+  { TAirport }
+
   TAirport = class(TStation);
 
 type
@@ -34,6 +37,12 @@ type
   public
     function CanBuild(const AX, AY: Integer): Boolean;
   end;
+
+type
+
+  { TTrainStation }
+
+  TTrainStation = class(TStation);
 
 implementation
 

@@ -42,6 +42,10 @@ begin
   DrawBuildingTitle('Truck Loading Bay', 'L', 12,
     FIndustry.TruckLoadingBay.CanBuild, FIndustry.TruckLoadingBay.Cost,
     FIndustry.TruckLoadingBay.Level = 0);
+  // Train Station
+  DrawBuildingTitle('Train Station', 'T', 13,
+    FIndustry.TrainStation.CanBuild, FIndustry.TrainStation.Cost,
+    FIndustry.TrainStation.Level = 0);
 
   AddButton(19, 'Esc', 'Close');
 
@@ -69,6 +73,8 @@ begin
             AKey := TK_D;
           12:
             AKey := TK_L;
+          13:
+            AKey := TK_T;
         end;
     end;
   end;
@@ -89,6 +95,14 @@ begin
         begin
           FIndustry.TruckLoadingBay.Build;
           Scenes.SetScene(scTruckLoadingBay, scIndustry);
+        end;
+      end;
+    TK_T:
+      begin
+        if FIndustry.TrainStation.CanBuild then
+        begin
+          FIndustry.TrainStation.Build;
+          Scenes.SetScene(scTrainStation, scIndustry);
         end;
       end;
   end;

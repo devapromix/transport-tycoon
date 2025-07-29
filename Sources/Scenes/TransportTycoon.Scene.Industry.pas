@@ -58,6 +58,8 @@ begin
     DrawButton(34, 12, 35, Dock.IsBuilding, Dock.IsBuilding, 'D', 'Dock');
     DrawButton(34, 13, 35, TruckLoadingBay.IsBuilding,
       TruckLoadingBay.IsBuilding, 'L', 'Truck Loading Bay');
+    DrawButton(34, 14, 35, TrainStation.IsBuilding, TrainStation.IsBuilding,
+      'T', 'Train Station');
   end;
 
   IndustryInfo(FIndustry, 12, 16);
@@ -88,6 +90,8 @@ begin
             AKey := TK_D;
           13:
             AKey := TK_L;
+          14:
+            AKey := TK_T;
         end;
     end;
   end;
@@ -102,6 +106,9 @@ begin
     TK_L:
       if FIndustry.TruckLoadingBay.IsBuilding then
         Scenes.SetScene(scTruckLoadingBay, scIndustry);
+    TK_T:
+      if FIndustry.TrainStation.IsBuilding then
+        Scenes.SetScene(scTrainStation, scIndustry);
   end;
 end;
 

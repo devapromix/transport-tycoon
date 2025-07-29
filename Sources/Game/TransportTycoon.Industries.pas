@@ -34,7 +34,7 @@ type
     FAccepts: TCargoSet;
     FDock: TDock;
     FTruckLoadingBay: TStation;
-    FTrainStation: TStation;
+    FTrainStation: TTrainStation;
   public
     constructor Create(const AName: string; const AX, AY: Integer);
     destructor Destroy; override;
@@ -52,7 +52,7 @@ type
     property Dock: TDock read FDock write FDock;
     property TruckLoadingBay: TStation read FTruckLoadingBay
       write FTruckLoadingBay;
-    property TrainStation: TStation read FTrainStation write FTrainStation;
+    property TrainStation: TTrainStation read FTrainStation write FTrainStation;
     procedure Grows; virtual;
     function MaxCargo: Integer; virtual;
     function GetCargoStr(const ACargoSet: TCargoSet): string;
@@ -171,6 +171,7 @@ begin
   end;
   FDock := TDock.Create(9000);
   FTruckLoadingBay := TStation.Create(300);
+  FTrainStation := TTrainStation.Create(1000);
 end;
 
 procedure TIndustry.SetCargoAmount(const ACargo: TCargo;
@@ -187,6 +188,7 @@ end;
 
 destructor TIndustry.Destroy;
 begin
+  FreeAndNil(FTrainStation);
   FreeAndNil(FTruckLoadingBay);
   FreeAndNil(FDock);
   inherited;
@@ -236,7 +238,8 @@ procedure TPrimaryIndustry.Grows;
 var
   LCargo: TCargo;
 begin
-  if Dock.IsBuilding or TruckLoadingBay.IsBuilding then
+  if Dock.IsBuilding or TruckLoadingBay.IsBuilding or TrainStation.IsBuilding
+  then
   begin
     for LCargo := Succ(Low(TCargo)) to High(TCargo) do
       if (LCargo in Produces) then
@@ -250,7 +253,8 @@ procedure TSecondaryIndustry.Grows;
 var
   LAcceptsCargo, LProducesCargo: TCargo;
 begin
-  if Dock.IsBuilding or TruckLoadingBay.IsBuilding then
+  if Dock.IsBuilding or TruckLoadingBay.IsBuilding or TrainStation.IsBuilding
+  then
   begin
     for LAcceptsCargo := Succ(Low(TCargo)) to High(TCargo) do
       if (LAcceptsCargo in Accepts) then
@@ -280,14 +284,12 @@ begin
   ModifyPopulation(Math.RandomRange(250, 1500));
   FAirport := TAirport.Create(8000, 5);
   FBusStation := TStation.Create(250);
-  FTrainStation := TStation.Create(5000);
   FHQ := TStation.Create(250);
 end;
 
 destructor TTownIndustry.Destroy;
 begin
   FreeAndNil(FHQ);
-  FreeAndNil(FTrainStation);
   FreeAndNil(FBusStation);
   FreeAndNil(FAirport);
   inherited;
