@@ -44,14 +44,14 @@ begin
   terminal_color(TPalette.Default);
   LY := 11;
   for LCargo := Succ(Low(TCargo)) to High(TCargo) do
-  begin
-    if LCargo in [cgPassengers] then
     begin
-      DrawText(7, LY, Format('%s: %d/%d', [CargoStr[LCargo],
-        FIndustry.ProducesAmount[LCargo], FIndustry.MaxCargo]));
-      Inc(LY);
+      if LCargo in FIndustry.Produces then
+      begin
+        DrawText(7, LY, Format('%s: %d/%d', [CargoStr[LCargo],
+          FIndustry.ProducesAmount[LCargo], FIndustry.MaxCargo]));
+        Inc(LY);
+      end;
     end;
-  end;
 
   for LVehicle := 0 to Game.Vehicles.RoadVehicleCount - 1 do
     DrawButton(37, LVehicle + 11, Game.Vehicles.RoadVehicle[LVehicle]
