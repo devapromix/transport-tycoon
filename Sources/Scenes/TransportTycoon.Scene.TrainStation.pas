@@ -58,7 +58,7 @@ begin
       .InLocation(FIndustry.X, FIndustry.Y), Chr(Ord('A') + LVehicle),
       StrLim(Game.Vehicles.RoadVehicle[LVehicle].Name, 30));
 
-  AddButton(19, 'V', 'Road Vehicle Depot');
+  AddButton(19, 'V', 'Train Depot');
   AddButton(19, 'Esc', 'Close');
 
   DrawGameBar;
@@ -91,11 +91,11 @@ begin
           FIndustry.Y) then
         begin
           Game.Vehicles.CurrentVehicle := LVehicle;
-          Scenes.SetScene(scRoadVehicle, scTrainStation);
+          Scenes.SetScene(scTrain, scTrainStation);
         end;
       end;
     TK_V:
-      Scenes.SetScene(scRoadVehicleDepot, scTrainStation);
+      Scenes.SetScene(scTrainDepot, scTrainStation);
   end;
 end;
 
