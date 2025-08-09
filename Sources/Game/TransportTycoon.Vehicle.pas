@@ -11,7 +11,7 @@ type
   TGetXYVal = function(AX, AY: Integer): Boolean; stdcall;
 
 type
-  TVehicleType = (vtAircraft, vtShip, vtBus, vtTruck);
+  TVehicleType = (vtAircraft, vtShip, vtBus, vtTruck, vtTrain);
 
 type
 

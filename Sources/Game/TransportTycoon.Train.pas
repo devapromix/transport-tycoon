@@ -9,8 +9,8 @@ uses
 const
   TrainBase: array [0 .. 4] of TVehicleBase = (
     // #1
-    (Name: 'TG Perry Bus'; CargoSet: [cgPassengers]; Amount: 27; Cost: 4000;
-    RunningCost: 18 * 12; Speed: 60; Since: 1950; VehicleType: vtBus;),
+    (Name: 'ZS Fink M7'; CargoSet: [cgPassengers]; Amount: 27; Cost: 4000;
+    RunningCost: 18 * 12; Speed: 60; Since: 1950; VehicleType: vtTrain;),
     // #2
     (Name: 'JK-5 Mail Truck'; CargoSet: [cgMail]; Amount: 7; Cost: 3500;
     RunningCost: 14 * 12; Speed: 60; Since: 1950; VehicleType: vtTruck;),
