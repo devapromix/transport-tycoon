@@ -64,7 +64,8 @@ uses
   TransportTycoon.Scene.Menu.SaveGame.Saved in 'Scenes\TransportTycoon.Scene.Menu.SaveGame.Saved.pas',
   TransportTycoon.Train in 'Game\TransportTycoon.Train.pas',
   TransportTycoon.Scene.Menu.About in 'Scenes\TransportTycoon.Scene.Menu.About.pas',
-  TransportTycoon.Scene.TrainStation in 'Scenes\TransportTycoon.Scene.TrainStation.pas';
+  TransportTycoon.Scene.TrainStation in 'Scenes\TransportTycoon.Scene.TrainStation.pas',
+  TransportTycoon.Scene.TrainDepot in 'Scenes\TransportTycoon.Scene.TrainDepot.pas';
 
 var
   LKey: Word = 0;
