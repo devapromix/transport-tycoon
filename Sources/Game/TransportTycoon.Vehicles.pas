@@ -17,6 +17,7 @@ type
     FAircraft: TArray<TAircraft>;
     FShip: TArray<TShip>;
     FRoadVehicle: TArray<TRoadVehicle>;
+    FTrain: TArray<TRoadVehicle>;
     function GetAircraftCount: Integer;
     function GetShipCount: Integer;
     function GetRoadVehicleCount: Integer;
@@ -27,6 +28,8 @@ type
     function GetShip(AVehicle: Integer): TShip;
     function GetRoadVehicle(AVehicle: Integer): TRoadVehicle;
     function GetVehicle(AX, AY: Integer; AVehicles: TArray<TVehicle>): Integer;
+    function GetGotTrains: Boolean;
+    function GetTrainCount: Integer;
   public
     constructor Create;
     destructor Destroy; override;
@@ -51,9 +54,11 @@ type
     property ShipCount: Integer read GetShipCount;
     property AircraftCount: Integer read GetAircraftCount;
     property RoadVehicleCount: Integer read GetRoadVehicleCount;
+    property TrainCount: Integer read GetTrainCount;
     property GotShips: Boolean read GetGotShips;
     property GotAircrafts: Boolean read GetGotAircrafts;
     property GotRoadVehicles: Boolean read GetGotRoadVehicles;
+    property GotTrains: Boolean read GetGotTrains;
     property Aircraft[AVehicleIdent: Integer]: TAircraft read GetAircraft;
     property Ship[AVehicleIdent: Integer]: TShip read GetShip;
     property RoadVehicle[AVehicleIdent: Integer]: TRoadVehicle
@@ -321,6 +326,11 @@ begin
   Exit(ShipCount > 0);
 end;
 
+function TVehicles.GetGotTrains: Boolean;
+begin
+  Exit(TrainCount > 0);
+end;
+
 function TVehicles.GetRoadVehicle(AVehicle: Integer): TRoadVehicle;
 begin
   Exit(FRoadVehicle[AVehicle]);
@@ -339,6 +349,11 @@ end;
 function TVehicles.GetShipCount: Integer;
 begin
   Exit(Length(FShip));
+end;
+
+function TVehicles.GetTrainCount: Integer;
+begin
+  Exit(Length(FTrain));
 end;
 
 procedure TVehicles.Step;
