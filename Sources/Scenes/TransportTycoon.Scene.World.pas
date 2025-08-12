@@ -36,6 +36,7 @@ uses
   TransportTycoon.Scene.Menu.Settings,
   TransportTycoon.Stations,
   TransportTycoon.Palette,
+  TransportTycoon.Train,
   TransportTycoon.RoadVehicle,
   TransportTycoon.Vehicle;
 
@@ -155,6 +156,9 @@ begin
       TK_S:
         if Game.Vehicles.GotShips then
           Scenes.SetScene(scShips);
+      TK_T:
+        if Game.Vehicles.GotTrains then
+          Scenes.SetScene(scTrains);
       TK_X:
         begin
           Game.Construct.Build(ceClearLand);

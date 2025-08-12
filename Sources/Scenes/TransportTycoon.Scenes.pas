@@ -14,7 +14,7 @@ type
     scOpenGameMenu, scOpenGamePromptMenu, scOpenGameDoneMenu, scSaveGameMenu,
     scSaveGamePromptMenu, scSaveGameSavedMenu, scRoadVehicle, scRoadVehicles,
     scTruckLoadingBay, scBusStation, scRoadVehicleDepot, scDialog, scAboutMenu,
-    scTrainStation, scTrainDepot);
+    scTrain, scTrains, scTrainStation, scTrainDepot);
 
 type
   TButtonRec = record
