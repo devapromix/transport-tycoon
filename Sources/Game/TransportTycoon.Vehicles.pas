@@ -6,6 +6,7 @@ uses
   TransportTycoon.Aircraft,
   TransportTycoon.Ship,
   TransportTycoon.RoadVehicle,
+  TransportTycoon.Train,
   TransportTycoon.Vehicle;
 
 type
@@ -17,19 +18,20 @@ type
     FAircraft: TArray<TAircraft>;
     FShip: TArray<TShip>;
     FRoadVehicle: TArray<TRoadVehicle>;
-    FTrain: TArray<TRoadVehicle>;
+    FTrain: TArray<TTrain>;
     function GetAircraftCount: Integer;
     function GetShipCount: Integer;
     function GetRoadVehicleCount: Integer;
+    function GetTrainCount: Integer;
     function GetGotAircrafts: Boolean;
     function GetGotShips: Boolean;
     function GetGotRoadVehicles: Boolean;
+    function GetGotTrains: Boolean;
     function GetAircraft(AVehicle: Integer): TAircraft;
     function GetShip(AVehicle: Integer): TShip;
     function GetRoadVehicle(AVehicle: Integer): TRoadVehicle;
+    function GetTrain(AVehicle: Integer): TTrain;
     function GetVehicle(AX, AY: Integer; AVehicles: TArray<TVehicle>): Integer;
-    function GetGotTrains: Boolean;
-    function GetTrainCount: Integer;
   public
     constructor Create;
     destructor Destroy; override;
@@ -42,15 +44,18 @@ type
     procedure AddShip(const AName: string; const AIndex, AShipID: Integer);
     procedure AddRoadVehicle(const AName: string;
       const AIndex, ARoadVehicleID: Integer);
+    procedure AddTrain(const AName: string; const AIndex, ATrainID: Integer);
     procedure RunningCosts;
     function GetCurrentAircraft(const AX, AY: Integer): Integer;
     function GetCurrentShip(const AX, AY: Integer): Integer;
     function GetCurrentRoadVehicle(const AX, AY: Integer): Integer;
+    function GetCurrentTrain(const AX, AY: Integer): Integer;
     function IsVehicleOnMap(const AX, AY: Integer;
       out AVehicleName: string): Boolean;
     function IsBuyShipAllowed(): Boolean;
     function IsBuyAircraftAllowed(): Boolean;
     function IsBuyRoadVehicleAllowed(): Boolean;
+    function IsBuyTrainAllowed(): Boolean;
     property ShipCount: Integer read GetShipCount;
     property AircraftCount: Integer read GetAircraftCount;
     property RoadVehicleCount: Integer read GetRoadVehicleCount;
@@ -63,6 +68,7 @@ type
     property Ship[AVehicleIdent: Integer]: TShip read GetShip;
     property RoadVehicle[AVehicleIdent: Integer]: TRoadVehicle
       read GetRoadVehicle;
+    property Train[AVehicleIdent: Integer]: TTrain read GetTrain;
     procedure ClearProfit;
   end;
 
@@ -137,6 +143,24 @@ begin
       Game.Map.Industry[AIndex].X, Game.Map.Industry[AIndex].Y);
     Game.ModifyMoney(ttNewVehicles, -ShipBase[AShipID].Cost);
     VehicleID := AShipID;
+  end;
+end;
+
+procedure TVehicles.AddTrain(const AName: string;
+  const AIndex, ATrainID: Integer);
+begin
+  if ((Game.Money >= TrainBase[ATrainID].Cost)) then
+    SetLength(FTrain, TrainCount + 1);
+
+  FTrain[High(FTrain)] := TTrain.Create(AName, Game.Map.Industry[AIndex].X,
+    Game.Map.Industry[AIndex].Y, ATrainID);
+
+  with FTrain[High(FTrain)] do
+  begin
+    Orders.AddOrder(AIndex, Game.Map.Industry[AIndex].Name,
+      Game.Map.Industry[AIndex].X, Game.Map.Industry[AIndex].Y);
+    Game.ModifyMoney(ttNewVehicles, -TrainBase[ATrainID].Cost);
+    VehicleID := ATrainID;
   end;
 end;
 
@@ -262,6 +286,11 @@ begin
   Exit(GetVehicle(AX, AY, TArray<TVehicle>(FShip)));
 end;
 
+function TVehicles.GetCurrentTrain(const AX, AY: Integer): Integer;
+begin
+  Exit(GetVehicle(AX, AY, TArray<TVehicle>(FTrain)));
+end;
+
 function TVehicles.GetVehicle(AX, AY: Integer;
   AVehicles: TArray<TVehicle>): Integer;
 var
@@ -286,6 +315,11 @@ end;
 function TVehicles.IsBuyShipAllowed: Boolean;
 begin
   Exit(ShipCount < MaxVehicles);
+end;
+
+function TVehicles.IsBuyTrainAllowed: Boolean;
+begin
+  Exit(TrainCount < MaxVehicles);
 end;
 
 function TVehicles.IsVehicleOnMap(const AX, AY: Integer;
@@ -349,6 +383,11 @@ end;
 function TVehicles.GetShipCount: Integer;
 begin
   Exit(Length(FShip));
+end;
+
+function TVehicles.GetTrain(AVehicle: Integer): TTrain;
+begin
+  Exit(FTrain[AVehicle]);
 end;
 
 function TVehicles.GetTrainCount: Integer;
