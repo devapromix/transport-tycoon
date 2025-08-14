@@ -53,10 +53,10 @@ begin
       end;
     end;
 
-  for LVehicle := 0 to Game.Vehicles.RoadVehicleCount - 1 do
-    DrawButton(37, LVehicle + 11, Game.Vehicles.RoadVehicle[LVehicle]
+  for LVehicle := 0 to Game.Vehicles.TrainCount - 1 do
+    DrawButton(37, LVehicle + 11, Game.Vehicles.Train[LVehicle]
       .InLocation(FIndustry.X, FIndustry.Y), Chr(Ord('A') + LVehicle),
-      StrLim(Game.Vehicles.RoadVehicle[LVehicle].Name, 30));
+      StrLim(Game.Vehicles.Train[LVehicle].Name, 30));
 
   AddButton(19, 'V', 'Train Depot');
   AddButton(19, 'Esc', 'Close');
@@ -87,7 +87,7 @@ begin
     TK_A .. TK_G:
       begin
         LVehicle := AKey - TK_A;
-        if Game.Vehicles.RoadVehicle[LVehicle].InLocation(FIndustry.X,
+        if Game.Vehicles.Train[LVehicle].InLocation(FIndustry.X,
           FIndustry.Y) then
         begin
           Game.Vehicles.CurrentVehicle := LVehicle;
