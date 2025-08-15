@@ -7,22 +7,10 @@ uses
   TransportTycoon.Cargo;
 
 const
-  TrainBase: array [0 .. 4] of TVehicleBase = (
+  TrainBase: array [0 .. 0] of TVehicleBase = (
     // #1
     (Name: 'ZS Fink M7'; CargoSet: [cgPassengers]; Amount: 27; Cost: 4000;
-    RunningCost: 18 * 12; Speed: 60; Since: 1950; VehicleType: vtTrain;),
-    // #2
-    (Name: 'JK-5 Mail Truck'; CargoSet: [cgMail]; Amount: 7; Cost: 3500;
-    RunningCost: 14 * 12; Speed: 60; Since: 1950; VehicleType: vtTruck;),
-    // #3
-    (Name: 'DR-2 Coal Truck'; CargoSet: [cgCoal]; Amount: 9; Cost: 4800;
-    RunningCost: 18 * 12; Speed: 60; Since: 1950; VehicleType: vtTruck;),
-    // #4
-    (Name: 'ASV-11 Wood Truck'; CargoSet: [cgWood]; Amount: 9; Cost: 5000;
-    RunningCost: 19 * 12; Speed: 60; Since: 1950; VehicleType: vtTruck;),
-    // #5
-    (Name: 'RT Goods Truck'; CargoSet: [cgGoods]; Amount: 9; Cost: 4500;
-    RunningCost: 20 * 12; Speed: 60; Since: 1950; VehicleType: vtTruck;)
+    RunningCost: 18 * 12; Speed: 60; Since: 1950; VehicleType: vtTrain;)
     //
     );
 
@@ -70,8 +58,7 @@ begin
     Orders.AddOrder(AIndex, Name, X, Y);
 end;
 
-constructor TTrain.Create(const AName: string;
-  const AX, AY, AIndex: Integer);
+constructor TTrain.Create(const AName: string; const AX, AY, AIndex: Integer);
 begin
   inherited Create(AName, AX, AY, TrainBase, AIndex);
   FTimer := 0;
@@ -88,8 +75,8 @@ begin
       (LCargo in CargoSet) then
     begin
       SetCargoType(LCargo);
-      while (Game.Map.Industry[CurOrder.IndustryIndex].ProducesAmount[LCargo] > 0) and
-        (CargoAmount < MaxCargoAmount) do
+      while (Game.Map.Industry[CurOrder.IndustryIndex].ProducesAmount[LCargo] >
+        0) and (CargoAmount < MaxCargoAmount) do
       begin
         Game.Map.Industry[CurOrder.IndustryIndex].DecCargoAmount(LCargo);
         IncCargoAmount;
@@ -116,7 +103,6 @@ end;
 procedure TTrain.Step;
 var
   LCargo: TCargo;
-  LStation: TStation;
 begin
   if Orders.Count > 0 then
   begin
@@ -125,21 +111,16 @@ begin
       Inc(FTimer);
       if CurOrder.IndustryIndex <> LastStationId then
         UnLoad;
-      case CargoType of
-        cgPassengers:
-          LStation := TTownIndustry(Game.Map.Industry[CurOrder.IndustryIndex]).BusStation;
-      else
-        LStation := Game.Map.Industry[CurOrder.IndustryIndex].TruckLoadingBay;
-      end;
       FState := 'Service';
-      if FTimer > (15 - (LStation.Level * 2)) then
+      if FTimer > (15 - (Game.Map.Industry[CurOrder.IndustryIndex]
+        .TrainStation.Level * 2)) then
       begin
         FTimer := 0;
         Load;
         if FullLoad then
           for LCargo := Succ(Low(TCargo)) to High(TCargo) do
-            if (LCargo in Game.Map.Industry[CurOrder.IndustryIndex].Produces) and
-              (LCargo in CargoSet) then
+            if (LCargo in Game.Map.Industry[CurOrder.IndustryIndex].Produces)
+              and (LCargo in CargoSet) then
             begin
               SetCargoType(LCargo);
               if (CargoAmount < MaxCargoAmount) then
