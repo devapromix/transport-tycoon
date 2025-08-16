@@ -33,9 +33,9 @@ var
 begin
   inherited Render;
   DrawTitle(Game.Company.GetName + ' Trains');
-  for LVehicle := 0 to Game.Vehicles.ShipCount - 1 do
+  for LVehicle := 0 to Game.Vehicles.TrainCount - 1 do
     DrawButton(12, LVehicle + 11, Chr(Ord('A') + LVehicle),
-      Game.Vehicles.Ship[LVehicle].Name);
+      Game.Vehicles.Train[LVehicle].Name);
 end;
 
 procedure TSceneTrains.Update(var AKey: Word);
@@ -47,12 +47,12 @@ begin
     TK_A .. TK_G:
       begin
         LVehicle := AKey - TK_A;
-        if LVehicle > Game.Vehicles.ShipCount - 1 then
+        if LVehicle > Game.Vehicles.TrainCount - 1 then
           Exit;
         Game.Vehicles.CurrentVehicle := LVehicle;
-        with Game.Vehicles.Ship[LVehicle] do
+        with Game.Vehicles.Train[LVehicle] do
           ScrollTo(X, Y);
-        Scenes.SetScene(scShip, scTrains);
+        Scenes.SetScene(scTrain, scTrains);
       end;
   end;
 end;
