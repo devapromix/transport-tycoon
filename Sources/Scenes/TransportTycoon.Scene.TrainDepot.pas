@@ -41,7 +41,7 @@ begin
   DrawVehiclesList(TrainBase, LVehicle);
   DrawVehicleInfo(TrainBase, LVehicle);
 
-  AddButton(20, Game.Vehicles.IsBuyRoadVehicleAllowed, 'Enter', 'Buy Train');
+  AddButton(20, Game.Vehicles.IsBuyTrainAllowed, 'Enter', 'Buy Train');
   AddButton(20, 'Esc', 'Close');
 
   DrawGameBar;
@@ -80,14 +80,14 @@ begin
       end;
     TK_ENTER:
       begin
-        if Game.Vehicles.IsBuyRoadVehicleAllowed then
+        if Game.Vehicles.IsBuyTrainAllowed then
         begin
           LVehicle := Game.Vehicles.CurrentVehicle;
           if (Game.Money >= TrainBase[LVehicle].Cost) then
           begin
             LTitle := Format('Train #%d (%s)',
-              [Game.Vehicles.RoadVehicleCount + 1, TrainBase[LVehicle].Name]);
-            Game.Vehicles.AddRoadVehicle(LTitle, Game.Map.CurrentIndustry,
+              [Game.Vehicles.TrainCount + 1, TrainBase[LVehicle].Name]);
+            Game.Vehicles.AddTrain(LTitle, Game.Map.CurrentIndustry,
               LVehicle);
             Scenes.Back;
           end;
