@@ -367,6 +367,25 @@ begin
                           end;
                         Scenes.SetScene(scRoadVehicle, scWorld);
                       end;
+                    scTrain:
+                      begin
+						LStation := TTownIndustry
+                          (Game.Map.Industry[LCurrentIndustry]).TrainStation;
+                        LIsFlag :=
+                          not(Train[CurrentVehicle].Orders.IsOrder
+                          (LCurrentIndustry) or not LStation.IsBuilding);
+                        if LIsFlag then
+                          with Game.Vehicles do
+                          begin
+                            if LStation.IsBuilding then
+                            begin
+                              Train[CurrentVehicle]
+                                .AddOrder(LCurrentIndustry);
+                              Game.IsOrder := False;
+                            end;
+                          end;
+                        Scenes.SetScene(scTrain, scWorld);
+                      end;
                   end;
                 end;
               end
@@ -419,6 +438,23 @@ begin
                           end;
                         Scenes.SetScene(scRoadVehicle, scWorld);
                       end;
+                    scTrain:
+                      begin
+                        LStation := Game.Map.Industry[LCurrentIndustry].TrainStation;
+                        LIsFlag :=
+                          not(Train[CurrentVehicle].Orders.IsOrder
+                          (LCurrentIndustry) or not LStation.IsBuilding);
+                        if LIsFlag then
+                          with Game.Vehicles do
+                          begin
+                            if LStation.IsBuilding then
+                            begin
+                              Train[CurrentVehicle].AddOrder(LCurrentIndustry);
+                              Game.IsOrder := False;
+                            end;
+                          end;
+                        Scenes.SetScene(scTrain, scWorld);
+                      end;
                   end;
                 end;
               end
@@ -445,6 +481,13 @@ begin
           begin
             Game.Vehicles.CurrentVehicle := LCurrentVehicle;
             Scenes.SetScene(scRoadVehicle, scWorld);
+            Exit;
+          end;
+          LCurrentVehicle := Game.Vehicles.GetCurrentTrain(RX, RY);
+          if LCurrentVehicle >= 0 then
+          begin
+            Game.Vehicles.CurrentVehicle := LCurrentVehicle;
+            Scenes.SetScene(scTrain, scWorld);
             Exit;
           end;
         end;
