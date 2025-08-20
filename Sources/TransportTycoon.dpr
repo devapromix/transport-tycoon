@@ -20,6 +20,7 @@ uses
   TransportTycoon.Stations in 'Game\TransportTycoon.Stations.pas',
   TransportTycoon.Industries in 'Game\TransportTycoon.Industries.pas',
   TransportTycoon.RoadVehicle in 'Game\TransportTycoon.RoadVehicle.pas',
+  TransportTycoon.Train in 'Game\TransportTycoon.Train.pas',
   TransportTycoon.Palette in 'Game\TransportTycoon.Palette.pas',
   TransportTycoon.Log in 'Game\TransportTycoon.Log.pas',
   TransportTycoon.Races in 'Game\TransportTycoon.Races.pas',
@@ -62,7 +63,8 @@ uses
   TransportTycoon.Scene.Menu.OpenGame.Done in 'Scenes\TransportTycoon.Scene.Menu.OpenGame.Done.pas',
   TransportTycoon.Scene.Menu.SaveGame.Prompt in 'Scenes\TransportTycoon.Scene.Menu.SaveGame.Prompt.pas',
   TransportTycoon.Scene.Menu.SaveGame.Saved in 'Scenes\TransportTycoon.Scene.Menu.SaveGame.Saved.pas',
-  TransportTycoon.Train in 'Game\TransportTycoon.Train.pas',
+  TransportTycoon.Scene.Trains in 'Scenes\TransportTycoon.Scene.Trains.pas',
+  TransportTycoon.Scene.Train in 'Scenes\TransportTycoon.Scene.Train.pas',
   TransportTycoon.Scene.Menu.About in 'Scenes\TransportTycoon.Scene.Menu.About.pas',
   TransportTycoon.Scene.TrainStation in 'Scenes\TransportTycoon.Scene.TrainStation.pas',
   TransportTycoon.Scene.TrainDepot in 'Scenes\TransportTycoon.Scene.TrainDepot.pas';

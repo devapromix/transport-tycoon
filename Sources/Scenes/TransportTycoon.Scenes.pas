@@ -156,16 +156,18 @@ uses
   TransportTycoon.Scene.Menu.SaveGame,
   TransportTycoon.Scene.Menu.SaveGame.Prompt,
   TransportTycoon.Scene.Menu.SaveGame.Saved,
+  TransportTycoon.Scene.RoadVehicles,
   TransportTycoon.Scene.RoadVehicle,
   TransportTycoon.Scene.BusStation,
   TransportTycoon.Scene.TruckLoadingBay,
   TransportTycoon.Scene.RoadVehicleDepot,
-  TransportTycoon.Scene.RoadVehicles,
   TransportTycoon.Palette,
   TransportTycoon.Construct,
   TransportTycoon.Scene.Dialog,
   TransportTycoon.Scene.Menu.About,
   TransportTycoon.Scene.TrainStation,
+  TransportTycoon.Scene.Trains,
+  TransportTycoon.Scene.Train,
   TransportTycoon.Scene.TrainDepot;
 
 procedure CloseGame;
@@ -617,6 +619,8 @@ begin
   FScene[scDialog] := TSceneDialog.Create;
   FScene[scAboutMenu] := TSceneAboutMenu.Create;
   FScene[scTrainStation] := TSceneTrainStation.Create;
+  FScene[scTrain] := TSceneTrain.Create;
+  FScene[scTrains] := TSceneTrains.Create;
   FScene[scTrainDepot] := TSceneTrainDepot.Create;
 end;
 

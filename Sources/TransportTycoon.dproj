@@ -122,6 +122,7 @@
         <DCCReference Include="Game\TransportTycoon.Stations.pas"/>
         <DCCReference Include="Game\TransportTycoon.Industries.pas"/>
         <DCCReference Include="Game\TransportTycoon.RoadVehicle.pas"/>
+        <DCCReference Include="Game\TransportTycoon.Train.pas"/>
         <DCCReference Include="Game\TransportTycoon.Palette.pas"/>
         <DCCReference Include="Game\TransportTycoon.Log.pas"/>
         <DCCReference Include="Game\TransportTycoon.Races.pas"/>
@@ -164,7 +165,8 @@
         <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.OpenGame.Done.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.SaveGame.Prompt.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.SaveGame.Saved.pas"/>
-        <DCCReference Include="Game\TransportTycoon.Train.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.Trains.pas"/>
+        <DCCReference Include="Scenes\TransportTycoon.Scene.Train.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.Menu.About.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.TrainStation.pas"/>
         <DCCReference Include="Scenes\TransportTycoon.Scene.TrainDepot.pas"/>
