@@ -189,6 +189,13 @@ begin
     Game.ModifyMoney(ttRoadVehicleRunningCosts, -LMoney);
     RoadVehicle[LVehicle].Profit := RoadVehicle[LVehicle].Profit - LMoney;
   end;
+  for LVehicle := 0 to TrainCount - 1 do
+  begin
+    LVehicleIdent := Train[LVehicle].VehicleID;
+    LMoney := TrainBase[LVehicleIdent].RunningCost div 12;
+    Game.ModifyMoney(ttTrainRunningCosts, -LMoney);
+    Train[LVehicle].Profit := Train[LVehicle].Profit - LMoney;
+  end;
 end;
 
 procedure TVehicles.Clear;
@@ -204,6 +211,9 @@ begin
   for LVehicle := 0 to RoadVehicleCount - 1 do
     FreeAndNil(FRoadVehicle[LVehicle]);
   SetLength(FRoadVehicle, 0);
+  for LVehicle := 0 to TrainCount - 1 do
+    FreeAndNil(FTrain[LVehicle]);
+  SetLength(FTrain, 0);
 end;
 
 procedure TVehicles.ClearProfit;
@@ -224,6 +234,12 @@ begin
     end;
   for LVehicle := 0 to RoadVehicleCount - 1 do
     with RoadVehicle[LVehicle] do
+    begin
+      LastProfit := Profit;
+      Profit := 0;
+    end;
+  for LVehicle := 0 to TrainCount - 1 do
+    with Train[LVehicle] do
     begin
       LastProfit := Profit;
       Profit := 0;
@@ -257,6 +273,10 @@ begin
   terminal_color(TRoadVehicle.Color);
   for LVehicle := 0 to RoadVehicleCount - 1 do
     RoadVehicle[LVehicle].Draw;
+  // Trains
+  terminal_color(TTrain.Color);
+  for LVehicle := 0 to TrainCount - 1 do
+    Train[LVehicle].Draw;
   //
   terminal_color(TPalette.Default);
 end;
@@ -338,10 +358,11 @@ function TVehicles.IsVehicleOnMap(const AX, AY: Integer;
 
 begin
   AVehicleName := '';
-  // for more Vehicle types add more "if not" expressions in this chain
   if not GetVehicle(GetCurrentAircraft, TArray<TVehicle>(FAircraft)) then
     if not GetVehicle(GetCurrentShip, TArray<TVehicle>(FShip)) then
-      GetVehicle(GetCurrentRoadVehicle, TArray<TVehicle>(FRoadVehicle));
+      if not GetVehicle(GetCurrentRoadVehicle, TArray<TVehicle>(FRoadVehicle))
+      then
+        GetVehicle(GetCurrentTrain, TArray<TVehicle>(FTrain));
   Exit(AVehicleName <> '');
 end;
 
@@ -422,6 +443,15 @@ begin
             AP := AP - 1;
       for LVehicle := 0 to RoadVehicleCount - 1 do
         with RoadVehicle[LVehicle] do
+          if AP <= 0 then
+          begin
+            Step;
+            AP := MaxAP;
+          end
+          else
+            AP := AP - 1;
+      for LVehicle := 0 to TrainCount - 1 do
+        with Train[LVehicle] do
           if AP <= 0 then
           begin
             Step;
