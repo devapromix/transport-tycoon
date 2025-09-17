@@ -13,6 +13,7 @@ type
   TVehicles = class(TObject)
   private const
     MaxVehicles = 7;
+    MaxTicks = 200;
   private
     FCurrentVehicle: Integer;
     FAircraft: TArray<TAircraft>;
@@ -32,6 +33,10 @@ type
     function GetRoadVehicle(AVehicle: Integer): TRoadVehicle;
     function GetTrain(AVehicle: Integer): TTrain;
     function GetVehicle(AX, AY: Integer; AVehicles: TArray<TVehicle>): Integer;
+    procedure ProcessAircraft;
+    procedure ProcessShip;
+    procedure ProcessRoadVehicle;
+    procedure ProcessTrain;
   public
     constructor Create;
     destructor Destroy; override;
@@ -416,49 +421,77 @@ begin
   Exit(Length(FTrain));
 end;
 
+procedure TVehicles.ProcessAircraft;
+var
+  I: Integer;
+begin
+  for I := 0 to AircraftCount - 1 do
+    with Aircraft[I] do
+      if AP <= 0 then
+      begin
+        Step;
+        AP := MaxAP;
+      end
+      else
+        AP := AP - 1;
+end;
+
+procedure TVehicles.ProcessShip;
+var
+  I: Integer;
+begin
+  for I := 0 to ShipCount - 1 do
+    with Ship[I] do
+      if AP <= 0 then
+      begin
+        Step;
+        AP := MaxAP;
+      end
+      else
+        AP := AP - 1;
+end;
+
+procedure TVehicles.ProcessRoadVehicle;
+var
+  I: Integer;
+begin
+  for I := 0 to RoadVehicleCount - 1 do
+    with RoadVehicle[I] do
+      if AP <= 0 then
+      begin
+        Step;
+        AP := MaxAP;
+      end
+      else
+        AP := AP - 1;
+end;
+
+procedure TVehicles.ProcessTrain;
+var
+  I: Integer;
+begin
+  for I := 0 to TrainCount - 1 do
+    with Train[I] do
+      if AP <= 0 then
+      begin
+        Step;
+        AP := MaxAP;
+      end
+      else
+        AP := AP - 1;
+end;
+
 procedure TVehicles.Step;
 var
-  LVehicle, LTick: Integer;
+  LTick: Integer;
 begin
   try
-    for LTick := 0 to 200 - 1 do
+    for LTick := 0 to MaxTicks - 1 do
     begin
-      for LVehicle := 0 to AircraftCount - 1 do
-        with Aircraft[LVehicle] do
-          if AP <= 0 then
-          begin
-            Step;
-            AP := MaxAP;
-          end
-          else
-            AP := AP - 1;
-      for LVehicle := 0 to ShipCount - 1 do
-        with Ship[LVehicle] do
-          if AP <= 0 then
-          begin
-            Step;
-            AP := MaxAP;
-          end
-          else
-            AP := AP - 1;
-      for LVehicle := 0 to RoadVehicleCount - 1 do
-        with RoadVehicle[LVehicle] do
-          if AP <= 0 then
-          begin
-            Step;
-            AP := MaxAP;
-          end
-          else
-            AP := AP - 1;
-      for LVehicle := 0 to TrainCount - 1 do
-        with Train[LVehicle] do
-          if AP <= 0 then
-          begin
-            Step;
-            AP := MaxAP;
-          end
-          else
-            AP := AP - 1;
+      ProcessAircraft;
+      ProcessShip;
+      ProcessRoadVehicle;
+      ProcessTrain;
     end;
   except
     on E: Exception do
