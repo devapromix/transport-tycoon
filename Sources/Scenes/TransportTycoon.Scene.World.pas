@@ -6,6 +6,9 @@ uses
   TransportTycoon.Scenes;
 
 type
+  TMenuHintEnum = (mhMoney, mhTurns, mhMenu);
+
+type
 
   { TSceneWorld }
 
@@ -16,6 +19,7 @@ type
     procedure VehicleInfo(const AVehicleName: string);
     procedure TileInfo(const ATileName: string);
     procedure DrawTileBkColor(const ABkColor: string = 'gray');
+    procedure DrawHint(const AMenuHintEnum: TMenuHintEnum);
   public
     procedure Render; override;
     procedure Update(var AKey: Word); override;
@@ -108,6 +112,29 @@ begin
   except
     on E: Exception do
       Log.Add('TSceneWorld.TownInfo', E.Message);
+  end;
+end;
+
+procedure TSceneWorld.DrawHint(const AMenuHintEnum: TMenuHintEnum);
+begin
+  try
+    terminal_bkcolor(TPalette.Background);
+    case AMenuHintEnum of
+      mhTurns:
+        begin
+          DrawFrame(12, ScreenHeight - 7, 45, 5);
+          DrawText(15, ScreenHeight - 5,
+            'Number of elapsed turns since the start');
+        end;
+      mhMenu:
+        begin
+          DrawFrame(38, ScreenHeight - 7, 41, 5);
+          DrawText(41, ScreenHeight - 5, 'Click to open menu or press ESC key');
+        end;
+    end;
+  except
+    on E: Exception do
+      Log.Add('TSceneWorld.DrawHint', E.Message);
   end;
 end;
 
@@ -248,6 +275,14 @@ begin
       else
         TileInfo(Tile[Game.Map.GetTileEnum].Name);
     end;
+    if MY = Self.ScreenHeight - 1 then
+    begin
+      if (MX >= 12) and (MX <= 24) then
+        DrawHint(mhTurns)
+      else if (MX >= 70) and (MX <= 79) then
+        DrawHint(mhMenu);
+
+    end;
     if (MY = Self.ScreenHeight - 2) then
       Scroll(drSouth);
     if (MY = 0) and not Game.Construct.IsConstruct then
@@ -369,8 +404,9 @@ begin
                       end;
                     scTrain:
                       begin
-						LStation := TTownIndustry
-                          (Game.Map.Industry[LCurrentIndustry]).TrainStation;
+                        LStation :=
+                          TTownIndustry(Game.Map.Industry[LCurrentIndustry])
+                          .TrainStation;
                         LIsFlag :=
                           not(Train[CurrentVehicle].Orders.IsOrder
                           (LCurrentIndustry) or not LStation.IsBuilding);
@@ -379,8 +415,7 @@ begin
                           begin
                             if LStation.IsBuilding then
                             begin
-                              Train[CurrentVehicle]
-                                .AddOrder(LCurrentIndustry);
+                              Train[CurrentVehicle].AddOrder(LCurrentIndustry);
                               Game.IsOrder := False;
                             end;
                           end;
@@ -440,7 +475,8 @@ begin
                       end;
                     scTrain:
                       begin
-                        LStation := Game.Map.Industry[LCurrentIndustry].TrainStation;
+                        LStation := Game.Map.Industry[LCurrentIndustry]
+                          .TrainStation;
                         LIsFlag :=
                           not(Train[CurrentVehicle].Orders.IsOrder
                           (LCurrentIndustry) or not LStation.IsBuilding);
