@@ -120,6 +120,12 @@ begin
   try
     terminal_bkcolor(TPalette.Background);
     case AMenuHintEnum of
+      mhMoney:
+        begin
+          DrawFrame(1, ScreenHeight - 7, 56, 5);
+          DrawText(4, ScreenHeight - 5,
+            'Click to open company finances info or press F key');
+        end;
       mhTurns:
         begin
           DrawFrame(12, ScreenHeight - 7, 45, 5);
@@ -277,7 +283,9 @@ begin
     end;
     if MY = Self.ScreenHeight - 1 then
     begin
-      if (MX >= 12) and (MX <= 24) then
+      if (MX >= 1) and (MX <= 10) then
+        DrawHint(mhMoney)
+      else if (MX >= 12) and (MX <= 24) then
         DrawHint(mhTurns)
       else if (MX >= 70) and (MX <= 79) then
         DrawHint(mhMenu);
